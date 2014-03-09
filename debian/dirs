@@ -1,0 +1,3 @@
+/etc/puppet
+/etc/puppet/manifests
+/etc/puppet/templates

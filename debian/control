@@ -1,0 +1,14 @@
+Source: config-puppet-manifests
+Build-Depends: debhelper
+Section: extra
+Priority: optional
+Maintainer: Igor Shishkin <ishishkin@mirantis.com>
+
+Package: config-puppet-manifests
+Replaces: puppet
+Section: extra
+Priority: optional
+Architecture: any
+Depends: puppet
+Description: Puppet manifests
+ .

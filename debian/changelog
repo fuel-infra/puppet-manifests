@@ -1,0 +1,5 @@
+config-puppet-manifests (0.1) unstable; urgency=low
+
+ * Initial release
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Sun, 09 Mar 2014 17:06:33 +0400
