@@ -1,0 +1,5 @@
+[gerrit]
+host=gerrit.mirantis.com
+port=29418
+project=fuel-qa-team/config-puppet-manifests
+
