@@ -1,3 +1,9 @@
+config-puppet-manifests (0.2) unstable; urgency=low
+
+ * Changing manifests structure
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 01:11:57 +0400
+
 config-puppet-manifests (0.1) unstable; urgency=low
 
  * Initial release
