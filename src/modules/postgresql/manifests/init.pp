@@ -7,6 +7,9 @@ class postgresql {
   package { $packages:
     ensure => 'latest',
   }
+  package { 'logrotate':
+    ensure => '3.7.8-6ubuntu5',
+  }
 
   file { 'pg_hba.conf':
     path => '/etc/postgresql/9.1/main/pg_hba.conf',

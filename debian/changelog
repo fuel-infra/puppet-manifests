@@ -1,3 +1,9 @@
+config-puppet-manifests (0.3) unstable; urgency=low
+
+ * Fixes in venv, system_tests, postgresql modules
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 12:31:46 +0400
+
 config-puppet-manifests (0.2) unstable; urgency=low
 
  * Changing manifests structure

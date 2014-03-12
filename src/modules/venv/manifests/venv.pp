@@ -4,6 +4,14 @@ define venv::venv (
   $options,
   $user
 ) {
+  include venv::params
+
+  $packages = $venv::params::packages
+
+  package { $packages :
+    ensure => 'latest',
+  }
+
   exec { 'venv-create':
     provider => 'shell',
     command => "virtualenv ${options} ${path}",
@@ -20,6 +28,6 @@ define venv::venv (
     }
   }
 
-  Exec['venv-create'] -> Exec['venv-requirements']
+  Package[$packages] -> Exec['venv-create'] -> Exec['venv-requirements']
 }
 
