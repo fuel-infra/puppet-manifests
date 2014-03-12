@@ -6,5 +6,5 @@ class venv {
     user => 'jenkins',
   }
 
-  File['allow-unauthenticated.conf'] -> venv::venv['venv-nailgun-tests']
+  File['allow-unauthenticated.conf'] -> Venv::Venv['venv-nailgun-tests']
 }

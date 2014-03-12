@@ -15,5 +15,5 @@ class system_tests {
     ensure => installed,
   }
 
-  File['allow-unauthenticated.conf'] -> venv::venv['venv-nailgun-tests'] -> Package[$packages] -> Exec['workspace-create']
+  File['allow-unauthenticated.conf'] -> Venv::Venv['venv-nailgun-tests'] -> Package[$packages] -> Exec['workspace-create']
 }

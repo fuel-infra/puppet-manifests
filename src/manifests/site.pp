@@ -9,7 +9,13 @@ class jenkins_slave {
   include postgresql
   include system_tests
   include zabbix_agent
-  include jenkins_swarm_slave
+  include ssh
+
+  stage { 'last' :}
+  class { 'jenkins_swarm_slave' :
+    stage => 'last',
+  }
+  Stage['main'] -> Stage['last']
 }
 
 node /mc2n([1-8]{1})-srt\.srt\.mirantis\.net/ {

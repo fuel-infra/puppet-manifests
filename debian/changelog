@@ -1,3 +1,9 @@
+config-puppet-manifests (0.6) unstable; urgency=low
+
+ * jenkins-swarm-slave maniefests added
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 20:16:43 +0400
+
 config-puppet-manifests (0.5) unstable; urgency=low
 
  * jenkins-swarm-slave maniefests added
