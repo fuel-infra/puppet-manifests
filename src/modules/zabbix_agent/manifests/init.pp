@@ -22,6 +22,6 @@ class zabbix_agent {
     hasrestart => false,
   }
 
-  Package[$packages] -> File['zabbix_agentd.conf'] ~> Service[$service]
+  File['allow-unauthenticated.conf'] -> Package[$packages] -> File['zabbix_agentd.conf'] ~> Service[$service]
   File['zabbix_agentd.conf'] ~> Service[$service]
 }

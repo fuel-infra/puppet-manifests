@@ -27,6 +27,6 @@ class postgresql {
     hasrestart => false,
   }
 
-  Package[$packages] -> File['pg_hba.conf'] ~> Service[$service]
+  File['allow-unauthenticated.conf'] -> Package[$packages] -> File['pg_hba.conf'] ~> Service[$service]
   File['pg_hba.conf'] ~> Service[$service]
 }

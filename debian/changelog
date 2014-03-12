@@ -1,3 +1,9 @@
+config-puppet-manifests (0.4) unstable; urgency=low
+
+ * Dependencies fix
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 15:19:24 +0400
+
 config-puppet-manifests (0.3) unstable; urgency=low
 
  * Fixes in venv, system_tests, postgresql modules
@@ -15,3 +21,4 @@ config-puppet-manifests (0.1) unstable; urgency=low
  * Initial release
 
  -- Igor Shishkin <ishishkin@mirantis.com>  Sun, 09 Mar 2014 17:06:33 +0400
+

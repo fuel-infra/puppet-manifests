@@ -34,8 +34,8 @@ class libvirt {
     hasrestart => false,
   }
 
-  Package[$packages] -> File[$config] -> File[$default_config] ~> Service[$service]
-  Package[$packages] ~> Service[$service]
+  File['allow-unauthenticated.conf'] -> Package[$packages] -> File[$config] -> File[$default_config] ~> Service[$service]
+  File['allow-unauthenticated.conf'] -> Package[$packages] ~> Service[$service]
   File[$config] ~> Service[$service]
   File[$default_config] ~> Service[$service]
 

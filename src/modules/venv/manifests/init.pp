@@ -5,4 +5,6 @@ class venv {
     options => '--system-site-packages',
     user => 'jenkins',
   }
+
+  File['allow-unauthenticated.conf'] -> venv::venv['venv-nailgun-tests']
 }
