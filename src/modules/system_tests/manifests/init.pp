@@ -11,9 +11,21 @@ class system_tests {
     cwd => '/tmp',
   }
 
+  exec { 'devops-syncdb' :
+    command => '. /home/jenkins/venv-nailgun-tests/bin/activate ; django-admin.py syncdb --settings=devops.settings',
+    provider => 'shell',
+    user => 'jenkins',
+    cwd => '/tmp',
+  }
+
   package { $packages:
     ensure => installed,
   }
 
-  File['allow-unauthenticated.conf'] -> Venv::Venv['venv-nailgun-tests'] -> Package[$packages] -> Exec['workspace-create']
+  File['allow-unauthenticated.conf'] ->
+    Venv::Venv['venv-nailgun-tests'] ->
+    Package[$packages] -> 
+    Class['postgresql'] -> 
+    Exec['devops-syncdb'] -> 
+    Exec['workspace-create']
 }

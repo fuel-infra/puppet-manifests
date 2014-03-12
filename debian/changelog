@@ -1,3 +1,10 @@
+config-puppet-manifests (0.7) unstable; urgency=low
+
+ * manage.py syncdb for devops
+ * vish pool-create
+ 
+ -- Igor Shishkin <ishishkin@mirantis.com> Thu, 13 Mar 2014 02:09:37 +0400
+ 
 config-puppet-manifests (0.6) unstable; urgency=low
 
  * jenkins-swarm-slave maniefests added

@@ -34,8 +34,25 @@ class libvirt {
     hasrestart => false,
   }
 
-  File['allow-unauthenticated.conf'] -> Package[$packages] -> File[$config] -> File[$default_config] ~> Service[$service]
-  File['allow-unauthenticated.conf'] -> Package[$packages] ~> Service[$service]
+  exec { 'pool-create-default' :
+    command => 'virsh pool-create-as --name=default --type=dir --target=/var/lib/libvirt/images',
+    provider => 'shell',
+    user => 'root',
+    cwd => '/tmp',
+    unless => 'virsh pool-dumpxml default'
+  }
+
+  File['allow-unauthenticated.conf'] -> 
+    Package[$packages] -> 
+    File[$config] -> 
+    File[$default_config] ~> 
+    Service[$service] -> 
+    Exec['pool-create-default']
+
+  File['allow-unauthenticated.conf'] -> 
+    Package[$packages] ~> 
+    Service[$service]
+
   File[$config] ~> Service[$service]
   File[$default_config] ~> Service[$service]
 
