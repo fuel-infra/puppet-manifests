@@ -2,7 +2,7 @@ Exec {
   path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
 }
 
-class libvirtnode {
+class jenkins_slave {
   include dpkg
   include libvirt
   include venv
@@ -11,12 +11,7 @@ class libvirtnode {
   include zabbix_agent
 }
 
-class zabbixnode {
-  include dpkg
-  include zabbix
-}
-
-node 'mc2n7-srt.srt.mirantis.net' {
-  include libvirtnode
+node /mc2n([1-8]{1})-srt\.srt\.mirantis\.net/ {
+  include jenkins_slave
 }
 

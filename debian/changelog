@@ -1,3 +1,9 @@
+config-puppet-manifests (0.5) unstable; urgency=low
+
+ * Nodes definition for Saratov microcloud
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 19:03:19 +0400
+
 config-puppet-manifests (0.4) unstable; urgency=low
 
  * Dependencies fix
