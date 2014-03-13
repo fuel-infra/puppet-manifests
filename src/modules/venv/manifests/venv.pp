@@ -9,7 +9,7 @@ define venv::venv (
   $packages = $venv::params::packages
 
   package { $packages :
-    ensure => 'latest',
+    ensure => 'installed',
   }
 
   exec { 'venv-create':

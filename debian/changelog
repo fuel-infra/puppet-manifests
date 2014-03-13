@@ -1,49 +1,63 @@
+config-puppet-manifests (0.9) unstable; urgency=low
+
+  * New repos moved to dpkg module
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Thu, 13 Mar 2014 20:04:33 +0400
+
+config-puppet-manifests (0.8) unstable; urgency=low
+
+  * manifests for transmission_daemon added
+  * fixed manifests for postgresql
+  * fixed manifests for venv
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Thu, 13 Mar 2014 16:43:22 +0400
+
 config-puppet-manifests (0.7) unstable; urgency=low
 
- * manage.py syncdb for devops
- * vish pool-create
+  * manage.py syncdb for devops
+  * vish pool-create
  
  -- Igor Shishkin <ishishkin@mirantis.com> Thu, 13 Mar 2014 02:09:37 +0400
  
 config-puppet-manifests (0.6) unstable; urgency=low
 
- * jenkins-swarm-slave maniefests added
+  * jenkins-swarm-slave maniefests added
 
  -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 20:16:43 +0400
 
 config-puppet-manifests (0.5) unstable; urgency=low
 
- * jenkins-swarm-slave maniefests added
+  * jenkins-swarm-slave maniefests added
 
  -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 19:42:25 +0400
 
 config-puppet-manifests (0.5) unstable; urgency=low
 
- * Nodes definition for Saratov microcloud
+  * Nodes definition for Saratov microcloud
 
  -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 19:03:19 +0400
 
 config-puppet-manifests (0.4) unstable; urgency=low
 
- * Dependencies fix
+  * Dependencies fix
 
  -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 15:19:24 +0400
 
 config-puppet-manifests (0.3) unstable; urgency=low
 
- * Fixes in venv, system_tests, postgresql modules
+  * Fixes in venv, system_tests, postgresql modules
 
  -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 12:31:46 +0400
 
 config-puppet-manifests (0.2) unstable; urgency=low
 
- * Changing manifests structure
+  * Changing manifests structure
 
  -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 12 Mar 2014 01:11:57 +0400
 
 config-puppet-manifests (0.1) unstable; urgency=low
 
- * Initial release
+  * Initial release
 
  -- Igor Shishkin <ishishkin@mirantis.com>  Sun, 09 Mar 2014 17:06:33 +0400
 

@@ -22,7 +22,7 @@ class system_tests {
     ensure => installed,
   }
 
-  File['allow-unauthenticated.conf'] ->
+  Class['dpkg'] ->
     Venv::Venv['venv-nailgun-tests'] ->
     Package[$packages] -> 
     Class['postgresql'] -> 

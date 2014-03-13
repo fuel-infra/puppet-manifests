@@ -10,6 +10,7 @@ class jenkins_slave {
   include system_tests
   include zabbix_agent
   include ssh
+  include transmission_daemon
 
   stage { 'last' :}
   class { 'jenkins_swarm_slave' :

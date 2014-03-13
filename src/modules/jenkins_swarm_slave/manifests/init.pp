@@ -24,7 +24,7 @@ class jenkins_swarm_slave {
     hasrestart => false,
   }
 
-  File['allow-unauthenticated.conf'] -> Package[$packages] -> File['jenkins-swarm-slave.conf'] ~> Service[$service]
-  File['allow-unauthenticated.conf'] -> Package[$packages] ~> Service[$service]
+  Class['dpkg'] -> Package[$packages] -> File['jenkins-swarm-slave.conf'] ~> Service[$service]
+  Class['dpkg'] -> Package[$packages] ~> Service[$service]
   File['jenkins-swarm-slave.conf'] ~> Service[$service]
 }

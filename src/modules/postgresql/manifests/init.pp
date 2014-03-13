@@ -5,10 +5,7 @@ class postgresql {
   $service = $postgresql::params::service
 
   package { $packages:
-    ensure => 'latest',
-  }
-  package { 'logrotate':
-    ensure => '3.7.8-6ubuntu5',
+    ensure => 'installed',
   }
 
   file { 'pg_hba.conf':
@@ -27,6 +24,6 @@ class postgresql {
     hasrestart => false,
   }
 
-  File['allow-unauthenticated.conf'] -> Package[$packages] -> File['pg_hba.conf'] ~> Service[$service]
+  Class['dpkg'] -> Package[$packages] -> File['pg_hba.conf'] ~> Service[$service]
   File['pg_hba.conf'] ~> Service[$service]
 }

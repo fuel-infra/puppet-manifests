@@ -7,8 +7,7 @@ class libvirt {
   $service = $libvirt::params::service
 
   package { $packages :
-    ensure => latest,
-    require => File['allow-unauthenticated.conf'],
+    ensure => installed,
   }
 
   file { $config :
@@ -42,18 +41,21 @@ class libvirt {
     unless => 'virsh pool-dumpxml default'
   }
 
-  File['allow-unauthenticated.conf'] -> 
+  Class['dpkg'] ->
     Package[$packages] -> 
     File[$config] -> 
     File[$default_config] ~> 
     Service[$service] -> 
     Exec['pool-create-default']
 
-  File['allow-unauthenticated.conf'] -> 
-    Package[$packages] ~> 
+  Class['dpkg'] ->
+    Package[$packages] ~>
     Service[$service]
 
-  File[$config] ~> Service[$service]
-  File[$default_config] ~> Service[$service]
+  File[$config] ~>
+    Service[$service]
+
+  File[$default_config] ~>
+    Service[$service]
 
 }
