@@ -12,7 +12,7 @@
     "blocklist-url": "http://www.example.com/blocklist",
     "cache-size-mb": 4,
     "dht-enabled": true,
-    "download-dir": "/srv/images/iso",
+    "download-dir": "<%= @download_dir %>",
     "download-limit": 1024000,
     "download-limit-enabled": false,
     "download-queue-enabled": false,
@@ -66,5 +66,5 @@
     "upload-limit": 100,
     "upload-limit-enabled": 0,
     "upload-slots-per-torrent": 14,
-    "utp-enabled": false
+    "utp-enabled": <%= @utp_enabled %>
 }
