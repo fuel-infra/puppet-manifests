@@ -3,10 +3,13 @@ class jenkins_swarm_slave {
 
   $packages = $jenkins_swarm_slave::params::packages
   $service = $jenkins_swarm_slave::params::service
+  $users = $jenkins_swarm_slave::params::users
 
   package { $packages :
     ensure => latest,
   }
+
+  create_resources(user, $users, {ensure => present})
 
   file { 'jenkins-swarm-slave.conf' :
     path => '/etc/default/jenkins-swarm-slave',

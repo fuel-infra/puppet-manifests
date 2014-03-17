@@ -4,19 +4,20 @@ Exec {
 
 class jenkins_slave {
   include dpkg
+  include jenkins_swarm_slave
   include libvirt
   include venv
   include postgresql
-  include system_tests
-  include zabbix_agent
   include ssh
+  include system_tests
   include transmission_daemon
+  include zabbix_agent
+}
 
-  stage { 'last' :}
-  class { 'jenkins_swarm_slave' :
-    stage => 'last',
-  }
-  Stage['main'] -> Stage['last']
+node default {
+  include dpkg
+  include ssh
+  include zabbix_agent
 }
 
 node /mc2n([1-8]{1})-srt\.srt\.mirantis\.net/ {

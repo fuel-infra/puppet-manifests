@@ -5,6 +5,7 @@ class libvirt {
   $config = $libvirt::params::config
   $default_config = $libvirt::params::default_config
   $service = $libvirt::params::service
+  $default_pool_dir = $libvirt::params::default_pool_dir
 
   package { $packages :
     ensure => installed,
@@ -34,7 +35,7 @@ class libvirt {
   }
 
   exec { 'pool-create-default' :
-    command => 'virsh pool-create-as --name=default --type=dir --target=/var/lib/libvirt/images',
+    command => "virsh pool-create-as --name=default --type=dir --target=${default_pool_dir}",
     provider => 'shell',
     user => 'root',
     cwd => '/tmp',

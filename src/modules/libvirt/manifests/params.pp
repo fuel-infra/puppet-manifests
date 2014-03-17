@@ -7,4 +7,5 @@ class libvirt::params {
   $service = 'libvirt-bin'
   $config = '/etc/libvirt/libvirtd.conf'
   $default_config = '/etc/default/libvirt-bin'
+  $default_pool_dir = '/var/lib/libvirt/images'
 }
