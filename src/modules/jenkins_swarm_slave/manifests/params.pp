@@ -13,4 +13,7 @@ class jenkins_swarm_slave::params {
       comment => 'Jenkins',
     }
   }
+  $jenkins_master = 'http://jenkins-product.srt.mirantis.net:8080/'
+  $jenkins_user = 'fuel-slave-jenkins'
+  $jenkins_password = 'l0dasf)aKKswe'
 }

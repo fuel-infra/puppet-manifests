@@ -32,5 +32,5 @@ JENKINS_SLAVE_NAME="$(hostname -f)"
 JENKINS_SLAVE_LOG=/var/log/jenkins/$NAME.log
 
 # Arguments to pass to jenkins slave on startup
-JENKINS_ARGS="-name $JENKINS_SLAVE_NAME -master http://jenkins-product.srt.mirantis.net:8080/ -username fuel-slave-jenkins -password l0dasf)aKKswe -mode exclusive -fsroot $JENKINS_HOME"
+JENKINS_ARGS="-name $JENKINS_SLAVE_NAME -master <%= @jenkins_master %> -username <%= @jenkins_user %> -password <%= @jenkins_password %> -mode exclusive -fsroot $JENKINS_HOME"
 
