@@ -8,6 +8,7 @@ class jenkins_slave {
   include libvirt
   include venv
   include postgresql
+  include puppet
   include ssh
   include system_tests
   include transmission_daemon
@@ -17,12 +18,14 @@ class jenkins_slave {
 class torrent_tracker {
   include dpkg
   include opentracker
+  include puppet
   include ssh
   include zabbix_agent
 }
 
 node default {
   include dpkg
+  include puppet
   include ssh
   include zabbix_agent
 }

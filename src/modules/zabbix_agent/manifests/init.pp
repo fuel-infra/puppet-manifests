@@ -1,21 +1,26 @@
 class zabbix_agent {
   include zabbix_agent::params
+  #include zabbix_agent::checks
 
+  $checks = $zabbix_agent::params::checks
   $packages = $zabbix_agent::params::packages
   $service = $zabbix_agent::params::service
 
-  file { 'zabbix_agentd.conf':
+  file { 'zabbix_agentd.conf' :
     path => '/etc/zabbix/zabbix_agentd.conf',
     owner => 'root',
     group => 'root',
+    mode => '0644',
     content => template('zabbix_agent/zabbix_agentd.conf.erb'),
   }
 
-  package { $packages:
+  zabbix_agent::checks { $checks :}
+
+  package { $packages :
     ensure => latest,
   }
 
-  service { $service:
+  service { $service :
     ensure => running,
     enable => true,
     hasstatus => true,
@@ -24,9 +29,14 @@ class zabbix_agent {
 
   Class['dpkg'] ->
     Package[$packages] ->
-    File['zabbix_agentd.conf'] ~>
+    File['zabbix_agentd.conf'] ->
+    Zabbix_agent::Checks[$checks] ~>
     Service[$service]
 
-  File['zabbix_agentd.conf'] ~>
+  File['zabbix_agentd.conf'] ->
+    Zabbix_agent::Checks[$checks] ~>
+    Service[$service]
+
+  Zabbix_agent::Checks[$checks] ~>
     Service[$service]
 }
