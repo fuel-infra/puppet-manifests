@@ -9,6 +9,6 @@ Replaces: puppet
 Section: extra
 Priority: optional
 Architecture: any
-Depends: puppet
+Depends: puppet, puppet-module-puppetlabs-firewall, iptables-persistent
 Description: Puppet manifests
  .

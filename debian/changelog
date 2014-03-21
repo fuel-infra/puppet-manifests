@@ -1,3 +1,10 @@
+config-puppet-manifests (0.16) UNRELEASED; urgency=low
+
+  * firewall rules for some daemons
+  * deps fixes
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Sat, 22 Mar 2014 03:46:16 +0400
+
 config-puppet-manifests (0.15) unstable; urgency=low
 
   * selfupdate functionality 

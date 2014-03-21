@@ -24,8 +24,8 @@ class system_tests {
 
   Class['dpkg'] ->
     Class['jenkins_swarm_slave'] ->
-    Venv::Venv['venv-nailgun-tests'] ->
     Package[$packages] -> 
+    Venv::Venv['venv-nailgun-tests'] ->
     Class['postgresql'] -> 
     Exec['devops-syncdb'] ->
     Exec['workspace-create']

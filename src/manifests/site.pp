@@ -2,6 +2,15 @@ Exec {
   path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
 }
 
+resources { "firewall" :
+  purge => true,
+}
+
+class { ['firewall_defaults::pre', 'firewall_defaults::post'] :}
+Firewall {
+    before  => Class['firewall_defaults::post'],
+}
+
 class jenkins_slave {
   include dpkg
   include jenkins_swarm_slave
