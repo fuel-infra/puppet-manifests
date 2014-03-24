@@ -1,3 +1,9 @@
+config-puppet-manifests (0.18) unstable; urgency=low
+
+  * security fix for puppet dir chmod
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 24 Mar 2014 11:26:27 +0400
+
 config-puppet-manifests (0.17) unstable; urgency=low
 
   * fixed package deps

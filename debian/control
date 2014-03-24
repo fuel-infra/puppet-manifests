@@ -9,6 +9,6 @@ Replaces: puppet
 Section: extra
 Priority: optional
 Architecture: any
-Depends: puppet, puppet-module-puppetlabs-firewall
+Depends: coreutils, findutils, puppet, puppet-module-puppetlabs-firewall
 Description: Puppet manifests
  .
