@@ -1,3 +1,9 @@
+config-puppet-manifests (0.20) unstable; urgency=low
+
+  * iptables-persisten dependencies
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 24 Mar 2014 19:21:40 +0400
+
 config-puppet-manifests (0.19) unstable; urgency=low
 
   * zabbix_agentd.conf template updated
