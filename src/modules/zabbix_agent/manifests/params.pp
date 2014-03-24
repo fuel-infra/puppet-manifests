@@ -5,4 +5,7 @@ class zabbix_agent::params {
   ]
   $packages = ['zabbix-agent']
   $service = 'zabbix-agent'
+  $zabbix_nets = [
+    '172.18.0.0/16',
+  ]
 }

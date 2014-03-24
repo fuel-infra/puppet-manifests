@@ -5,6 +5,7 @@ class zabbix_agent {
   $checks = $zabbix_agent::params::checks
   $packages = $zabbix_agent::params::packages
   $service = $zabbix_agent::params::service
+  $zabbix_nets = $zabbix_agent::params::zabbix_nets
 
   file { 'zabbix_agentd.conf' :
     path => '/etc/zabbix/zabbix_agentd.conf',
@@ -25,6 +26,13 @@ class zabbix_agent {
     enable => true,
     hasstatus => true,
     hasrestart => false,
+  }
+
+  Class['firewall_defaults::pre'] ->
+  firewall { '200 allow zabbix connections' :
+    dport => 10050,
+    source => $zabbix_nets,
+    action => 'accept',
   }
 
   Class['dpkg'] ->
