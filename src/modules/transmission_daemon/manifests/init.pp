@@ -20,6 +20,29 @@ class transmission_daemon {
     content => template('transmission_daemon/settings.json.erb'),
   }
 
+  if $external_host {
+    Class['firewall_defaults::pre'] ->
+    firewall { '500 allow transmission-rpc connections' :
+      port => 9091,
+      action => 'accept',
+    }->
+    firewall { '501 allow transmission peer connections' :
+      port => 55589,
+      proto => 'tcp',
+      action => 'accept',
+    }->
+    firewall { '502 allow transmission peer connections' :
+      port => 55589,
+      proto => 'udp',
+      action => 'accept',
+    }->
+    firewall { '502 allow transmission multicast connections' :
+      port => 6771,
+      proto => 'udp',
+      action => 'accept',
+    }
+  }
+
   file { $download_dir :
     path => $download_dir,
     ensure => 'directory',

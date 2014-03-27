@@ -9,5 +9,7 @@ class ssh::params {
        key => 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDKgCCELnGto4MROegcB3i68q+j0fTZYNHEWLKx6yYhi1G/xB6sPqhvY14/3unAr0isF2pYEEV2HgG0zUGBCKyaCV9Py9+6Zb1HVAjvw8+6MA2B4dHZr46n+jZmn5c/rNRggaC6mEYEu4RoUefrbyLs7hdxSrQpeyBk3F8GC/4mXBQP4vxXkzkbEn2fLVGCfevip3dLRRt6QoP5dEvyhm3b0s1dlTGQ554Gw3g3gZHBuVqCIk4nc4P0Bz5bn7v93+PLih6S9SdM3RFbIl+KBz1byOqLMQPXH0dwZ0lVsG3PePfnykc9OVNClx4T6JEoxYWECCfHZZULln9gHsGy3PzJ',
     }
   }
+  $service = 'ssh'
+  $sshd_config = '/etc/ssh/sshd_config'
 }
 

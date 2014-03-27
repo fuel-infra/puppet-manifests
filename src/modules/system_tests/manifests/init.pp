@@ -12,7 +12,7 @@ class system_tests {
   }
 
   exec { 'devops-syncdb' :
-    command => '. /home/jenkins/venv-nailgun-tests/bin/activate ; django-admin.py syncdb --settings=devops.settings',
+    command => '. /home/jenkins/venv-nailgun-tests/bin/activate ; django-admin syncdb --settings=devops.settings',
     provider => 'shell',
     user => 'jenkins',
     cwd => '/tmp',

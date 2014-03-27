@@ -30,11 +30,13 @@ class opentracker {
     hasrestart => false,
   }
 
-  Class['firewall_defaults::pre'] ->
-    firewall { '300 allow connections to opentracker' :
-      dport => 8080,
-      action => 'accept',
-    }
+  if $external_host {
+    Class['firewall_defaults::pre'] ->
+      firewall { '300 allow connections to opentracker' :
+        dport => 8080,
+        action => 'accept',
+      }
+  }
 
   Package[$pre_packages] ->
     Package[$packages] ->

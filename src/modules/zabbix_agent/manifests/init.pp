@@ -28,11 +28,13 @@ class zabbix_agent {
     hasrestart => false,
   }
 
-  Class['firewall_defaults::pre'] ->
-  firewall { '200 allow zabbix connections' :
-    dport => 10050,
-    source => $zabbix_nets,
-    action => 'accept',
+  if $external_host {
+    Class['firewall_defaults::pre'] ->
+    firewall { '200 allow zabbix connections' :
+      dport => 10050,
+      source => $zabbix_nets,
+      action => 'accept',
+    }
   }
 
   Class['dpkg'] ->

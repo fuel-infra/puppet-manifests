@@ -50,3 +50,8 @@ node 'ctorrent-msk.msk.mirantis.net' {
   include torrent_tracker
 }
 
+node /(ss0078.svwh.net|fuel-jenkins2.mirantis.com)/ {
+  $external_host = true
+  include jenkins_slave
+}
+

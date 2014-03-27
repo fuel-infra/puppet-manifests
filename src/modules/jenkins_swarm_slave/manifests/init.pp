@@ -14,13 +14,22 @@ class jenkins_swarm_slave {
 
   create_resources(user, $users, {ensure => present})
 
-  file { 'jenkins-swarm-slave.conf' :
-    path => '/etc/default/jenkins-swarm-slave',
-    ensure => present,
-    owner => 'root',
-    group => 'root',
-    mode => '0600',
-    content => template('jenkins_swarm_slave/jenkins-swarm-slave.conf.erb')
+  if $::jenkins_update {
+    file { 'jenkins-swarm-slave.conf' :
+      path => '/etc/default/jenkins-swarm-slave',
+      ensure => present,
+      owner => 'root',
+      group => 'root',
+      mode => '0600',
+      content => template('jenkins_swarm_slave/jenkins-swarm-slave.conf.erb')
+    }
+
+    Class['dpkg']->
+      Package[$packages]->
+      File['jenkins-swarm-slave.conf']~>
+      Service[$service]
+    File['jenkins-swarm-slave.conf']~>
+      Service[$service]
   }
 
   service { $service :
@@ -30,7 +39,5 @@ class jenkins_swarm_slave {
     hasrestart => false,
   }
 
-  Class['dpkg'] -> Package[$packages] -> File['jenkins-swarm-slave.conf'] ~> Service[$service]
   Class['dpkg'] -> Package[$packages] ~> Service[$service]
-  File['jenkins-swarm-slave.conf'] ~> Service[$service]
 }

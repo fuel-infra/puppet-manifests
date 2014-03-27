@@ -1,3 +1,13 @@
+config-puppet-manifests (0.21) unstable; urgency=low
+
+  * added ability to specify if host is internal
+  * [zabbix] zabbix software check: it won't require sed ana keep output clean
+  * [transmission_daemon] added firewall rules
+  * [ssh] added sshd_config
+  * [jenkins_swarm_slave] removing jenkins credentials from manifests, using facter instead
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 26 Mar 2014 20:58:48 +0400
+
 config-puppet-manifests (0.20) unstable; urgency=low
 
   * iptables-persisten dependencies
