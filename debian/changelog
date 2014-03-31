@@ -1,3 +1,9 @@
+config-puppet-manifests (0.23) unstable; urgency=low
+
+  * fixing HOME env variable
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 31 Mar 2014 16:30:34 +0400
+
 config-puppet-manifests (0.22) unstable; urgency=low
 
   * add logoutput => on_failure to all exec's

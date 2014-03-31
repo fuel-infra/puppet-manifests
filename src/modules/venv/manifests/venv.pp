@@ -23,7 +23,7 @@ define venv::venv (
   if $requirements {
     exec { 'venv-requirements':
       provider => 'shell',
-      command => ". ${path}/bin/activate ; pip install -r ${requirements}",
+      command => "export HOME='/home/${user}' ; . ${path}/bin/activate ; pip install -r ${requirements}",
       cwd => '/tmp',
       user => $user,
       logoutput => on_failure,
