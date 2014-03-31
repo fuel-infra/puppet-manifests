@@ -9,6 +9,7 @@ class system_tests {
     provider => 'shell',
     user => 'jenkins',
     cwd => '/tmp',
+    logoutput => on_failure,
   }
 
   exec { 'devops-syncdb' :
@@ -16,6 +17,7 @@ class system_tests {
     provider => 'shell',
     user => 'jenkins',
     cwd => '/tmp',
+    logoutput => on_failure,
   }
 
   package { $packages:

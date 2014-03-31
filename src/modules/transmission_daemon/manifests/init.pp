@@ -55,6 +55,7 @@ class transmission_daemon {
     provider => 'shell',
     user => 'root',
     refreshonly => true,
+    logoutput => on_failure,
   }
 
   Class['dpkg'] ->

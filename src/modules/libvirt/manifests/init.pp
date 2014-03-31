@@ -39,7 +39,8 @@ class libvirt {
     provider => 'shell',
     user => 'root',
     cwd => '/tmp',
-    unless => 'virsh pool-dumpxml default'
+    unless => 'virsh pool-dumpxml default',
+    logoutput => on_failure,
   }
 
   Class['dpkg'] ->

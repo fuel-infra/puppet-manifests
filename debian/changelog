@@ -1,3 +1,9 @@
+config-puppet-manifests (0.22) unstable; urgency=low
+
+  * add logoutput => on_failure to all exec's
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 31 Mar 2014 15:44:52 +0400
+
 config-puppet-manifests (0.21) unstable; urgency=low
 
   * added ability to specify if host is internal

@@ -18,6 +18,7 @@ class dpkg {
     provider => 'shell',
     user => 'root',
     cwd => '/tmp',
+    logoutput => on_failure,
   }
 
   File['allow-unauthenticated.conf'] ->

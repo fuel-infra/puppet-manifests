@@ -17,6 +17,7 @@ define venv::venv (
     command => "virtualenv ${options} ${path}",
     cwd => '/tmp',
     user => $user,
+    logoutput => on_failure,
   }
 
   if $requirements {
@@ -25,6 +26,7 @@ define venv::venv (
       command => ". ${path}/bin/activate ; pip install -r ${requirements}",
       cwd => '/tmp',
       user => $user,
+      logoutput => on_failure,
     }
   }
 
