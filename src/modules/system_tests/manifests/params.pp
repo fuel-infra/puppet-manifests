@@ -11,6 +11,7 @@ class system_tests::params {
     'python-seed-cleaner',
     'python-seed-client',
     'python-xmlbuilder',
+    'python-yaml',
   ]
   $workspace = '/home/jenkins/workspace'
 }

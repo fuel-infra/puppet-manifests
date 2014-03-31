@@ -1,3 +1,9 @@
+config-puppet-manifests (0.24) unstable; urgency=low
+
+  * python-yaml added
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 31 Mar 2014 21:54:21 +0400
+
 config-puppet-manifests (0.23) unstable; urgency=low
 
   * fixing HOME env variable
