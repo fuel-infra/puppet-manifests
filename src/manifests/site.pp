@@ -18,6 +18,7 @@ class jenkins_slave {
   include dpkg
   include jenkins_swarm_slave
   include libvirt
+  include ntp
   include venv
   include postgresql
   include puppet
@@ -29,6 +30,7 @@ class jenkins_slave {
 
 class torrent_tracker {
   include dpkg
+  include ntp
   include opentracker
   include puppet
   include ssh
@@ -37,6 +39,7 @@ class torrent_tracker {
 
 node default {
   include dpkg
+  include ntp
   include puppet
   include ssh
   include zabbix_agent

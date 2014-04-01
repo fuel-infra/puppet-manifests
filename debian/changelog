@@ -1,3 +1,9 @@
+config-puppet-manifests (0.25) unstable; urgency=low
+
+  * ntp module added
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Tue, 01 Apr 2014 04:01:55 +0400
+
 config-puppet-manifests (0.24) unstable; urgency=low
 
   * python-yaml added
