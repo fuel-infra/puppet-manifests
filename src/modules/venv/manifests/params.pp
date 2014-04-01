@@ -2,7 +2,7 @@ class venv::params {
   $packages = [
     'git',
     'libffi-dev',
-    'postgresql-server-dev-9.1',
+    'postgresql-server-dev-all',
     'python-dev',
     'python-virtualenv',
   ]

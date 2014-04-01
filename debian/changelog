@@ -1,3 +1,9 @@
+config-puppet-manifests (0.26) unstable; urgency=low
+
+  * fixes to support Ubuntu 14.04 LTS
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Tue, 01 Apr 2014 18:42:03 +0400
+
 config-puppet-manifests (0.25) unstable; urgency=low
 
   * ntp module added

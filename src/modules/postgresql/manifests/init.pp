@@ -1,6 +1,7 @@
 class postgresql {
   include postgresql::params
 
+  $config = $postgresql::params::config
   $packages = $postgresql::params::packages
   $service = $postgresql::params::service
 
@@ -8,8 +9,8 @@ class postgresql {
     ensure => 'installed',
   }
 
-  file { 'pg_hba.conf':
-    path => '/etc/postgresql/9.1/main/pg_hba.conf',
+  file { $config :
+    path => $config,
     ensure => present,
     owner => 'root',
     group => 'root',
@@ -24,6 +25,11 @@ class postgresql {
     hasrestart => false,
   }
 
-  Class['dpkg'] -> Package[$packages] -> File['pg_hba.conf'] ~> Service[$service]
-  File['pg_hba.conf'] ~> Service[$service]
+  Class['dpkg'] ->
+    Package[$packages] ->
+    File[$config] ~>
+    Service[$service]
+
+  File[$config] ~>
+    Service[$service]
 }
