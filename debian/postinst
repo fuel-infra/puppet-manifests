@@ -4,3 +4,11 @@
 find /etc/puppet -type d | xargs -P 1 -L 1 chmod 700
 find /etc/puppet -type f | xargs -P 1 -L 1 chmod 600
 
+if [ -e /etc/puppet/etckeeper-commit-pre ] ; then
+    chmod +x /etc/puppet/etckeeper-commit-pre
+fi
+
+if [ -e /etc/puppet/etckeeper-commit-pre ] ; then
+    chmod +x /etc/puppet/etckeeper-commit-pre
+fi
+
