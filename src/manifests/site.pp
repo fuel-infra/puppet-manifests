@@ -14,35 +14,32 @@ Firewall {
     before  => Class['firewall_defaults::post'],
 }
 
-class jenkins_slave {
+
+class class_default {
   include dpkg
-  include jenkins_swarm_slave
-  include libvirt
   include ntp
-  include venv
-  include postgresql
   include puppet
   include ssh
+  include zabbix_agent
+}
+
+class jenkins_slave {
+  include class_default
+  include jenkins_swarm_slave
+  include venv
+  include postgresql
   include system_tests
   include transmission_daemon
-  include zabbix_agent
 }
 
 class torrent_tracker {
-  include dpkg
-  include ntp
+  include class_default
   include opentracker
-  include puppet
-  include ssh
-  include zabbix_agent
 }
 
+
 node default {
-  include dpkg
-  include ntp
-  include puppet
-  include ssh
-  include zabbix_agent
+  include class_default
 }
 
 node /mc2n([1-8]{1})-srt\.srt\.mirantis\.net/ {

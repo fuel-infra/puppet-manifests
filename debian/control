@@ -5,10 +5,10 @@ Priority: optional
 Maintainer: Igor Shishkin <ishishkin@mirantis.com>
 
 Package: config-puppet-manifests
-Replaces: puppet
+Replaces: puppet, puppet-common
 Section: extra
 Priority: optional
 Architecture: any
-Depends: coreutils, etckeeper, findutils, puppet, puppet-module-puppetlabs-firewall
+Depends: coreutils, findutils, puppet, puppet-module-puppetlabs-firewall
 Description: Puppet manifests
  .
