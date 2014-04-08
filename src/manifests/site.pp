@@ -26,6 +26,7 @@ class class_default {
 class jenkins_slave {
   include class_default
   include jenkins_swarm_slave
+  include libvirt
   include venv
   include postgresql
   include system_tests
