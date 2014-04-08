@@ -43,7 +43,7 @@ node default {
   include class_default
 }
 
-node /mc2n([1-8]{1})-srt\.srt\.mirantis\.net/ {
+node /mc([0-2]+)n([1-8]{1})-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   include jenkins_slave
 }
 
