@@ -38,6 +38,12 @@ class torrent_tracker {
   include opentracker
 }
 
+class srv {
+  include class_default
+  include nginx
+  include nginx::share
+}
+
 
 node default {
   include class_default
@@ -54,5 +60,9 @@ node 'ctorrent-msk.msk.mirantis.net' {
 node /(ss0078.svwh.net|fuel-jenkins2.mirantis.com)/ {
   $external_host = true
   include jenkins_slave
+}
+
+node /srv0(7|8|11)-(msk|srt).(msk|srt).mirantis.net/ {
+  include srv
 }
 
