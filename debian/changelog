@@ -1,3 +1,9 @@
+config-puppet-manifests (0.34) unstable; urgency=low
+
+  * Setting labels for jenkins swarm slave
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 09 Apr 2014 23:05:30 +0400
+
 config-puppet-manifests (0.33) unstable; urgency=low
 
   * nginx share config

@@ -7,6 +7,7 @@ class jenkins_swarm_slave {
   $jenkins_master = $jenkins_swarm_slave::params::jenkins_master
   $jenkins_user = $jenkins_swarm_slave::params::jenkins_user
   $jenkins_password = $jenkins_swarm_slave::params::jenkins_password
+  $labels = $jenkins_swarm_slave::params::labels
 
   package { $packages :
     ensure => latest,
