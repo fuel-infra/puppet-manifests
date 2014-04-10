@@ -1,16 +1,15 @@
 class dpkg {
   include dpkg::params
 
-  $dpkg_confdir = $dpkg::params::dpkg_confdir
+  $gpg_key_cmd = $dpkg::params::gpg_key_cmd
   $init_command = $dpkg::params::init_command
 
-  file { 'allow-unauthenticated.conf' :
-    name    => "${dpkg_confdir}/00-allow-unauthenticated.conf",
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template('dpkg/allow-unauthenticated.conf.erb'),
+  exec { $gpg_key_cmd :
+    command => $gpg_key_cmd,
+    provider => 'shell',
+    user => 'root',
+    cwd => '/tmp',
+    logoutput => 'on_failure'
   }
 
   exec { $init_command :
@@ -18,10 +17,10 @@ class dpkg {
     provider => 'shell',
     user => 'root',
     cwd => '/tmp',
-    logoutput => on_failure,
+    logoutput => 'on_failure',
   }
 
-  File['allow-unauthenticated.conf'] ->
+  Exec[$gpg_key_cmd]->
     Exec[$init_command]
 }
 

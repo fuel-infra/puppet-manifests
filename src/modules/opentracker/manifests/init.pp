@@ -32,8 +32,14 @@ class opentracker {
 
   if $external_host {
     Class['firewall_defaults::pre'] ->
-      firewall { '300 allow connections to opentracker' :
+      firewall { '1000 allow TCP connections to opentracker' :
         dport => 8080,
+        proto => 'tcp',
+        action => 'accept',
+      }->
+      firewall { '1000 allow UDP connections to opentracker' :
+        dport => 6969,
+        proto => 'udp',
         action => 'accept',
       }
   }
@@ -41,10 +47,8 @@ class opentracker {
   Package[$pre_packages] ->
     Package[$packages] ->
     File[$config_file] ->
-    Firewall['300 allow connections to opentracker'] ~>
     Service[$service]
 
   File[$config_file] ->
-    Firewall['300 allow connections to opentracker'] ~>
     Service[$service]
 }

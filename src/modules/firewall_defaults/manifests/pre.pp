@@ -1,5 +1,16 @@
 class firewall_defaults::pre {
   if $external_host {
+    package { 'iptables-persistent' :
+      ensure => installed,
+    }->
+    resources { "firewall" :
+      purge => true,
+    }
+
+    Firewall {
+        before  => Class['firewall_defaults::post'],
+    }
+
     firewall { '000 accept all icmp':
       proto   => 'icmp',
       action  => 'accept',

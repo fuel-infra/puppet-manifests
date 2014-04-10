@@ -1,3 +1,15 @@
+config-puppet-manifests (0.35) unstable; urgency=low
+
+  * do nothing with firewall if not needed
+  * firewall rules added for nginx
+  * acharykov's key added to ssh
+  * ssh module splited in ssh::sshd and ssh::authorized_keys
+  * minor fixes
+  * dpkg repo key added
+  * changed default behavior to do nothing
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Thu, 10 Apr 2014 21:18:05 +0400
+
 config-puppet-manifests (0.34) unstable; urgency=low
 
   * Setting labels for jenkins swarm slave

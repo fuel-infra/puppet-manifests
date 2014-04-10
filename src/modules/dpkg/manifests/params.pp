@@ -1,4 +1,4 @@
 class dpkg::params {
-  $dpkg_confdir = '/etc/apt/apt.conf.d'
+  $gpg_key_cmd = 'cat /etc/puppet/modules/dpkg/files/qa-ubuntu.key | apt-key add -'
   $init_command = 'apt-get update'
 }

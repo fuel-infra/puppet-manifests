@@ -22,21 +22,21 @@ class transmission_daemon {
 
   if $external_host {
     Class['firewall_defaults::pre'] ->
-    firewall { '500 allow transmission-rpc connections' :
+    firewall { '1000 allow transmission-rpc connections' :
       port => 9091,
       action => 'accept',
     }->
-    firewall { '501 allow transmission peer connections' :
+    firewall { '1000 allow transmission TCP peer connections' :
       port => 55589,
       proto => 'tcp',
       action => 'accept',
     }->
-    firewall { '502 allow transmission peer connections' :
+    firewall { '1000 allow transmission UDP peer connections' :
       port => 55589,
       proto => 'udp',
       action => 'accept',
     }->
-    firewall { '502 allow transmission multicast connections' :
+    firewall { '1000 allow transmission multicast connections' :
       port => 6771,
       proto => 'udp',
       action => 'accept',

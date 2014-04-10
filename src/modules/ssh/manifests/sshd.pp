@@ -1,11 +1,8 @@
-class ssh {
+class ssh::sshd {
   include ssh::params
 
-  $root_keys = $ssh::params::root_keys
   $service = $ssh::params::service
   $sshd_config = $ssh::params::sshd_config
-
-  create_resources(ssh_authorized_key, $root_keys, {ensure => present, user => 'root'})
 
  file { $sshd_config :
     path => $sshd_config,
