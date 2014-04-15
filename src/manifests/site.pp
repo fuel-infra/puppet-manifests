@@ -16,7 +16,6 @@ class common {
 
 class jenkins_slave {
   include common
-  include jenkins_swarm_slave
   include libvirt
   include venv
   include postgresql
@@ -40,13 +39,14 @@ class srv {
 
 node /mc([0-2]+)n([1-8]{1})-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   include jenkins_slave
+  include jenkins_swarm_slave
 }
 
 node 'ctorrent-msk.msk.mirantis.net' {
   include torrent_tracker
 }
 
-node /(ss0078.svwh.net|fuel-jenkins2.mirantis.com)/ {
+node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com)/ {
   $external_host = true
 
   include jenkins_slave

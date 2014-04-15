@@ -33,7 +33,6 @@ class system_tests {
   }
 
   Class['dpkg'] ->
-    Class['jenkins_swarm_slave'] ->
     Package[$packages] -> 
     Venv::Venv['venv-nailgun-tests'] ->
     Class['postgresql'] -> 

@@ -1,4 +1,6 @@
 class jenkins_swarm_slave {
+  include dpkg
+
   include jenkins_swarm_slave::params
 
   $packages = $jenkins_swarm_slave::params::packages
@@ -40,5 +42,7 @@ class jenkins_swarm_slave {
     hasrestart => false,
   }
 
-  Class['dpkg'] -> Package[$packages] ~> Service[$service]
+  Class['dpkg']->
+    Package[$packages]~>
+    Service[$service]
 }
