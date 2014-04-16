@@ -17,6 +17,11 @@ class nginx {
     content => template('nginx/nginx.conf.erb'),
   }
 
+  file { 'default.conf' :
+    path => '/etc/nginx/sites-enabled/default',
+    ensure => absent,
+  }
+
   service { $service :
     ensure => running,
     enable => true,
@@ -25,10 +30,12 @@ class nginx {
   }
 
   Package[$packages]->
-    File['nginx.conf']~>
+    File['nginx.conf']->
+    File['default.conf']~>
     Service[$service]
 
-  File['nginx.conf']~>
+  File['nginx.conf']->
+    File['default.conf']~>
     Service[$service]
 }
 

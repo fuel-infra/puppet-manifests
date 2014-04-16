@@ -30,6 +30,11 @@ class torrent_tracker {
   include opentracker
 }
 
+class pxe_deployment {
+  include common
+  include pxetool
+}
+
 class srv {
   include common
   include nginx
@@ -54,5 +59,11 @@ node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com)/ {
 
 node /srv0(7|8|11)-(msk|srt).(msk|srt).mirantis.net/ {
   include srv
+}
+
+node 'pxe-product.msk.mirantis.net' {
+  include common
+  include pxetool
+  include ssh::authorized_keys
 }
 
