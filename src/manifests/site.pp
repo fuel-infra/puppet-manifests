@@ -51,6 +51,16 @@ node 'ctorrent-msk.msk.mirantis.net' {
   include torrent_tracker
 }
 
+node /(fuel-archive\.mirantis\.com|fuel-tr01cz\.mirantis\.com)/ {
+  $external_host = true
+
+  include torrent_tracker
+
+  include transmission_daemon
+  include nginx
+  include nginx::share
+}
+
 node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com)/ {
   $external_host = true
 
