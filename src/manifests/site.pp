@@ -22,6 +22,11 @@ class jenkins_slave {
   include ssh::authorized_keys
   include system_tests
   include transmission_daemon
+  if $external_host == true {
+    include jenkins_standalone_slave
+  } else {
+    include jenkins_swarm_slave
+  }
 }
 
 class torrent_tracker {
@@ -41,10 +46,8 @@ class srv {
   include nginx::share
 }
 
-
 node /mc([0-2]+)n([1-8]{1})-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   include jenkins_slave
-  include jenkins_swarm_slave
 }
 
 node 'ctorrent-msk.msk.mirantis.net' {
