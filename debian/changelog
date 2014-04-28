@@ -1,3 +1,9 @@
+config-puppet-manifests (0.40) unstable; urgency=low
+
+  * Local mirrors usage
+
+ -- Igor Shishkin <acharykov@mirantis.com>  Mon, 28 Apr 2014 17:35:33 +0400
+
 config-puppet-manifests (0.39) unstable; urgency=medium
 
   * Additional configuration for external jenkins slaves
