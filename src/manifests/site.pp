@@ -11,7 +11,7 @@ class common {
   include ntp
   include puppet
   include ssh::sshd
-  include zabbix_agent
+  include zabbix::agent
 }
 
 class jenkins_slave {
@@ -22,6 +22,7 @@ class jenkins_slave {
   include ssh::authorized_keys
   include system_tests
   include transmission_daemon
+
   if $external_host == true {
     include jenkins_standalone_slave
   } else {
@@ -38,6 +39,7 @@ class torrent_tracker {
 class pxe_deployment {
   include common
   include pxetool
+  include ssh::authorized_keys
 }
 
 class srv {
@@ -74,9 +76,7 @@ node /srv0(7|8|11)-(msk|srt).(msk|srt).mirantis.net/ {
   include srv
 }
 
-node 'pxe-product.msk.mirantis.net' {
-  include common
-  include pxetool
-  include ssh::authorized_keys
+node /(pxe-product\.msk\.mirantis\.net|jenkins-product\.srt\.mirantis\.net)/ {
+  include pxe_deployment
 }
 
