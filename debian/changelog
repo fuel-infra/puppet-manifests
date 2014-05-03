@@ -1,3 +1,9 @@
+config-puppet-manifests (0.43) unstable; urgency=low
+
+  * Persistent pool configuration (Closes-Bug: #1315692)
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 05 May 2014 15:41:30 +0400
+
 config-puppet-manifests (0.42) unstable; urgency=low
 
   * sudo for jenkins user to run ebtables (Close-Bug: #1315863)

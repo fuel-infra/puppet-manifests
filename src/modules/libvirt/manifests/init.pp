@@ -6,6 +6,7 @@ class libvirt {
   $default_config = $libvirt::params::default_config
   $service = $libvirt::params::service
   $default_pool_dir = $libvirt::params::default_pool_dir
+  $default_pool_name = $libvirt::params::default_pool_name
 
   package { $packages :
     ensure => installed,
@@ -34,30 +35,52 @@ class libvirt {
     hasrestart => false,
   }
 
-  exec { 'pool-create-default' :
-    command => "virsh pool-create-as --name=default --type=dir --target=${default_pool_dir}",
-    provider => 'shell',
-    user => 'root',
-    cwd => '/tmp',
-    unless => 'virsh pool-dumpxml default',
-    logoutput => on_failure,
+  file { '/etc/libvirt/storage' :
+    ensure => directory,
   }
 
-  Class['dpkg'] ->
-    Package[$packages] -> 
-    File[$config] -> 
-    File[$default_config] ~> 
-    Service[$service] -> 
-    Exec['pool-create-default']
+  file { "/etc/libvirt/storage/${default_pool_name}.xml" :
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    content => template('libvirt/libvirt-pool-default.xml.erb'),
+  }
 
-  Class['dpkg'] ->
-    Package[$packages] ~>
+  exec { 'define-default-pool' :
+    command => "virsh pool-define /etc/libvirt/storage/${default_pool_name}.xml",
+    unless => "virsh pool-list --persistent | awk '{print \$1}' | egrep '^${default_pool_name}\$'"
+  }
+
+  exec { 'default-pool-autostart' :
+    command => "virsh pool-autostart ${default_pool_name}",
+    onlyif => "virsh pool-list --no-autostart | awk '{print \$1}' | egrep '^${default_pool_name}\$'"
+  }
+
+  exec { 'default-pool-start' :
+    command => "virsh pool-start ${default_pool_name}",
+    onlyif => "virsh pool-list --inactive | awk '{print \$1}' | egrep '^${default_pool_name}\$'"
+  }
+
+  Class['dpkg']->
+    Package[$packages]-> 
+    File['/etc/libvirt/storage']->
+    File[$config]-> 
+    File[$default_config]~> 
+    Service[$service]-> 
+    File["/etc/libvirt/storage/${default_pool_name}.xml"]->
+    Exec['define-default-pool']->
+    Exec['default-pool-autostart']->
+    Exec['default-pool-start']
+
+  Class['dpkg']->
+    Package[$packages]~>
     Service[$service]
 
-  File[$config] ~>
+  File[$config]~>
     Service[$service]
 
-  File[$default_config] ~>
+  File[$default_config]~>
     Service[$service]
 
 }

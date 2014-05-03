@@ -1,5 +1,6 @@
 Exec {
   path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+  provider => 'shell',
 }
 
 #class { ['firewall_defaults::pre', 'firewall_defaults::post'] :}
