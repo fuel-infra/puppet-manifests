@@ -2,6 +2,7 @@ class system_tests {
   include system_tests::params
 
   $packages = $system_tests::params::packages
+  $sudo_commands = $system_tests::params::sudo_commands
   $workspace = $system_tests::params::workspace
 
   exec { 'workspace-create':
@@ -32,6 +33,11 @@ class system_tests {
     ensure => installed,
   }
 
+  file { '/etc/sudoers.d/systest' :
+    content => template('system_tests/sudoers.erb'),
+    mode => '0600',
+  }
+
   Class['dpkg'] ->
     Package[$packages] -> 
     Venv::Venv['venv-nailgun-tests'] ->
@@ -40,3 +46,4 @@ class system_tests {
     Exec['devops-migrate'] ->
     Exec['workspace-create']
 }
+

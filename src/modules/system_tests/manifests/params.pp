@@ -13,5 +13,6 @@ class system_tests::params {
     'python-xmlbuilder',
     'python-yaml',
   ]
+  $sudo_commands = ['/sbin/ebtables']
   $workspace = '/home/jenkins/workspace'
 }
