@@ -3,6 +3,7 @@ class dpkg {
 
   $gpg_key_cmd = $dpkg::params::gpg_key_cmd
   $init_command = $dpkg::params::init_command
+  $internal_mirror = $dpkg::params::internal_mirror
   $mirror = $dpkg::params::mirror
   $repo_list = $dpkg::params::repo_list
 

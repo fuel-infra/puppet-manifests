@@ -19,6 +19,12 @@ class dpkg::params {
     $mirror = 'archive.ubuntu.com'
   }
 
+  if $::fqdn =~ /\.mirantis\.com$/ {
+    $internal_mirror = 'deb http://fuel-repository.mirantis.com/devops/ubuntu/ /'
+  } else {
+    $internal_mirror = 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /'
+  }
+
   $repo_list = '/etc/apt/sources.list'
 }
 

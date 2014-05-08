@@ -3,5 +3,5 @@ deb http://<%= @mirror %>/ubuntu/ <%= @lsbdistcodename %>-updates main restricte
 
 deb http://security.ubuntu.com/ubuntu <%= @lsbdistcodename %>-security main restricted universe multiverse
 
-deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /
+<%= @internal_mirror %>
 

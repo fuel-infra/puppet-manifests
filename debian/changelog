@@ -1,3 +1,9 @@
+config-puppet-manifests (0.44) unstable; urgency=low
+
+  * External mirror for internal devops repo added
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Thu, 08 May 2014 16:35:14 +0400
+
 config-puppet-manifests (0.43) unstable; urgency=low
 
   * Persistent pool configuration (Closes-Bug: #1315692)
