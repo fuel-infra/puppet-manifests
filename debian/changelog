@@ -1,3 +1,9 @@
+config-puppet-manifests (0.47) unstable; urgency=low
+
+  * client_max_body_size 5G added to seed-web nginx configuration
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Tue, 13 May 2014 16:55:56 +0400
+
 config-puppet-manifests (0.46) unstable; urgency=low
 
   * Zabbix firewall fix

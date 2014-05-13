@@ -12,5 +12,7 @@ server {
                 uwsgi_pass                127.0.0.1:7333;
                 uwsgi_send_timeout        600;
                 uwsgi_read_timeout        600;
+
+                client_max_body_size 5G;
         }
 }
