@@ -57,14 +57,14 @@ node 'ctorrent-msk.msk.mirantis.net' {
   include torrent_tracker
 }
 
-node /(fuel-archive\.mirantis\.com|fuel-tr01cz\.mirantis\.com)/ {
+node /(seed-(eu|us)([0-9]{2,})\.mirantis\.com)/ {
   $external_host = true
 
-  include torrent_tracker
-
-  include transmission_daemon
+  include common
   include nginx
   include nginx::share
+  include seed::web
+  include torrent_tracker
 }
 
 node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com)/ {
@@ -80,4 +80,3 @@ node /srv0(7|8|11)-(msk|srt).(msk|srt).mirantis.net/ {
 node /(pxe-product\.msk\.mirantis\.net|jenkins-product\.srt\.mirantis\.net)/ {
   include pxe_deployment
 }
-

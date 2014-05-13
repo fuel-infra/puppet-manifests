@@ -1,0 +1,16 @@
+server {
+        server_name                        _;
+        listen                             17333;
+
+        location / {
+                <% if @external_host
+                @allowed_ips.each {|ip| %><%= "allow #{ip};" %><% } %>
+                deny all;
+                <% end %>
+                include                   uwsgi_params;
+
+                uwsgi_pass                127.0.0.1:7333;
+                uwsgi_send_timeout        600;
+                uwsgi_read_timeout        600;
+        }
+}
