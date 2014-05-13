@@ -1,3 +1,9 @@
+config-puppet-manifests (0.46) unstable; urgency=low
+
+  * Zabbix firewall fix
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Tue, 13 May 2014 16:18:37 +0400
+
 config-puppet-manifests (0.45) unstable; urgency=low
 
   * External mirror for internal devops repo added
