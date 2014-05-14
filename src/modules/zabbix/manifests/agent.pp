@@ -6,7 +6,7 @@ class zabbix::agent {
   $config = $zabbix::params::agent_config
   $packages = $zabbix::params::agent_packages
   $service = $zabbix::params::agent_service
-  $zabbix_nets = $zabbix::params::zabbix_nets
+  $server_fqdn = $zabbix::params::server_fqdn
 
   file { $config :
     path => $config,
@@ -33,7 +33,7 @@ class zabbix::agent {
     Class['firewall_defaults::pre'] ->
     firewall { '1000 allow zabbix connections' :
       dport => 10050,
-      source => $zabbix_nets,
+      source => $server_fqdn,
       action => 'accept',
     }
   }

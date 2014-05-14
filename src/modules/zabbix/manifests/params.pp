@@ -20,7 +20,7 @@ class zabbix::params {
 
   $server_service = 'zabbix-server'
 
-  $zabbix_nets = '91.218.144.129/32'
+  $server_fqdn = '91.218.144.129'
 
   # MySQL options
   $innodb_buffer_pool_size = floor($::memorysize_mb/2*1024*1024)
