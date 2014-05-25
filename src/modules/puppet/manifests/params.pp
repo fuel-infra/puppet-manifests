@@ -4,4 +4,5 @@ class puppet::params {
     'puppet',
     'config-puppet-manifests'
   ]
+  $service = 'puppet'
 }

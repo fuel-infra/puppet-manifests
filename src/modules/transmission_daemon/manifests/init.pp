@@ -8,7 +8,7 @@ class transmission_daemon {
   $utp_enabled = $transmission_daemon::params::utp_enabled
 
   package { $packages :
-    ensure => 'latest',
+    ensure => latest,
   }
 
   file { "${config}-new" :
@@ -52,8 +52,6 @@ class transmission_daemon {
 
   exec { "${service}-reload" :
     command => "service ${service} stop ; cp ${config}-new ${config} ; service ${service} start",
-    provider => 'shell',
-    user => 'root',
     refreshonly => true,
     logoutput => on_failure,
   }

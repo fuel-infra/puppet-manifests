@@ -1,3 +1,27 @@
+config-puppet-manifests (0.49) unstable; urgency=low
+
+  * Adding fixes to pxetool to choose closest mirror
+  * Refactoring dpkg module
+  * Refactoring jenkins_standalone_slave module
+  * Puppet agent service stop and disable added
+  * Uwsgi module fixes to work on ubuntu 14.04 LTS(somaxconn)
+  * Zabbix-agent dependencies refactoring
+  * Zabbix-server TrendCacheSize=8M
+  * Zabbix-server packages ensure latest
+  * Zabbix-server ping.php handle
+  * Venv update packages ensure latest
+  * Transmission-daemon code style fix
+  * System_tests code style fix
+  * Ssh code style fix
+  * Seed code style fix
+  * Postgresql code style fix
+  * Opentracker dependencies cleanup
+  * Libvirt packages ensure latest
+  * Buld_fuel_iso packages ensure latest
+  * Regex fix for srv*
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Fri, 23 May 2014 20:12:11 +0400
+
 config-puppet-manifests (0.48) unstable; urgency=low
 
   * Zabbix active checks on external servers fix
@@ -210,7 +234,7 @@ config-puppet-manifests (0.16) unstable; urgency=low
 
 config-puppet-manifests (0.15) unstable; urgency=low
 
-  * selfupdate functionality 
+  * selfupdate functionality
   * zabbix checks added
 
  -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 19 Mar 2014 23:45:56 +0400
@@ -258,9 +282,9 @@ config-puppet-manifests (0.7) unstable; urgency=low
 
   * manage.py syncdb for devops
   * vish pool-create
- 
+
  -- Igor Shishkin <ishishkin@mirantis.com> Thu, 13 Mar 2014 02:09:37 +0400
- 
+
 config-puppet-manifests (0.6) unstable; urgency=low
 
   * jenkins-swarm-slave maniefests added
@@ -302,4 +326,3 @@ config-puppet-manifests (0.1) unstable; urgency=low
   * Initial release
 
  -- Igor Shishkin <ishishkin@mirantis.com>  Sun, 09 Mar 2014 17:06:33 +0400
-

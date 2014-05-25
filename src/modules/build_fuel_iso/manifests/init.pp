@@ -4,6 +4,6 @@ class build_fuel_iso {
   $packages = $build_fuel_iso::params::packages
 
   package { $packages :
-    ensure => installed,
+    ensure => latest,
   }
 }

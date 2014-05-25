@@ -73,7 +73,7 @@ node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com)/ {
   include jenkins_slave
 }
 
-node /srv0(7|8|11)-(msk|srt).(msk|srt).mirantis.net/ {
+node /srv(07|08|11)-(msk|srt).(msk|srt).mirantis.net/ {
   include srv
 }
 

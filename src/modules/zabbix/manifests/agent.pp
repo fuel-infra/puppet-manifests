@@ -38,16 +38,16 @@ class zabbix::agent {
     }
   }
 
-  Class['dpkg'] ->
-    Package[$packages] ->
-    File[$config] ->
-    Zabbix::Checks[$checks] ~>
+  Class['dpkg']->
+    Package[$packages]->
+    File[$config]->
+    Zabbix::Checks[$checks]~>
     Service[$service]
 
-  File[$config] ->
-    Zabbix::Checks[$checks] ~>
+  File[$config]->
+    Zabbix::Checks[$checks]~>
     Service[$service]
 
-  Zabbix::Checks[$checks] ~>
+  Zabbix::Checks[$checks]~>
     Service[$service]
 }

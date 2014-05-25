@@ -6,7 +6,7 @@ class postgresql {
   $service = $postgresql::params::service
 
   package { $packages:
-    ensure => 'installed',
+    ensure => latest,
   }
 
   file { $config :

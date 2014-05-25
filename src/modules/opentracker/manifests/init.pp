@@ -3,12 +3,7 @@ class opentracker {
 
   $config_file = $opentracker::params::config_file
   $packages = $opentracker::params::packages
-  $pre_packages = $opentracker::params::pre_packages
   $service = $opentracker::params::service
-
-  package { $pre_packages :
-    ensure => latest,
-  }
 
   package { $packages :
     ensure => latest,
@@ -44,11 +39,10 @@ class opentracker {
       }
   }
 
-  Package[$pre_packages] ->
-    Package[$packages] ->
-    File[$config_file] ->
+  Package[$packages]->
+    File[$config_file]->
     Service[$service]
 
-  File[$config_file] ->
+  File[$config_file]->
     Service[$service]
 }

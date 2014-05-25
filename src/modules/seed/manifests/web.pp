@@ -11,7 +11,7 @@ class seed::web {
   $allowed_ips = $seed::params::allowed_ips
 
   package { $packages :
-    ensure => 'latest',
+    ensure => latest,
   }
 
   file { $seed_conf :

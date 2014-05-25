@@ -10,7 +10,7 @@ class zabbix::server {
   $max_connections = $zabbix::params::max_connections
 
   package { $packages :
-    ensure => present,
+    ensure => latest,
   }
 
   class { '::mysql::server':
@@ -76,6 +76,14 @@ class zabbix::server {
     content => template('zabbix/zabbix_server.conf.erb'),
   }
 
+  file { 'ping-handle' :
+    path => '/usr/share/zabbix/ping.php',
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    content => template('zabbix/ping.php.erb'),
+  }
+
   service { $service :
     ensure => running,
     enable => true,
@@ -90,6 +98,7 @@ class zabbix::server {
     Exec['load-zabbix-images']->
     Exec['load-zabbix-initial-data']->
     File[$config]~>
+    File['ping-handle']->
     Service[$service]->
     Exec['flag-installation-complete']
 }

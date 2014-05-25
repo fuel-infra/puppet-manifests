@@ -9,7 +9,7 @@ class libvirt {
   $default_pool_name = $libvirt::params::default_pool_name
 
   package { $packages :
-    ensure => installed,
+    ensure => latest,
   }
 
   file { $config :
@@ -63,11 +63,11 @@ class libvirt {
   }
 
   Class['dpkg']->
-    Package[$packages]-> 
+    Package[$packages]->
     File['/etc/libvirt/storage']->
-    File[$config]-> 
-    File[$default_config]~> 
-    Service[$service]-> 
+    File[$config]->
+    File[$default_config]~>
+    Service[$service]->
     File["/etc/libvirt/storage/${default_pool_name}.xml"]->
     Exec['define-default-pool']->
     Exec['default-pool-autostart']->

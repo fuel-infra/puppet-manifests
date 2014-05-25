@@ -1,10 +1,15 @@
 class ssh::sshd {
   include ssh::params
 
+  $packages = $ssh::params::packages
   $service = $ssh::params::service
   $sshd_config = $ssh::params::sshd_config
 
- file { $sshd_config :
+  package { $packages :
+    ensure => latest,
+  }
+
+  file { $sshd_config :
     path => $sshd_config,
     mode => '0644',
     owner => 'root',
@@ -30,4 +35,3 @@ class ssh::sshd {
   File[$sshd_config]~>
    Service[$service]
 }
-

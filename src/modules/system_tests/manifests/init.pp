@@ -1,5 +1,7 @@
 class system_tests {
+  include postgresql
   include system_tests::params
+  include venv
 
   $packages = $system_tests::params::packages
   $sudo_commands = $system_tests::params::sudo_commands
@@ -15,22 +17,18 @@ class system_tests {
 
   exec { 'devops-syncdb' :
     command => '. /home/jenkins/venv-nailgun-tests/bin/activate ; django-admin syncdb --settings=devops.settings',
-    provider => 'shell',
     user => 'jenkins',
-    cwd => '/tmp',
     logoutput => on_failure,
   }
 
   exec { 'devops-migrate' :
     command => '. /home/jenkins/venv-nailgun-tests/bin/activate ; django-admin migrate devops --settings=devops.settings',
-    provider => 'shell',
     user => 'jenkins',
-    cwd => '/tmp',
     logoutput => on_failure,
   }
 
   package { $packages:
-    ensure => installed,
+    ensure => latest,
   }
 
   file { '/etc/sudoers.d/systest' :
@@ -39,11 +37,10 @@ class system_tests {
   }
 
   Class['dpkg'] ->
-    Package[$packages] -> 
+    Package[$packages] ->
     Venv::Venv['venv-nailgun-tests'] ->
-    Class['postgresql'] -> 
+    Class['postgresql'] ->
     Exec['devops-syncdb'] ->
     Exec['devops-migrate'] ->
     Exec['workspace-create']
 }
-

@@ -17,17 +17,11 @@ class dpkg {
 
   exec { $gpg_key_cmd :
     command => $gpg_key_cmd,
-    provider => 'shell',
-    user => 'root',
-    cwd => '/tmp',
     logoutput => 'on_failure'
   }
 
   exec { $init_command :
     command => $init_command,
-    provider => 'shell',
-    user => 'root',
-    cwd => '/tmp',
     logoutput => 'on_failure',
   }
 
@@ -35,4 +29,3 @@ class dpkg {
     File[$repo_list]->
     Exec[$init_command]
 }
-

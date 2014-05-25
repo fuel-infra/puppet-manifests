@@ -9,4 +9,22 @@ class uwsgi {
     hasstatus => true,
     hasrestart => false,
   }
+
+  file { '/etc/sysctl.d/10-uwsgi-somaxconn.conf' :
+    path => '/etc/sysctl.d/10-uwsgi-somaxconn.conf',
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    content => template('uwsgi/sysctl.conf'),
+  }
+
+  exec { 'sysctl-apply' :
+    command => '/sbin/sysctl -p',
+    logoutput => on_failure,
+  }
+
+  File['/etc/sysctl.d/10-uwsgi-somaxconn.conf']->
+    Exec['sysctl-apply']~>
+    Service[$service]
 }
