@@ -1,14 +1,11 @@
 #!/bin/sh
 
-/bin/chown -R root:root /etc/puppet
-find /etc/puppet -type d | xargs -P 1 -L 1 chmod 700
-find /etc/puppet -type f | xargs -P 1 -L 1 chmod 600
+/bin/chown -R root:root /usr/share/config-puppet-manifests
+find /usr/share/config-puppet-manifests -type d | xargs -P 1 -L 1 chmod 700
+find /usr/share/config-puppet-manifests -type f | xargs -P 1 -L 1 chmod 600
 
-if [ -e /etc/puppet/etckeeper-commit-pre ] ; then
-    chmod +x /etc/puppet/etckeeper-commit-pre
+if [ -e /etc/puppet ] ; then
+    rm -rvf /etc/puppet
 fi
 
-if [ -e /etc/puppet/etckeeper-commit-pre ] ; then
-    chmod +x /etc/puppet/etckeeper-commit-pre
-fi
-
+ln -s /usr/share/config-puppet-manifests /etc/puppet

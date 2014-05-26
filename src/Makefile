@@ -1,5 +1,5 @@
 install:
-	install -d							$(DESTDIR)/etc/puppet
-	cp    $(CURDIR)/modules/puppet/templates/puppet.conf.erb $(DESTDIR)/etc/puppet/puppet.conf
-	cp -r $(CURDIR)/manifests			$(DESTDIR)/etc/puppet/
-	cp -r $(CURDIR)/modules				$(DESTDIR)/etc/puppet/
+	install -d							$(DESTDIR)/usr/share/config-puppet-manifests
+	cp    $(CURDIR)/modules/puppet/templates/puppet.conf.erb $(DESTDIR)/usr/share/config-puppet-manifests/puppet.conf
+	cp -r $(CURDIR)/manifests			$(DESTDIR)/usr/share/config-puppet-manifests/
+	cp -r $(CURDIR)/modules				$(DESTDIR)/usr/share/config-puppet-manifests/

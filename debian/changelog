@@ -1,3 +1,9 @@
+config-puppet-manifests (0.49-1) unstable; urgency=low
+
+  * Installing manifests to /usr/share instead of /etc
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 26 May 2014 16:06:27 +0400
+
 config-puppet-manifests (0.49) unstable; urgency=low
 
   * Adding fixes to pxetool to choose closest mirror
