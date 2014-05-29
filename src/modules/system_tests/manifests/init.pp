@@ -2,6 +2,7 @@ class system_tests {
   include postgresql
   include system_tests::params
   include venv
+  include packages
 
   $packages = $system_tests::params::packages
   $sudo_commands = $system_tests::params::sudo_commands
@@ -27,9 +28,7 @@ class system_tests {
     logoutput => on_failure,
   }
 
-  package { $packages:
-    ensure => latest,
-  }
+  realize Package[$packages]
 
   file { '/etc/sudoers.d/systest' :
     content => template('system_tests/sudoers.erb'),

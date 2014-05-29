@@ -62,6 +62,7 @@ class srv {
 
 node /mc([0-2]+)n([1-8]{1})-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   include jenkins_slave
+  include build_fuel_iso
 }
 
 node 'ctorrent-msk.msk.mirantis.net' {
@@ -80,12 +81,13 @@ node /(seed-(eu|us)([0-9]{2,})\.mirantis\.com)/ {
 
 node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com)/ {
   $external_host = true
-
   include jenkins_slave
 }
 
 node /srv(07|08|11)-(msk|srt).(msk|srt).mirantis.net/ {
   include srv
+  include jenkins_slave
+  include build_fuel_iso
 }
 
 node /(pxe-product\.msk\.mirantis\.net|jenkins-product\.srt\.mirantis\.net)/ {

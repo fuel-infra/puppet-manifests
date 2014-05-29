@@ -1,8 +1,4 @@
 class dpkg::params {
-  $gpg_key_cmd = 'cat /tmp/qa-ubuntu.key | apt-key add -'
-
-  $init_command = 'apt-get update'
-
   if $::fqdn =~ /msk\.mirantis\.net$/ {
     # Moscow internal mirror
     $mirror = 'mirrors.msk.mirantis.net'
@@ -20,9 +16,9 @@ class dpkg::params {
   }
 
   if $::fqdn =~ /\.mirantis\.com$/ {
-    $internal_mirror = 'deb http://fuel-repository.mirantis.com/devops/ubuntu/ /'
+    $additional_repos = [ 'deb http://fuel-repository.mirantis.com/devops/ubuntu/ /' ]
   } else {
-    $internal_mirror = 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /'
+    $additional_repos = [ 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /', 'deb http://mirrors-local-msk.msk.mirantis.net/docker docker main' ]
   }
 
   $repo_list = '/etc/apt/sources.list'

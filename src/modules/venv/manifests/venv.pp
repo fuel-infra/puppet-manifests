@@ -6,11 +6,10 @@ define venv::venv (
 ) {
   include venv::params
 
+  include packages
   $packages = $venv::params::packages
 
-  package { $packages :
-    ensure => latest,
-  }
+  realize Package[$packages]
 
   exec { 'venv-create':
     command => "virtualenv ${options} ${path}",

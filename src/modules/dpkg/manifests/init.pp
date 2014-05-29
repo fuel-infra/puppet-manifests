@@ -1,9 +1,7 @@
 class dpkg {
   include dpkg::params
 
-  $gpg_key_cmd = $dpkg::params::gpg_key_cmd
-  $init_command = $dpkg::params::init_command
-  $internal_mirror = $dpkg::params::internal_mirror
+  $additional_repos = $dpkg::params::additional_repos
   $mirror = $dpkg::params::mirror
   $repo_list = $dpkg::params::repo_list
 
@@ -15,7 +13,7 @@ class dpkg {
     content => template('dpkg/sources.list.erb'),
   }
 
-  file { 'gpg-key' :
+  file { 'gpg-key-qa' :
     path => '/tmp/qa-ubuntu.key',
     owner => 'root',
     group => 'root',
@@ -23,18 +21,33 @@ class dpkg {
     source => 'puppet:///modules/dpkg/qa-ubuntu.key',
   }
 
-  exec { $gpg_key_cmd :
-    command => $gpg_key_cmd,
+  file { 'gpg-key-docker' :
+    path => '/tmp/docker.key',
+    owner => 'root',
+    group => 'root',
+    mode => '0400',
+    source => 'puppet:///modules/dpkg/docker.key',
+  }
+
+  exec { 'gpg-add-qa' :
+    command => 'cat /tmp/qa-ubuntu.key | apt-key add -',
     logoutput => 'on_failure'
   }
 
-  exec { $init_command :
-    command => $init_command,
+  exec { 'gpg-add-docker' :
+    command => 'cat /tmp/docker.key | apt-key add -',
+    logoutput => 'on_failure'
+  }
+
+  exec { 'apt-update' :
+    command => '/usr/bin/apt-get update',
     logoutput => 'on_failure',
   }
 
-  File['gpg-key']->
-    Exec[$gpg_key_cmd]->
+  File['gpg-key-qa']->
+    File['gpg-key-docker']->
+    Exec['gpg-add-qa']->
+    Exec['gpg-add-docker']->
     File[$repo_list]->
-    Exec[$init_command]
+    Exec['apt-update']
 }
