@@ -20,7 +20,9 @@ http {
     include                         /etc/nginx/mime.types;
     default_type                    application/octet-stream;
 
-    access_log                      /var/log/nginx/access.log;
+    log_format proxy '[$time_local] $host $remote_addr "$request" $status "$http_referer" "$http_user_agent" "$http_cookie" "$http_x_forwarded_for" [proxy ($upstream_cache_status) : $upstream_addr $upstream_response_time $upstream_status ] $request_length $bytes_sent $request_time';
+
+    access_log                      /var/log/nginx/access.log proxy;
     error_log                       /var/log/nginx/error.log;
 
     gzip                            on;

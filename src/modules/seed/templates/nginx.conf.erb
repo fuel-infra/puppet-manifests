@@ -2,6 +2,9 @@ server {
         server_name                        _;
         listen                             17333;
 
+        access_log /var/log/nginx/seed.access.log proxy;
+        error_log /var/log/nginx/seed.error.log;
+
         location / {
                 <% if @external_host
                 @allowed_ips.each {|ip| %><%= "allow #{ip};" %><% } %>

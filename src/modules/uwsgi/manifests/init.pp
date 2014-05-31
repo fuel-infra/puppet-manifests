@@ -20,7 +20,7 @@ class uwsgi {
   }
 
   exec { 'sysctl-apply' :
-    command => '/sbin/sysctl -p',
+    command => '/sbin/sysctl --system -p',
     logoutput => on_failure,
   }
 

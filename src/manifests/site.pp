@@ -1,9 +1,15 @@
+# Defaults
+
 Exec {
   path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
   provider => 'shell',
 }
 
-#class { ['firewall_defaults::pre', 'firewall_defaults::post'] :}
+File {
+  replace => true,
+}
+
+# Class definitions
 
 class common {
   include dpkg
@@ -48,6 +54,8 @@ class srv {
   include nginx
   include nginx::share
 }
+
+# Nodes definitions
 
 node /mc([0-2]+)n([1-8]{1})-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   include jenkins_slave

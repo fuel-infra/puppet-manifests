@@ -1,5 +1,6 @@
 class system_tests::params {
   $packages = [
+    # dependencies
     'python-anyjson',
     'python-devops',
     'python-glanceclient',
@@ -12,6 +13,11 @@ class system_tests::params {
     'python-seed-client',
     'python-xmlbuilder',
     'python-yaml',
+
+    # diagnostic utilities
+    'htop',
+    'sysstat',
+    'dstat',
   ]
   $sudo_commands = ['/sbin/ebtables']
   $workspace = '/home/jenkins/workspace'
