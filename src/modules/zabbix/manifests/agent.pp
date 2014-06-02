@@ -1,6 +1,5 @@
 class zabbix::agent {
   include zabbix::params
-  #include zabbix_agent::checks
 
   $checks = $zabbix::params::checks
   $config = $zabbix::params::agent_config

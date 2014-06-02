@@ -1,5 +1,6 @@
 class seed::web {
   include seed::params
+
   include nginx
   include nginx::share
   include uwsgi
@@ -48,10 +49,6 @@ class seed::web {
     refreshonly => true,
   }
 
-  file { '/var/www/fuelweb-iso' :
-    ensure => 'directory',
-  }
-
   if $external_host {
     Class['firewall_defaults::pre'] ->
     firewall { '1000 allow seed connections' :
@@ -62,12 +59,11 @@ class seed::web {
   }
 
   Class['nginx::share']->
-    File['/var/www/fuelweb-iso']->
     File[$seed_conf]->
     File[$nginx_conf]~>
     Exec["${nginx_conf}-symlink"]
     File[$uwsgi_conf]~>
-    Exec["${uwsgi_conf}-symlink"]
-    Service['nginx']~>
-    Service['uwsgi']
+    Exec["${uwsgi_conf}-symlink"]~>
+    Class['nginx']~>
+    Class['uwsgi']
 }

@@ -15,6 +15,14 @@ class dpkg {
     content => template('dpkg/sources.list.erb'),
   }
 
+  file { 'gpg-key' :
+    path => '/tmp/qa-ubuntu.key',
+    owner => 'root',
+    group => 'root',
+    mode => '0400',
+    source => 'puppet:///modules/dpkg/qa-ubuntu.key',
+  }
+
   exec { $gpg_key_cmd :
     command => $gpg_key_cmd,
     logoutput => 'on_failure'
@@ -25,7 +33,8 @@ class dpkg {
     logoutput => 'on_failure',
   }
 
-  Exec[$gpg_key_cmd]->
+  File['gpg-key']->
+    Exec[$gpg_key_cmd]->
     File[$repo_list]->
     Exec[$init_command]
 }

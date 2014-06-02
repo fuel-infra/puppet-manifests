@@ -1,0 +1,38 @@
+#!/bin/bash
+
+sh=$(hostname -s)
+
+d=/etc/ssh/keys.$$
+t=/tmp/ldap2sshkeys.$$
+tmpDir=/tmp/ldap2sshkeys_dir.$$
+
+[ -d $d ] || mkdir $d
+[ -d $tmpDir ] || mkdir $tmpDir
+
+ldapsearch -LLL -x -b "o=mirantis,dc=mirantis,dc=net" "(&(objectClass=groupOfNames)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)))" memberUid | awk '/memberUid:/ {print $2}' > $t
+ldapsearch -LLL -x -b "ou=people,ou=external,dc=mirantis,dc=net" "(&(objectClass=groupOfNames)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)))" memberUid | awk '/memberUid:/ {print $2}' >> $t
+ldapsearch -LLL -x -b "ou=people,ou=external,dc=mirantis,dc=net" "(&(sshPublicKey=*)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)(memberOf=cn=it,ou=groups,o=mirantis,dc=mirantis,dc=net)))" uid | awk '/uid:/ {print $2}' >> $t
+ldapsearch -LLL -x -b "o=mirantis,dc=mirantis,dc=net" "(&(sshPublicKey=*)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)(memberOf=cn=it,ou=groups,o=mirantis,dc=mirantis,dc=net)))" uid | awk '/uid:/ {print $2}' >> $t
+
+for u in `sort -u $t`;do
+   ldapsearch -x -LLL -b "o=mirantis,dc=mirantis,dc=net" "uid=$u" sshPublicKey -tt -T $tmpDir > /dev/null 2>&1
+   [ "xxx`ls $tmpDir`" != 'xxx' ]  && ( cat $tmpDir/* > $d/$u ; rm -f $tmpDir/* )
+done
+for u in `sort -u $t`;do
+   ldapsearch -x -LLL -b "ou=people,ou=services,dc=mirantis,dc=net" "uid=$u" sshPublicKey -tt -T $tmpDir > /dev/null 2>&1
+   [ "xxx`ls $tmpDir`" != 'xxx' ]  && ( cat $tmpDir/* > $d/$u ; rm -f $tmpDir/* )
+done
+for u in `sort -u $t`;do
+   ldapsearch -x -LLL -b "ou=people,ou=external,dc=mirantis,dc=net" "uid=$u" sshPublicKey -tt -T $tmpDir > /dev/null 2>&1
+   [ "xxx`ls $tmpDir`" != 'xxx' ]  && ( cat $tmpDir/* > $d/$u ; rm -f $tmpDir/* )
+done
+rm $t
+rm -fR $tmpDir
+
+
+if (grep -E '(dsa|rsa)' $d/*>/dev/null);then
+        [ -d /etc/ssh/keys.old ] && rm -rf /etc/ssh/keys.old
+        [ -d /etc/ssh/keys ] && mv /etc/ssh/keys /etc/ssh/keys.old
+        mv $d /etc/ssh/keys
+        rm -rf etc/ssh/keys.*
+fi

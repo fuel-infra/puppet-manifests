@@ -1,0 +1,17 @@
+#
+# LDAP Defaults
+#
+
+# See ldap.conf(5) for details
+# This file should be world readable but not world writable.
+
+URI ldap://ldap
+BASE dc=mirantis,dc=net
+TLS_CACERTDIR /etc/openldap/cacerts
+
+pam_password md5
+pam_filter |(&(accessTo=monitor-product)(trustModel=byhost))(trustModel=fullaccess)(memberOf=CN=it,ou=groups,o=mirantis,dc=mirantis,dc=net)
+sudoers_base ou=sudoers,dc=mirantis,dc=net
+uri ldap://ldap
+bind_policy soft
+nss_initgroups_ignoreusers backup,bin,daemon,games,gnats,irc,landscape,libuuid,list,lp,mail,man,messagebus,mysql,nagios,news,ntp,postfix,proxy,puppet,root,sshd,sync,sys,syslog,uucp,whoopsie,www-data,zabbix

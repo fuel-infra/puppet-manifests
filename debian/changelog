@@ -1,3 +1,12 @@
+config-puppet-manifests (0.51) unstable; urgency=low
+
+  * fix for nginx directories creation conflict
+  * installing dpkg's gpg key in a right way
+  * SSH LDAP authentication
+  * fix for zabbix agent configuration
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 02 Jun 2014 17:50:55 +0400
+
 config-puppet-manifests (0.50) unstable; urgency=low
 
   * log_format proxy

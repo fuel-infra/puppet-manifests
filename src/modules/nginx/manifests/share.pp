@@ -15,6 +15,14 @@ class nginx::share {
     content => template('nginx/share.conf.erb'),
   }
 
+  file { '/var/www' :
+    ensure => 'directory',
+  }
+
+  file { '/var/www/fuelweb-iso' :
+    ensure => 'directory',
+  }
+
   if $external_host {
     Class['firewall_defaults::pre'] ->
     firewall { '1000 allow nginx connections' :
@@ -23,6 +31,8 @@ class nginx::share {
     }
   }
 
-  File['share.conf']~>
+  File['share.conf']->
+    File['/var/www']->
+    File['/var/www/fuelweb-iso']~>
     Service[$service]
 }

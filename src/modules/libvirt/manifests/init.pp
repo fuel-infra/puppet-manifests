@@ -49,17 +49,20 @@ class libvirt {
 
   exec { 'define-default-pool' :
     command => "virsh pool-define /etc/libvirt/storage/${default_pool_name}.xml",
-    unless => "virsh pool-list --persistent | awk '{print \$1}' | egrep '^${default_pool_name}\$'"
+    unless => "virsh pool-list --persistent | awk '{print \$1}' | egrep '^${default_pool_name}\$'",
+    logoutput => on_failure,
   }
 
   exec { 'default-pool-autostart' :
     command => "virsh pool-autostart ${default_pool_name}",
-    onlyif => "virsh pool-list --no-autostart | awk '{print \$1}' | egrep '^${default_pool_name}\$'"
+    onlyif => "virsh pool-list --no-autostart | awk '{print \$1}' | egrep '^${default_pool_name}\$'",
+    logoutput => on_failure,
   }
 
   exec { 'default-pool-start' :
     command => "virsh pool-start ${default_pool_name}",
-    onlyif => "virsh pool-list --inactive | awk '{print \$1}' | egrep '^${default_pool_name}\$'"
+    onlyif => "virsh pool-list --inactive | awk '{print \$1}' | egrep '^${default_pool_name}\$'",
+    logoutput => on_failure,
   }
 
   Class['dpkg']->

@@ -18,6 +18,11 @@ class ssh::params {
     'openssh-server'
   ]
 
+  $ldap_packages = [
+    'libpam-ldap',
+    'nscd',
+  ]
+
   $service = 'ssh'
 
   $sshd_config = '/etc/ssh/sshd_config'

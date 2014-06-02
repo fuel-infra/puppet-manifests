@@ -53,6 +53,9 @@ class srv {
   include common
   include nginx
   include nginx::share
+  include ssh::sshd
+  include ssh::authorized_keys
+  include ssh::ldap
 }
 
 # Nodes definitions
