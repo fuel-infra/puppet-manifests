@@ -19,6 +19,7 @@ class ssh::params {
   ]
 
   $ldap_packages = [
+    'ldap-utils',
     'libpam-ldap',
     'nscd',
   ]

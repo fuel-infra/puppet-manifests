@@ -1,3 +1,9 @@
+config-puppet-manifests (0.52) unstable; urgency=low
+
+  * fix for deps: ldap-utils for ssh::ldap added to deps
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Wed, 04 Jun 2014 16:07:48 +0400
+
 config-puppet-manifests (0.51) unstable; urgency=low
 
   * fix for nginx directories creation conflict
