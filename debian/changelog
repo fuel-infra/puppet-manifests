@@ -1,3 +1,9 @@
+config-puppet-manifests (0.56) unstable; urgency=low
+
+  * Add bc dependency for building fuel iso
+
+ -- Alexander Charykov <acharykov@mirantis.com>  Fri, 06 Jun 2014 20:43:43 +0400
+
 config-puppet-manifests (0.55) unstable; urgency=low
 
   * Fixed relations between installation of nginx and restart on configuring

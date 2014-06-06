@@ -1,5 +1,6 @@
 class build_fuel_iso::params {
   $packages = [
+    'bc',
     'build-essential',
     'createrepo',
     'debootstrap',
