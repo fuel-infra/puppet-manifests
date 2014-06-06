@@ -1,3 +1,11 @@
+config-puppet-manifests (0.54) unstable; urgency=low
+
+  * Add aurlapova key
+  * Enable tun createtion over ssh
+  * Add vncviewer for system-tests module
+
+ -- Alexander Charykov <acharykov@mirantis.com>  Fri, 06 Jun 2014 12:55:21 +0400
+
 config-puppet-manifests (0.53) unstable; urgency=low
 
     Automate installation of fuel iso build enviroment

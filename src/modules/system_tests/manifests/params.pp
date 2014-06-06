@@ -18,6 +18,7 @@ class system_tests::params {
     'htop',
     'sysstat',
     'dstat',
+    'vncviewer',
   ]
   $sudo_commands = ['/sbin/ebtables']
   $workspace = '/home/jenkins/workspace'

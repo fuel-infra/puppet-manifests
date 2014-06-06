@@ -46,6 +46,7 @@ class packages {
     @package {"rubygems-integration" : ensure => present }
     @package {"sysstat" : ensure => present }
     @package {"unzip" : ensure => present }
+    @package {"vncviewer" : ensure => present }
     @package {"yum" : ensure => present }
     @package {"yum-utils" : ensure => present }
 }
