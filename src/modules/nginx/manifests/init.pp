@@ -1,6 +1,8 @@
 class nginx {
   include nginx::params
 
+  include nginx::service
+
   $packages = $nginx::params::packages
   $service = $nginx::params::service
 
@@ -17,25 +19,24 @@ class nginx {
     content => template('nginx/nginx.conf.erb'),
   }
 
-  file { 'default.conf' :
+  file { 'default.conf-enabled' :
     path => '/etc/nginx/sites-enabled/default',
     ensure => absent,
   }
 
-  service { $service :
-    ensure => running,
-    enable => true,
-    hasstatus => true,
-    hasrestart => false,
+  file { 'default.conf-available' :
+    path => '/etc/nginx/sites-available/default',
+    ensure => absent,
   }
 
   Package[$packages]->
     File['nginx.conf']->
-    File['default.conf']~>
-    Service[$service]
+    File['default.conf-available']->
+    File['default.conf-enabled']~>
+    Class['nginx::service']
 
   File['nginx.conf']->
-    File['default.conf']~>
-    Service[$service]
+    File['default.conf-available']->
+    File['default.conf-enabled']~>
+    Class['nginx::service']
 }
-

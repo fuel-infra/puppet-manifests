@@ -57,18 +57,22 @@ class pxetool {
   }
 
   Package[$packages]->
+    Class['nginx']->
     File[$config]->
     Exec['pxetool-syncdb']->
     Exec['pxetool-migratedb']->
     File[$nginx_conf]->
     File[$nginx_conf_link]~>
     Class['uwsgi']~>
+    Class['nginx::service']
+
     Class['nginx']
+      File[$config]~>
+      Class['uwsgi']~>
+      Class['nginx::service']
 
-    File[$config]~>
-      Class['uwsgi']
-
-    File[$nginx_conf]->
+    Class['nginx']->
+      File[$nginx_conf]->
       File[$nginx_conf_link]~>
-      Class['nginx']
+      Class['nginx::service']
 }

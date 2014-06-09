@@ -61,8 +61,9 @@ class srv {
 # Nodes definitions
 
 node /mc([0-2]+)n([1-8]{1})-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
-  include jenkins_slave
   include build_fuel_iso
+  include nginx::share
+  include jenkins_slave
 }
 
 node 'ctorrent-msk.msk.mirantis.net' {

@@ -58,12 +58,13 @@ class seed::web {
     }
   }
 
-  Class['nginx::share']->
+  Class['nginx']->
+    Class['nginx::share']->
     File[$seed_conf]->
     File[$nginx_conf]~>
     Exec["${nginx_conf}-symlink"]
     File[$uwsgi_conf]~>
     Exec["${uwsgi_conf}-symlink"]~>
-    Class['nginx']~>
-    Class['uwsgi']
+    Class['uwsgi']~>
+    Class['nginx::service']
 }

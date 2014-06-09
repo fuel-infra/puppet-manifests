@@ -1,6 +1,8 @@
 class nginx::share {
-  include nginx
   include nginx::params
+
+  include nginx
+  include nginx::service
 
   $autoindex = $nginx::params::autoindex
   $server_name = $nginx::params::server_name
@@ -31,8 +33,9 @@ class nginx::share {
     }
   }
 
-  File['share.conf']->
+  Class['nginx']->
+    File['share.conf']->
     File['/var/www']->
     File['/var/www/fuelweb-iso']~>
-    Service[$service]
+    Class['nginx::service']
 }
