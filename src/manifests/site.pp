@@ -18,6 +18,7 @@ class common {
   include ntp
   include puppet
   include ssh::sshd
+  include system
   include zabbix::agent
 }
 

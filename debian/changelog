@@ -1,3 +1,9 @@
+config-puppet-manifests (0.57) unstable; urgency=low
+
+  * root email to devops+root@mirantis.com
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 20 Jun 2014 16:55:54 +0400
+
 config-puppet-manifests (0.56) unstable; urgency=low
 
   * Add bc dependency for building fuel iso
