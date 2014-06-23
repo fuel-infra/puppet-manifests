@@ -1,8 +1,14 @@
+config-puppet-manifests (0.58) unstable; urgency=low
+
+  * ZabbixServer's TrendCache set to 16M
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 23 Jun 2014 15:33:27 +0400
+
 config-puppet-manifests (0.57) unstable; urgency=low
 
   * root email to devops+root@mirantis.com
 
- -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 20 Jun 2014 16:55:54 +0400
+ -- Igor Shishkin <ishishkin@mirantis.com>  Fri, 20 Jun 2014 16:55:54 +0400
 
 config-puppet-manifests (0.56) unstable; urgency=low
 
