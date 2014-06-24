@@ -1,8 +1,14 @@
+config-puppet-manifests (0.59) unstable; urgency=low
+
+  * Syntax fix for pxetool manifests
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Tue, 24 Jun 2014 13:11:41 +0400
+
 config-puppet-manifests (0.58) unstable; urgency=low
 
   * ZabbixServer's TrendCache set to 16M
 
- -- Igor Shishkin <ishishkin@mirantis.com>  Mon, 23 Jun 2014 15:33:27 +0400
+-- Igor Shishkin <ishishkin@mirantis.com>  Mon, 23 Jun 2014 15:33:27 +0400
 
 config-puppet-manifests (0.57) unstable; urgency=low
 

@@ -66,7 +66,7 @@ class pxetool {
     Class['uwsgi']~>
     Class['nginx::service']
 
-    Class['nginx']
+    Class['nginx']->
       File[$config]~>
       Class['uwsgi']~>
       Class['nginx::service']
