@@ -1,3 +1,9 @@
+config-puppet-manifests (0.60) unstable; urgency=low
+
+  * Fix for pxe-product nodes names in site.pp
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Tue, 25 Jun 2014 18:51:57 +0400
+
 config-puppet-manifests (0.59) unstable; urgency=low
 
   * Syntax fix for pxetool manifests
