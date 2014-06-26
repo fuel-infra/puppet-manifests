@@ -6,6 +6,7 @@ class zabbix::agent {
   $packages = $zabbix::params::agent_packages
   $service = $zabbix::params::agent_service
   $server_fqdn = $zabbix::params::server_fqdn
+  $sudoers = $zabbix::params::agent_sudoers
 
   file { $config :
     path => $config,
@@ -13,6 +14,14 @@ class zabbix::agent {
     group => 'root',
     mode => '0644',
     content => template('zabbix/zabbix_agentd.conf.erb'),
+  }
+
+  file { $sudoers :
+    path => $sudoers,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    content => template('zabbix/sudoers.erb')
   }
 
   zabbix::checks { $checks :}
@@ -40,6 +49,11 @@ class zabbix::agent {
   Class['dpkg']->
     Package[$packages]->
     File[$config]->
+    File[$sudoers]->
+    Zabbix::Checks[$checks]~>
+    Service[$service]
+
+  File[$sudoers]->
     Zabbix::Checks[$checks]~>
     Service[$service]
 

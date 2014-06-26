@@ -10,6 +10,8 @@ class zabbix::params {
 
   $agent_service = 'zabbix-agent'
 
+  $agent_sudoers = '/etc/sudoers.d/zabbix'
+
   $server_config = '/etc/zabbix/zabbix_server.conf'
 
   $server_packages = [
