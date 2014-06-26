@@ -1,3 +1,9 @@
+config-puppet-manifests (0.62) unstable; urgency=low
+
+  * Update pxe-product VMs names
+
+ -- Igor Shishkin <ishishkin@mirantis.com>  Tue, 26 Jun 2014 16:08:09 +0400
+
 config-puppet-manifests (0.61) unstable; urgency=low
 
   * Fix for seed nginx conf
