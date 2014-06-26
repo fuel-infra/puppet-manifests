@@ -10,11 +10,9 @@ server {
                 @allowed_ips.each {|ip| %><%= "allow #{ip};" %><% } %>
                 deny all;
                 <% end %>
-                include                   uwsgi_params;
 
-                uwsgi_pass                127.0.0.1:7333;
-                uwsgi_send_timeout        600;
-                uwsgi_read_timeout        600;
+                dav_methods  PUT;
+                root /var/www;
 
                 client_max_body_size 5G;
         }
