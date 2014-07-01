@@ -97,7 +97,10 @@ node /pxe-product-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
 }
 
 node 'test-server' {
-  include nginx::share
-  include dpkg
-  include venv
+  # puppet apply --certname test-server -v -d /etc/puppet/manifests/site.pp
+
+  include virtual::repos
+
+  realize Apt::Source['jenkins']
+  realize Apt::Source['docker']
 }

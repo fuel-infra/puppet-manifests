@@ -18,7 +18,7 @@ class dpkg::params {
   if $::fqdn =~ /\.mirantis\.com$/ {
     $additional_repos = [ 'deb http://fuel-repository.mirantis.com/devops/ubuntu/ /' ]
   } else {
-    $additional_repos = [ 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /', 'deb http://mirrors-local-msk.msk.mirantis.net/docker docker main' ]
+    $additional_repos = [ 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /' ]
   }
 
   $repo_list = '/etc/apt/sources.list'
