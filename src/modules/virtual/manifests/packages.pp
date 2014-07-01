@@ -1,4 +1,4 @@
-class packages {
+class virtual::packages {
     @package {"bc" : ensure => present }
     @package {"build-essential" : ensure => present }
     @package {"createrepo" : ensure => present }

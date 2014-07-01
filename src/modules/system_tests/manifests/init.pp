@@ -2,7 +2,7 @@ class system_tests {
   include postgresql
   include system_tests::params
   include venv
-  include packages
+  include virtual::packages
 
   $packages = $system_tests::params::packages
   $sudo_commands = $system_tests::params::sudo_commands

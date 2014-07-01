@@ -95,3 +95,9 @@ node /srv(07|08|11)-(msk|srt).(msk|srt).mirantis.net/ {
 node /pxe-product-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   include pxe_deployment
 }
+
+node 'test-server' {
+  include nginx::share
+  include dpkg
+  include venv
+}

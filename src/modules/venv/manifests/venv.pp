@@ -6,7 +6,7 @@ define venv::venv (
 ) {
   include venv::params
 
-  include packages
+  include virtual::packages
   $packages = $venv::params::packages
 
   realize Package[$packages]

@@ -1,5 +1,5 @@
 class build_fuel_iso {
-  include packages
+  include virtual::packages
   include build_fuel_iso::params
 
   $packages = $build_fuel_iso::params::packages
