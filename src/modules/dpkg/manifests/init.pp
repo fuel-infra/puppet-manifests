@@ -21,21 +21,8 @@ class dpkg {
     source => 'puppet:///modules/dpkg/qa-ubuntu.key',
   }
 
-  file { 'gpg-key-docker' :
-    path => '/tmp/docker.key',
-    owner => 'root',
-    group => 'root',
-    mode => '0400',
-    source => 'puppet:///modules/dpkg/docker.key',
-  }
-
   exec { 'gpg-add-qa' :
     command => 'cat /tmp/qa-ubuntu.key | apt-key add -',
-    logoutput => 'on_failure'
-  }
-
-  exec { 'gpg-add-docker' :
-    command => 'cat /tmp/docker.key | apt-key add -',
     logoutput => 'on_failure'
   }
 
@@ -45,9 +32,7 @@ class dpkg {
   }
 
   File['gpg-key-qa']->
-    File['gpg-key-docker']->
     Exec['gpg-add-qa']->
-    Exec['gpg-add-docker']->
     File[$repo_list]->
     Exec['apt-update']
 }
