@@ -1,6 +1,9 @@
 class virtual::repos {
 
-  include apt
+ class { 'apt':
+    always_apt_update => true,
+    purge_sources_list => true,
+  }
 
   @apt::source { 'jenkins':
     location => 'http://mirrors-local-msk.msk.mirantis.net/jenkins/debian-stable/',

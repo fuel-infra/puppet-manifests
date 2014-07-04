@@ -21,5 +21,5 @@ class dpkg::params {
     $additional_repos = [ 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /' ]
   }
 
-  $repo_list = '/etc/apt/sources.list'
+  $repo_list = '/etc/apt/sources.list.d/default.list'
 }
