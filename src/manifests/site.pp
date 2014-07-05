@@ -53,7 +53,7 @@ class pxe_deployment {
 class srv {
   include common
   include nginx
-  include nginx::share
+  class { 'nginx::share': fuelweb_iso_create => true }
   include ssh::sshd
   include ssh::authorized_keys
   include ssh::ldap
@@ -63,7 +63,7 @@ class srv {
 
 node /mc([0-2]+)n([1-8]{1})-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   include build_fuel_iso
-  include nginx::share
+  class { 'nginx::share': fuelweb_iso_create => true }
   include jenkins_slave
 }
 
@@ -76,7 +76,7 @@ node /(seed-(eu|us)([0-9]{2,})\.mirantis\.com)/ {
 
   include common
   include nginx
-  include nginx::share
+  class { 'nginx::share': fuelweb_iso_create => true }
   include seed::web
   include torrent_tracker
 }
@@ -86,7 +86,7 @@ node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com)/ {
   include jenkins_slave
 }
 
-node /(srv(07|08|11)-(msk|srt).(msk|srt).mirantis.net|jenkins-product-kha\.vm\.mirantis\.net)/ {
+node /(srv(07|08|11)|jenkins-product)-(msk|srt|kha)\.(msk|srt|vm)\.mirantis\.net/ {
   include srv
   include jenkins_slave
   include build_fuel_iso
@@ -94,6 +94,15 @@ node /(srv(07|08|11)-(msk|srt).(msk|srt).mirantis.net|jenkins-product-kha\.vm\.m
 
 node /pxe-product-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   include pxe_deployment
+}
+
+node 'mirror1.fuel-infra.org' {
+  $external_host = true
+
+  include common
+  include nginx
+  include nginx::share
+  include ssh::authorized_keys
 }
 
 node 'test-server' {

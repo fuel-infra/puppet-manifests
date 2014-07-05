@@ -1,4 +1,7 @@
-class nginx::share {
+class nginx::share(
+  $fuelweb_iso_create = false,
+  $fwm_create = false
+) {
   include nginx::params
 
   include nginx
@@ -8,8 +11,8 @@ class nginx::share {
   $server_name = $nginx::params::server_name
   $service = $nginx::params::service
 
-  file { 'share.conf' :
-    path => '/etc/nginx/sites-enabled/share.conf',
+  file { 'share.conf-available' :
+    path => '/etc/nginx/sites-available/share.conf',
     ensure => present,
     mode => '0644',
     owner => 'root',
@@ -17,12 +20,32 @@ class nginx::share {
     content => template('nginx/share.conf.erb'),
   }
 
+  file { 'share.conf-enabled' :
+    path => '/etc/nginx/sites-enabled/share.conf',
+    ensure => link,
+    target => '/etc/nginx/sites-available/share.conf',
+  }
+
   file { '/var/www' :
     ensure => 'directory',
   }
 
-  file { '/var/www/fuelweb-iso' :
-    ensure => 'directory',
+  if($fuelweb_iso_create) {
+    file { '/var/www/fuelweb-iso' :
+      ensure => 'directory',
+      owner => 'www-data',
+      group => 'www-data',
+      mode => '0775',
+    }
+  }
+
+  if($fwm_create) {
+    file { "/var/www/fwm" :
+      ensure => 'directory',
+      owner => 'www-data',
+      group => 'www-data',
+      mode => '0775',
+    }
   }
 
   if $external_host {
@@ -34,8 +57,8 @@ class nginx::share {
   }
 
   Class['nginx']->
-    File['share.conf']->
-    File['/var/www']->
-    File['/var/www/fuelweb-iso']~>
+    File['share.conf-available']->
+    File['share.conf-enabled']->
+    File['/var/www']~>
     Class['nginx::service']
 }
