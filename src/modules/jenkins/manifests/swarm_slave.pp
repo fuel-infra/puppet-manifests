@@ -1,23 +1,25 @@
-class jenkins_swarm_slave {
+class jenkins::swarm_slave {
   include dpkg
 
-  include jenkins_swarm_slave::params
+  include jenkins::params
+  include virtual::users
 
-  $packages = $jenkins_swarm_slave::params::packages
-  $service = $jenkins_swarm_slave::params::service
-  $users = $jenkins_swarm_slave::params::users
+  $packages = $jenkins::params::swarm_packages
+  $service = $jenkins::params::service
+
   $jenkins_master = $jenkins_swarm_slave::params::jenkins_master
   $jenkins_user = $jenkins_swarm_slave::params::jenkins_user
   $jenkins_password = $jenkins_swarm_slave::params::jenkins_password
+
   $labels = $jenkins_swarm_slave::params::labels
 
   package { $packages :
-    ensure => latest,
+    ensure => present,
   }
 
-  create_resources(user, $users, {ensure => present})
+  realize User['jenkins']
 
-  if $::jenkins_update {
+  if($::jenkins_update) {
     file { 'jenkins-swarm-slave.conf' :
       path => '/etc/default/jenkins-swarm-slave',
       ensure => present,

@@ -32,9 +32,9 @@ class jenkins_slave {
   include transmission_daemon
 
   if $external_host == true {
-    include jenkins_standalone_slave
+    include jenkins::slave
   } else {
-    include jenkins_swarm_slave
+    include jenkins::swarm_slave
   }
 }
 

@@ -1,24 +1,25 @@
-class jenkins_standalone_slave {
+class jenkins::slave {
   include dpkg
 
-  include jenkins_standalone_slave::params
+  include jenkins::params
+  include virtual::users
 
-  $packages = $jenkins_standalone_slave::params::packages
-  $users = $jenkins_standalone_slave::params::users
-  $jenkins_keys = $jenkins_standalone_slave::params::jenkins_keys
+  $packages = $jenkins::params::slave_packages
+  $jenkins_keys = $jenkins::params::jenkins_keys
 
   package { $packages :
-    ensure => latest,
+    ensure => present,
   }
 
-  create_resources(user, $users, {ensure => present})
-  create_resources(ssh_authorized_key, $jenkins_keys, {ensure => present, user => 'jenkins'})
+  realize User['jenkins']
 
   exec { 'ssh_review.openstack.org':
     command => 'ssh -o StrictHostKeyChecking=no -p 29418 review.openstack.org ; exit 0',
     user => 'jenkins',
     logoutput => 'on_failure',
   }
+
+  create_resources(ssh_authorized_key, $jenkins_keys, {ensure => present, user => 'jenkins'})
 
   Class['dpkg']->
     Package[$packages]->
