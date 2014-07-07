@@ -35,11 +35,28 @@ class system_tests {
     mode => '0600',
   }
 
-  Class['dpkg'] ->
-    Package[$packages] ->
-    Venv::Venv['venv-nailgun-tests'] ->
-    Class['postgresql'] ->
-    Exec['devops-syncdb'] ->
-    Exec['devops-migrate'] ->
-    Exec['workspace-create']
+  file { 'cron-cleanup.sh' :
+    path => '/usr/bin/cron-cleanup.sh',
+    owner => 'root',
+    group => 'root',
+    mode => '0755',
+    content => template('system_tests/cron-cleanup.sh.erb'),
+  }
+
+  cron { 'cron-cleanup' :
+    command => '/usr/bin/cron-cleanup.sh | logger -t cron-cleanup',
+    user => root,
+    hour => '*/4',
+    minute => 0,
+  }
+
+  Class['dpkg']->
+    Package[$packages]->
+    Venv::Venv['venv-nailgun-tests']->
+    Class['postgresql']->
+    Exec['devops-syncdb']->
+    Exec['devops-migrate']->
+    Exec['workspace-create']->
+    File['cron-cleanup.sh']->
+    Cron['cron-cleanup']
 }
