@@ -7,11 +7,11 @@ class jenkins::swarm_slave {
   $packages = $jenkins::params::swarm_packages
   $service = $jenkins::params::service
 
-  $jenkins_master = $jenkins_swarm_slave::params::jenkins_master
-  $jenkins_user = $jenkins_swarm_slave::params::jenkins_user
-  $jenkins_password = $jenkins_swarm_slave::params::jenkins_password
+  $jenkins_master = $jenkins::params::jenkins_master
+  $jenkins_user = $jenkins::params::jenkins_user
+  $jenkins_password = $jenkins::params::jenkins_password
 
-  $labels = $jenkins_swarm_slave::params::labels
+  $labels = $jenkins::params::labels
 
   package { $packages :
     ensure => present,
@@ -26,7 +26,7 @@ class jenkins::swarm_slave {
       owner => 'root',
       group => 'root',
       mode => '0600',
-      content => template('jenkins_swarm_slave/jenkins-swarm-slave.conf.erb')
+      content => template('jenkins/swarm_slave.conf.erb')
     }
 
     Class['dpkg']->
