@@ -1,7 +1,8 @@
 class system {
   include system::rootmail
+  include virtual::packages
 
   $packages = $system::params::packages
 
-  Realize Package[$packages]
+  realize Package[$packages]
 }
