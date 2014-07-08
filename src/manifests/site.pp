@@ -96,13 +96,21 @@ node /pxe-product-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   include pxe_deployment
 }
 
-node 'mirror1.fuel-infra.org' {
+node /mirror(\d+)\.fuel-infra\.org/ {
   $external_host = true
 
   include common
   include nginx
   include nginx::share
   include ssh::authorized_keys
+}
+
+node /build(\d+)\.fuel-infra\.org/ {
+  $external_host = true
+
+  include common
+  include build_fuel_iso
+  include jenkins::slave
 }
 
 node 'test-server' {

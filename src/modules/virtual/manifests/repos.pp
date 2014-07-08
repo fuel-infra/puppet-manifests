@@ -6,7 +6,7 @@ class virtual::repos {
     purge_sources_list => true,
     purge_sources_list_d => true,
     purge_preferences_d => true,
-    update_timeout => 60,
+    update_timeout => 300,
   }
 
   if $::fqdn =~ /msk\.mirantis\.net$/ {
@@ -27,8 +27,15 @@ class virtual::repos {
 
   if $::fqdn =~ /(\.mirantis\.com|fuel-infra\.org)$/ {
     $devops = 'http://fuel-repository.mirantis.com/devops/ubuntu/'
+
+    # FIXME https://bugs.launchpad.net/fuel/+bug/1339162
+    $docker = 'https://get.docker.io/ubuntu'
+    $jenkins = 'http://pkg.jenkins-ci.org/debian-stable/'
+    # /FIXME
   } else {
     $devops = 'http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/'
+    $docker = 'http://mirrors-local-msk.msk.mirantis.net/docker/'
+    $jenkins = 'http://mirrors-local-msk.msk.mirantis.net/jenkins/debian-stable/'
   }
 
   @apt::source { 'mirror':
@@ -57,26 +64,26 @@ class virtual::repos {
   @apt::source { 'devops':
     location => $devops,
     release => '/',
-    key => 'D5A05778',
-    key_source => "${devops}/Release.key",
+    key => 'C1EC35C7D5A05778',
+    key_server => 'keyserver.ubuntu.com',
     repos => '',
     include_src => false,
   }
 
   @apt::source { 'docker':
-    location => 'http://mirrors-local-msk.msk.mirantis.net/docker',
+    location => $docker,
     release => 'docker',
-    key => 'A88D21E9',
-    key_source => 'http://mirrors-local-msk.msk.mirantis.net/docker/DOCKER-GPG-KEY',
+    key => 'D8576A8BA88D21E9',
+    key_server => 'keyserver.ubuntu.com',
     repos => 'main',
     include_src => false,
   }
 
   @apt::source { 'jenkins':
-    location => 'http://mirrors-local-msk.msk.mirantis.net/jenkins/debian-stable/',
+    location => $jenkins,
     release => 'binary/',
-    key => 'D50582E6',
-    key_source => 'http://mirrors-local-msk.msk.mirantis.net/jenkins/debian-stable/Release.key',
+    key => 'D50582E6 10AF40FE',
+    key_server => 'keyserver.ubuntu.com',
     repos => '',
     include_src => false,
   }
