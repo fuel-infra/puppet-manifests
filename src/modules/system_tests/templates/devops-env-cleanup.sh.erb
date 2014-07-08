@@ -1,0 +1,17 @@
+#!/bin/bash
+
+for env in $(/usr/bin/dos.py list | /bin/fgrep 'fuelmain.system_test.')
+do
+	echo -n "$env : "
+	DATE=$(/usr/bin/virsh snapshot-list \
+		--domain "${env}_admin" \
+	| fgrep paused | sort -k2,3 | tail -n 1 | awk '{print $2,$3}')
+
+	DIFF=$((`date +%s`-`date +%s -d "$DATE"`))
+	echo $DIFF
+
+	if [ $DIFF -gt 86400 ]
+	then
+		/usr/bin/dos.py erase "${env}"
+	fi
+done

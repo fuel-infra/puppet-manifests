@@ -6,7 +6,7 @@ class puppet {
   $service = $puppet::params::service
 
   package { $packages :
-    ensure => latest,
+    ensure => present,
   }
 
   file { $config :

@@ -35,20 +35,44 @@ class system_tests {
     mode => '0600',
   }
 
-  file { 'cron-cleanup.sh' :
-    path => '/usr/bin/cron-cleanup.sh',
+  file { 'seed-downloads-cleanup.sh' :
+    path => '/usr/local/bin/seed-downloads-cleanup.sh',
     owner => 'root',
     group => 'root',
     mode => '0755',
-    content => template('system_tests/cron-cleanup.sh.erb'),
+    content => template('system_tests/seed-downloads-cleanup.sh.erb'),
   }
 
-  cron { 'cron-cleanup' :
-    command => '/usr/bin/cron-cleanup.sh | logger -t cron-cleanup',
+  cron { 'seed-downloads-cleanup' :
+    command => '/usr/local/bin/seed-downloads-cleanup.sh | logger -t seed-downloads-cleanup',
     user => root,
     hour => '*/4',
     minute => 0,
   }
+
+  file { 'devops-env-cleanup.sh' :
+    path => '/usr/local/bin/devops-env-cleanup.sh',
+    owner => 'root',
+    group => 'root',
+    mode => '0755',
+    content => template('system_tests/devops-env-cleanup.sh.erb'),
+  }
+
+  cron { 'devops-env-cleanup' :
+    command => '/usr/local/bin/devops-env-cleanup.sh | logger -t devops-env-cleanup',
+    user => root,
+    hour => 16, # 16:00 UTC
+    minute => 0,
+  }
+
+  # FIXME: Temporary required to clean up old files and cronjobs
+  file { '/usr/bin/cron-cleanup.sh' :
+    ensure => absent,
+  }->
+  cron { 'cron-cleanup' :
+    ensure => absent,
+  }
+  # /FIXME
 
   Class['dpkg']->
     Package[$packages]->
@@ -57,6 +81,8 @@ class system_tests {
     Exec['devops-syncdb']->
     Exec['devops-migrate']->
     Exec['workspace-create']->
-    File['cron-cleanup.sh']->
-    Cron['cron-cleanup']
+    File['seed-downloads-cleanup.sh']->
+    Cron['seed-downloads-cleanup']->
+    File['devops-env-cleanup.sh']->
+    Cron['devops-env-cleanup']
 }
