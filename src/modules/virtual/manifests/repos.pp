@@ -26,7 +26,7 @@ class virtual::repos {
       Apt::Source[$title]
   }
 
-  class { 'apt':
+  class { 'apt' :
     always_apt_update => true,
     disable_keys => false,
     purge_sources_list => true,

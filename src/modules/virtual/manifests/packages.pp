@@ -17,6 +17,7 @@ class virtual::packages {
     'extlinux',
     'genisoimage',
     'git',
+    'gitweb',
     'htop',
     'isomd5sum',
     'kpartx',
