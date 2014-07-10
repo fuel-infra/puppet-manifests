@@ -22,7 +22,7 @@ class nginx::share(
 
   file { 'share.conf-enabled' :
     path => '/etc/nginx/sites-enabled/share.conf',
-    ensure => link,
+    ensure => 'link',
     target => '/etc/nginx/sites-available/share.conf',
   }
 

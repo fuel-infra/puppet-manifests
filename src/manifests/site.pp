@@ -71,7 +71,7 @@ node 'ctorrent-msk.msk.mirantis.net' {
   include torrent_tracker
 }
 
-node /(seed-(eu|us)([0-9]{2,})\.mirantis\.com)/ {
+node /(seed-(cz|us)1\.fuel-infra\.org)/ {
   $external_host = true
 
   include common
