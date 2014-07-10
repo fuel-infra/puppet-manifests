@@ -1,8 +1,8 @@
 class dpkg {
   include virtual::repos
 
-  realize Apt::Source['mirror']
-  realize Apt::Source['mirror-updates']
-  realize Apt::Source['security']
-  realize Apt::Source['devops']
+  realize Virtual::Repos::Repository['mirror']
+  realize Virtual::Repos::Repository['mirror-updates']
+  realize Virtual::Repos::Repository['security']
+  realize Virtual::Repos::Repository['devops']
 }

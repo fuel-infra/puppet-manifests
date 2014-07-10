@@ -118,6 +118,6 @@ node 'test-server' {
 
   include virtual::repos
 
-  realize Apt::Source['jenkins']
-  realize Apt::Source['docker']
+  realize Repository['jenkins']
+  realize Repository['docker']
 }

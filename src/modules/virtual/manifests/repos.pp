@@ -1,6 +1,29 @@
 class virtual::repos {
 
- class { 'apt':
+  define repository(
+    $location,
+    $release = $::lsbdistcodename,
+    $repos,
+    $key,
+    $key_server = 'keyserver.ubuntu.com',
+    $include_src = false) {
+
+    @apt::key { $title :
+      key => $key,
+      key_server => $key_server,
+    }
+    @apt::source { $title :
+      location => $location,
+      release => $release,
+      repos => $repos,
+      include_src => $include_src,
+    }
+
+    realize Apt::Key[$title]
+    realize Apt::Source[$title]
+  }
+
+  class { 'apt':
     always_apt_update => true,
     disable_keys => false,
     purge_sources_list => true,
@@ -38,7 +61,7 @@ class virtual::repos {
     $jenkins = 'http://mirrors-local-msk.msk.mirantis.net/jenkins/debian-stable/'
   }
 
-  @apt::source { 'mirror':
+  @repository { 'mirror':
     location => $mirror,
     release => $::lsbdistcodename,
     key => '437D05B5 C0B21F32',
@@ -46,7 +69,7 @@ class virtual::repos {
     include_src => false,
   }
 
-  @apt::source { 'mirror-updates':
+  @repository { 'mirror-updates':
     location => $mirror,
     release => "${::lsbdistcodename}-updates",
     key => '437D05B5 C0B21F32',
@@ -54,14 +77,14 @@ class virtual::repos {
     include_src => false,
   }
 
-  @apt::source { 'security':
+  @repository { 'security':
     location => 'http://security.ubuntu.com/ubuntu/',
     release => "${::lsbdistcodename}-security",
     key => '437D05B5 C0B21F32',
     repos => 'main restricted universe multiverse',
   }
 
-  @apt::source { 'devops':
+  @repository { 'devops':
     location => $devops,
     release => '/',
     key => 'C1EC35C7D5A05778',
@@ -70,7 +93,7 @@ class virtual::repos {
     include_src => false,
   }
 
-  @apt::source { 'docker':
+  @repository { 'docker':
     location => $docker,
     release => 'docker',
     key => 'D8576A8BA88D21E9',
@@ -79,7 +102,7 @@ class virtual::repos {
     include_src => false,
   }
 
-  @apt::source { 'jenkins':
+  @repository { 'jenkins':
     location => $jenkins,
     release => 'binary/',
     key => 'D50582E6 10AF40FE',

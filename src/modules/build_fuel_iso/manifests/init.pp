@@ -6,7 +6,7 @@ class build_fuel_iso {
 
   $packages = $build_fuel_iso::params::packages
 
-  realize Apt::Source['docker']
+  realize Virtual::Repos::Repository['docker']
   realize Package[$packages]
 
   exec { "install-grunt-cli":
@@ -15,7 +15,6 @@ class build_fuel_iso {
   }
 
   Class['dpkg']->
-    Apt::Source['docker']->
     Package[$packages]->
     Exec['install-grunt-cli']
 }
