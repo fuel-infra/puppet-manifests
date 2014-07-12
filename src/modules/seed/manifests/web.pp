@@ -32,6 +32,8 @@ class seed::web {
 
   Class['dpkg']->
     Class['nginx']->
+    File['nginx-seed.conf-available']->
+    File['nginx-seed.conf-enabled']->
     Class['nginx::share']->
     Class['nginx::service']
 }
