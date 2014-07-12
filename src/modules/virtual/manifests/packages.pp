@@ -16,8 +16,8 @@ class virtual::packages {
     @package {"libmysqlclient-dev" : ensure => present }
     @package {"libparse-debian-packages-perl" : ensure => present }
     @package {"lrzip" : ensure => present }
-    @package {"lxc-docker" : ensure => present }
-    @package {"multistrap" : ensure => "2.1.6ubuntu3" }
+    @package {"lxc-docker" : ensure => '0.10.0' }
+    @package {"multistrap" : ensure => '2.1.6ubuntu3' }
     @package {"nodejs" : ensure => present }
     @package {"nodejs-legacy" : ensure => present }
     @package {"npm" : ensure => present }
