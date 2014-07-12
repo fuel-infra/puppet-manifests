@@ -22,11 +22,13 @@ class seed::web {
   }
 
   if $external_host {
-    Class['firewall_defaults::pre'] ->
-    firewall { '1000 allow seed connections' :
-      dport => 17333,
-      source => $allowed_ips,
-      action => 'accept',
+    each($allowed_ips) |$ip| {
+      firewall { "1000 allow seed connections - ${ip}:17333" :
+        dport => 17333,
+        source => $ip,
+        action => 'accept',
+        require => Class['firewall_defaults::pre'],
+      }
     }
   }
 

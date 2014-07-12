@@ -7,7 +7,9 @@ server {
 
         location / {
                 <% if @external_host
-                @allowed_ips.each {|ip| %><%= "allow #{ip};" %><% } %>
+                @allowed_ips.each {|ip| %>
+                <%= "allow #{ip};" %>
+                <% } %>
                 deny all;
                 <% end %>
 
