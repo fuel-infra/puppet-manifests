@@ -17,6 +17,7 @@ class common {
   include firewall_defaults::post
   include ntp
   include puppet
+  include ssh::authorized_keys
   include ssh::sshd
   include system
   include zabbix::agent
@@ -27,7 +28,6 @@ class jenkins_slave {
   include libvirt
   include venv
   include postgresql
-  include ssh::authorized_keys
   include system_tests
   include transmission_daemon
 
@@ -40,14 +40,12 @@ class jenkins_slave {
 
 class torrent_tracker {
   include common
-  include ssh::authorized_keys
   include opentracker
 }
 
 class pxe_deployment {
   include common
   include pxetool
-  include ssh::authorized_keys
 }
 
 class srv {
@@ -55,7 +53,6 @@ class srv {
   include nginx
   class { 'nginx::share': fuelweb_iso_create => true }
   include ssh::sshd
-  include ssh::authorized_keys
   include ssh::ldap
 }
 
@@ -102,7 +99,6 @@ node /mirror(\d+)\.fuel-infra\.org/ {
   include common
   include nginx
   include nginx::share
-  include ssh::authorized_keys
 }
 
 node /build(\d+)\.fuel-infra\.org/ {
@@ -111,6 +107,11 @@ node /build(\d+)\.fuel-infra\.org/ {
   include common
   include build_fuel_iso
   include jenkins::slave
+}
+
+node 'monitor-product.vm.mirantis.net' {
+  include common
+  include zabbix::server
 }
 
 node 'test-server' {

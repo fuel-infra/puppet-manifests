@@ -10,16 +10,24 @@ class zabbix::server {
   $max_connections = $zabbix::params::max_connections
 
   package { $packages :
-    ensure => latest,
+    ensure => 'present',
   }
 
   class { '::mysql::server':
+    package_name     => 'percona-server-server',
     root_password    => 'r00tme',
     override_options => {
       'mysqld' => {
         'innodb_file_per_table' => $innodb_file_per_table,
         'max_connections' => $max_connections,
         'innodb_buffer_pool_size' => $innodb_buffer_pool_size,
+        'innodb_flush_method' => 'O_DIRECT',
+        'table_open_cache' => '256M',
+        'thread_cache_size' => '4M',
+        'slow_query_log'		=>	1,
+        'slow_query_log_file'	=>	'/var/log/mysql/slow.log',
+        'lock_wait_timeout'		=>	120,
+        'log_queries_not_using_indexes'	=>	1,
       },
     },
     users => {
@@ -30,13 +38,13 @@ class zabbix::server {
     },
     databases => {
       'zabbix' => {
-        ensure => present,
+        ensure => 'present',
         charset => 'utf8',
       }
     },
     grants => {
       'zabbix@localhost/zabbix.*' => {
-        ensure => present,
+        ensure => 'present',
         options => ['GRANT'],
         privileges => ['ALTER', 'CREATE', 'INDEX', 'SELECT', 'INSERT', 'UPDATE', 'DELETE'],
         table => 'zabbix.*',
@@ -85,7 +93,7 @@ class zabbix::server {
   }
 
   service { $service :
-    ensure => running,
+    ensure => 'running',
     enable => true,
     hasstatus => true,
     hasrestart => false,
