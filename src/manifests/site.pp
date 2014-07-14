@@ -81,7 +81,7 @@ node /(seed-(cz|us)1\.fuel-infra\.org)/ {
   include torrent_tracker
 }
 
-node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com)/ {
+node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org)/ {
   $external_host = true
   include jenkins_slave
 }
