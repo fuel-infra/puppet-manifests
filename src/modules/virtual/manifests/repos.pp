@@ -78,7 +78,7 @@ class virtual::repos {
   }
 
   @repository { 'security':
-    location => 'http://security.ubuntu.com/ubuntu/',
+    location => $mirror,
     release => "${::lsbdistcodename}-security",
     key => '437D05B5 C0B21F32',
     repos => 'main restricted universe multiverse',

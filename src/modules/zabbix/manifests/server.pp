@@ -1,6 +1,9 @@
 class zabbix::server {
   include zabbix::params
 
+  include nginx
+  include nginx::service
+
   $config = $zabbix::params::server_config
   $packages = $zabbix::params::server_packages
   $service = $zabbix::params::server_service
@@ -25,6 +28,7 @@ class zabbix::server {
         'lock_wait_timeout' => 120,
         'log_queries_not_using_indexes' => 1,
         'max_connections' => $max_connections,
+        'query_cache_size' => '64M',
         'query_cache_type' => 1,
         'read_rnd_buffer_size' => '4M',
         'slow_query_log' => 1,
@@ -99,8 +103,39 @@ class zabbix::server {
   service { $service :
     ensure => 'running',
     enable => true,
-    hasstatus => true,
+    hasstatus => false,
     hasrestart => false,
+  }
+
+  realize Package['php5']
+  realize Package['php5-fpm']
+  realize Package['php5-mysql']
+
+  service { 'php5-fpm' :
+    ensure => 'running',
+    enable => true,
+    hasstatus => false,
+    hasrestart => false,
+  }
+
+  file { 'setup.php-cleanup' :
+    path => '/usr/share/zabbix/setup.php',
+    ensure => 'absent',
+  }
+
+  file { 'zabbix.conf-available' :
+    path => '/etc/nginx/sites-available/zabbix.conf',
+    ensure => present,
+    mode => '0644',
+    owner => 'root',
+    group => 'root',
+    content => template('zabbix/nginx.conf.erb'),
+  }
+
+  file { 'zabbix.conf-enabled' :
+    path => '/etc/nginx/sites-enabled/zabbix.conf',
+    ensure => 'link',
+    target => '/etc/nginx/sites-available/zabbix.conf',
   }
 
   Class['dpkg']->
@@ -112,5 +147,7 @@ class zabbix::server {
     File[$config]~>
     File['ping-handle']->
     Service[$service]->
-    Exec['flag-installation-complete']
+    Exec['flag-installation-complete']~>
+    Class['nginx::service']~>
+    Service['php5-fpm']
 }

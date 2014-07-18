@@ -13,7 +13,7 @@ class build_fuel_iso::params {
     'libmysqlclient-dev',
     'libparse-debian-packages-perl',
     'lrzip',
-    'lxc-docker',
+    'lxc-docker-0.10.0',
     'multistrap',
     'nodejs',
     'nodejs-legacy',

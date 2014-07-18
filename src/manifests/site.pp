@@ -58,7 +58,7 @@ class srv {
 
 # Nodes definitions
 
-node /mc([0-2]+)n([1-8]{1})-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
+node /(mc([0-2]+)n([1-8]{1})-(msk|srt)|srv(14|15|16|17|18|19|20|21)-msk)\.(msk|srt)\.mirantis\.net/ {
   include build_fuel_iso
   class { 'nginx::share': fuelweb_iso_create => true }
   include jenkins_slave

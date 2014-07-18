@@ -1,6 +1,7 @@
 class ssh::ldap {
   include ssh::params
 
+  include ssh::banner
   include ssh::sshd
 
   $ldap_packages = $ssh::params::ldap_packages
