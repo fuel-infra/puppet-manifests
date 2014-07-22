@@ -1,8 +1,13 @@
 [main]
-logdir=/var/log/puppet
-vardir=/var/lib/puppet
-ssldir=/var/lib/puppet/ssl
-rundir=/var/run/puppet
-factpath=$vardir/lib/facter
-templatedir=$confdir/templates
-parser=future
+  factpath = $vardir/lib/facter
+  logdir = /var/log/puppet
+  rundir = /var/run/puppet
+  server = <%= @server %>
+  ssldir = /var/lib/puppet/ssl
+  vardir = /var/lib/puppet
+  parser = future
+
+[agent]
+  pluginsync = true
+  reports = true
+  show_diff = true

@@ -12,6 +12,7 @@ class virtual::repos {
       key => $key,
       key_server => $key_server,
     }
+
     @apt::source { $title :
       location => $location,
       release => $release,
@@ -21,6 +22,9 @@ class virtual::repos {
 
     realize Apt::Key[$title]
     realize Apt::Source[$title]
+
+    Apt::Key[$title]->
+      Apt::Source[$title]
   }
 
   class { 'apt':
@@ -32,23 +36,28 @@ class virtual::repos {
     update_timeout => 300,
   }
 
-  if $::fqdn =~ /msk\.mirantis\.net$/ {
-    # Moscow internal mirror
-    $mirror = 'http://mirrors.msk.mirantis.net/ubuntu/'
-  }
-  elsif $::fqdn =~ /srt\.mirantis\.net$/ {
-    # Saratov internal mirror
-    $mirror = 'http://mirrors.srt.mirantis.net/ubuntu/'
-  }
-  elsif $::fqdn =~ /\.vm\.mirantis\.net$/ {
-    # VMs, I hope they're in Moscow ;)
-    $mirror = 'http://mirrors.msk.mirantis.net/ubuntu/'
-  } else {
-    # All other servers
+  if $external_host {
+    # External mirror
     $mirror = 'http://archive.ubuntu.com/ubuntu/'
+  } else {
+    if $::fqdn =~ /msk\.mirantis\.net$/ {
+      # Moscow internal mirror
+      $mirror = 'http://mirrors.msk.mirantis.net/ubuntu/'
+    }
+    elsif $::fqdn =~ /srt\.mirantis\.net$/ {
+      # Saratov internal mirror
+      $mirror = 'http://mirrors.srt.mirantis.net/ubuntu/'
+    }
+    elsif $::fqdn =~ /\.vm\.mirantis\.net$/ {
+      # VMs, I hope they're in Moscow ;)
+      $mirror = 'http://mirrors.msk.mirantis.net/ubuntu/'
+    } else {
+      # All other servers
+      $mirror = 'http://archive.ubuntu.com/ubuntu/'
+    }
   }
 
-  if $::fqdn =~ /(\.mirantis\.com|fuel-infra\.org)$/ {
+  if $::fqdn =~ /(\.mirantis\.com|fuel-infra\.org)$/ or $external_host {
     $devops = 'http://fuel-repository.mirantis.com/devops/ubuntu/'
 
     # FIXME https://bugs.launchpad.net/fuel/+bug/1339162
@@ -110,4 +119,24 @@ class virtual::repos {
     repos => '',
     include_src => false,
   }
+
+  # FIXME: https://bugs.launchpad.net/fuel/+bug/1342798
+  @repository { 'puppetlabs' :
+    location => 'http://apt.puppetlabs.com',
+    release => 'trusty',
+    key => '4BD6EC30',
+    key_server => 'keyserver.ubuntu.com',
+    repos => 'main',
+    include_src => false,
+  }
+
+  @repository { 'puppetlabs-deps' :
+    location => 'http://apt.puppetlabs.com',
+    release => 'trusty',
+    key => '4BD6EC30',
+    key_server => 'keyserver.ubuntu.com',
+    repos => 'dependencies',
+    include_src => false,
+  }
+  # /FIXME
 }

@@ -16,7 +16,7 @@ class common {
   include firewall_defaults::pre
   include firewall_defaults::post
   include ntp
-  include puppet
+  include puppet::agent
   include ssh::authorized_keys
   include ssh::sshd
   include system
@@ -115,6 +115,15 @@ node 'monitor-product.vm.mirantis.net' {
   include zabbix::server
 }
 
+node 'fuel-puppet.vm.mirantis.net' {
+  $external_host = true
+  $dmz = true
+  $puppet_master = true
+
+  include common
+  include puppet::master
+}
+
 node 'test-server' {
   # puppet apply --certname test-server -v -d /etc/puppet/manifests/site.pp
 
@@ -122,4 +131,8 @@ node 'test-server' {
 
   realize Repository['jenkins']
   realize Repository['docker']
+}
+
+node default {
+  notify { 'Default node invocation' :}
 }

@@ -22,10 +22,13 @@ class zabbix::params {
 
   $server_service = 'zabbix-server'
 
-  if $external_host {
-    $server_fqdn = '91.218.144.129'
+  if $dmz {
+    $server = '172.18.2.175' # monitor-product.vm.mirantis.net
+  }
+  elsif $external_host {
+    $server = '91.218.144.129'
   } else {
-    $server_fqdn = 'monitor-product.vm.mirantis.net'
+    $server = 'monitor-product.vm.mirantis.net'
   }
 
   # MySQL options

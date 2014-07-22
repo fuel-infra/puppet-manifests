@@ -5,7 +5,7 @@ class zabbix::agent {
   $config = $zabbix::params::agent_config
   $packages = $zabbix::params::agent_packages
   $service = $zabbix::params::agent_service
-  $server_fqdn = $zabbix::params::server_fqdn
+  $server = $zabbix::params::server
   $sudoers = $zabbix::params::agent_sudoers
 
   file { $config :
@@ -41,7 +41,7 @@ class zabbix::agent {
     Class['firewall_defaults::pre'] ->
     firewall { '1000 allow zabbix connections' :
       dport => 10050,
-      source => $server_fqdn,
+      source => $server,
       action => 'accept',
     }
   }

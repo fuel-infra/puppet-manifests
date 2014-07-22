@@ -1,20 +1,13 @@
-class puppet {
+class puppet::agent {
   include puppet::params
 
-  $config = $puppet::params::config
+  include puppet::config
+
   $packages = $puppet::params::packages
   $service = $puppet::params::service
 
   package { $packages :
     ensure => present,
-  }
-
-  file { $config :
-    path => $config,
-    mode => '0400',
-    owner => 'root',
-    group => 'root',
-    content => template('puppet/puppet.conf.erb'),
   }
 
   service { $service :
