@@ -5,8 +5,8 @@ UserParameter=nginx.waiting[*],/usr/bin/curl -s http://127.0.0.1:61929/ | awk '/
 UserParameter=nginx.accepted[*],/usr/bin/curl -s http://127.0.0.1:61929/ | awk '/^[ \t]+[0-9]+[ \t]+[0-9]+[ \t]+[0-9]+/ {print $$1}'
 UserParameter=nginx.handled[*],/usr/bin/curl -s http://127.0.0.1:61929/ | awk '/^[ \t]+[0-9]+[ \t]+[0-9]+[ \t]+[0-9]+/ {print $$2}'
 UserParameter=nginx.requests[*],/usr/bin/curl -s http://127.0.0.1:61929/ | awk '/^[ \t]+[0-9]+[ \t]+[0-9]+[ \t]+[0-9]+/ {print $$3}'
-UserParameter=nginx.logs.requests[*],/usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | wc -l
-UserParameter=nginx.logs.requests.2xx[*],/usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 200 && $$8 < 300) { i++ }} END {print i}'
-UserParameter=nginx.logs.requests.3xx[*],/usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 300 && $$8 < 400) { i++ }} END {print i}'
-UserParameter=nginx.logs.requests.4xx[*],/usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 400 && $$8 < 500) { i++ }} END {print i}'
-UserParameter=nginx.logs.requests.5xx[*],/usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 500 && $$8 < 600) { i++ }} END {print i}'
+UserParameter=nginx.logs.requests[*],sudo /usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | wc -l
+UserParameter=nginx.logs.requests.2xx[*],sudo /usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 200 && $$8 < 300) { i++ }} END {print i}'
+UserParameter=nginx.logs.requests.3xx[*],sudo /usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 300 && $$8 < 400) { i++ }} END {print i}'
+UserParameter=nginx.logs.requests.4xx[*],sudo /usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 400 && $$8 < 500) { i++ }} END {print i}'
+UserParameter=nginx.logs.requests.5xx[*],sudo /usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 500 && $$8 < 600) { i++ }} END {print i}'
