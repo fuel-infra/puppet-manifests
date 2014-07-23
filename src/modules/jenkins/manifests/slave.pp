@@ -5,7 +5,8 @@ class jenkins::slave {
   include virtual::users
 
   $packages = $jenkins::params::slave_packages
-  $jenkins_keys = $jenkins::params::jenkins_keys
+
+  $jenkins = hiera('jenkins')
 
   package { $packages :
     ensure => present,
@@ -19,7 +20,7 @@ class jenkins::slave {
     logoutput => 'on_failure',
   }
 
-  create_resources(ssh_authorized_key, $jenkins_keys, {ensure => present, user => 'jenkins'})
+  create_resources(ssh_authorized_key, $jenkins['ssh_keys'], {ensure => present, user => 'jenkins'})
 
   Class['dpkg']->
     Package[$packages]->

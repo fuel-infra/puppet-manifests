@@ -15,14 +15,4 @@ class jenkins::params {
   ]
 
   $service = 'jenkins-swarm-slave'
-
-  $jenkins_master = $::jenkins_master
-  $jenkins_user = $::jenkins_user
-  $jenkins_password = $::jenkins_password
-
-  if($::jenkins_labels) {
-    $labels = $::jenkins_labels
-  } else {
-    $labels = "swarm systest ${::operatingsystem}_${::operatingsystemrelease}"
-  }
 }

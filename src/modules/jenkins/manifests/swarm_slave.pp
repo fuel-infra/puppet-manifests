@@ -7,11 +7,12 @@ class jenkins::swarm_slave {
   $packages = $jenkins::params::swarm_packages
   $service = $jenkins::params::service
 
-  $jenkins_master = $jenkins::params::jenkins_master
-  $jenkins_user = $jenkins::params::jenkins_user
-  $jenkins_password = $jenkins::params::jenkins_password
+  $jenkins = hiera('jenkins')
 
-  $labels = $jenkins::params::labels
+  $jenkins_master = $jenkins['swarm_server']
+  $jenkins_user = $jenkins['swarm_user']
+  $jenkins_password = $jenkins['swarm_password']
+  $labels = $jenkins['swarm_labels']
 
   package { $packages :
     ensure => present,
@@ -19,22 +20,13 @@ class jenkins::swarm_slave {
 
   realize User['jenkins']
 
-  if($::jenkins_update) {
-    file { 'jenkins-swarm-slave.conf' :
-      path => '/etc/default/jenkins-swarm-slave',
-      ensure => present,
-      owner => 'root',
-      group => 'root',
-      mode => '0600',
-      content => template('jenkins/swarm_slave.conf.erb')
-    }
-
-    Class['dpkg']->
-      Package[$packages]->
-      File['jenkins-swarm-slave.conf']~>
-      Service[$service]
-    File['jenkins-swarm-slave.conf']~>
-      Service[$service]
+  file { 'jenkins-swarm-slave.conf' :
+    path => '/etc/default/jenkins-swarm-slave',
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '0600',
+    content => template('jenkins/swarm_slave.conf.erb')
   }
 
   service { $service :
@@ -43,6 +35,14 @@ class jenkins::swarm_slave {
     hasstatus => true,
     hasrestart => false,
   }
+
+  Class['dpkg']->
+    Package[$packages]->
+    File['jenkins-swarm-slave.conf']~>
+    Service[$service]
+
+  File['jenkins-swarm-slave.conf']~>
+    Service[$service]
 
   Class['dpkg']->
     Package[$packages]~>
