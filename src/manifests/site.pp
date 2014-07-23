@@ -15,7 +15,10 @@ class common {
   include dpkg
   include firewall_defaults::pre
   include firewall_defaults::post
-  include ntp
+  class { '::ntp':
+    servers => ['pool.ntp.org'],
+    restrict => ['127.0.0.1'],
+  }
   include puppet::agent
   include ssh::authorized_keys
   include ssh::sshd

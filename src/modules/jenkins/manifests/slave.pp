@@ -6,7 +6,7 @@ class jenkins::slave {
 
   $packages = $jenkins::params::slave_packages
 
-  $jenkins = hiera('jenkins')
+  $jenkins = hiera_hash('jenkins')
 
   package { $packages :
     ensure => present,

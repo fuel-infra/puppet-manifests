@@ -2,7 +2,8 @@ class puppet::config {
   include puppet::params
 
   $config = $puppet::params::config
-  $server = $puppet::params::server
+  $puppet = hiera_hash('puppet')
+  $server = $puppet['master']
 
   if($puppet_master) {
     file { $config :

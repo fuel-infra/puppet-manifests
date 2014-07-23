@@ -34,16 +34,6 @@ class puppet::master {
     }
   }
 
-  file { '/usr/share/config-puppet-manifests' :
-    #ensure => 'directory',
-    mode => '0600',
-    owner => 'puppet',
-    group => 'puppet',
-    recurse => true,
-  }
-
-  #Virtual::Repos::Repository['puppetlabs']->
-  #Virtual::Repos::Repository['puppetlabs-deps']->
   Package[$packages]->
     Class['puppet::config']~>
     Service[$service]

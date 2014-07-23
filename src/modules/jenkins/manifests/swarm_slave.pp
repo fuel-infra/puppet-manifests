@@ -7,7 +7,7 @@ class jenkins::swarm_slave {
   $packages = $jenkins::params::swarm_packages
   $service = $jenkins::params::service
 
-  $jenkins = hiera('jenkins')
+  $jenkins = hiera_hash('jenkins')
 
   $jenkins_master = $jenkins['swarm_server']
   $jenkins_user = $jenkins['swarm_user']
