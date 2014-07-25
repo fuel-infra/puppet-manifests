@@ -22,6 +22,15 @@ class build_fuel_iso {
     content => template('build_fuel_iso/sudoers_d_build_fuel_iso.erb')
   }
 
+  if $external_host {
+    firewall { '010 accept all to docker0 interface':
+      proto   => 'all',
+      iniface => 'docker0',
+      action  => 'accept',
+      require => Package[$packages],
+    }
+  }
+
   Class['dpkg']->
     Package[$packages]->
     Exec['install-grunt-cli']->
