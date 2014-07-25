@@ -9,12 +9,21 @@ class build_fuel_iso {
   realize Virtual::Repos::Repository['docker']
   realize Package[$packages]
 
-  exec { "install-grunt-cli":
+  exec { 'install-grunt-cli' :
     command => '/usr/bin/npm install -g grunt-cli',
     logoutput => on_failure,
   }
 
+  file { 'jenkins-sudo-for-build_iso' :
+    path => '/etc/sudoers.d/build_fuel_iso',
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    content => template('build_fuel_iso/sudoers_d_build_fuel_iso.erb')
+  }
+
   Class['dpkg']->
     Package[$packages]->
-    Exec['install-grunt-cli']
+    Exec['install-grunt-cli']->
+    File['jenkins-sudo-for-build_iso']
 }
