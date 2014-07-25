@@ -4,7 +4,6 @@ class puppet::master {
   include puppet::config
   include virtual::repos
 
-  $allowed_ips = $puppet::params::allowed_ips
   $packages = $puppet::params::master_packages
   $service = $puppet::params::master_service
 
@@ -23,10 +22,19 @@ class puppet::master {
   }
 
   if $external_host {
+    $firewall = hiera_hash('firewall')
+
     $port = 8140
-    each($allowed_ips) |$ip| {
-      firewall { "1000 allow puppetmaster connections - ${ip}:${port}" :
+    $proto = 'tcp'
+
+    $allowed_networks = $firewall['known_networks'] +
+      $firewall['external_hosts'] +
+      $firewall['internal_networks']
+
+    each($allowed_networks) |$ip| {
+      firewall { "1000 allow puppetmaster connections - src ${ip} ; dst ${proto}/${port}" :
         dport => $port,
+        proto => $proto,
         source => $ip,
         action => 'accept',
         require => Class['firewall_defaults::pre'],
