@@ -42,7 +42,12 @@ class zabbix::agent {
 
     $port = 10050
     $proto = 'tcp'
-    $allowed_ips = $firewall['known_networks']
+    if $dmz {
+      $allowed_ips = $firewall['known_networks'] +
+        $firewall['internal_networks']
+    } else {
+      $allowed_ips = $firewall['known_networks']
+    }
 
     each($allowed_ips) |$ip| {
       firewall { "1000 allow zabbix connections - src ${ip} ; dst ${proto}/${port}" :
