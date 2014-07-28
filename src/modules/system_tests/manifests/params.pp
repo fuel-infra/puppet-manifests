@@ -1,6 +1,7 @@
 class system_tests::params {
   $packages = [
     # dependencies
+    'libevent-dev',
     'python-anyjson',
     'python-devops',
     'python-glanceclient',

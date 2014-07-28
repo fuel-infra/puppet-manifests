@@ -21,6 +21,7 @@ class virtual::packages {
     'isomd5sum',
     'kpartx',
     'libconfig-auto-perl',
+    'libevent-dev',
     'libffi-dev',
     'libmysqlclient-dev',
     'libparse-debian-packages-perl',
