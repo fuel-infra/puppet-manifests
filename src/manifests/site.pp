@@ -87,7 +87,7 @@ node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-
   include jenkins_slave
 }
 
-node /(srv(07|08|11)|jenkins-product)-(msk|srt|kha)\.(msk|srt|vm)\.mirantis\.net/ {
+node /(srv(07|08|11)|jenkins-product)-(msk|srt|kha|pl)\.(msk|srt|vm|poz)\.mirantis\.net/ {
   include srv
   include jenkins_slave
   include build_fuel_iso
