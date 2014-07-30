@@ -9,6 +9,6 @@ Replaces: puppet, puppet-common
 Section: extra
 Priority: optional
 Architecture: any
-Depends: coreutils, findutils, puppet, puppet-module-puppetlabs-apt, puppet-module-puppetlabs-firewall, puppet-module-puppetlabs-mysql
+Depends: coreutils, findutils, puppet, puppet-module-puppetlabs-apt, puppet-module-puppetlabs-firewall, puppet-module-puppetlabs-mysql, puppet-module-puppetlabs-ntp
 Description: Puppet manifests
  .
