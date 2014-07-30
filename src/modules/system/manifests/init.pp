@@ -8,4 +8,16 @@ class system {
 
   realize Package[$packages]
   realize User['root']
+
+  # FIXME: Legacy from IT's puppet agent
+  cron { 'puppet' :
+    ensure => 'absent',
+  }
+  cron { 'puppet-timeout' :
+    ensure => 'absent',
+  }
+  cron { 'check-backup' :
+    ensure => 'absent',
+  }
+  # /FIXME
 }
