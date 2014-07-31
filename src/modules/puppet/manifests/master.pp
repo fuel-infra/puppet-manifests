@@ -10,9 +10,7 @@ class puppet::master {
   realize Virtual::Repos::Repository['puppetlabs']
   realize Virtual::Repos::Repository['puppetlabs-deps']
 
-  package { $packages :
-    ensure => present,
-  }
+  realize Package[$packages]
 
   service { $service :
     ensure => running,

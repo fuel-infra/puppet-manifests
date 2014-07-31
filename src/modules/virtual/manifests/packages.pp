@@ -52,6 +52,8 @@ class virtual::packages {
     'python-virtualenv',
     'python-xmlbuilder',
     'python-yaml',
+    'puppet',
+    'puppetmaster',
     'realpath',
     'ruby-builder',
     'ruby-bundler',

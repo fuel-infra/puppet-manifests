@@ -2,12 +2,14 @@ class puppet::config {
   include puppet::params
 
   $config = $puppet::params::config
+
   $puppet = hiera_hash('puppet')
   $server = $puppet['master']
 
   if($puppet_master) {
     file { $config :
       path => $config,
+      ensure => 'present',
       mode => '0644',
       owner => 'puppet',
       group => 'puppet',
@@ -16,6 +18,7 @@ class puppet::config {
   } else {
     file { $config :
       path => $config,
+      ensure => 'present',
       mode => '0400',
       owner => 'root',
       group => 'root',

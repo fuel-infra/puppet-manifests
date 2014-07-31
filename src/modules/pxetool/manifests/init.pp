@@ -1,6 +1,7 @@
 class pxetool {
   include nginx
   include uwsgi
+  include virtual::packages
 
   include pxetool::params
 
@@ -12,10 +13,14 @@ class pxetool {
   $nginx_conf_link = $pxetool::params::nginx_conf_link
   $packages = $pxetool::params::packages
 
+  $puppet = hiera_hash('puppet')
+  $system = hiera_hash('system')
+
+  $puppet_master = $puppet['master']
+  $root_password_hash = $system['root_password_hash']
+
   # installing required $packages
-  package { $packages :
-    ensure => latest,
-  }
+  realize Package[$packages]
 
   # creating database schema
   exec { 'pxetool-syncdb' :

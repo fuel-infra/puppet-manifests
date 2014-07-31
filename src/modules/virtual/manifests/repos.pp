@@ -1,5 +1,4 @@
 class virtual::repos {
-
   define repository(
     $location,
     $release = $::lsbdistcodename,

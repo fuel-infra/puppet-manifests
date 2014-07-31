@@ -9,10 +9,16 @@ File {
   replace => true,
 }
 
+stage { 'pre' :
+  before => Stage['main'],
+}
+
 # Class definitions
 
 class common {
-  include dpkg
+  class { 'dpkg' :
+    stage => 'pre'
+  }
   include firewall_defaults::pre
   include firewall_defaults::post
   class { '::ntp':

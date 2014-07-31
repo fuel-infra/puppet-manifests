@@ -3,12 +3,10 @@ class puppet::agent {
 
   include puppet::config
 
-  $packages = $puppet::params::packages
+  $packages = $puppet::params::agent_packages
   $service = $puppet::params::service
 
-  package { $packages :
-    ensure => present,
-  }
+  realize Package[$packages]
 
   service { $service :
     ensure => 'stopped',

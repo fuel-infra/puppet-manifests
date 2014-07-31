@@ -1,4 +1,6 @@
 class virtual::users {
+  $system = hiera_hash('system')
+
   @user { 'jenkins' :
     ensure => 'present',
     name => 'jenkins',
@@ -13,6 +15,6 @@ class virtual::users {
   @user { 'root' :
     ensure => 'present',
     shell => '/bin/bash',
-    password => '$6$v0NMomQ1$VSGZjvlRebtDHSoRdSGWh2tDPSu.i7eV6tfWeLY1Zf6YPREMmtobthI.ff9iHxf.AJLhVI6qZtwp472OiZqWv/',
+    password => $system['root_password_hash'],
   }
 }
