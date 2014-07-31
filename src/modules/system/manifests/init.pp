@@ -1,5 +1,14 @@
 class system {
-  include system::rootmail
+  $system = hiera_hash('system')
+
+  class { 'system::rootmail' :
+    root_email => $system['root_email'],
+  }
+
+  class { 'system::timezone' :
+    timezone => $system['timezone']
+  }
+
   include system::tools
   include virtual::packages
   include virtual::users

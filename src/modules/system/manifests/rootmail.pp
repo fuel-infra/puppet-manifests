@@ -1,7 +1,7 @@
-class system::rootmail {
+class system::rootmail (
+  $root_email,
+) {
   include system::params
-
-  $root_email = $system::params::root_email
   $packages = $system::params::rootemail_packages
 
   $aliases = '/etc/aliases'

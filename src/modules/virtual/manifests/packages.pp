@@ -58,6 +58,7 @@ class virtual::packages {
     'ruby-dev',
     'rubygems-integration',
     'sysstat',
+    'tzdata',
     'unzip',
     'vncviewer',
     'yum',
