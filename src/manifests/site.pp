@@ -16,9 +16,7 @@ stage { 'pre' :
 # Class definitions
 
 class common {
-  class { 'dpkg' :
-    # stage => 'pre'
-  }
+  include dpkg
   include firewall_defaults::pre
   include firewall_defaults::post
   class { '::ntp':
