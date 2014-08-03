@@ -65,6 +65,19 @@ class system_tests {
     minute => 0,
   }
 
+  if $external_host {
+    $firewall = hiera_hash('firewall')
+    $local_networks = $firewall['local_networks']
+
+    each($local_networks) |$ip| {
+      firewall { "0100 allow local connections - src ${ip}" :
+        source => $ip,
+        action => 'accept',
+        require => Class['firewall_defaults::pre'],
+      }
+    }
+  }
+
   # FIXME: Temporary required to clean up old files and cronjobs
   file { '/usr/bin/cron-cleanup.sh' :
     ensure => absent,

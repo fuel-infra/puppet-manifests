@@ -17,7 +17,7 @@ stage { 'pre' :
 
 class common {
   class { 'dpkg' :
-    stage => 'pre'
+    # stage => 'pre'
   }
   include firewall_defaults::pre
   include firewall_defaults::post
