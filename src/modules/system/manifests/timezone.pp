@@ -13,4 +13,13 @@ class system::timezone (
     owner => 'root',
     group => 'root',
   }
+
+  file { 'localtime' :
+    path => '/etc/localtime',
+    source => "file:///usr/share/zoneinfo/${timezone}",
+    ensure => 'present',
+    mode => '0644',
+    owner => 'root',
+    group => 'root',
+  }
 }

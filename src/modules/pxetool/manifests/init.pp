@@ -18,6 +18,7 @@ class pxetool {
 
   $puppet_master = $puppet['master']
   $root_password_hash = $system['root_password_hash']
+  $timezone = $system['timezone']
 
   # installing required $packages
   realize Package[$packages]

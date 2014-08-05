@@ -7,6 +7,7 @@ class libvirt {
   $service = $libvirt::params::service
   $default_pool_dir = $libvirt::params::default_pool_dir
   $default_pool_name = $libvirt::params::default_pool_name
+  $listen_addr = $libvirt::params::listen_addr
 
   package { $packages :
     ensure => latest,

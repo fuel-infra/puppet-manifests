@@ -1,8 +1,7 @@
 class ssh::authorized_keys {
-  include ssh::params
+  $system = hiera_hash('system')
 
-  $root_keys = $ssh::params::root_keys
+  $root_keys = $system['root_keys']
 
   create_resources(ssh_authorized_key, $root_keys, {ensure => present, user => 'root'})
 }
-
