@@ -131,6 +131,12 @@ node 'fuel-puppet.vm.mirantis.net' {
   include puppet::master
 }
 
+node 'lab-cz.vm.mirantis.net' {
+  include common
+  include libvirt
+  include ssh::ldap
+}
+
 node 'test-server' {
   # puppet apply --certname test-server -v -d /etc/puppet/manifests/site.pp
 
