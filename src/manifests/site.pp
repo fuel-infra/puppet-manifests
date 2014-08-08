@@ -131,7 +131,7 @@ node 'fuel-puppet.vm.mirantis.net' {
   include puppet::master
 }
 
-node 'lab-cz.vm.mirantis.net' {
+node 'lab-cz.bud.mirantis.net' {
   include common
   include libvirt
   include ssh::ldap
