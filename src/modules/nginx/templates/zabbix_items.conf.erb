@@ -10,3 +10,5 @@ UserParameter=nginx.logs.requests.2xx[*],sudo /usr/local/bin/tailnew "$1" nginx.
 UserParameter=nginx.logs.requests.3xx[*],sudo /usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 300 && $$8 < 400) { i++ }} END {print i}'
 UserParameter=nginx.logs.requests.4xx[*],sudo /usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 400 && $$8 < 500) { i++ }} END {print i}'
 UserParameter=nginx.logs.requests.5xx[*],sudo /usr/local/bin/tailnew "$1" nginx.logs.requests.$(echo -n $1 | sed 's~/~_~g') | awk 'BEGIN { i = 0 } {if($$8 >= 500 && $$8 < 600) { i++ }} END {print i}'
+UserParameter=nginx.timings.frontend[*],sudo /usr/local/bin/tailnew "$1" nginx.timings_$(echo -n "$1" | sed 's~/~_~g')_frontend | awk '{sum += $$NF} END {print sum / NR}'
+UserParameter=nginx.timings.backend[*],sudo /usr/local/bin/tailnew "$1" nginx.timings_$(echo -n "$1" | sed 's~/~_~g')_backend | awk '{sum += $$(NF-5)} END {print sum / NR}'
