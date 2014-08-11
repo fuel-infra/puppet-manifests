@@ -1,4 +1,6 @@
-class build_fuel_iso {
+class build_fuel_iso(
+  $external_host = false,
+) {
   include dpkg
   include virtual::packages
   include virtual::repos

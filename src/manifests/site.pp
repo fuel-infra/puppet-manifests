@@ -30,21 +30,6 @@ class common {
   include zabbix::agent
 }
 
-class jenkins_slave {
-  include common
-  include libvirt
-  include venv
-  include postgresql
-  include system_tests
-  include transmission_daemon
-
-  if $external_host == true {
-    include jenkins::slave
-  } else {
-    include jenkins::swarm_slave
-  }
-}
-
 class torrent_tracker {
   include common
   include opentracker
@@ -58,7 +43,7 @@ class pxe_deployment {
 class srv {
   include common
   include nginx
-  class { 'nginx::share': fuelweb_iso_create => true }
+  class { 'nginx::share' : fuelweb_iso_create => true }
   include ssh::sshd
   include ssh::ldap
 }
@@ -66,9 +51,12 @@ class srv {
 # Nodes definitions
 
 node /(mc([0-2]+)n([1-8]{1})-(msk|srt)|srv(14|15|16|17|18|19|20|21)-msk)\.(msk|srt)\.mirantis\.net/ {
-  include build_fuel_iso
-  class { 'nginx::share': fuelweb_iso_create => true }
-  include jenkins_slave
+  class { 'nginx::share' : fuelweb_iso_create => true }
+  class { 'fuel_project::jenkins_slave' :
+    external_host  => false,
+    run_tests => true,
+    build_fuel_iso => true,
+  }
   include ssh::ldap
 }
 
@@ -81,20 +69,28 @@ node /(seed-(cz|us)1\.fuel-infra\.org)/ {
 
   include common
   include nginx
-  class { 'nginx::share': fuelweb_iso_create => true }
+  class { 'nginx::share' : fuelweb_iso_create => true }
   include seed::web
   include torrent_tracker
 }
 
-node /(ss0078\.svwh\.net|fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org)/ {
+node /(fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org)/ {
   $external_host = true
-  include jenkins_slave
+
+  class { 'fuel_project::jenkins_slave' :
+    external_host  => true,
+    run_tests      => true,
+    build_fuel_iso => false,
+  }
 }
 
 node /(srv(07|08|11)|jenkins-product)-(msk|srt|kha|pl)\.(msk|srt|vm|poz)\.mirantis\.net/ {
   include srv
-  include jenkins_slave
-  include build_fuel_iso
+  class { 'fuel_project::jenkins_slave' :
+    external_host  => false,
+    run_tests      => true,
+    build_fuel_iso => true,
+  }
 }
 
 node /pxe-product-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
@@ -113,8 +109,11 @@ node /build(\d+)\.fuel-infra\.org/ {
   $external_host = true
 
   include common
-  include build_fuel_iso
-  include jenkins::slave
+  class { 'fuel_project::jenkins_slave' :
+    external_host  => true,
+    run_tests      => false,
+    build_fuel_iso => true,
+  }
 }
 
 node 'monitor-product.vm.mirantis.net' {
@@ -147,7 +146,7 @@ node 'osci-gerrit.vm.mirantis.net' {
   $gerrit = hiera_hash('gerrit')
   $mysql = hiera_hash('mysql')
 
-  class { 'gerrit':
+  class { 'gerrit' :
     gitweb                              => true,
     gerrit_start_timeout                => $gerrit['start_timeout'],
     mysql_host                          => $gerrit['mysql_host'],

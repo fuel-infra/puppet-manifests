@@ -5,6 +5,8 @@ class virtual::packages {
     ensure => 'present',
   }
 
+  # Howto sort packages:
+  # sed -n '/\$packages = \[/,/\]/{/\$packages/d;/\]/d;p}' modules/virtual/manifests/packages.pp | sort
   $packages = [
     'atop',
     'bc',
@@ -34,6 +36,8 @@ class virtual::packages {
     'php5-fpm',
     'php5-mysql',
     'postgresql-server-dev-all',
+    'puppet',
+    'puppetmaster',
     'python-anyjson',
     'python-daemon',
     'python-dev',
@@ -54,8 +58,7 @@ class virtual::packages {
     'python-virtualenv',
     'python-xmlbuilder',
     'python-yaml',
-    'puppet',
-    'puppetmaster',
+    'qemu-kvm',
     'realpath',
     'ruby-builder',
     'ruby-bundler',
