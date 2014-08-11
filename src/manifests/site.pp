@@ -131,9 +131,9 @@ node 'fuel-puppet.vm.mirantis.net' {
 }
 
 node 'lab-cz.bud.mirantis.net' {
-  include common
-  include libvirt
-  include ssh::ldap
+  class { 'fuel_project::lab_cz' :
+    external_host => false,
+  }
 }
 
 node 'osci-gerrit.vm.mirantis.net' {

@@ -1,0 +1,1 @@
+ALL ALL=NOPASSWD: /sbin/mount, /sbin/umount, /sbin/ifconfig, /sbin/brctl
