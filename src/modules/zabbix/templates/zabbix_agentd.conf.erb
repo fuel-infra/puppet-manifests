@@ -1,25 +1,25 @@
 PidFile=/var/run/zabbix/zabbix_agentd.pid
-LogFile=/var/log/zabbix-agent/zabbix_agentd.log
+LogFile=<%= @log_file %>
 LogFileSize=0
-DebugLevel=4
-EnableRemoteCommands=1
-LogRemoteCommands=1
+DebugLevel=<%= @debug_level %>
+EnableRemoteCommands=<%= @enable_remote_commands ? 1 : 0 %>
+LogRemoteCommands=<%= @log_remote_commands ? 1 : 0 %>
 
-Server=<%= @server %>, 127.0.0.1
-ListenPort=10050
-ListenIP=0.0.0.0
-StartAgents=3
-<% if !@external_host %>
-ServerActive=monitor-product.vm.mirantis.net
-RefreshActiveChecks=120
+Server=<%= @zabbix_server %>, 127.0.0.1
+ListenPort=<%= @listen_port %>
+ListenIP=<%= @listen_address %>
+StartAgents=<%= @start_agents %>
+<% if @server_active %>
+ServerActive=<%= @server_active %>
+RefreshActiveChecks=<%= @refresh_active_checks %>
 <% end %>
-Hostname=system.hostname
-HostnameItem=system.hostname
+Hostname=<%= @hostname %>
+HostnameItem=<%= @hostname_item %>
 
-MaxLinesPerSecond=100
-AllowRoot=0
-Timeout=3
+MaxLinesPerSecond=<%= @max_lines_per_second %>
+AllowRoot=<%= @allow_root ? 1 : 0 %>
+Timeout=<%= @timeout %>
 
-Include=/etc/zabbix/zabbix_agentd.conf.d/
+Include=<%= @include %>
 
-UnsafeUserParameters=0
+UnsafeUserParameters=<%= @unsafe_user_parameters ? 1 : 0 %>

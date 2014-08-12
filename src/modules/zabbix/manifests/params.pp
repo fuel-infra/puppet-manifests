@@ -6,7 +6,7 @@ class zabbix::params {
 
   $agent_config = '/etc/zabbix/zabbix_agentd.conf'
 
-  $agent_packages = ['zabbix-agent']
+  $agent_package = 'zabbix-agent'
 
   $agent_service = 'zabbix-agent'
 
@@ -15,7 +15,6 @@ class zabbix::params {
   $server_config = '/etc/zabbix/zabbix_server.conf'
 
   $server_packages = [
-    'puppet-module-puppetlabs-mysql',
     'zabbix-frontend-php',
     'zabbix-server-mysql',
   ]

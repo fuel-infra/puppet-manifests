@@ -27,7 +27,12 @@ class common {
   include ssh::authorized_keys
   include ssh::sshd
   include system
-  include zabbix::agent
+
+  $zabbix = hiera_hash('zabbix')
+  class { 'zabbix::agent' :
+    zabbix_server => $zabbix['server'],
+    server_active => $zabbix['server'],
+  }
 }
 
 class torrent_tracker {

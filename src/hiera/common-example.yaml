@@ -107,6 +107,7 @@ system:
 
 zabbix:
   service_fqdn: 'zabbix.test.local'
+  server: 'zabbix.test.local'
   service_fqdn_internal: 'zabbix.test.local-int'
   mysql_database: 'zabbix'
   mysql_host: '127.0.0.1'

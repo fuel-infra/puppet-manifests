@@ -3,7 +3,6 @@ class nginx {
 
   include nginx::service
   include system::tools
-  include zabbix::agent
 
   $packages = $nginx::params::packages
   $service = $nginx::params::service
@@ -46,13 +45,9 @@ class nginx {
     target => '/etc/nginx/sites-available/stub_status.conf',
   }
 
-  file { 'nginx-zabbix-items' :
-    path => '/etc/zabbix/zabbix_agentd.conf.d//nginx.conf',
-    ensure => present,
-    owner => 'root',
-    group => 'root',
-    mode => '0644',
-    content => template('nginx/zabbix_items.conf.erb'),
+  class { 'zabbix::item' :
+    name => 'nginx',
+    template => 'nginx/zabbix_items.conf.erb',
   }
 
   file { '/var/lib/nginx/cache' :
@@ -63,12 +58,10 @@ class nginx {
     require => Package[$packages],
   }
 
-  Class['zabbix::agent']->
-    Package[$packages]->
+  Package[$packages]->
     Class['system::tools']->
     File['stub_status.conf-available']->
     File['stub_status.conf-enabled']->
-    File['nginx-zabbix-items']~>
     File['nginx.conf']->
     File['default.conf-available']->
     File['default.conf-enabled']~>
@@ -77,10 +70,5 @@ class nginx {
   File['nginx.conf']->
     File['default.conf-available']->
     File['default.conf-enabled']~>
-    Class['nginx::service']
-
-  Class['zabbix::agent']->
-    File['stub_status.conf-available']->
-    File['stub_status.conf-enabled']~>
     Class['nginx::service']
 }
