@@ -7,15 +7,29 @@ class fuel_project::jenkins_slave (
 
   include common
   if $run_tests == true {
-    class { 'libvirt' :
-      define_storage => true,
-      external_host  => $external_host,
+    class { '::libvirt' :
+      listen_tls => false,
+      listen_tcp => true,
+      auth_tcp => 'none',
+      mdns_adv => false,
+      unix_sock_group => 'libvirtd',
+      unix_sock_rw_perms => '0777',
+      python => true,
+      qemu => true,
     }
+
+    libvirt_pool { 'default' :
+      ensure     => 'present',
+      type       => 'dir',
+      autostart  => true,
+      target     => '/var/lib/libvirt/images',
+      require    => Class['libvirt'],
+    }
+
     include venv
     include postgresql
     include system_tests
     include transmission_daemon
-    realize Package ['qemu-kvm']
   }
 
   if $external_host == true {

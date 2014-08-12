@@ -61,7 +61,6 @@ class virtual::packages {
     'python-virtualenv',
     'python-xmlbuilder',
     'python-yaml',
-    'qemu-kvm',
     'realpath',
     'ruby-builder',
     'ruby-bundler',
