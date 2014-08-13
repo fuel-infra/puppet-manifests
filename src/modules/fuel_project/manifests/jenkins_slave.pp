@@ -27,7 +27,6 @@ class fuel_project::jenkins_slave (
     }
 
     include venv
-    include postgresql
     include system_tests
     include transmission_daemon
   }

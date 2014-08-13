@@ -1,6 +1,4 @@
 class system::tools {
-  include virtual::packages
-
   file { 'tailnew' :
     path => '/usr/local/bin/tailnew',
     ensure => 'present',
@@ -10,8 +8,12 @@ class system::tools {
     content => template('system/tailnew.erb'),
   }
 
-  realize Package['atop']
-  realize Package['curl']
-  realize Package['htop']
-  realize Package['sysstat']
+  $packages = ['atop','curl','htop','sysstat']
+  each($packages) |$package| {
+    if ! defined(Package[$package]) {
+      package { $package :
+        ensure => installed,
+      }
+    }
+  }
 }

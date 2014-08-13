@@ -1,14 +1,41 @@
 class system_tests {
-  include postgresql
   include system_tests::params
   include venv
-  include virtual::packages
 
-  $packages = $system_tests::params::packages
   $sudo_commands = $system_tests::params::sudo_commands
   $workspace = $system_tests::params::workspace
 
-  exec { 'workspace-create':
+  $packages = [
+    # dependencies
+    'libevent-dev',
+    'python-anyjson',
+    'python-glanceclient',
+    'python-ipaddr',
+    'python-keystoneclient',
+    'python-novaclient',
+    'python-paramiko',
+    'python-proboscis',
+    'python-seed-cleaner',
+    'python-seed-client',
+    'python-xmlbuilder',
+    'python-yaml',
+
+    # diagnostic utilities
+    'htop',
+    'sysstat',
+    'dstat',
+    'vncviewer',
+  ]
+
+  each($packages) |$package| {
+    if ! defined(Package[$package]){
+      package { $package :
+        ensure => installed,
+      }
+    }
+  }
+
+  exec { 'workspace-create' :
     command => "mkdir -p ${workspace}",
     provider => 'shell',
     user => 'jenkins',
@@ -16,55 +43,40 @@ class system_tests {
     logoutput => on_failure,
   }
 
-  exec { 'devops-syncdb' :
-    command => '. /home/jenkins/venv-nailgun-tests/bin/activate ; django-admin syncdb --settings=devops.settings',
-    user => 'jenkins',
-    logoutput => on_failure,
+  class { 'devops' :
+    install_cron_cleanup => true,
   }
 
-  exec { 'devops-migrate' :
-    command => '. /home/jenkins/venv-nailgun-tests/bin/activate ; django-admin migrate devops --settings=devops.settings',
-    user => 'jenkins',
-    logoutput => on_failure,
+  file { '/home/jenkins/venv-nailgun-tests/lib/python2.7/site-packages/devops/local_settings.py' :
+    ensure   => link,
+    target   => '/etc/devops/local_settings.py',
+    require  => [ Class['devops'],
+                  Venv::Venv['venv-nailgun-tests']
+                ]
   }
-
-  realize Package[$packages]
 
   file { '/etc/sudoers.d/systest' :
     content => template('system_tests/sudoers.erb'),
     mode => '0600',
   }
 
-  file { 'seed-downloads-cleanup.sh' :
-    path => '/usr/local/bin/seed-downloads-cleanup.sh',
-    owner => 'root',
-    group => 'root',
-    mode => '0755',
-    content => template('system_tests/seed-downloads-cleanup.sh.erb'),
+  file { '/usr/local/bin/seed-downloads-cleanup.sh' :
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    source => 'puppet:///modules/fuel_project/bin/seed-downloads-cleanup.sh',
+    require => Package['python-seed-cleaner'],
   }
 
   cron { 'seed-downloads-cleanup' :
     command => '/usr/local/bin/seed-downloads-cleanup.sh | logger -t seed-downloads-cleanup',
-    user => root,
-    hour => '*/4',
-    minute => 0,
+    user    => root,
+    hour    => '*/4',
+    minute  => 0,
+    require => File['/usr/local/bin/seed-downloads-cleanup.sh'],
   }
 
-  file { 'devops-env-cleanup.sh' :
-    path => '/usr/local/bin/devops-env-cleanup.sh',
-    owner => 'root',
-    group => 'root',
-    mode => '0755',
-    content => template('system_tests/devops-env-cleanup.sh.erb'),
-  }
-
-  cron { 'devops-env-cleanup' :
-    command => '/usr/local/bin/devops-env-cleanup.sh | logger -t devops-env-cleanup',
-    user => root,
-    hour => 16, # 16:00 UTC
-    minute => 0,
-  }
-
+  # FIXME: Please pass firewall rules as a parameters to class.
   if $external_host {
     $firewall = hiera_hash('firewall')
     $local_networks = $firewall['local_networks']
@@ -78,24 +90,8 @@ class system_tests {
     }
   }
 
-  # FIXME: Temporary required to clean up old files and cronjobs
-  file { '/usr/bin/cron-cleanup.sh' :
-    ensure => absent,
-  }->
-  cron { 'cron-cleanup' :
-    ensure => absent,
-  }
-  # /FIXME
-
   Class['dpkg']->
     Package[$packages]->
     Venv::Venv['venv-nailgun-tests']->
-    Class['postgresql']->
-    Exec['devops-syncdb']->
-    Exec['devops-migrate']->
-    Exec['workspace-create']->
-    File['seed-downloads-cleanup.sh']->
-    Cron['seed-downloads-cleanup']->
-    File['devops-env-cleanup.sh']->
-    Cron['devops-env-cleanup']
+    Exec['workspace-create']
 }

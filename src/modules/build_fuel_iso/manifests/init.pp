@@ -2,14 +2,35 @@ class build_fuel_iso(
   $external_host = false,
 ) {
   include dpkg
-  include virtual::packages
   include virtual::repos
   include build_fuel_iso::params
 
   $packages = $build_fuel_iso::params::packages
 
   realize Virtual::Repos::Repository['docker']
-  realize Package[$packages]
+  each($packages) |$package| {
+    if ! defined(Package[$package]) {
+      package { $package :
+        ensure => installed,
+      }
+    }
+  }
+
+  if ! defined(Package['multistrap']) {
+    package { 'multistrap' :
+      ensure => '2.1.6ubuntu3'
+    }
+  }
+
+  # Meta(pinnings, holds, etc.)
+  # apt::hold supported in puppetlabs-apt >= 1.5:
+  # apt::hold { 'multistrap': version => '2.1.6ubuntu3' }
+  apt::pin { 'multistrap' :
+    packages => 'multistrap',
+    version => '2.1.6ubuntu3',
+    priority => 1000,
+  }
+  # /Meta(pinnings, holds, etc.)
 
   exec { 'install-grunt-cli' :
     command => '/usr/bin/npm install -g grunt-cli',

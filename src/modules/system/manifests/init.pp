@@ -10,12 +10,17 @@ class system {
   }
 
   include system::tools
-  include virtual::packages
   include virtual::users
 
   $packages = $system::params::packages
 
-  realize Package[$packages]
+  each($packages) |$package| {
+    if ! defined(Package[$package]) {
+      package { $package :
+        ensure => installed,
+      }
+    }
+  }
   realize User['root']
 
   # FIXME: Legacy from IT's puppet agent
