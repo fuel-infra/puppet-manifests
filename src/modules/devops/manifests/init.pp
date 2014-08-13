@@ -1,14 +1,16 @@
 class devops (
   $install_cron_cleanup = true,
-) {
   $psql_user   = 'devops'
   $psql_pass   = 'devops'
   $psql_db     = 'devops'
   $psql_engine = 'django.db.backends.postgresql_psycopg2'
   $psql_host   = '127.0.0.1'
   $psql_port   = ''
+) {
 
-  class { 'postgresql::server' : }
+  if ! defined(Class['postgresql::server']) {
+    class { 'postgresql::server' : }
+  }
 
   postgresql::server::db { $psql_db :
     user     => $psql_user,

@@ -1,6 +1,6 @@
 class jenkins::params {
   $slave_packages = [
-    'openjdk-7-jre'
+    'openjdk-7-jre-headless'
   ]
 
   $jenkins_keys = {

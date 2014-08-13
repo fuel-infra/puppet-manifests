@@ -25,7 +25,6 @@ class virtual::packages {
     'libparse-debian-packages-perl',
     'lrzip',
     'nfs-kernel-server',
-    'npm',
     'php5',
     'php5-fpm',
     'php5-mysql',

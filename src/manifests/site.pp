@@ -83,9 +83,13 @@ node /(fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-9]{2})\.fuel-infra
   $external_host = true
 
   class { 'fuel_project::jenkins_slave' :
-    external_host  => true,
-    run_tests      => true,
-    build_fuel_iso => false,
+    external_host         => true,
+    run_tests             => true,
+    build_fuel_iso        => false,
+    simple_syntax_check   => true,
+    verify_fuel_web       => true,
+    verify_fuel_astute    => true,
+    verify_fuel_docs      => true,
   }
 }
 
@@ -115,9 +119,13 @@ node /build(\d+)\.fuel-infra\.org/ {
 
   include common
   class { 'fuel_project::jenkins_slave' :
-    external_host  => true,
-    run_tests      => false,
-    build_fuel_iso => true,
+    external_host         => true,
+    run_tests             => false,
+    build_fuel_iso        => true,
+    simple_syntax_check   => false,
+    verify_fuel_web       => false,
+    verify_fuel_astute    => false,
+    verify_fuel_docs      => false,
   }
 }
 
