@@ -55,6 +55,14 @@ class nginx {
     content => template('nginx/zabbix_items.conf.erb'),
   }
 
+  file { '/var/lib/nginx/cache' :
+    ensure => 'directory',
+    owner => 'www-data',
+    group => 'www-data',
+    mode => '0700',
+    require => Package[$packages],
+  }
+
   Class['zabbix::agent']->
     Package[$packages]->
     Class['system::tools']->

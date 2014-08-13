@@ -381,10 +381,10 @@ class gerrit (
     notify  => Service['gerrit'],
   }
 
-
   package { 'libmysql-java':
     ensure => present,
   }
+
   file { '/var/lib/gerrit/review_site/lib/mysql-connector-java.jar':
     ensure  => link,
     target  => '/usr/share/java/mysql-connector-java.jar',
