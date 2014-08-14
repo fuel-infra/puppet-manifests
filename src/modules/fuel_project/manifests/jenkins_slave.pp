@@ -16,6 +16,9 @@ class fuel_project::jenkins_slave (
       unix_sock_rw_perms => '0777',
       python => true,
       qemu => true,
+      deb_default => {
+        'libvirtd_opts' => '-d -l',
+      }
     }
 
     libvirt_pool { 'default' :
