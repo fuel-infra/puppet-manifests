@@ -4,7 +4,7 @@ server {
   listen 80;
   server_name <%= @service_fqdn %>:80;
 
-  rewrite   ^(.*) https://<%= @service_fqdn %>$1 permanent;
+  return 301 https://<%= @service_fqdn %>$request_uri;
 }
 
 server {

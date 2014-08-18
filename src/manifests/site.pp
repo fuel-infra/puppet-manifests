@@ -211,6 +211,27 @@ node 'osci-gerrit.vm.mirantis.net' {
   }
 }
 
+node 'osci-jenkins2.vm.mirantis.net' {
+
+  include common
+
+  $hiera_name = $::hostname
+  $params = hiera_hash($hiera_name)
+
+  class { 'jenkins::master' :
+    service_fqdn => $params['service_fqdn'],
+    ssl_cert_file_contents => $params['ssl_cert_file_contents'],
+    ssl_key_file_contents => $params['ssl_key_file_contents'],
+    jenkins_ssh_private_key_contents => $params['jenkins_ssh_private_key_contents'],
+    jenkins_ssh_public_key => $params['jenkins_ssh_public_key_contents'],
+    jenkins_address => $params['jenkins_address'],
+    jenkins_java_args => $params['jenkins_java_args'],
+    jjb_username => $params['jjb_username'],
+    jjb_password => $params['jjb_password'],
+  }
+
+}
+
 node 'test-server' {
   # puppet apply --certname test-server -v -d /etc/puppet/manifests/site.pp
 
@@ -223,3 +244,4 @@ node 'test-server' {
 node default {
   notify { 'Default node invocation' :}
 }
+

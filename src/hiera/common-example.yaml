@@ -71,6 +71,68 @@ gerrit:
   service_url: 'https://review.test.local'
   start_timeout: 600
 
+jenkins_product_staging:
+  service_fqdn: 'jenkins-product.test.local'
+  ssl_cert_file_contents: |
+    -----BEGIN CERTIFICATE-----
+    MIIDPjCCAiYCCQCiiKl1cghBuDANBgkqhkiG9w0BAQUFADBhMQswCQYDVQQGEwJB
+    VTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0
+    cyBQdHkgTHRkMRowGAYDVQQDDBFzZXJ2ZXIudGVzdC5sb2NhbDAeFw0xNDA4MTEy
+    MDAzNTVaFw0xNTA4MTEyMDAzNTVaMGExCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApT
+    b21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQxGjAY
+    BgNVBAMMEXNlcnZlci50ZXN0LmxvY2FsMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+    MIIBCgKCAQEAtjgfpwJsZBz4bY/QgV69S1P5+54d+1lAxmoWDe++US3EdzVGWR8+
+    oaHO4crxDztTyOTJtstC/MkRCZngxUZdcpJz9T3v70pT/tfu95fVJaX1fLjcCdw3
+    wD1IMcGIzjtMzDLujYoeM7mdjR9ixzN5WiQFnngQkwqeEsQltV3jJSqn3U+P093l
+    6eVnSdfhLT+q8mvWYr8fhx4el3SHyk8qRomYj4gnsEJ3dGtjDNF9CI7XL2pZXVeD
+    PZZQKI5Fc3tYnSAUbvXO7fdeAn2QLG0kntkPLPGGAJspr8Vq3Ic/glbPBj6BsdYj
+    0jOMwWRYpCV2lk/CFZN03BUx6JPQMxbWHQIDAQABMA0GCSqGSIb3DQEBBQUAA4IB
+    AQBlKH2m2AdkmASM1Q7J/LA0NnanqUvy4n+zhYb8NarOLEHG+OzLBLyW/y51X3cb
+    0IOzHHupA3cu38TuXnIGnoT/M3QsKKKz8smthHLvb7RPiVkJNYMLm8ZJlX2uCQSu
+    rN4ikYHut6bElAf2yZDOiLhDhhFhIwQTj1vm+4gmYFnexcHylLvRY3ulkN/MccXr
+    NyObrYJYR4jB5C+S9rCTN7gU7jX6fCD2NoY5DGdpBkSNvnSIWDPftRExLkMC4vvs
+    hrL5z+KEJjQEQJMMQFgdt1kDeLcnFmZl3sqhRFs0/2alyRmxTxkrUtLn3z68RsZy
+    gDKsvK5qpm7hWt35IVL3nZsZ
+    -----END CERTIFICATE-----
+
+  jenkins_ssh_private_key_contents: |
+    -----BEGIN PRIVATE KEY-----
+    MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC2OB+nAmxkHPht
+    j9CBXr1LU/n7nh37WUDGahYN775RLcR3NUZZHz6hoc7hyvEPO1PI5Mm2y0L8yREJ
+    meDFRl1yknP1Pe/vSlP+1+73l9UlpfV8uNwJ3DfAPUgxwYjOO0zMMu6Nih4zuZ2N
+    H2LHM3laJAWeeBCTCp4SxCW1XeMlKqfdT4/T3eXp5WdJ1+EtP6rya9Zivx+HHh6X
+    dIfKTypGiZiPiCewQnd0a2MM0X0IjtcvalldV4M9llAojkVze1idIBRu9c7t914C
+    fZAsbSSe2Q8s8YYAmymvxWrchz+CVs8GPoGx1iPSM4zBZFikJXaWT8IVk3TcFTHo
+    k9AzFtYdAgMBAAECggEBAJdwr4W6suDFXwaXhp9uYH4xbcpbz+ksdXQxiODORmrr
+    UaQNR8kb+Y6Vjv4DDzMsiGanFqnv5l12sc078R2jbFijNPI2JqnGKWbciYOG0aO3
+    eP3OGTmspz0C8XRAt3VGvX3cOnyxtIYilrlJw2tw8UMkOvNIL+Y05ckM8ZX5UKV6
+    lVJ30HO2jR6T5yM/Gc3s3gL/X5bHcaQDLWjhqZP411zULQPsWP8+bbXv8f+jZqcg
+    jg4oK1mC2MtGjy83DU5CqxZKPiISXm48RDDe8HAUrnkEMQAnHPdQymMv+d9kDv2y
+    6sp1ov3BQCfZm0mHkSW+wdnzwjNnPHZZ2FdvRz7V3GECgYEA5eFYdA9vuTbFhtod
+    foxHzmqZXBQM6ToXYEKFgdNYvHDISXNdsB4DyUT4V46bxpTMLynMqvM59/u16jaP
+    lo4DkkRLG/GxvGeFM/0odPMnoGTL0HBMJiYr7U3tgtEu2t2RqmVc2tpDPzQ0Mwaj
+    dqHPFId1p1AHeeX1MxeuTLPkA5UCgYEAyuxvfgoBfsDad5E3EbFrilrRJRbb3yxQ
+    hgilaISaSDn0MWZ3zE+pTCwuA9HYmjwr4GCeO8kSCpnhI4BKASMa4p0SLsTr0i/9
+    OUulLi3ZieWA2mqekqUo/CaccMhMfGr4AVQ3WeK3cjKXj/j/WnKTfHSB5uL2bvFg
+    XoqfXcOUZmkCgYBjkkdBBkqrXBkU/zcVUGft9eh1pM2u3BWyAT5Y7JWcEfH/NrRX
+    C7kyHei/7Cp3So5iw2U+itoKGwJB794kJWFQorox4W/OHrzotvgmKAh7Bg3uPCYP
+    xCr0v/Nn3XnBHYXx27Prq+zC3Lbbfz2grhfHWaFRlm2WlE+wEMrTuHvEPQKBgEM9
+    XSRShHRPyxRblffS5mON/Edh77Ffqb8AFm8voT/VlEjaP1AABYUsDoNNgYx568AJ
+    w+Tjl4rTunpdBCikTUBR87hzoAChzjKyEiXfI3pCBhRZx/mnqJEE6kmk1VNUzqEC
+    GuU57rd0dCxMwbBizuQqZvDuu+G/McOiA3S6Xe4hAoGAYs01BdHeksEyZK+q0TIR
+    cHJOyX0ae4ClfXyJ6moQbPr9uoDs0g+3p8IZtiEwVatpmQB2DIoE6jF81rsKBK68
+    tHQtn8ywdYDgJbqhx2Y4XP+9CeNhsRAya8SxFmQMirdtWNltMNvTXHFEoVWbf9Yz
+    Sb2NcH2bS0mjAlLmBCPYqsA=
+    -----END PRIVATE KEY-----
+
+  jenkins_ssh_public_key_contents = |
+    'AAAAB3NzaC1yc2EAAAADAQABAAABAQCwjGe9ZfzdgeEkQQiGBDhOpgMEMJm6bfsJwKTXNTDtHDuMZJzWzHLm/64/71ht4pPnKsivQZzBLMTChdkOfqX4kQtl1CX3bo8lukV+3hv2y42HTwOKM1Ay9Tj+cQ5JqWOIT3lINJQ1maNeNH3khXLYq6T60w8k4wo+rezsTX1bkzg3OSThSASBsSfGgLG184LE7aj+24EJl4M6wQueRamXCmVsB+RyDSBFKJOeqqZwlOiWrgHnGv5qxfrGcc+6UCStI9L5JK8IFuK8z0oA8paEOzYgSz7MemmYUJu5r80DJ+7N5chMfg0cCSioNhtgSIjAziIEl26jNt+t3r/zQ04x'
+
+  jenkins_address: '127.0.0.1'
+  jenkins_java_args: '-Xmx1500m -Xms1024m -Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/Moscow'
+  jjb_username: 'jjb_user'
+  jjb_password:	'jjb_pass'
+
 jenkins:
   swarm_server: 'http://jenkins-master.test.local/'
   swarm_user: 'jenkins-robotson'

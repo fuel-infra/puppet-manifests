@@ -1,0 +1,36 @@
+server {
+  listen 80;
+  server_name <%= @service_fqdn %>:80;
+
+  return 301 https://<%= @service_fqdn %>$request_uri;
+}
+
+server {
+  listen 443 ssl;
+  server_name <%= @service_fqdn %>:443;
+
+  #add_header Strict-Transport-Security max-age=15768000;
+
+  location / {
+    client_max_body_size    8m;
+    client_body_buffer_size 128k;
+    port_in_redirect        on;
+    proxy_buffers           4 32k;
+    proxy_pass              http://127.0.0.1:8080;
+    proxy_read_timeout      120;
+    proxy_redirect          off;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto https;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        Host $host;
+  }
+
+  ssl                       on;
+  ssl_certificate           <%= @ssl_cert_file %>;
+  ssl_certificate_key       <%= @ssl_key_file %>;
+  ssl_ciphers               ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS;
+  ssl_prefer_server_ciphers on;
+  ssl_protocols             SSLv3 TLSv1 TLSv1.1 TLSv1.2;
+  ssl_session_cache         shared:SSL:1m;
+  ssl_session_timeout       5m;
+}
