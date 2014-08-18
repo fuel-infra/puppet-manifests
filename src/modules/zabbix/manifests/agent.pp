@@ -35,7 +35,7 @@ class zabbix::agent (
     group => 'root',
     mode => '0644',
     content => template('zabbix/zabbix_agentd.conf.erb'),
-    require => Package[$packages],
+    require => Package[$package],
   }
 
   file { '/etc/sudoers.d/zabbix' :
