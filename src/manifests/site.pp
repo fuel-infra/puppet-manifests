@@ -33,7 +33,7 @@ class common (
   $zabbix = hiera_hash('zabbix')
 
   $zabbix_host = $external_host ? {
-    true => $zabbix['external_host'],
+    true => $zabbix['server_external'],
     false => $zabbix['server'],
   }
 
