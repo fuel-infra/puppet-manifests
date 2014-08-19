@@ -5,7 +5,10 @@ class fuel_project::lab_cz (
   include virtual::packages
 
   # Used for network managment
-  include common
+  class { 'common' :
+    external_host => $external_host
+  }
+
   include ssh::ldap
   class { 'libvirt' :
     qemu => false,

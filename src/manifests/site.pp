@@ -15,7 +15,9 @@ stage { 'pre' :
 
 # Class definitions
 
-class common {
+class common (
+  $external_host = false,
+) {
   include dpkg
   include firewall_defaults::pre
   include firewall_defaults::post
@@ -29,9 +31,15 @@ class common {
   include system
 
   $zabbix = hiera_hash('zabbix')
+
+  $zabbix_host = $external_host ? {
+    true => $zabbix['external_host'],
+    false => $zabbix['server'],
+  }
+
   class { 'zabbix::agent' :
-    zabbix_server => $zabbix['server'],
-    server_active => $zabbix['server'],
+    zabbix_server => $zabbix_host,
+    server_active => $zabbix_host,
   }
 }
 
@@ -72,7 +80,9 @@ node 'ctorrent-msk.msk.mirantis.net' {
 node /(seed-(cz|us)1\.fuel-infra\.org)/ {
   $external_host = true
 
-  include common
+  class { 'common' :
+    external_host => $external_host
+  }
   include nginx
   class { 'nginx::share' : fuelweb_iso_create => true }
   include seed::web
@@ -109,7 +119,9 @@ node /pxe-product-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
 node /mirror(\d+)\.fuel-infra\.org/ {
   $external_host = true
 
-  include common
+  class { 'common' :
+    external_host => $external_host
+  }
   include nginx
   include nginx::share
 }
@@ -117,7 +129,6 @@ node /mirror(\d+)\.fuel-infra\.org/ {
 node /build(\d+)\.fuel-infra\.org/ {
   $external_host = true
 
-  include common
   class { 'fuel_project::jenkins_slave' :
     external_host         => true,
     run_tests             => false,
@@ -139,7 +150,9 @@ node 'fuel-puppet.vm.mirantis.net' {
   $dmz = true
   $puppet_master = true
 
-  include common
+  class { 'common' :
+    external_host => $external_host
+  }
   include puppet::master
 }
 
@@ -153,7 +166,10 @@ node 'osci-gerrit.vm.mirantis.net' {
   $external_host = true
   $dmz = true
 
-  include common
+  class { 'common' :
+    external_host => $external_host
+  }
+
   include ssh::authorized_keys
 
   $gerrit = hiera_hash('gerrit')

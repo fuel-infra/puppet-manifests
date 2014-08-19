@@ -7,7 +7,7 @@ class fuel_project::jenkins_slave (
   $verify_fuel_astute    = true,
   $verify_fuel_docs      = true,
 ) {
-  include common
+  class { 'common' : external_host => $external_host }
 
   if $external_host == true {
     include jenkins::slave
