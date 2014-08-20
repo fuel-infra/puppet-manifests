@@ -10,7 +10,7 @@ do
 	DIFF=$((`date +%s`-`date +%s -d "$DATE"`))
 	echo $DIFF
 
-	if [ $DIFF -gt 86400 ]
+	if [ $DIFF -gt 129600 ]
 	then
 		/usr/bin/dos.py erase "${env}"
 	fi
