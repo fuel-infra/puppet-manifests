@@ -88,10 +88,14 @@ class fuel_project::jenkins_slave (
       password => 'nailgun',
     }
     exec { 'install_global_npm' :
-      command => '/usr/bin/npm -g install grunt-cli casperjs',
+      command => '/usr/bin/npm -g install grunt-cli casperjs phantomjs',
       require => Package['npm'],
     }
-
+    file { '/var/log/nailgun' :
+      ensure  => directory,
+      owner   => 'jenkins',
+      require => User['jenkins'],
+    }
   }
 
   # Astute tests require only rvm package
