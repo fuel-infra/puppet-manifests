@@ -2,10 +2,10 @@ class fuel_project::jenkins_slave (
   $external_host         = true,
   $build_fuel_iso        = false,
   $run_tests             = true,
-  $simple_syntax_check   = true,
-  $verify_fuel_web       = true,
-  $verify_fuel_astute    = true,
-  $verify_fuel_docs      = true,
+  $simple_syntax_check   = false,
+  $verify_fuel_web       = false,
+  $verify_fuel_astute    = false,
+  $verify_fuel_docs      = false,
 ) {
   class { 'common' : external_host => $external_host }
 

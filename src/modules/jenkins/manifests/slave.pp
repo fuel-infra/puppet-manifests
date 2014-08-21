@@ -1,33 +1,28 @@
 class jenkins::slave {
-  include dpkg
-
-  include jenkins::params
   include virtual::users
-
-  $packages = $jenkins::params::slave_packages
 
   $jenkins = hiera_hash('jenkins')
 
-  package { $packages :
-    ensure => present,
+  if ! defined(Package['openjdk-7-jre-headless']) {
+    package { 'openjdk-7-jre-headless' :
+      ensure  => present,
+      require => Class['dpkg'],
+    }
   }
 
   realize User['jenkins']
 
-  exec { 'ssh_review.openstack.org':
-    command => 'ssh -o StrictHostKeyChecking=no -p 29418 review.openstack.org ; exit 0',
-    user => 'jenkins',
+  exec { 'ssh_review.openstack.org' :
+    command   =>
+      'ssh -o StrictHostKeyChecking=no -p 29418 review.openstack.org ; exit 0',
+    user      => 'jenkins',
     logoutput => 'on_failure',
+    require   => Ssh_authorized_key[keys($jenkins['ssh_keys'])]
   }
 
-  create_resources(ssh_authorized_key, $jenkins['ssh_keys'], {ensure => present, user => 'jenkins'})
-
-  Class['dpkg']->
-    Package[$packages]->
-    User['jenkins']->
-    Ssh_authorized_key['jenkins@mc0n1-srt']->
-    Exec['ssh_review.openstack.org']
-
-  Ssh_Authorized_Key['jenkins@mc0n1-srt']->
-    Exec['ssh_review.openstack.org']
+  create_resources(ssh_authorized_key, $jenkins['ssh_keys'], {
+    ensure  => present,
+    user    => 'jenkins',
+    require => [ User['jenkins'], Package['openjdk-7-jre-headless'] ]
+  })
 }
