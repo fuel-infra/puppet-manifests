@@ -72,7 +72,7 @@ class virtual::repos {
   @repository { 'mirror':
     location => $mirror,
     release => $::lsbdistcodename,
-    key => '437D05B5 C0B21F32',
+    key => 'C0B21F32',
     repos => 'main restricted universe multiverse',
     include_src => false,
   }
@@ -80,7 +80,7 @@ class virtual::repos {
   @repository { 'mirror-updates':
     location => $mirror,
     release => "${::lsbdistcodename}-updates",
-    key => '437D05B5 C0B21F32',
+    key => 'C0B21F32',
     repos => 'main restricted universe multiverse',
     include_src => false,
   }
@@ -88,7 +88,7 @@ class virtual::repos {
   @repository { 'security':
     location => $mirror,
     release => "${::lsbdistcodename}-security",
-    key => '437D05B5 C0B21F32',
+    key => 'C0B21F32',
     repos => 'main restricted universe multiverse',
   }
 
@@ -113,29 +113,9 @@ class virtual::repos {
   @repository { 'jenkins':
     location => $jenkins,
     release => 'binary/',
-    key => 'D50582E6 10AF40FE',
+    key => 'D50582E6',
     key_server => 'keyserver.ubuntu.com',
     repos => '',
     include_src => false,
   }
-
-  # FIXME: https://bugs.launchpad.net/fuel/+bug/1342798
-  @repository { 'puppetlabs' :
-    location => 'http://apt.puppetlabs.com',
-    release => 'trusty',
-    key => '4BD6EC30',
-    key_server => 'keyserver.ubuntu.com',
-    repos => 'main',
-    include_src => false,
-  }
-
-  @repository { 'puppetlabs-deps' :
-    location => 'http://apt.puppetlabs.com',
-    release => 'trusty',
-    key => '4BD6EC30',
-    key_server => 'keyserver.ubuntu.com',
-    repos => 'dependencies',
-    include_src => false,
-  }
-  # /FIXME
 }
