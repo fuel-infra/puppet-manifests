@@ -39,6 +39,7 @@ fi
 MODULES["puppetlabs-apt"]="1.6.0"
 MODULES["puppetlabs-firewall"]="1.1.3"
 MODULES["puppetlabs-concat"]="1.0.4"
+MODULES["puppetlabs-mysql"]="2.3.1"
 MODULES["puppetlabs-ntp"]="3.1.2"
 MODULES["puppetlabs-postgresql"]="3.4.2"
 MODULES["puppetlabs-stdlib"]="4.3.2"
