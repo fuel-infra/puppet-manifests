@@ -32,14 +32,16 @@ class common (
 
   $zabbix = hiera_hash('zabbix')
 
-  $zabbix_host = $external_host ? {
-    true => $zabbix['server_external'],
-    false => $zabbix['server'],
-  }
-
-  class { 'zabbix::agent' :
-    zabbix_server => $zabbix_host,
-    server_active => $zabbix_host,
+  if $external_host {
+    class { 'zabbix::agent' :
+      zabbix_server => $zabbix['server_external'],
+      server_active => false,
+    }
+  } else {
+    class { 'zabbix::agent' :
+      zabbix_server => $zabbix['server'],
+      server_active => $zabbix['server'],
+    }
   }
 }
 
@@ -244,4 +246,3 @@ node 'test-server' {
 node default {
   notify { 'Default node invocation' :}
 }
-
