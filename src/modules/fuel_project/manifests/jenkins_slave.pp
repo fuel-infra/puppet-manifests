@@ -123,13 +123,20 @@ class fuel_project::jenkins_slave (
       source       => $raemon_file,
       require      => [ Rvm_system_ruby['ruby-2.1.2'], File[$raemon_file] ],
     }
+    if $simple_syntax_check {
+      rvm_gem { 'puppet-lint' :
+        ruby_version => 'ruby-2.1.2',
+        ensure       => installed,
+        require      => Rvm_system_ruby['ruby-2.1.2'],
+      }
+    }
   }
 
   # Simple syntax check by:
   # - verify-fuel-devops
-  # -
-  if $syntax_check {
-    $syntax_check_packages = ['python-flake8', 'python-tox']
+  # - fuellib_review_syntax_check (puppet tests)
+  if $simple_syntax_check {
+    $syntax_check_packages = ['python-flake8', 'python-tox', 'puppet-lint']
     each($syntax_check_packages) |$package| {
       if ! defined(Package[$package]) {
         package { $package :
