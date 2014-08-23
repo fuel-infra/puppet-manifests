@@ -33,9 +33,13 @@ class common (
   $zabbix = hiera_hash('zabbix')
 
   if $external_host {
+    $firewall = hiera_hash('firewall')
+
     class { 'zabbix::agent' :
       zabbix_server => $zabbix['server_external'],
       server_active => false,
+      enable_firewall => true,
+      firewall_allow_sources => $firewall['known_networks']
     }
   } else {
     class { 'zabbix::agent' :
@@ -214,7 +218,6 @@ node 'osci-gerrit.vm.mirantis.net' {
 }
 
 node 'osci-jenkins2.vm.mirantis.net' {
-
   include common
 
   $hiera_name = $::hostname

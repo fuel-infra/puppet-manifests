@@ -16,7 +16,7 @@ class zabbix::agent (
   $timeout = 5,
   $include = '/etc/zabbix/zabbix_agentd.conf.d/',
   $unsafe_user_parameters = false,
-  $firewall_enabled = false,
+  $enable_firewall = false,
   $firewall_allow_sources = []
 ) {
   include zabbix::params
@@ -45,9 +45,7 @@ class zabbix::agent (
     content => template('zabbix/sudoers.erb')
   }
 
-  if $firewall_enabled {
-    $firewall = hiera_hash('firewall')
-
+  if $enable_firewall {
     $port = 10050
     $proto = 'tcp'
 
