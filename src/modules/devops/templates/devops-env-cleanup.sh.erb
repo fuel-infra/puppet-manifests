@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# sync for deleted VM's by hand
+/usr/bin/dos.py sync
+
 for env in $(/usr/bin/dos.py list | /bin/fgrep 'fuelmain.system_test.')
 do
 	echo -n "$env : "
