@@ -60,18 +60,19 @@ class fuel_project::jenkins_slave (
 
   # Web tests by verify-fuel-web, stackforge-verify-fuel-web
   if $verify_fuel_web {
-    $verify_fuel_web_packages = [ 'inkscape',
-                                  'rst2pdf',
-                                  'python2.6',
-                                  'python2.6-dev',
-                                  'python-all-dev',
-                                  'python-sphinx',
-                                  'python-cloud-sptheme',
-                                  'python-virtualenv',
-                                  'python-tox',
-                                  'postgresql',
-                                  'nodejs-legacy',
-                                  'npm',
+    $verify_fuel_web_packages = [
+      'inkscape',
+      'rst2pdf',
+      'python2.6',
+      'python2.6-dev',
+      'python-all-dev',
+      'python-sphinx',
+      'python-cloud-sptheme',
+      'python-virtualenv',
+      'python-tox',
+      'postgresql',
+      'nodejs-legacy',
+      'npm',
     ]
     each($verify_fuel_web_packages) |$package| {
       if ! defined(Package[$package]) {
@@ -147,14 +148,14 @@ class fuel_project::jenkins_slave (
   }
 
   if $verify_fuel_docs {
-    $verify_fuel_docs_packages =  [ 'inkscape',
-                                    'rst2pdf',
-                                    'make',
-                                    'python-sphinx',
-                                    'python-cloud-sptheme',
-                                    'plantuml',
-                                    'python-sphinxcontrib.plantuml',
-
+    $verify_fuel_docs_packages =  [
+      'inkscape',
+      'rst2pdf',
+      'make',
+      'python-sphinx',
+      'python-cloud-sptheme',
+      'plantuml',
+      'python-sphinxcontrib.plantuml',
     ]
     each($verify_fuel_docs_packages) |$package| {
       if ! defined(Package[$package]) {
