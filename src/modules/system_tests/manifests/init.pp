@@ -1,3 +1,5 @@
+# Class: system_tests
+#
 class system_tests {
   include system_tests::params
   include venv
@@ -36,10 +38,10 @@ class system_tests {
   }
 
   exec { 'workspace-create' :
-    command => "mkdir -p ${workspace}",
-    provider => 'shell',
-    user => 'jenkins',
-    cwd => '/tmp',
+    command   => "mkdir -p ${workspace}",
+    provider  => 'shell',
+    user      => 'jenkins',
+    cwd       => '/tmp',
     logoutput => on_failure,
   }
 
@@ -48,23 +50,28 @@ class system_tests {
   }
 
   file { '/home/jenkins/venv-nailgun-tests/lib/python2.7/site-packages/devops/local_settings.py' :
-    ensure   => link,
-    target   => '/etc/devops/local_settings.py',
-    require  => [ Class['devops'],
-                  Venv::Venv['venv-nailgun-tests']
-                ]
+    ensure  => link,
+    target  => '/etc/devops/local_settings.py',
+    require => [
+      Class['devops'],
+      Venv::Venv['venv-nailgun-tests']
+    ]
   }
 
   file { '/etc/sudoers.d/systest' :
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
     content => template('system_tests/sudoers.erb'),
-    mode => '0600',
   }
 
   file { '/usr/local/bin/seed-downloads-cleanup.sh' :
+    ensure  => 'present',
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    source => 'puppet:///modules/fuel_project/bin/seed-downloads-cleanup.sh',
+    source  => 'puppet:///modules/fuel_project/bin/seed-downloads-cleanup.sh',
     require => Package['python-seed-cleaner'],
   }
 
@@ -83,8 +90,8 @@ class system_tests {
 
     each($local_networks) |$ip| {
       firewall { "0100 allow local connections - src ${ip}" :
-        source => $ip,
-        action => 'accept',
+        source  => $ip,
+        action  => 'accept',
         require => Class['firewall_defaults::pre'],
       }
     }

@@ -1,3 +1,5 @@
+# Class: system::timezone
+#
 class system::timezone (
   $timezone = 'UTC',
 ) {
@@ -5,21 +7,19 @@ class system::timezone (
 
   realize Package['tzdata']
 
-  file { 'timezone' :
-    path => '/etc/timezone',
-    ensure => 'present',
+  file { '/etc/timezone' :
+    ensure  => 'present',
     content => $timezone,
-    mode => '0644',
-    owner => 'root',
-    group => 'root',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
   }
 
-  file { 'localtime' :
-    path => '/etc/localtime',
-    source => "file:///usr/share/zoneinfo/${timezone}",
+  file { '/etc/localtime' :
     ensure => 'present',
-    mode => '0644',
-    owner => 'root',
-    group => 'root',
+    source => "file:///usr/share/zoneinfo/${timezone}",
+    mode   => '0644',
+    owner  => 'root',
+    group  => 'root',
   }
 }

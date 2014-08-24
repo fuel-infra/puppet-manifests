@@ -1,3 +1,5 @@
+# Class: zabbix::agent
+#
 class zabbix::agent (
   $zabbix_server = '127.0.0.1',
   $listen_address = '0.0.0.0',
@@ -26,22 +28,22 @@ class zabbix::agent (
 
   if ! defined(Package[$package]) {
     package { $package :
-      ensure => 'present',
+      ensure      => 'present',
     }
   }
 
   file { '/etc/zabbix/zabbix_agentd.conf' :
-    owner => 'root',
-    group => 'root',
-    mode => '0644',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     content => template('zabbix/zabbix_agentd.conf.erb'),
     require => Package[$package],
   }
 
   file { '/etc/sudoers.d/zabbix' :
-    owner => 'root',
-    group => 'root',
-    mode => '0644',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     content => template('zabbix/sudoers.erb')
   }
 
@@ -50,11 +52,11 @@ class zabbix::agent (
     $proto = 'tcp'
 
     each($firewall_allow_sources) |$ip| {
-      firewall { "1000 allow zabbix connections - src ${ip} ; dst ${proto}/${port}" :
-        dport => $port,
-        proto => $proto,
-        source => $ip,
-        action => 'accept',
+      firewall { "1000 zabbix agent - src ${ip} ; dst ${proto}/${port}" :
+        dport   => $port,
+        proto   => $proto,
+        source  => $ip,
+        action  => 'accept',
         require => Class['firewall_defaults::pre'],
       }
     }

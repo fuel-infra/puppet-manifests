@@ -1,15 +1,17 @@
+# Class: gerrit
+#
 class gerrit (
   $gerrit_listen = '127.0.0.1:8081',
   $gerrit_start_timeout = 90,
   $mysql_host = 'localhost',
   $mysql_database = 'reviewdb',
   $mysql_user = 'gerrit',
-  $mysql_password,
+  $mysql_password = '',
   $email_private_key = '',
-  $service_fqdn = "${fqdn}",
-  $canonicalweburl = "https://${fqdn}/",
+  $service_fqdn = $fqdn,
+  $canonicalweburl = '',
   $robots_txt_source = '', # If left empty, the gerrit default will be used.
-  $serveradmin = "webmaster@${fqdn}",
+  $serveradmin = '',
   $ssl_cert_file = '/etc/ssl/certs/ssl-cert-gerrit-review.pem',
   $ssl_key_file = '/etc/ssl/private/ssl-cert-gerrit-review.key',
   $ssl_chain_file = '',
@@ -57,7 +59,7 @@ class gerrit (
   $replicate_path = '/opt/lib/git',
   $replication = [],
   $gitweb = true,
-  $web_repo_url = "",
+  $web_repo_url = '',
   $testmode = false,
   $secondary_index = false,
   $secondary_index_type = 'LUCENE',
@@ -69,16 +71,15 @@ class gerrit (
   include virtual::packages
   include virtual::users
 
-  file { 'nginx-gerrit.conf-available' :
-    path => '/etc/nginx/sites-available/gerrit.conf',
+  file { '/etc/nginx/sites-available/gerrit.conf' :
+    ensure  => 'present',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
     content => template('gerrit/nginx.conf.erb'),
-    mode => '0644',
-    owner => 'root',
-    group => 'root',
     require => Class['nginx'],
   }->
-  file { 'nginx-gerrit.conf-enabled' :
-    path => '/etc/nginx/sites-enabled/gerrit.conf',
+  file { '/etc/nginx/sites-enabled/gerrit.conf' :
     ensure => 'link',
     target => '/etc/nginx/sites-available/gerrit.conf',
   }~>
@@ -88,7 +89,7 @@ class gerrit (
 
   $java_home = $::lsbdistcodename ? {
     'precise' => '/usr/lib/jvm/java-7-openjdk-amd64/jre',
-    'trusty' => '/usr/lib/jvm/java-7-openjdk-amd64/jre',
+    'trusty'  => '/usr/lib/jvm/java-7-openjdk-amd64/jre',
   }
 
   $gerrit_war = '/var/lib/gerrit/review_site/bin/gerrit.war'
@@ -108,28 +109,27 @@ class gerrit (
   }
 
   if $external_host {
-    firewall { "1000 allow gerrit connections" :
-      dport => ['80', '443', '29418'],
-      proto => 'tcp',
-      action => 'accept',
+    firewall { '1000 allow gerrit connections' :
+      dport   => ['80', '443', '29418'],
+      proto   => 'tcp',
+      action  => 'accept',
       require => Class['firewall_defaults::pre'],
     }
   }
 
   package { 'gerrit':
-    ensure => present,
+    ensure  => present,
     require => [
-                File['/var/lib/gerrit/review_site/etc/gerrit.config'],
-                File['/var/lib/gerrit/review_site/etc/secure.config'],
-               ],
+      File['/var/lib/gerrit/review_site/etc/gerrit.config'],
+      File['/var/lib/gerrit/review_site/etc/secure.config'],
+    ],
   }
 
   file { '/var/lib/gerrit/review_site/bin/gerrit.sh' :
-    path => '/var/lib/gerrit/review_site/bin/gerrit.sh',
-    ensure => 'present',
-    owner => 'root',
-    group => 'root',
-    mode => '0755',
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
     content => template('gerrit/gerrit.init.d.erb'),
   }
 
@@ -139,8 +139,8 @@ class gerrit (
   }
 
   file { '/var/log/gerrit':
-    ensure => 'link',
-    target => '/var/lib/gerrit/review_site/logs',
+    ensure  => 'link',
+    target  => '/var/lib/gerrit/review_site/logs',
     require => Package['gerrit'],
   }
 
@@ -156,15 +156,15 @@ class gerrit (
   # by the init command, we can go ahead and create them now and populate them.
   # That way the config files are already in place before init runs.
   file { [
-          '/var/lib/gerrit',
-          '/var/lib/gerrit/review_site',
-          '/var/lib/gerrit/review_site/etc',
-          '/var/lib/gerrit/review_site/static',
-          '/var/lib/gerrit/review_site/lib',
-          '/var/lib/gerrit/review_site/hooks',
-          '/var/lib/gerrit/.ssh',
-         ]:
-    ensure  => directory,
+      '/var/lib/gerrit',
+      '/var/lib/gerrit/review_site',
+      '/var/lib/gerrit/review_site/etc',
+      '/var/lib/gerrit/review_site/static',
+      '/var/lib/gerrit/review_site/lib',
+      '/var/lib/gerrit/review_site/hooks',
+      '/var/lib/gerrit/.ssh',
+    ]:
+    ensure  => 'directory',
   }
 
   # Skip replication if we're in test mode
@@ -274,11 +274,11 @@ class gerrit (
 
   if $robots_txt_source != '' {
     file { '/var/lib/gerrit/review_site/static/robots.txt':
-      owner    => 'root',
-      group    => 'root',
-      mode     => '0444',
-      source   => $robots_txt_source,
-      require  => Package['gerrit'],
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0444',
+      source  => $robots_txt_source,
+      require => Package['gerrit'],
     }
   }
 
@@ -446,10 +446,10 @@ class gerrit (
   }
 
   service { 'gerrit' :
-    ensure => running,
-    enable => true,
-    hasstatus => true,
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
     hasrestart => false,
-    require => Package['gerrit']
+    require    => Package['gerrit']
   }
 }

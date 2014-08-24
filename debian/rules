@@ -11,9 +11,11 @@
 export DH_VERBOSE=1
 export DESTDIR="`pwd`/debian/config-puppet-manifests"
 
+build:
+	$(CURDIR)/tests/run_tests.sh
+
 install:
 	$(MAKE) -C src -f Makefile
 
 %:
 	dh $@
-

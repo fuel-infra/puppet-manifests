@@ -1,3 +1,5 @@
+# Class: dpkg
+#
 class dpkg {
   include virtual::repos
 

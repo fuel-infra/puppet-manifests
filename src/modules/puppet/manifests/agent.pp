@@ -1,3 +1,5 @@
+# Class: puppet::agent
+#
 class puppet::agent {
   include puppet::params
 

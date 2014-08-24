@@ -1,3 +1,5 @@
+# Class: jenkins::slave
+#
 class jenkins::slave {
   include virtual::users
 

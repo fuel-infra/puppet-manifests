@@ -1,3 +1,5 @@
+# Class: puppet::master
+#
 class puppet::master {
   include puppet::params
 
@@ -13,9 +15,9 @@ class puppet::master {
   realize Package[$packages]
 
   service { $service :
-    ensure => running,
-    enable => true,
-    hasstatus => true,
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
     hasrestart => false,
   }
 
@@ -30,11 +32,11 @@ class puppet::master {
       $firewall['internal_networks']
 
     each($allowed_networks) |$ip| {
-      firewall { "1000 allow puppetmaster connections - src ${ip} ; dst ${proto}/${port}" :
-        dport => $port,
-        proto => $proto,
-        source => $ip,
-        action => 'accept',
+      firewall { "1000 puppetmaster - src ${ip} ; dst ${proto}/${port}" :
+        dport   => $port,
+        proto   => $proto,
+        source  => $ip,
+        action  => 'accept',
         require => Class['firewall_defaults::pre'],
       }
     }

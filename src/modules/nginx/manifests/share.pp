@@ -1,3 +1,5 @@
+# Class: nginx::share
+#
 class nginx::share(
   $fuelweb_iso_create = false,
   $fwm_create = false
@@ -11,17 +13,15 @@ class nginx::share(
   $server_name = $nginx::params::server_name
   $service = $nginx::params::service
 
-  file { 'share.conf-available' :
-    path => '/etc/nginx/sites-available/share.conf',
-    ensure => present,
-    mode => '0644',
-    owner => 'root',
-    group => 'root',
+  file { '/etc/nginx/sites-available/share.conf' :
+    ensure  => 'present',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
     content => template('nginx/share.conf.erb'),
   }
 
-  file { 'share.conf-enabled' :
-    path => '/etc/nginx/sites-enabled/share.conf',
+  file { '/etc/nginx/sites-enabled/share.conf' :
     ensure => 'link',
     target => '/etc/nginx/sites-available/share.conf',
   }
@@ -33,25 +33,25 @@ class nginx::share(
   if($fuelweb_iso_create) {
     file { '/var/www/fuelweb-iso' :
       ensure => 'directory',
-      owner => 'www-data',
-      group => 'www-data',
-      mode => '0775',
+      owner  => 'www-data',
+      group  => 'www-data',
+      mode   => '0775',
     }
   }
 
   if($fwm_create) {
-    file { "/var/www/fwm" :
+    file { '/var/www/fwm' :
       ensure => 'directory',
-      owner => 'www-data',
-      group => 'www-data',
-      mode => '0775',
+      owner  => 'www-data',
+      group  => 'www-data',
+      mode   => '0775',
     }
   }
 
   if $external_host {
     Class['firewall_defaults::pre'] ->
     firewall { '1000 allow nginx connections' :
-      dport => 80,
+      dport  => 80,
       action => 'accept',
     }
   }

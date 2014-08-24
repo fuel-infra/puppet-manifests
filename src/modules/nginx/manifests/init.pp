@@ -1,3 +1,5 @@
+# Class: nginx
+#
 class nginx {
   include nginx::params
 
@@ -11,50 +13,45 @@ class nginx {
     ensure => latest,
   }
 
-  file { 'nginx.conf' :
-    path => '/etc/nginx/nginx.conf',
-    ensure => present,
-    owner => 'root',
-    group => 'root',
-    mode => '0644',
+  file { '/etc/nginx/nginx.conf' :
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     content => template('nginx/nginx.conf.erb'),
   }
 
-  file { 'default.conf-enabled' :
-    path => '/etc/nginx/sites-enabled/default',
-    ensure => absent,
+  file { '/etc/nginx/sites-enabled/default' :
+    ensure    => 'absent',
   }
 
-  file { 'default.conf-available' :
-    path => '/etc/nginx/sites-available/default',
-    ensure => absent,
+  file { '/etc/nginx/sites-available/default' :
+    ensure    => 'absent',
   }
 
-  file { 'stub_status.conf-available' :
-    path => '/etc/nginx/sites-available/stub_status.conf',
-    ensure => present,
-    mode => '0644',
-    owner => 'root',
-    group => 'root',
+  file { '/etc/nginx/sites-available/stub_status.conf' :
+    ensure  => 'present',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
     content => template('nginx/stub_status.conf.erb'),
   }
 
-  file { 'stub_status.conf-enabled' :
-    path => '/etc/nginx/sites-enabled/stub_status.conf',
+  file { '/etc/nginx/sites-enabled/stub_status.conf' :
     ensure => 'link',
     target => '/etc/nginx/sites-available/stub_status.conf',
   }
 
   class { 'zabbix::item' :
-    name => 'nginx',
+    name     => 'nginx',
     template => 'nginx/zabbix_items.conf.erb',
   }
 
   file { '/var/lib/nginx/cache' :
-    ensure => 'directory',
-    owner => 'www-data',
-    group => 'www-data',
-    mode => '0700',
+    ensure  => 'directory',
+    owner   => 'www-data',
+    group   => 'www-data',
+    mode    => '0700',
     require => Package[$packages],
   }
 

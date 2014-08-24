@@ -1,3 +1,5 @@
+# Class: zabbix::params
+#
 class zabbix::params {
   $checks = [
     'hardware.conf',
@@ -16,7 +18,7 @@ class zabbix::params {
 
   $server_packages = [
     'zabbix-frontend-php',
-    'zabbix-server-mysql',
+    'zabbix-server-mysql'
   ]
 
   $server_service = 'zabbix-server'

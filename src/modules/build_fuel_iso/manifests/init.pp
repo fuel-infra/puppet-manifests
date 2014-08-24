@@ -1,3 +1,5 @@
+# Class: build_fuel_iso
+#
 class build_fuel_iso(
   $external_host = false,
 ) {
@@ -27,21 +29,21 @@ class build_fuel_iso(
   # apt::hold { 'multistrap': version => '2.1.6ubuntu3' }
   apt::pin { 'multistrap' :
     packages => 'multistrap',
-    version => '2.1.6ubuntu3',
+    version  => '2.1.6ubuntu3',
     priority => 1000,
   }
   # /Meta(pinnings, holds, etc.)
 
   exec { 'install-grunt-cli' :
-    command => '/usr/bin/npm install -g grunt-cli',
+    command   => '/usr/bin/npm install -g grunt-cli',
     logoutput => on_failure,
   }
 
   file { 'jenkins-sudo-for-build_iso' :
-    path => '/etc/sudoers.d/build_fuel_iso',
-    owner => 'root',
-    group => 'root',
-    mode => '0644',
+    path    => '/etc/sudoers.d/build_fuel_iso',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     content => template('build_fuel_iso/sudoers_d_build_fuel_iso.erb')
   }
 

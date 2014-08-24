@@ -1,3 +1,5 @@
+# Class: build_fuel_iso::params
+#
 class build_fuel_iso::params {
   $packages = [
     'bc',

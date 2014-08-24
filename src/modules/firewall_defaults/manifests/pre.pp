@@ -1,9 +1,11 @@
+# Class: firewall_defaults::pre
+#
 class firewall_defaults::pre {
   if $external_host {
     package { 'iptables-persistent' :
       ensure => installed,
     }->
-    resources { "firewall" :
+    resources { 'firewall' :
       purge => true,
     }
 

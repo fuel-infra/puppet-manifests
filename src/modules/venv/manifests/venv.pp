@@ -1,3 +1,5 @@
+# Define: venv::venv
+#
 define venv::venv (
   $path,
   $requirements,
@@ -12,17 +14,21 @@ define venv::venv (
   realize Package[$packages]
 
   exec { 'venv-create':
-    command => "virtualenv ${options} ${path}",
-    user => $user,
-    logoutput => on_failure,
+    command   => "virtualenv ${options} ${path}",
+    user      => $user,
+    logoutput => on_failure
   }
 
   if $requirements {
     exec { 'venv-requirements':
-      command => "export HOME='/home/${user}' ; . ${path}/bin/activate ; pip install -r ${requirements}",
-      user => $user,
-      cwd => $path,
-      logoutput => on_failure,
+      command   => "...
+        export HOME='/home/${user}' ; \
+        . ${path}/bin/activate ; \
+        pip install -r ${requirements}
+        ...",
+      user      => $user,
+      cwd       => $path,
+      logoutput => on_failure
     }
   }
 

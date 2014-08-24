@@ -12,12 +12,12 @@ class gerrit::cron {
   }
 
   cron { 'expireoldreviews':
-    ensure      => 'absent',
-    user        => 'gerrit',
+    ensure => 'absent',
+    user   => 'gerrit',
   }
 
   cron { 'removedbdumps':
-    ensure      => 'absent',
-    user        => 'gerrit',
+    ensure => 'absent',
+    user   => 'gerrit',
   }
 }

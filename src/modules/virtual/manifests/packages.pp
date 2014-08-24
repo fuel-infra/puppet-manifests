@@ -1,3 +1,5 @@
+# Class: virtual::packages
+#
 class virtual::packages {
   # Package list
 

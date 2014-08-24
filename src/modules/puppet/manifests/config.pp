@@ -1,3 +1,5 @@
+# == Class: puppet::config
+#
 class puppet::config {
   include puppet::params
 
@@ -8,20 +10,21 @@ class puppet::config {
 
   if($puppet_master) {
     file { $config :
-      path => $config,
-      ensure => 'present',
-      mode => '0644',
-      owner => 'puppet',
-      group => 'puppet',
-      content => template('puppet/puppet.conf.erb', 'puppet/puppet-master.conf.erb'),
+      ensure  => 'present',
+      path    => $config,
+      mode    => '0644',
+      owner   => 'puppet',
+      group   => 'puppet',
+      content => template(
+        'puppet/puppet.conf.erb', 'puppet/puppet-master.conf.erb'),
     }
   } else {
     file { $config :
-      path => $config,
-      ensure => 'present',
-      mode => '0400',
-      owner => 'root',
-      group => 'root',
+      ensure  => 'present',
+      path    => $config,
+      mode    => '0400',
+      owner   => 'root',
+      group   => 'root',
       content => template('puppet/puppet.conf.erb'),
     }
   }

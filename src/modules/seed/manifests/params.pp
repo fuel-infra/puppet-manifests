@@ -1,3 +1,5 @@
+# Class: seed::params
+#
 class seed::params {
   $allowed_ips = [
     '91.218.144.129/32', # moscow uplink

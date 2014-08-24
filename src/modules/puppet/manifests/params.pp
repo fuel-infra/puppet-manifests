@@ -1,3 +1,5 @@
+# Class: puppet::params
+#
 class puppet::params {
   $agent_packages = [
     'puppet',

@@ -1,3 +1,5 @@
+# Class: seed::web
+#
 class seed::web {
   include seed::params
 
@@ -7,16 +9,15 @@ class seed::web {
 
   $allowed_ips = $seed::params::allowed_ips
 
-  file { 'nginx-seed.conf-available' :
-    path => '/etc/nginx/sites-available/seed.conf',
+  file { '/etc/nginx/sites-available/seed.conf' :
+    ensure  => 'present',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
     content => template('seed/nginx.conf.erb'),
-    mode => '0644',
-    owner => 'root',
-    group => 'root',
   }
 
-  file { 'nginx-seed.conf-enabled' :
-    path => '/etc/nginx/sites-enabled/seed.conf',
+  file { '/etc/nginx/sites-enabled/seed.conf' :
     ensure => 'link',
     target => '/etc/nginx/sites-available/seed.conf',
   }
@@ -24,9 +25,9 @@ class seed::web {
   if $external_host {
     each($allowed_ips) |$ip| {
       firewall { "1000 allow seed connections - ${ip}:17333" :
-        dport => 17333,
-        source => $ip,
-        action => 'accept',
+        dport   => 17333,
+        source  => $ip,
+        action  => 'accept',
         require => Class['firewall_defaults::pre'],
       }
     }

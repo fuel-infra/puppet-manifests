@@ -1,3 +1,5 @@
+# Class: pxetool
+#
 class pxetool {
   include nginx
   include uwsgi
@@ -26,32 +28,32 @@ class pxetool {
   # creating database schema
   exec { 'pxetool-syncdb' :
     command => '/usr/share/pxetool/webapp/pxetool/manage.py syncdb --noinput',
-    user => 'www-data',
+    user    => 'www-data',
   }
 
   # running migrations
   exec { 'pxetool-migratedb' :
     command => '/usr/share/pxetool/webapp/pxetool/manage.py migrate --all',
-    user => 'www-data',
+    user    => 'www-data',
   }
 
   # /etc/pxetool.py
   # pxetool main configuration file
   file { $config :
-    path => $config,
-    ensure => 'present',
-    mode => '0600',
-    owner => 'www-data',
+    ensure  => 'present',
+    mode    => '0600',
+    owner   => 'www-data',
+    group   => 'www-data',
     content => template('pxetool/pxetool.py.erb'),
   }
 
   # /etc/nginx/sites-available/pxetool.conf
   # virtual host file for nginx
   file { $nginx_conf :
-    path => $nginx_conf,
-    ensure => 'present',
-    mode => '0644',
-    owner => 'root',
+    ensure  => 'present',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
     content => template('pxetool/nginx.conf.erb'),
   }
 

@@ -1,3 +1,5 @@
+# Class: devops
+#
 class devops (
   $install_cron_cleanup = true,
   $psql_user   = 'devops',
@@ -43,10 +45,10 @@ class devops (
   }
 
   file { '/etc/devops' :
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
   }
 
   file { '/etc/devops/local_settings.py' :
@@ -65,18 +67,18 @@ class devops (
 
   if $install_cron_cleanup {
     file { 'devops-env-cleanup.sh' :
-      path => '/usr/local/bin/devops-env-cleanup.sh',
-      owner => 'root',
-      group => 'root',
-      mode => '0755',
+      path    => '/usr/local/bin/devops-env-cleanup.sh',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
       content => template('devops/devops-env-cleanup.sh.erb'),
     }
 
     cron { 'devops-env-cleanup' :
       command => '/usr/local/bin/devops-env-cleanup.sh | logger -t devops-env-cleanup',
-      user => root,
-      hour => 16, # 16:00 UTC
-      minute => 0,
+      user    => root,
+      hour    => 16, # 16:00 UTC
+      minute  => 0,
     }
   }
 }

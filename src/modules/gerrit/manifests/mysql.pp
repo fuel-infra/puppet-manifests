@@ -8,15 +8,15 @@ class gerrit::mysql(
 ) {
 
   class { '::mysql::server':
-    package_name => 'percona-server-server',
+    package_name     => 'percona-server-server',
     override_options => {
-      'root_password'  => $mysql_root_password,
-      'default_engine' => 'InnoDB',
-      'bind_address'   => '127.0.0.1',
-      'lock_wait_timeout' => 120,
+      'root_password'                 => $mysql_root_password,
+      'default_engine'                => 'InnoDB',
+      'bind_address'                  => '127.0.0.1',
+      'lock_wait_timeout'             => 120,
       'log_queries_not_using_indexes' => 1,
-      'slow_query_log' => 1,
-      'slow_query_log_file' => '/var/log/mysql/slow.log',
+      'slow_query_log'                => 1,
+      'slow_query_log_file'           => '/var/log/mysql/slow.log',
     }
   }
 

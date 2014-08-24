@@ -1,5 +1,7 @@
+# Class: system::rootmail
+#
 class system::rootmail (
-  $root_email,
+  $root_email = '',
 ) {
   include system::params
   $packages = $system::params::rootemail_packages
@@ -7,20 +9,23 @@ class system::rootmail (
   $aliases = '/etc/aliases'
   $newaliases = '/usr/bin/newaliases'
 
+  if(!$root_email) {
+    fail('system::rootmail invoked with specified email')
+  }
+
   package { $packages :
-    ensure => 'present',
+    ensure      => 'present',
   }
 
   file { $aliases :
-    path => $aliases,
-    mode => '0644',
-    owner => 'root',
-    group => 'root',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
     content => template('system/aliases.erb'),
   }
 
   exec { $newaliases :
-    command => $newaliases,
+    command   => $newaliases,
     logoutput => on_failure,
   }
 

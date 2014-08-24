@@ -1,21 +1,25 @@
+# Class: virtual::repos
+#
 class virtual::repos {
+  # Define: repository
+  #
   define repository(
     $location,
-    $release = $::lsbdistcodename,
     $repos,
     $key,
+    $release = $::lsbdistcodename,
     $key_server = 'keyserver.ubuntu.com',
     $include_src = false) {
 
     @apt::key { $title :
-      key => $key,
+      key        => $key,
       key_server => $key_server,
     }
 
     @apt::source { $title :
-      location => $location,
-      release => $release,
-      repos => $repos,
+      location    => $location,
+      release     => $release,
+      repos       => $repos,
       include_src => $include_src,
     }
 
@@ -27,12 +31,12 @@ class virtual::repos {
   }
 
   class { 'apt' :
-    always_apt_update => true,
-    disable_keys => false,
-    purge_sources_list => true,
+    always_apt_update    => true,
+    disable_keys         => false,
+    purge_sources_list   => true,
     purge_sources_list_d => true,
-    purge_preferences_d => true,
-    update_timeout => 300,
+    purge_preferences_d  => true,
+    update_timeout       => 300,
   }
 
   if $external_host {
@@ -70,52 +74,52 @@ class virtual::repos {
   }
 
   @repository { 'mirror':
-    location => $mirror,
-    release => $::lsbdistcodename,
-    key => 'C0B21F32',
-    repos => 'main restricted universe multiverse',
+    location    => $mirror,
+    release     => $::lsbdistcodename,
+    key         => 'C0B21F32',
+    repos       => 'main restricted universe multiverse',
     include_src => false,
   }
 
   @repository { 'mirror-updates':
-    location => $mirror,
-    release => "${::lsbdistcodename}-updates",
-    key => 'C0B21F32',
-    repos => 'main restricted universe multiverse',
+    location    => $mirror,
+    release     => "${::lsbdistcodename}-updates",
+    key         => 'C0B21F32',
+    repos       => 'main restricted universe multiverse',
     include_src => false,
   }
 
   @repository { 'security':
     location => $mirror,
-    release => "${::lsbdistcodename}-security",
-    key => 'C0B21F32',
-    repos => 'main restricted universe multiverse',
+    release  => "${::lsbdistcodename}-security",
+    key      => 'C0B21F32',
+    repos    => 'main restricted universe multiverse',
   }
 
   @repository { 'devops':
-    location => $devops,
-    release => '/',
-    key => 'C1EC35C7D5A05778',
-    key_server => 'keyserver.ubuntu.com',
-    repos => '',
+    location    => $devops,
+    release     => '/',
+    key         => 'C1EC35C7D5A05778',
+    key_server  => 'keyserver.ubuntu.com',
+    repos       => '',
     include_src => false,
   }
 
   @repository { 'docker':
-    location => $docker,
-    release => 'docker',
-    key => 'D8576A8BA88D21E9',
-    key_server => 'keyserver.ubuntu.com',
-    repos => 'main',
+    location    => $docker,
+    release     => 'docker',
+    key         => 'D8576A8BA88D21E9',
+    key_server  => 'keyserver.ubuntu.com',
+    repos       => 'main',
     include_src => false,
   }
 
   @repository { 'jenkins':
-    location => $jenkins,
-    release => 'binary/',
-    key => 'D50582E6',
-    key_server => 'keyserver.ubuntu.com',
-    repos => '',
+    location    => $jenkins,
+    release     => 'binary/',
+    key         => 'D50582E6',
+    key_server  => 'keyserver.ubuntu.com',
+    repos       => '',
     include_src => false,
   }
 }

@@ -1,5 +1,5 @@
 Source: config-puppet-manifests
-Build-Depends: debhelper
+Build-Depends: debhelper, puppet (>= 3.4), puppet-lint, ruby-rgen (>= 0.6.1)
 Section: extra
 Priority: optional
 Maintainer: Igor Shishkin <ishishkin@mirantis.com>
@@ -9,6 +9,6 @@ Replaces: puppet, puppet-common
 Section: extra
 Priority: optional
 Architecture: any
-Depends: coreutils, findutils, puppet, puppet-module-puppetlabs-apt, puppet-module-puppetlabs-firewall, puppet-module-puppetlabs-mysql, puppet-module-puppetlabs-ntp
+Depends: coreutils, findutils, puppet (>= 3.4), puppet-module-puppetlabs-apt, puppet-module-puppetlabs-firewall, puppet-module-puppetlabs-mysql, puppet-module-puppetlabs-ntp
 Description: Puppet manifests
  .

@@ -15,7 +15,10 @@ class pip::params {
       $python3_pip_package   = 'python3-pip'
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} The 'pip' module only supports osfamily Debian or RedHat.")
+      fail("...
+        Unsupported osfamily: ${::osfamily} The 'pip' module \
+        only supports osfamily Debian or RedHat.
+        ...")
     }
   }
 }

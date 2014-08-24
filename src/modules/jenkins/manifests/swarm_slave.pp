@@ -1,3 +1,5 @@
+# Class: jenkins::swarm_slave
+#
 class jenkins::swarm_slave {
   include dpkg
 
@@ -20,19 +22,18 @@ class jenkins::swarm_slave {
 
   realize User['jenkins']
 
-  file { 'jenkins-swarm-slave.conf' :
-    path => '/etc/default/jenkins-swarm-slave',
-    ensure => present,
-    owner => 'root',
-    group => 'root',
-    mode => '0600',
+  file { '/etc/default/jenkins-swarm-slave' :
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
     content => template('jenkins/swarm_slave.conf.erb')
   }
 
   service { $service :
-    ensure => running,
-    enable => true,
-    hasstatus => true,
+    ensure     => 'running',
+    enable     => true,
+    hasstatus  => true,
     hasrestart => false,
   }
 

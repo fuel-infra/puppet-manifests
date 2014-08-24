@@ -1,3 +1,5 @@
+# == Class: venv::params
+#
 class venv::params {
   $packages = [
     'git',

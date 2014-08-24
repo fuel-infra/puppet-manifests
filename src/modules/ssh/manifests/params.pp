@@ -1,3 +1,5 @@
+# Class: ssh::params
+#
 class ssh::params {
   $packages = [
     'openssh-server'

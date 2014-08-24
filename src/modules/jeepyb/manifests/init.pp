@@ -15,8 +15,8 @@ class jeepyb {
   }
 
   package{ 'jeepyb':
-    ensure      => present,
-    require     => Class['mysql::bindings::python'],
+    ensure  => present,
+    require => Class['mysql::bindings::python'],
   }
 
   # A lot of things need yaml, be conservative requiring this package to avoid
@@ -42,5 +42,4 @@ class jeepyb {
       fail("Unsupported osfamily: ${::osfamily} The 'jeepyb' module only supports osfamily Debian or RedHat.")
     }
   }
-
 }

@@ -1,3 +1,5 @@
+# == Class: transmission_daemon::init
+#
 class transmission_daemon {
   include transmission_daemon::params
 
@@ -8,48 +10,50 @@ class transmission_daemon {
   $utp_enabled = $transmission_daemon::params::utp_enabled
 
   package { $packages :
-    ensure => latest,
+    ensure        => 'present',
   }
 
   file { "${config}-new" :
-    path => "${config}-new",
-    ensure => 'present',
-    mode => '0644',
-    owner => 'root',
-    group => 'root',
+    ensure  => 'present',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
     content => template('transmission_daemon/settings.json.erb'),
   }
 
   if $external_host {
     Class['firewall_defaults::pre']->
     firewall { '1000 allow transmission TCP peer connections' :
-      port => 55589,
-      proto => 'tcp',
+      port   => 55589,
+      proto  => 'tcp',
       action => 'accept',
     }->
     firewall { '1000 allow transmission UDP peer connections' :
-      port => 55589,
-      proto => 'udp',
+      port   => 55589,
+      proto  => 'udp',
       action => 'accept',
     }->
     firewall { '1000 allow transmission multicast connections' :
-      port => 6771,
-      proto => 'udp',
+      port   => 6771,
+      proto  => 'udp',
       action => 'accept',
     }
   }
 
   file { $download_dir :
-    path => $download_dir,
     ensure => 'directory',
-    owner => 'debian-transmission',
-    group => 'debian-transmission',
+    owner  => 'debian-transmission',
+    group  => 'debian-transmission',
   }
 
   exec { "${service}-reload" :
-    command => "service ${service} stop ; cp ${config}-new ${config} ; service ${service} start",
+    command     => "...
+      service ${service} stop ; \
+      cp ${config}-new ${config} ; \
+      service ${service} start
+      ...",
     refreshonly => true,
-    logoutput => on_failure,
+    logoutput   => on_failure,
   }
 
   Class['dpkg'] ->

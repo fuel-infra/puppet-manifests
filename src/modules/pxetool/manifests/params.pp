@@ -1,3 +1,5 @@
+# Class: pxetool::params
+#
 class pxetool::params {
   # configuration files
   $config = '/etc/pxetool.py'

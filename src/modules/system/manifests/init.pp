@@ -1,3 +1,5 @@
+# Class: system
+#
 class system {
   $system = hiera_hash('system')
 

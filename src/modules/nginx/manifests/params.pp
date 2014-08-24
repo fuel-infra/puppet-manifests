@@ -1,3 +1,5 @@
+# Class: nginx::params
+#
 class nginx::params {
   if $external_host {
     $autoindex = 'off'

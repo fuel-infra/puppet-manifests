@@ -1,3 +1,5 @@
+# Class: jenkins::master
+#
 class jenkins::master (
   $service_fqdn = $::fqdn,
   $install_firewall_rules = false,
@@ -32,7 +34,7 @@ class jenkins::master (
   }
 
   package { 'openjdk-6-jre-headless':
-    ensure => purged,
+    ensure  => purged,
     require => Package['openjdk-7-jre-headless'],
   }
 
@@ -41,9 +43,9 @@ class jenkins::master (
   }
 
   service { 'jenkins' :
-    ensure => running,
-    enable => true,
-    hasstatus => true,
+    ensure     => 'running',
+    enable     => true,
+    hasstatus  => true,
     hasrestart => false,
   }
 
@@ -53,8 +55,8 @@ class jenkins::master (
   Service['jenkins']
 
   file { '/etc/default/jenkins':
-    ensure => present,
-    mode => '0644',
+    ensure  => present,
+    mode    => '0644',
     content => template('jenkins/jenkins.erb'),
     require => Package['jenkins'],
   }
@@ -100,7 +102,7 @@ class jenkins::master (
   # Add Jenkins Job Builder
 
   class { '::jenkins::job_builder' :
-    url => $jjb_url,
+    url      => $jjb_url,
     username => $jjb_username,
     password => $jjb_password,
   }
@@ -109,16 +111,15 @@ class jenkins::master (
 
   include nginx
 
-  file { 'nginx-jenkins.conf-available' :
-    path => '/etc/nginx/sites-available/jenkins.conf',
+  file { '/etc/nginx/sites-available/jenkins.conf' :
+    ensure  => 'present',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
     content => template('jenkins/nginx.conf.erb'),
-    mode => '0644',
-    owner => 'root',
-    group => 'root',
     require => Class['nginx'],
   }->
-  file { 'nginx-jenkins.conf-enabled' :
-    path => '/etc/nginx/sites-enabled/jenkins.conf',
+  file { '/etc/nginx/sites-enabled/jenkins.conf' :
     ensure => 'link',
     target => '/etc/nginx/sites-available/jenkins.conf',
   }~>
@@ -130,8 +131,8 @@ class jenkins::master (
       group   => 'root',
       mode    => '0400',
       content => $ssl_cert_file_contents,
-      require  => Class['nginx'],
-      before => File['nginx-jenkins.conf-available'],
+      require => Class['nginx'],
+      before  => File['nginx-jenkins.conf-available'],
     }
   }
 
@@ -141,8 +142,8 @@ class jenkins::master (
       group   => 'root',
       mode    => '0400',
       content => $ssl_key_file_contents,
-      require  => Class['nginx'],
-      before => File['nginx-jenkins.conf-available'],
+      require => Class['nginx'],
+      before  => File['nginx-jenkins.conf-available'],
     }
   }
 
