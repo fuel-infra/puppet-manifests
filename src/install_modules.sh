@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MODULE_PATH=/etc/puppet/modules
+MODULE_PATH=/usr/share/puppet/modules
 
 function remove_module {
   local SHORT_MODULE_NAME=$1
@@ -58,7 +58,7 @@ for MOD in ${!MODULES[*]} ; do
     if ! puppet module upgrade $MOD --version ${MODULES[$MOD]} >/dev/null 2>&1
     then
       # This will get run in cron, so silence non-error output
-      puppet module install $MOD --version ${MODULES[$MOD]} >/dev/null
+      puppet module install --target-dir $MODULE_PATH $MOD --version ${MODULES[$MOD]} >/dev/null
     fi
   fi
 done
