@@ -27,6 +27,11 @@ class system_tests {
     'sysstat',
     'dstat',
     'vncviewer',
+    'tcpdump',
+
+    # usefull utils
+    'screen',
+    'mc',
   ]
 
   each($packages) |$package| {
