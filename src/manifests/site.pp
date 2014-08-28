@@ -15,64 +15,18 @@ stage { 'pre' :
 
 # Class definitions
 
-# Class: common
-#
-class common (
-  $external_host = false,
-) {
-  include dpkg
-  include firewall_defaults::pre
-  include firewall_defaults::post
-  class { '::ntp':
-    servers  => ['pool.ntp.org'],
-    restrict => ['127.0.0.1'],
-  }
-  include puppet::agent
-  include ssh::authorized_keys
-  include ssh::sshd
-  include system
-
-  $zabbix = hiera_hash('zabbix')
-
-  if $external_host {
-    $firewall = hiera_hash('firewall')
-
-    class { 'zabbix::agent' :
-      zabbix_server          => $zabbix['server_external'],
-      server_active          => false,
-      enable_firewall        => true,
-      firewall_allow_sources => $firewall['known_networks']
-    }
-  } else {
-    class { 'zabbix::agent' :
-      zabbix_server => $zabbix['server'],
-      server_active => $zabbix['server'],
-    }
-  }
-}
-
 # Class: torrent_tracker
 #
 class torrent_tracker {
-  include common
+  class { '::fuel_project::common' :}
   include opentracker
 }
 
 # Class: pxe_deployment
 #
 class pxe_deployment {
-  include common
+  class { '::fuel_project::common' :}
   include pxetool
-}
-
-# Class: srv
-#
-class srv {
-  include common
-  include nginx
-  class { 'nginx::share' : fuelweb_iso_create => true }
-  include ssh::sshd
-  include ssh::ldap
 }
 
 # Nodes definitions
@@ -85,6 +39,7 @@ node /(mc([0-2]+)n([1-8]{1})-(msk|srt)|srv(14|15|16|17|18|19|20|21)-msk)\.(msk|s
     external_host  => false,
     run_tests      => true,
     build_fuel_iso => true,
+    ldap           => true,
   }
   include ssh::ldap
 }
@@ -96,8 +51,8 @@ node 'ctorrent-msk.msk.mirantis.net' {
 node /(seed-(cz|us)1\.fuel-infra\.org)/ {
   $external_host = true
 
-  class { 'common' :
-    external_host => $external_host
+  class { '::fuel_project::common' :
+    external_host => $external_host,
   }
   include nginx
   class { 'nginx::share' : fuelweb_iso_create => true }
@@ -119,12 +74,15 @@ node /(fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-9]{2})\.fuel-infra
   }
 }
 
-node /(srv(07|08|11)|jenkins-product)-(msk|srt|kha|pl)\.(msk|srt|vm|poz)\.mirantis\.net/ {
-  include srv
+node /(srv(07|08|11|12)|jenkins-product)-(msk|srt|kha|pl)\.(msk|srt|vm|poz)\.mirantis\.net/ {
+  class { 'nginx::share' :
+    fuelweb_iso_create => true
+  }
   class { 'fuel_project::jenkins_slave' :
     external_host  => false,
     run_tests      => true,
     build_fuel_iso => true,
+    ldap           => true,
   }
 }
 
@@ -135,7 +93,7 @@ node /pxe-product-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
 node /mirror(\d+)\.fuel-infra\.org/ {
   $external_host = true
 
-  class { 'common' :
+  class { '::fuel_project::common' :
     external_host => $external_host
   }
   include nginx
@@ -157,7 +115,7 @@ node /build(\d+)\.fuel-infra\.org/ {
 }
 
 node 'monitor-product.vm.mirantis.net' {
-  include common
+  class { '::fuel_project::common' :}
   include zabbix::server
 }
 
@@ -182,7 +140,7 @@ node 'osci-gerrit.vm.mirantis.net' {
   $external_host = true
   $dmz = true
 
-  class { 'common' :
+  class { '::fuel_project::common' :
     external_host         => $external_host
   }
 
@@ -228,10 +186,12 @@ node 'osci-gerrit.vm.mirantis.net' {
 }
 
 node 'osci-jenkins2.vm.mirantis.net' {
-  include common
+  $external_host = true
+  class { '::fuel_project::common' :
+    external_host => $external_host,
+  }
 
-  $hiera_name = $::hostname
-  $params = hiera_hash($hiera_name)
+  $params = hiera_hash('osci_jenkins')
 
   class { 'jenkins::master' :
     service_fqdn                     => $params['service_fqdn'],

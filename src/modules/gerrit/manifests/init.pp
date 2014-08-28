@@ -248,7 +248,7 @@ class gerrit (
       group   => 'root',
       mode    => '0640',
       content => $ssl_cert_file_contents,
-      before  => File['nginx-gerrit.conf-enabled'],
+      before  => File['/etc/nginx/sites-enabled/gerrit.conf'],
     }
   }
 
@@ -258,7 +258,7 @@ class gerrit (
       group   => 'root',
       mode    => '0400',
       content => $ssl_key_file_contents,
-      before  => File['nginx-gerrit.conf-enabled'],
+      before  => File['/etc/nginx/sites-enabled/gerrit.conf'],
     }
   }
 
@@ -268,7 +268,7 @@ class gerrit (
       group   => 'root',
       mode    => '0400',
       content => $ssl_chain_file_contents,
-      before  => File['nginx-gerrit.conf-enabled'],
+      before  => File['/etc/nginx/sites-enabled/gerrit.conf'],
     }
   }
 

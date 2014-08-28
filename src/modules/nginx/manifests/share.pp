@@ -19,16 +19,16 @@ class nginx::share(
     owner   => 'root',
     group   => 'root',
     content => template('nginx/share.conf.erb'),
-  }
-
+    require => Class['nginx']
+  }->
   file { '/etc/nginx/sites-enabled/share.conf' :
     ensure => 'link',
     target => '/etc/nginx/sites-available/share.conf',
-  }
-
+  }->
   file { '/var/www' :
     ensure => 'directory',
-  }
+  }~>
+  Service['nginx']
 
   if($fuelweb_iso_create) {
     file { '/var/www/fuelweb-iso' :
@@ -55,10 +55,4 @@ class nginx::share(
       action => 'accept',
     }
   }
-
-  Class['nginx']->
-    File['share.conf-available']->
-    File['share.conf-enabled']->
-    File['/var/www']~>
-    Class['nginx::service']
 }

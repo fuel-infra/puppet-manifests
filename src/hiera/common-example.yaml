@@ -71,7 +71,7 @@ gerrit:
   service_url: 'https://review.test.local'
   start_timeout: 600
 
-jenkins_product_staging:
+osci_jenkins:
   service_fqdn: 'jenkins-product.test.local'
   ssl_cert_file_contents: |
     -----BEGIN CERTIFICATE-----
@@ -125,7 +125,7 @@ jenkins_product_staging:
     Sb2NcH2bS0mjAlLmBCPYqsA=
     -----END PRIVATE KEY-----
 
-  jenkins_ssh_public_key_contents = |
+  jenkins_ssh_public_key_contents: |
     'AAAAB3NzaC1yc2EAAAADAQABAAABAQCwjGe9ZfzdgeEkQQiGBDhOpgMEMJm6bfsJwKTXNTDtHDuMZJzWzHLm/64/71ht4pPnKsivQZzBLMTChdkOfqX4kQtl1CX3bo8lukV+3hv2y42HTwOKM1Ay9Tj+cQ5JqWOIT3lINJQ1maNeNH3khXLYq6T60w8k4wo+rezsTX1bkzg3OSThSASBsSfGgLG184LE7aj+24EJl4M6wQueRamXCmVsB+RyDSBFKJOeqqZwlOiWrgHnGv5qxfrGcc+6UCStI9L5JK8IFuK8z0oA8paEOzYgSz7MemmYUJu5r80DJ+7N5chMfg0cCSioNhtgSIjAziIEl26jNt+t3r/zQ04x'
 
   jenkins_address: '127.0.0.1'

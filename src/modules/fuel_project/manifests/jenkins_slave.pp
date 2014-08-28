@@ -8,8 +8,12 @@ class fuel_project::jenkins_slave (
   $verify_fuel_web       = false,
   $verify_fuel_astute    = false,
   $verify_fuel_docs      = false,
+  $ldap                  = false,
 ) {
-  class { 'common' : external_host => $external_host }
+  class { '::fuel_project::common' :
+    external_host => $external_host,
+    ldap          => $ldap,
+  }
 
   if $external_host == true {
     include jenkins::slave
@@ -126,6 +130,7 @@ class fuel_project::jenkins_slave (
       source       => $raemon_file,
       require      => [ Rvm_system_ruby['ruby-2.1.2'], File[$raemon_file] ],
     }
+
     if $simple_syntax_check {
       rvm_gem { 'puppet-lint' :
         ensure       => 'installed',

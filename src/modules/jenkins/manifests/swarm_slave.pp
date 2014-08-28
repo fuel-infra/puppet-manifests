@@ -17,7 +17,8 @@ class jenkins::swarm_slave {
   $labels = $jenkins['swarm_labels']
 
   package { $packages :
-    ensure => present,
+    ensure  => 'present',
+    require => Class['dpkg'],
   }
 
   realize User['jenkins']
@@ -27,25 +28,16 @@ class jenkins::swarm_slave {
     owner   => 'root',
     group   => 'root',
     mode    => '0600',
-    content => template('jenkins/swarm_slave.conf.erb')
-  }
-
+    content => template('jenkins/swarm_slave.conf.erb'),
+    require => [
+      Package[$packages],
+      User['jenkins']
+    ]
+  }~>
   service { $service :
     ensure     => 'running',
     enable     => true,
     hasstatus  => true,
     hasrestart => false,
   }
-
-  Class['dpkg']->
-    Package[$packages]->
-    File['jenkins-swarm-slave.conf']~>
-    Service[$service]
-
-  File['jenkins-swarm-slave.conf']~>
-    Service[$service]
-
-  Class['dpkg']->
-    Package[$packages]~>
-    Service[$service]
 }

@@ -10,23 +10,7 @@ class nginx {
   $service = $nginx::params::service
 
   package { $packages :
-    ensure => latest,
-  }
-
-  file { '/etc/nginx/nginx.conf' :
-    ensure  => 'present',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template('nginx/nginx.conf.erb'),
-  }
-
-  file { '/etc/nginx/sites-enabled/default' :
-    ensure    => 'absent',
-  }
-
-  file { '/etc/nginx/sites-available/default' :
-    ensure    => 'absent',
+    ensure => 'present',
   }
 
   file { '/etc/nginx/sites-available/stub_status.conf' :
@@ -35,12 +19,29 @@ class nginx {
     owner   => 'root',
     group   => 'root',
     content => template('nginx/stub_status.conf.erb'),
-  }
-
+    require => [
+      Class['system::tools'],
+      Package[$packages]
+    ]
+  }->
   file { '/etc/nginx/sites-enabled/stub_status.conf' :
     ensure => 'link',
     target => '/etc/nginx/sites-available/stub_status.conf',
-  }
+  }->
+  file { '/etc/nginx/nginx.conf' :
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => template('nginx/nginx.conf.erb'),
+  }->
+  file { '/etc/nginx/sites-enabled/default' :
+    ensure    => 'absent',
+  }->
+  file { '/etc/nginx/sites-available/default' :
+    ensure    => 'absent',
+  }~>
+  Service['nginx']
 
   class { 'zabbix::item' :
     name     => 'nginx',
@@ -54,18 +55,4 @@ class nginx {
     mode    => '0700',
     require => Package[$packages],
   }
-
-  Package[$packages]->
-    Class['system::tools']->
-    File['stub_status.conf-available']->
-    File['stub_status.conf-enabled']->
-    File['nginx.conf']->
-    File['default.conf-available']->
-    File['default.conf-enabled']~>
-    Class['nginx::service']
-
-  File['nginx.conf']->
-    File['default.conf-available']->
-    File['default.conf-enabled']~>
-    Class['nginx::service']
 }
