@@ -9,9 +9,6 @@ class puppet::master {
   $packages = $puppet::params::master_packages
   $service = $puppet::params::master_service
 
-  realize Virtual::Repos::Repository['puppetlabs']
-  realize Virtual::Repos::Repository['puppetlabs-deps']
-
   realize Package[$packages]
 
   service { $service :
