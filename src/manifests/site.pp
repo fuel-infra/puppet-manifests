@@ -238,7 +238,7 @@ node 'osci-jenkins2.vm.mirantis.net' {
     ssl_cert_file_contents           => $params['ssl_cert_file_contents'],
     ssl_key_file_contents            => $params['ssl_key_file_contents'],
     jenkins_ssh_private_key_contents => $params['jenkins_ssh_private_key_contents'],
-    jenkins_ssh_public_key           => $params['jenkins_ssh_public_key_contents'],
+    jenkins_ssh_public_key_contents  => $params['jenkins_ssh_public_key_contents'],
     jenkins_address                  => $params['jenkins_address'],
     jenkins_java_args                => $params['jenkins_java_args'],
     jjb_username                     => $params['jjb_username'],

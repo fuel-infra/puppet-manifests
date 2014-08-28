@@ -132,7 +132,7 @@ class jenkins::master (
       mode    => '0400',
       content => $ssl_cert_file_contents,
       require => Class['nginx'],
-      before  => File['nginx-jenkins.conf-available'],
+      before  => File['/etc/nginx/sites-available/jenkins.conf'],
     }
   }
 
@@ -143,7 +143,7 @@ class jenkins::master (
       mode    => '0400',
       content => $ssl_key_file_contents,
       require => Class['nginx'],
-      before  => File['nginx-jenkins.conf-available'],
+      before  => File['/etc/nginx/sites-available/jenkins.conf'],
     }
   }
 
