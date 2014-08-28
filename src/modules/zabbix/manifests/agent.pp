@@ -22,6 +22,7 @@ class zabbix::agent (
   $firewall_allow_sources = []
 ) {
   include zabbix::params
+  include zabbix::agent::service
 
   $package = $zabbix::params::agent_package
   $service = $zabbix::params::agent_service
@@ -38,14 +39,14 @@ class zabbix::agent (
     mode    => '0644',
     content => template('zabbix/zabbix_agentd.conf.erb'),
     require => Package[$package],
-  }
-
+  }->
   file { '/etc/sudoers.d/zabbix' :
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
     content => template('zabbix/sudoers.erb')
-  }
+  }~>
+  Service[$service]
 
   if $enable_firewall {
     $port = 10050
