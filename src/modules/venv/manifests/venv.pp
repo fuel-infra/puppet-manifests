@@ -21,11 +21,8 @@ define venv::venv (
 
   if $requirements {
     exec { 'venv-requirements':
-      command   => "...
-        export HOME='/home/${user}' ; \
-        . ${path}/bin/activate ; \
-        pip install -r ${requirements}
-        ...",
+      command   => "export HOME='/home/${user}' ; \
+        source ${path}/bin/activate ; pip install -r ${requirements}",
       user      => $user,
       cwd       => $path,
       logoutput => on_failure

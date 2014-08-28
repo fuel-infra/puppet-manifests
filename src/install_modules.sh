@@ -45,7 +45,7 @@ MODULES["puppetlabs-postgresql"]="3.4.2"
 MODULES["puppetlabs-stdlib"]="4.3.2"
 MODULES["maestrodev-rvm"]="1.6.4"
 
-SOURCE_MODULES["https://github.com/teran/puppet-libvirt"]="0.3.2-1python-bind"
+SOURCE_MODULES["https://github.com/teran/puppet-libvirt"]="0.3.2-2virsh-pool-bug"
 
 MODULE_LIST=`puppet module list`
 

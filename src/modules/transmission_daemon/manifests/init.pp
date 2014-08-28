@@ -47,11 +47,9 @@ class transmission_daemon {
   }
 
   exec { "${service}-reload" :
-    command     => "...
-      service ${service} stop ; \
+    command     => "service ${service} stop ; \
       cp ${config}-new ${config} ; \
-      service ${service} start
-      ...",
+      service ${service} start",
     refreshonly => true,
     logoutput   => on_failure,
   }
