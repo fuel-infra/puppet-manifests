@@ -79,6 +79,7 @@ class fuel_project::jenkins_slave (
       'postgresql',
       'nodejs-legacy',
       'npm',
+      'libxslt1-dev',
     ]
     each($verify_fuel_web_packages) |$package| {
       if ! defined(Package[$package]) {
@@ -144,7 +145,12 @@ class fuel_project::jenkins_slave (
   # - verify-fuel-devops
   # - fuellib_review_syntax_check (puppet tests)
   if $simple_syntax_check {
-    $syntax_check_packages = ['python-flake8', 'python-tox', 'puppet-lint']
+    $syntax_check_packages = [
+      'python-flake8',
+      'python-tox',
+      'puppet-lint',
+      'libxslt1-dev'
+    ]
     each($syntax_check_packages) |$package| {
       if ! defined(Package[$package]) {
         package { $package :
