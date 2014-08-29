@@ -32,7 +32,7 @@ class fuel_project::jenkins::slave (
     ldap_ignore_users => $ldap_ignore_users,
   }
   include venv
-  include transmission_daemon
+  class { 'transmission::daemon' :}
 
   if $external_host == true {
     class { '::jenkins::slave' :}

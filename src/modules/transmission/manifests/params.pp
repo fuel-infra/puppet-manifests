@@ -1,11 +1,9 @@
-# Class: transmission_daemon::params
+# Class: transmission::params
 #
-class transmission_daemon::params {
+class transmission::params {
   $config = '/etc/transmission-daemon/settings.json'
-  $download_dir = '/srv/downloads'
   $packages = [
     'transmission-daemon'
   ]
   $service = 'transmission-daemon'
-  $utp_enabled = false
 }
