@@ -10,10 +10,26 @@ class fuel_project::jenkins::slave (
   $verify_fuel_docs      = false,
   $ldap                  = false,
   $fuelweb_iso           = false,
+  $ldap_uri              = '',
+  $ldap_base             = '',
+  $tls_cacertdir         = '',
+  $pam_password          = '',
+  $pam_filter            = '',
+  $sudoers_base          = '',
+  $bind_policy           = '',
+  $ldap_ignore_users     = '',
 ) {
   class { '::fuel_project::common' :
-    external_host => $external_host,
-    ldap          => $ldap,
+    external_host     => $external_host,
+    ldap              => $ldap,
+    ldap_uri          => $ldap_uri,
+    ldap_base         => $ldap_base,
+    tls_cacertdir     => $tls_cacertdir,
+    pam_password      => $pam_password,
+    pam_filter        => $pam_filter,
+    sudoers_base      => $sudoers_base,
+    bind_policy       => $bind_policy,
+    ldap_ignore_users => $ldap_ignore_users,
   }
   include venv
   include system_tests

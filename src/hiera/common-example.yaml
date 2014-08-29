@@ -143,6 +143,16 @@ jenkins:
       type: ssh-rsa
       key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCwjGe9ZfzdgeEkQQiGBDhOpgMEMJm6bfsJwKTXNTDtHDuMZJzWzHLm/64/71ht4pPnKsivQZzBLMTChdkOfqX4kQtl1CX3bo8lukV+3hv2y42HTwOKM1Ay9Tj+cQ5JqWOIT3lINJQ1maNeNH3khXLYq6T60w8k4wo+rezsTX1bkzg3OSThSASBsSfGgLG184LE7aj+24EJl4M6wQueRamXCmVsB+RyDSBFKJOeqqZwlOiWrgHnGv5qxfrGcc+6UCStI9L5JK8IFuK8z0oA8paEOzYgSz7MemmYUJu5r80DJ+7N5chMfg0cCSioNhtgSIjAziIEl26jNt+t3r/zQ04x'
 
+ldap:
+  uri: 'ldap://ldap'
+  base: 'dc=company,dc=net'
+  tls_cacertdir: '/etc/openldap/cacerts'
+  pam_password: 'md5'
+  pam_filter: '|(&(accessTo=%{hostname})(trustModel=byhost))(trustModel=fullaccess)(memberOf=CN=it,ou=groups,o=company,dc=company,dc=net)'
+  sudoers_base: 'ou=sudoers,dc=company,dc=net'
+  bind_policy: 'soft'
+  ignore_users: 'backup,bin,daemon,games,gnats,irc,landscape,libuuid,list,lp,mail,man,messagebus,mysql,nagios,news,ntp,postfix,proxy,puppet,root,sshd,sync,sys,syslog,uucp,whoopsie,www-data,zabbix'
+
 mysql:
   root_password: 'peNTZ7GA2Zr90y'
 

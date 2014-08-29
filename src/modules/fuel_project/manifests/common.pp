@@ -1,8 +1,16 @@
 # Class: fuel_project::common
 #
 class fuel_project::common (
-  $external_host = false,
-  $ldap          = false,
+  $external_host     = false,
+  $ldap              = false,
+  $ldap_uri          = '',
+  $ldap_base         = '',
+  $tls_cacertdir     = '',
+  $pam_password      = '',
+  $pam_filter        = '',
+  $sudoers_base      = '',
+  $bind_policy       = '',
+  $ldap_ignore_users = '',
 ) {
   include dpkg
   include firewall_defaults::pre
@@ -35,6 +43,15 @@ class fuel_project::common (
   }
 
   if($ldap) {
-    include ssh::ldap
+    class { 'ssh::ldap' :
+      ldap_uri          => $ldap_uri,
+      ldap_base         => $ldap_base,
+      tls_cacertdir     => $tls_cacertdir,
+      pam_password      => $pam_password,
+      pam_filter        => $pam_filter,
+      sudoers_base      => $sudoers_base,
+      bind_policy       => $bind_policy,
+      ldap_ignore_users => $ldap_ignore_users,
+    }
   }
 }

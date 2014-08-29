@@ -1,6 +1,15 @@
 # Class: ssh::ldap
 #
-class ssh::ldap {
+class ssh::ldap (
+  $ldap_uri = '',
+  $ldap_base = '',
+  $tls_cacertdir = '',
+  $pam_password = $ssh::params::pam_password,
+  $pam_filter = '',
+  $sudoers_base = '',
+  $bind_policy = $ssh::params::bind_policy,
+  $ldap_ignore_users = $ssh::params::ldap_ignore_users
+) {
   include ssh::params
 
   include ssh::banner

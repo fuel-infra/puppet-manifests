@@ -24,12 +24,22 @@ class pxe_deployment {
 
 # Nodes definitions
 
-node /(mc([0-2]+)n([1-8]{1})-(msk|srt)|srv(14|15|16|17|18|19|20|21)-msk)\.(msk|srt)\.mirantis\.net/ {
-  class { '::fuel_project::jenkins::slave' :
-    run_tests      => true,
-    build_fuel_iso => true,
-    ldap           => true,
-    fuelweb_iso    => true,
+node /(mc([0-2]+)n([1-8]{1})|srv([0-9]{2})-(msk|srt))\.(msk|srt)\.mirantis\.net/ {
+  $ldap = hiera_hash('ldap')
+
+  class { 'fuel_project::jenkins::slave' :
+    run_tests         => true,
+    build_fuel_iso    => true,
+    fuelweb_iso       => true,
+    ldap              => true,
+    ldap_uri          => $ldap['uri'],
+    ldap_base         => $ldap['base'],
+    tls_cacertdir     => $ldap['tls_cacertdir'],
+    pam_password      => $ldap['pam_password'],
+    pam_filter        => $ldap['pam_filter'],
+    sudoers_base      => $ldap['sudoers_base'],
+    bind_policy       => $ldap['bind_policy'],
+    ldap_ignore_users => $ldap['ignore_users'],
   }
 }
 
@@ -37,9 +47,7 @@ node 'ctorrent-msk.msk.mirantis.net' {
   class { '::fuel_project::common' :
     external_host => false,
   }
-  class { '::opentracker' :
-    apply_firewall_rules   => false,
-  }
+  class { '::opentracker' :}
 }
 
 node /(seed-(cz|us)1\.fuel-infra\.org)/ {
@@ -57,7 +65,7 @@ node /(seed-(cz|us)1\.fuel-infra\.org)/ {
   }
 }
 
-node /(fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org)/ {
+node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
   class { 'fuel_project::jenkins::slave' :
     external_host       => true,
     run_tests           => true,
@@ -65,15 +73,6 @@ node /(fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-9]{2})\.fuel-infra
     verify_fuel_web     => true,
     verify_fuel_astute  => true,
     verify_fuel_docs    => true,
-  }
-}
-
-node /(srv(07|08|11|12)|jenkins-product)-(msk|srt|kha|pl)\.(msk|srt|vm|poz)\.mirantis\.net/ {
-  class { '::fuel_project::jenkins::slave' :
-    run_tests      => true,
-    build_fuel_iso => true,
-    ldap           => true,
-    fuelweb_iso    => true,
   }
 }
 
