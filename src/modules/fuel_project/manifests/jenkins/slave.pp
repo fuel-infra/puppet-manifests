@@ -1,19 +1,23 @@
 # Class: fuel_project::jenkins_slave
 #
-class fuel_project::jenkins_slave (
-  $external_host         = true,
+class fuel_project::jenkins::slave (
+  $external_host         = false,
   $build_fuel_iso        = false,
-  $run_tests             = true,
+  $run_tests             = false,
   $simple_syntax_check   = false,
   $verify_fuel_web       = false,
   $verify_fuel_astute    = false,
   $verify_fuel_docs      = false,
   $ldap                  = false,
+  $fuelweb_iso           = false,
 ) {
   class { '::fuel_project::common' :
     external_host => $external_host,
     ldap          => $ldap,
   }
+  include venv
+  include system_tests
+  include transmission_daemon
 
   if $external_host == true {
     include jenkins::slave
@@ -45,9 +49,6 @@ class fuel_project::jenkins_slave (
       require   => Class['libvirt'],
     }
 
-    include venv
-    include system_tests
-    include transmission_daemon
     if ! defined(Package['qemu-kvm']) {
       package { 'qemu-kvm' :
         ensure => installed
@@ -176,6 +177,12 @@ class fuel_project::jenkins_slave (
           ensure => installed,
         }
       }
+    }
+  }
+
+  if $fuelweb_iso {
+    class { '::nginx::share' :
+      fuelweb_iso_create => true,
     }
   }
 }

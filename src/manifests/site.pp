@@ -15,13 +15,6 @@ stage { 'pre' :
 
 # Class definitions
 
-# Class: torrent_tracker
-#
-class torrent_tracker {
-  class { '::fuel_project::common' :}
-  include opentracker
-}
-
 # Class: pxe_deployment
 #
 class pxe_deployment {
@@ -32,16 +25,12 @@ class pxe_deployment {
 # Nodes definitions
 
 node /(mc([0-2]+)n([1-8]{1})-(msk|srt)|srv(14|15|16|17|18|19|20|21)-msk)\.(msk|srt)\.mirantis\.net/ {
-  class { 'nginx::share' :
-    fuelweb_iso_create => true
-  }
-  class { 'fuel_project::jenkins_slave' :
-    external_host  => false,
+  class { '::fuel_project::jenkins::slave' :
     run_tests      => true,
     build_fuel_iso => true,
     ldap           => true,
+    fuelweb_iso    => true,
   }
-  include ssh::ldap
 }
 
 node 'ctorrent-msk.msk.mirantis.net' {
@@ -57,16 +46,13 @@ node /(seed-(cz|us)1\.fuel-infra\.org)/ {
   include nginx
   class { 'nginx::share' : fuelweb_iso_create => true }
   include seed::web
-  include torrent_tracker
+  include opentracker
 }
 
 node /(fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org)/ {
-  $external_host = true
-
-  class { 'fuel_project::jenkins_slave' :
+  class { 'fuel_project::jenkins::slave' :
     external_host       => true,
     run_tests           => true,
-    build_fuel_iso      => false,
     simple_syntax_check => true,
     verify_fuel_web     => true,
     verify_fuel_astute  => true,
@@ -75,14 +61,11 @@ node /(fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-9]{2})\.fuel-infra
 }
 
 node /(srv(07|08|11|12)|jenkins-product)-(msk|srt|kha|pl)\.(msk|srt|vm|poz)\.mirantis\.net/ {
-  class { 'nginx::share' :
-    fuelweb_iso_create => true
-  }
-  class { 'fuel_project::jenkins_slave' :
-    external_host  => false,
+  class { '::fuel_project::jenkins::slave' :
     run_tests      => true,
     build_fuel_iso => true,
     ldap           => true,
+    fuelweb_iso    => true,
   }
 }
 
@@ -101,16 +84,9 @@ node /mirror(\d+)\.fuel-infra\.org/ {
 }
 
 node /build(\d+)\.fuel-infra\.org/ {
-  $external_host = true
-
-  class { 'fuel_project::jenkins_slave' :
-    external_host       => true,
-    run_tests           => false,
-    build_fuel_iso      => true,
-    simple_syntax_check => false,
-    verify_fuel_web     => false,
-    verify_fuel_astute  => false,
-    verify_fuel_docs    => false,
+  class { 'fuel_project::jenkins::slave' :
+    external_host  => true,
+    build_fuel_iso => true,
   }
 }
 

@@ -12,7 +12,18 @@ class jenkins::slave {
     }
   }
 
-  realize User['jenkins']
+  if ! defined(User['jenkins']) {
+    user { 'jenkins' :
+      ensure     => 'present',
+      name       => 'jenkins',
+      shell      => '/bin/bash',
+      home       => '/home/jenkins',
+      managehome => true,
+      system     => true,
+      comment    => 'Jenkins',
+      groups     => 'www-data',
+    }
+  }
 
   exec { 'ssh_review.openstack.org' :
     command   =>

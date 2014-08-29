@@ -21,7 +21,18 @@ class jenkins::swarm_slave {
     require => Class['dpkg'],
   }
 
-  realize User['jenkins']
+  if ! defined(User['jenkins']) {
+    user { 'jenkins' :
+      ensure     => 'present',
+      name       => 'jenkins',
+      shell      => '/bin/bash',
+      home       => '/home/jenkins',
+      managehome => true,
+      system     => true,
+      comment    => 'Jenkins',
+      groups     => 'www-data',
+    }
+  }
 
   file { '/etc/default/jenkins-swarm-slave' :
     ensure  => 'present',

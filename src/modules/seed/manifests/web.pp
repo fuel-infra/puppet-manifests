@@ -4,6 +4,7 @@ class seed::web {
   include seed::params
 
   include nginx
+  include nginx::service
   include nginx::share
   include uwsgi
 
@@ -15,12 +16,13 @@ class seed::web {
     owner   => 'root',
     group   => 'root',
     content => template('seed/nginx.conf.erb'),
-  }
-
+    require => Class['nginx'],
+  }->
   file { '/etc/nginx/sites-enabled/seed.conf' :
     ensure => 'link',
     target => '/etc/nginx/sites-available/seed.conf',
-  }
+  }~>
+  Service['nginx']
 
   if $external_host {
     each($allowed_ips) |$ip| {
@@ -32,11 +34,4 @@ class seed::web {
       }
     }
   }
-
-  Class['dpkg']->
-    Class['nginx']->
-    File['nginx-seed.conf-available']->
-    File['nginx-seed.conf-enabled']->
-    Class['nginx::share']->
-    Class['nginx::service']
 }
