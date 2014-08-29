@@ -34,7 +34,12 @@ node /(mc([0-2]+)n([1-8]{1})-(msk|srt)|srv(14|15|16|17|18|19|20|21)-msk)\.(msk|s
 }
 
 node 'ctorrent-msk.msk.mirantis.net' {
-  include torrent_tracker
+  class { '::fuel_project::common' :
+    external_host => false,
+  }
+  class { '::opentracker' :
+    apply_firewall_rules   => false,
+  }
 }
 
 node /(seed-(cz|us)1\.fuel-infra\.org)/ {
@@ -46,7 +51,10 @@ node /(seed-(cz|us)1\.fuel-infra\.org)/ {
   include nginx
   class { 'nginx::share' : fuelweb_iso_create => true }
   include seed::web
-  include opentracker
+  class { '::opentracker' :
+    apply_firewall_rules   => true,
+    firewall_allow_sources => ['0.0.0.0/0'],
+  }
 }
 
 node /(fuel-jenkins([0-9]+)\.mirantis\.com|(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org)/ {
