@@ -175,7 +175,7 @@ node 'osci-jenkins2.vm.mirantis.net' {
     external_host => $external_host,
   }
 
-  $params = hiera_hash('osci_jenkins')
+  $params = hiera_hash('osci-jenkins')
 
   class { 'jenkins::master' :
     service_fqdn                     => $params['service_fqdn'],
@@ -187,7 +187,10 @@ node 'osci-jenkins2.vm.mirantis.net' {
     jenkins_java_args                => $params['jenkins_java_args'],
     jjb_username                     => $params['jjb_username'],
     jjb_password                     => $params['jjb_password'],
+    apply_firewall_rules             => true,
+    firewall_allow_sources           => ['0.0.0.0/0'],
   }
+
 
 }
 

@@ -2,7 +2,9 @@
 #
 class jenkins::master (
   $service_fqdn = $::fqdn,
-  $install_firewall_rules = false,
+  # Firewall access
+  $apply_firewall_rules = false,
+  $firewall_allow_sources = [],
   # Nginx parameters
   $ssl_cert_file = '/etc/nginx/jenkins.crt',
   $ssl_key_file = '/etc/nginx/jenkins.key',
@@ -147,4 +149,20 @@ class jenkins::master (
     }
   }
 
-}
+
+  if $apply_firewall_rules {
+    each($firewall_allow_sources) |$ip| {
+      Class['firewall_defaults::pre'] ->
+      firewall { '1000 allow HTTP for Jenkins' :
+        dport  => 80,
+        action => 'accept',
+        source => $ip,
+      }
+      firewall { '1000 allow HTTPS for Jenkins' :
+        dport  => 443,
+        action => 'accept',
+        source => $ip,
+      }
+    }
+  }
+  }
