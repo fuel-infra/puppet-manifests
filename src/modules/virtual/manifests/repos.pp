@@ -66,11 +66,13 @@ class virtual::repos {
     # FIXME https://bugs.launchpad.net/fuel/+bug/1339162
     $docker = 'https://get.docker.io/ubuntu'
     $jenkins = 'http://pkg.jenkins-ci.org/debian-stable/'
+    $jenkins_key = 'D50582E6'
     # /FIXME
   } else {
     $devops = 'http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/'
     $docker = 'http://mirrors-local-msk.msk.mirantis.net/docker/'
     $jenkins = 'http://mirrors-local-msk.msk.mirantis.net/jenkins/debian-stable/'
+    $jenkins_key = '3E301371'
   }
 
   @repository { 'mirror':
@@ -117,7 +119,7 @@ class virtual::repos {
   @repository { 'jenkins':
     location    => $jenkins,
     release     => 'binary/',
-    key         => 'D50582E6',
+    key         => $jenkins_key,
     key_server  => 'keyserver.ubuntu.com',
     repos       => '',
     include_src => false,
