@@ -114,6 +114,12 @@ node 'fuel-puppet.vm.mirantis.net' {
   include puppet::master
 }
 
+node 'twin1a-srt.srt.mirantis.net' {
+  class { 'fuel_project::jenkins::slave' :
+    run_tests => true,
+  }
+}
+
 node 'lab-cz.bud.mirantis.net' {
   class { 'fuel_project::lab_cz' :
     external_host         => false,
