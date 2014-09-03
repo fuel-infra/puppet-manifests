@@ -103,14 +103,15 @@ node 'monitor-product.vm.mirantis.net' {
 }
 
 node 'fuel-puppet.vm.mirantis.net' {
-  $external_host = true
-  $dmz = true
-  $puppet_master = true
+  $firewall = hiera_hash('firewall')
+  $puppet = hiera_hash('puppet')
 
-  class { 'common' :
-    external_host         => $external_host
+  class { '::fuel_project::puppet::master' :
+    apply_firewall_rules   => true,
+    external_host          => true,
+    firewall_allow_sources => $firewall['known_networks'],
+    puppet_server          => $puppet['master'],
   }
-  include puppet::master
 }
 
 node 'twin1a-srt.srt.mirantis.net' {

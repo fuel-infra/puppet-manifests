@@ -12,6 +12,9 @@ class fuel_project::common (
   $bind_policy       = '',
   $ldap_ignore_users = '',
 ) {
+  $puppet = hiera_hash('puppet')
+  $zabbix = hiera_hash('zabbix')
+
   include dpkg
   include firewall_defaults::pre
   include firewall_defaults::post
@@ -19,12 +22,12 @@ class fuel_project::common (
     servers  => ['pool.ntp.org'],
     restrict => ['127.0.0.1'],
   }
-  include puppet::agent
+  class { '::puppet::agent' :
+    puppet_server => $puppet['master'],
+  }
   include ssh::authorized_keys
   include ssh::sshd
   include system
-
-  $zabbix = hiera_hash('zabbix')
 
   if $external_host {
     $firewall = hiera_hash('firewall')

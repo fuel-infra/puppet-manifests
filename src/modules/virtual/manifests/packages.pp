@@ -31,8 +31,6 @@ class virtual::packages {
     'php5-fpm',
     'php5-mysql',
     'postgresql-server-dev-all',
-    'puppet',
-    'puppetmaster',
     'python-daemon',
     'python-dev',
     'python-django-pxetool',
