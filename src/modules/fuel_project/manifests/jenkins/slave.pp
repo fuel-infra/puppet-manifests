@@ -36,9 +36,9 @@ class fuel_project::jenkins::slave (
   include transmission_daemon
 
   if $external_host == true {
-    include jenkins::slave
+    include ::jenkins::slave
   } else {
-    include jenkins::swarm_slave
+    include ::jenkins::swarm_slave
   }
 
   # Run system tests
