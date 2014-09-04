@@ -115,8 +115,19 @@ node 'fuel-puppet.vm.mirantis.net' {
 }
 
 node 'twin1a-srt.srt.mirantis.net' {
+  $ldap = hiera_hash('ldap')
+
   class { 'fuel_project::jenkins::slave' :
-    run_tests => true,
+    run_tests         => true,
+    ldap              => true,
+    ldap_uri          => $ldap['uri'],
+    ldap_base         => $ldap['base'],
+    tls_cacertdir     => $ldap['tls_cacertdir'],
+    pam_password      => $ldap['pam_password'],
+    pam_filter        => $ldap['pam_filter'],
+    sudoers_base      => $ldap['sudoers_base'],
+    bind_policy       => $ldap['bind_policy'],
+    ldap_ignore_users => $ldap['ignore_users'],
   }
 }
 
