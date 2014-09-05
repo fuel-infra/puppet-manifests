@@ -71,7 +71,7 @@ class ssh::ldap (
   }
 
   cron { 'ldap2sshkeys' :
-    command => '/usr/local/bin/ldap2sshkeys.sh',
+    command => "/usr/local/bin/ldap2sshkeys.sh ${::hostname}",
     user    => root,
     hour    => '*',
     minute  => 0,
