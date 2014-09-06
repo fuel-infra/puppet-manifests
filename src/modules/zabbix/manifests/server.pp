@@ -1,26 +1,88 @@
 # Class: zabbix::server
 #
-class zabbix::server {
-  include zabbix::params
-
-  include nginx
-  include nginx::service
-
-  $config = $zabbix::params::server_config
-  $packages = $zabbix::params::server_packages
-  $service = $zabbix::params::server_service
-
-  $innodb_buffer_pool_size = $zabbix::params::innodb_buffer_pool_size
-  $innodb_file_per_table = $zabbix::params::innodb_file_per_table
-  $max_connections = $zabbix::params::max_connections
-
-  package { $packages :
-    ensure           => 'present',
+class zabbix::server (
+  $alert_script_path = $::zabbix::params::server_alert_script_path,
+  $allow_root = $::zabbix::params::server_allow_root,
+  $apply_firewall_rules = $::zabbix::params::server_apply_firewall_rules,
+  $cache_size = $::zabbix::params::server_cache_size,
+  $cache_update_frequency = $::zabbix::params::server_cache_update_frequency,
+  $config = $::zabbix::params::server_config,
+  $config_template = $::zabbix::params::server_config_template,
+  $db_driver = $::zabbix::params::server_db_driver,
+  $db_host = $::zabbix::params::server_db_host,
+  $db_name = $::zabbix::params::server_db_name,
+  $db_password = $::zabbix::params::server_db_password,
+  $db_port = $::zabbix::params::server_db_port,
+  $db_socket = $::zabbix::params::server_db_socket,
+  $db_user = $::zabbix::params::server_db_user,
+  $debug_level = $::zabbix::params::server_debug_level,
+  $disable_housekeeping = $::zabbix::params::server_disable_housekeeping,
+  $external_scripts = $::zabbix::params::server_external_scripts,
+  $firewall_allow_sources = $::zabbix::params::server_firewall_allow_sources,
+  $fping6_location = $::zabbix::params::server_fping6_location,
+  $fping_location = $::zabbix::params::server_fping_location,
+  $frontend_package = $::zabbix::params::frontend_package,
+  $frontend_service_fqdn = $::zabbix::params::frontend_service_fqdn,
+  $history_cache_size = $::zabbix::params::server_history_cache_size,
+  $history_text_cache_size = $::zabbix::params::server_history_text_cache_size,
+  $housekeeping_frequency = $::zabbix::params::server_housekeeping_frequency,
+  $install_frontend = $::zabbix::params::server_install_frontend,
+  $install_ping_handler = $::zabbix::params::server_install_ping_handler,
+  $listen_ip = $::zabbix::params::server_listen_ip,
+  $listen_port = $::zabbix::params::server_listen_port,
+  $log_file = $::zabbix::params::server_log_file,
+  $log_file_size = $::zabbix::params::server_log_file_size,
+  $log_slow_queries = $::zabbix::params::server_log_slow_queries,
+  $max_housekeeper_delete = $::zabbix::params::server_max_housekeeper_delete,
+  $mysql_package = $::zabbix::params::mysql_package,
+  $mysql_root_password = $::zabbix::params::mysql_root_password,
+  $node_id = $::zabbix::params::server_node_id,
+  $node_no_events = $::zabbix::params::server_node_no_events,
+  $node_no_history = $::zabbix::params::server_node_no_history,
+  $package = $::zabbix::params::server_package,
+  $pid_file = $::zabbix::params::server_pid_file,
+  $sender_frequency = $::zabbix::params::server_sender_frequency,
+  $service = $::zabbix::params::server_service,
+  $source_ip = $::zabbix::params::server_source_ip,
+  $ssh_key_location = $::zabbix::params::server_ssh_key_location,
+  $start_db_syncers = $::zabbix::params::server_start_db_syncers,
+  $start_discoverers = $::zabbix::params::server_start_discoverers,
+  $start_http_pollers = $::zabbix::params::server_start_http_pollers,
+  $start_ipmi_pollers = $::zabbix::params::server_start_ipmi_pollers,
+  $start_java_pollers = $::zabbix::params::server_start_java_pollers,
+  $start_pingers = $::zabbix::params::server_start_pingers,
+  $start_pollers = $::zabbix::params::server_start_pollers,
+  $start_pollers_unreachable = $::zabbix::params::server_start_pollers_unreachable,
+  $start_proxy_pollers = $::zabbix::params::server_start_proxy_pollers,
+  $start_snmp_trapper = $::zabbix::params::server_start_snmp_trapper,
+  $start_timers = $::zabbix::params::server_start_timers,
+  $start_trappers = $::zabbix::params::server_start_trappers,
+  $start_vmware_collectors = $::zabbix::params::server_start_vmware_collectors,
+  $timeout = $::zabbix::params::server_timeout,
+  $tmp_dir = $::zabbix::params::server_tmp_dir,
+  $trapper_timeout = $::zabbix::params::server_trapper_timeout,
+  $trend_cache_size = $::zabbix::params::server_trend_cache_size,
+  $unavailable_delay = $::zabbix::params::server_unavailable_delay,
+  $unreachable_delay = $::zabbix::params::server_unreachable_delay,
+  $unreachable_period = $::zabbix::params::server_unreachable_period,
+  $value_cache_size = $::zabbix::params::server_value_cache_size,
+) inherits ::zabbix::params {
+  if ($install_frontend) {
+    class { '::zabbix::frontend' :
+      package              => $frontend_package,
+      db_host              => $db_host,
+      db_port              => $db_port,
+      db_user              => $db_user,
+      db_password          => $db_password,
+      db_driver            => $db_driver,
+      install_ping_handler => $install_ping_handler,
+      service_fqdn         => $frontend_service_fqdn,
+    }
   }
 
   class { '::mysql::server':
-    package_name     => 'percona-server-server',
-    root_password    => 'r00tme',
+    package_name     => $mysql_package,
+    root_password    => $mysql_root_password,
     override_options => {
       'mysqld' => {
         'innodb_buffer_pool_size'       => $innodb_buffer_pool_size,
@@ -42,7 +104,10 @@ class zabbix::server {
     },
     users            => {
       'zabbix@localhost' => {
-        password_hash => '*DEEF4D7D88CD046ECA02A80393B7780A63E7E789',
+        password_hash => mysql_password($db_password),
+      },
+      'zabbix@127.0.0.1' => {
+        password_hash => mysql_password($db_password),
       }
     },
     databases        => {
@@ -59,91 +124,56 @@ class zabbix::server {
       }
     }
   }
-
+  exec { 'import-zabbix-fixtures' :
+    command  => "zcat /usr/share/zabbix-server-mysql/schema.sql.gz | \
+    mysql -h'${db_host}' -u'${db_user}' -p'${db_password}' '${db_name}'",
+    provider => 'shell',
+    creates  => '/etc/zabbix/zabbix_server_installed.flag',
+    require  => [Class['::mysql::server'], Package[$package]]
+  }->
+  exec { 'load-zabbix-images' :
+    command  => "zcat /usr/share/zabbix-server-mysql/images.sql.gz | \
+    mysql -h'${db_host}' -u'${db_user}' -p'${db_password}' '${db_name}'",
+    provider => 'shell',
+    creates  => '/etc/zabbix/zabbix_server_installed.flag',
+  }->
+  exec { 'load-zabbix-initial-data' :
+    command  => "zcat /usr/share/zabbix-server-mysql/data.sql.gz | \
+    mysql -h'${db_host}' -u'${db_user}' -p'${db_password}' '${db_name}'",
+    provider => 'shell',
+    creates  => '/etc/zabbix/zabbix_server_installed.flag',
+  }->
   exec { 'flag-installation-complete' :
     command  => 'touch /etc/zabbix/zabbix_server_installed.flag',
     provider => 'shell',
   }
 
-  exec { 'import-zabbix-fixtures' :
-    command  => 'zcat /usr/share/zabbix-server-mysql/schema.sql.gz | mysql -uzabbix -pzabbix zabbix',
-    provider => 'shell',
-    creates  => '/etc/zabbix/zabbix_server_installed.flag',
+  package { $package :
+    ensure  => 'present',
+    require => Class['::mysql::server']
   }
 
-  exec { 'load-zabbix-initial-data' :
-    command  => 'zcat /usr/share/zabbix-server-mysql/data.sql.gz | mysql -uzabbix -pzabbix zabbix',
-    provider => 'shell',
-    creates  => '/etc/zabbix/zabbix_server_installed.flag',
-  }
-
-  exec { 'load-zabbix-images' :
-    command  => 'zcat /usr/share/zabbix-server-mysql/images.sql.gz | mysql -uzabbix -pzabbix zabbix',
-    provider => 'shell',
-    creates  => '/etc/zabbix/zabbix_server_installed.flag',
+  if ($apply_firewall_rules) {
+    include firewall_defaults::pre
+    create_resources(firewall, $firewall_allow_sources, {
+      dport   => 10051,
+      action  => 'accept',
+      require => Class['firewall_defaults::pre'],
+    })
   }
 
   file { $config :
     ensure  => 'present',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template('zabbix/zabbix_server.conf.erb'),
-  }
-
-  file { '/usr/share/zabbix/ping.php' :
-    ensure  => 'present',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template('zabbix/ping.php.erb'),
-  }
-
+    owner   => 'zabbix',
+    group   => 'zabbix',
+    mode    => '0400',
+    content => template('zabbix/server/zabbix_server.conf.erb'),
+    require => Package[$package]
+  }~>
   service { $service :
     ensure     => 'running',
     enable     => true,
     hasstatus  => false,
     hasrestart => false,
   }
-
-  realize Package['php5']
-  realize Package['php5-fpm']
-  realize Package['php5-mysql']
-
-  service { 'php5-fpm' :
-    ensure     => 'running',
-    enable     => true,
-    hasstatus  => false,
-    hasrestart => false,
-  }
-
-  file { '/usr/share/zabbix/setup.php' :
-    ensure      => 'absent',
-  }
-
-  file { '/etc/nginx/sites-available/zabbix.conf' :
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('zabbix/nginx.conf.erb'),
-  }
-
-  file { '/etc/nginx/sites-enabled/zabbix.conf' :
-    ensure => 'link',
-    target => '/etc/nginx/sites-available/zabbix.conf',
-  }
-
-  Class['dpkg']->
-    Package[$packages]->
-    Class['::mysql::server']->
-    Exec['import-zabbix-fixtures']->
-    Exec['load-zabbix-images']->
-    Exec['load-zabbix-initial-data']->
-    File[$config]~>
-    File['ping-handle']->
-    Service[$service]->
-    Exec['flag-installation-complete']~>
-    Class['nginx::service']~>
-    Service['php5-fpm']
 }

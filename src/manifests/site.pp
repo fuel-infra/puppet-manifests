@@ -99,7 +99,7 @@ node /build(\d+)\.fuel-infra\.org/ {
 
 node 'monitor-product.vm.mirantis.net' {
   class { '::fuel_project::common' :}
-  include zabbix::server
+  class { '::zabbix::server' :}
 }
 
 node 'fuel-puppet.vm.mirantis.net' {
@@ -133,7 +133,7 @@ node 'twin1a-srt.srt.mirantis.net' {
 
 node 'lab-cz.bud.mirantis.net' {
   class { 'fuel_project::lab_cz' :
-    external_host         => false,
+    external_host => false,
   }
 }
 
@@ -142,7 +142,7 @@ node 'osci-gerrit.vm.mirantis.net' {
   $dmz = true
 
   class { '::fuel_project::common' :
-    external_host         => $external_host
+    external_host => $external_host
   }
 
   include ssh::authorized_keys
@@ -207,8 +207,6 @@ node 'osci-jenkins2.vm.mirantis.net' {
     apply_firewall_rules             => true,
     firewall_allow_sources           => ['0.0.0.0/0'],
   }
-
-
 }
 
 node 'test-server' {

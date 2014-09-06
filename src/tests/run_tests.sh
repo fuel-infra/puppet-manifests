@@ -14,4 +14,5 @@ find . -name '*.pp' | xargs -P1 -L1 puppet-lint \
           --no-80chars-check \
           --no-variable_scope-check \
           --no-nested_classes_or_defines-check \
-          --no-autoloader_layout-check
+          --no-autoloader_layout-check \
+          --no-class_inherits_from_params_class-check

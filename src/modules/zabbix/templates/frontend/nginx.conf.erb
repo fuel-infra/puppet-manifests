@@ -1,6 +1,6 @@
 server {
 	listen		80;
-	server_name 	monitor-product.vm.mirantis.net;
+	<% if @service_fqdn %>server_name 	<%= @service_fqdn %>;<% end %>
 
 	location / {
 		root 			/usr/share/zabbix;
@@ -12,13 +12,12 @@ server {
 			expires			epoch;
 			include			/etc/nginx/fastcgi_params;
 			fastcgi_index		index.php;
-			fastcgi_pass		127.0.0.1:9000;
+			fastcgi_pass		unix:///var/run/php5-fpm.sock; #127.0.0.1:9000;
 	    }
 
 		location ~ \.(jpg|jpeg|gif|png|ico)$ {
 			access_log	off;
 			expires		33d;
 		}
-
 	}
 }

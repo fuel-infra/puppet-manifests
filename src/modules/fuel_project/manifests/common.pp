@@ -16,8 +16,6 @@ class fuel_project::common (
   $zabbix = hiera_hash('zabbix')
 
   include dpkg
-  include firewall_defaults::pre
-  include firewall_defaults::post
   class { '::ntp':
     servers  => ['pool.ntp.org'],
     restrict => ['127.0.0.1'],

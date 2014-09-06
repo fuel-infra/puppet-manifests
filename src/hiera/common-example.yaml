@@ -178,10 +178,35 @@ system:
   timezone: UTC
 
 zabbix:
-  service_fqdn: 'zabbix.test.local'
   server: 'zabbix.test.local'
-  server_external: 'zabbix.test.local-ext'
-  mysql_database: 'zabbix'
-  mysql_host: '127.0.0.1'
-  mysql_user: 'zabbix'
-  mysql_password: '5sgqGVfHkcSonY'
+
+mysql::server::root_password: 'peNTZ7GA2Zr90y'
+mysql::server::package_name: 'percona-server-server'
+zabbix::agent::zabbix_server: 'zabbix.test.local'
+zabbix::server::service_fqdn: 'zabbix.test.local'
+zabbix::server::db_name: 'zabbix'
+zabbix::server::db_host: '127.0.0.1'
+zabbix::server::db_user: 'zabbix'
+zabbix::server::db_password: '5sgqGVfHkcSonY'
+zabbix::server::db_driver: 'mysql'
+zabbix::server::db_port: 3306
+zabbix::server::start_pollers: 4
+zabbix::server::mysql_package: 'percona-server-server'
+zabbix::server::mysql_root_password: 'peNTZ7GA2Zr90y'
+zabbix::server::install_frontend: true
+zabbix::frontend::apply_firewall_rules: false
+zabbix::frontend::firewall_allow_sources:
+  '1000 - zabbix frontend connections from 10.108.0.0/16':
+    source: '10.108.0.0/16'
+  '1000 - zabbix frontend connections from 172.18.0.0/16':
+    source: '172.18.0.0/16'
+  '1000 - zabbix frontend connections from 10.0.0.0/16':
+    source: '10.0.0.0/16'
+zabbix::server::apply_firewall_rules: false
+zabbix::server::firewall_allow_sources:
+  '1000 - zabbix server connections from 127.0.0.1/8':
+    source: '127.0.0.1/8'
+zabbix::agent::apply_firewall_rules: false
+zabbix::agent::firewall_allow_sources:
+  '1000 - zabbix agent connections from 192.168.0.0/16':
+    source: '192.168.0.0/16'
