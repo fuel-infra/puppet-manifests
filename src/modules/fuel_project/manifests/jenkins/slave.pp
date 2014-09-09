@@ -42,7 +42,7 @@ class fuel_project::jenkins::slave (
   }
 
   # Run system tests
-  if $run_tests == true {
+  if ($run_tests == true) {
     class { '::libvirt' :
       listen_tls         => false,
       listen_tcp         => true,
@@ -73,7 +73,7 @@ class fuel_project::jenkins::slave (
   }
 
   # Buiid ISO
-  if $build_iso == true {
+  if ($build_fuel_iso == true) {
     class { '::build_fuel_iso' :
       external_host => $external_host,
     }
@@ -83,29 +83,32 @@ class fuel_project::jenkins::slave (
 
   # Web tests by verify-fuel-web, stackforge-verify-fuel-web
   if $verify_fuel_web {
-    $verify_fuel_web_packages = [
-      'inkscape',
-      'rst2pdf',
-      'python2.6',
-      'python2.6-dev',
-      'python-all-dev',
-      'python-sphinx',
-      'python-cloud-sptheme',
-      'python-virtualenv',
-      'python-tox',
-      'postgresql',
-      'nodejs-legacy',
-      'npm',
-      'libxslt1-dev',
-    ]
-    each($verify_fuel_web_packages) |$package| {
-      if ! defined(Package[$package]) {
-        package { $package :
-          ensure => installed,
-        }
-      }
+    $verify_fuel_web_packages = {
+      'inkscape' => {},
+      'rst2pdf' => {},
+      'python2.6' => {},
+      'python2.6-dev' => {},
+      'python-all-dev' => {},
+      'python-sphinx' => {},
+      'python-cloud-sptheme' => {},
+      'python-virtualenv' => {},
+      'python-tox' => {},
+      'nodejs-legacy' => {},
+      'npm' => {},
+      'libxslt1-dev' => {},
     }
-    if ! defined(Class['postgresql::server']) {
+
+    #each($verify_fuel_web_packages) |$package| {
+    #  if ! defined(Package[$package]) {
+    #    package { $package :
+    #      ensure => installed,
+    #    }
+    #  }
+    #}
+    create_resources(package, $verify_fuel_web_packages, {
+      ensure => 'present',
+    })
+    if (!defined(Class['postgresql::server'])) {
       class { 'postgresql::server' : }
     }
     postgresql::server::db { 'nailgun':
@@ -133,7 +136,7 @@ class fuel_project::jenkins::slave (
       require     => Class['rvm'],
     }
     rvm_gem { 'bundler' :
-      ensure       => 'installed',
+      ensure       => 'present',
       ruby_version => 'ruby-2.1.2',
       require      => Rvm_system_ruby['ruby-2.1.2'],
     }
@@ -143,13 +146,13 @@ class fuel_project::jenkins::slave (
       source => 'puppet:///modules/fuel_project/gems/raemon-0.3.0.gem',
     }
     rvm_gem { 'raemon' :
-      ensure       => 'installed',
+      ensure       => 'present',
       ruby_version => 'ruby-2.1.2',
       source       => $raemon_file,
       require      => [ Rvm_system_ruby['ruby-2.1.2'], File[$raemon_file] ],
     }
 
-    if $simple_syntax_check {
+    if ($simple_syntax_check) {
       rvm_gem { 'puppet-lint' :
         ensure       => 'installed',
         ruby_version => 'ruby-2.1.2',
@@ -161,42 +164,48 @@ class fuel_project::jenkins::slave (
   # Simple syntax check by:
   # - verify-fuel-devops
   # - fuellib_review_syntax_check (puppet tests)
-  if $simple_syntax_check {
-    $syntax_check_packages = [
-      'python-flake8',
-      'python-tox',
-      'puppet-lint',
-      'libxslt1-dev'
-    ]
-    each($syntax_check_packages) |$package| {
-      if ! defined(Package[$package]) {
-        package { $package :
-          ensure => installed,
-        }
-      }
+  if ($simple_syntax_check) {
+    $syntax_check_packages = {
+      'python-flake8' => {},
+      'python-tox' => {},
+      'puppet-lint' => {},
+      'libxslt1-dev' => {},
     }
+    #each($syntax_check_packages) |$package| {
+    #  if ! defined(Package[$package]) {
+    #    package { $package :
+    #      ensure => installed,
+    #    }
+    #  }
+    #}
+    create_resources(package, $syntax_check_packages, {
+      ensure => 'present',
+    })
   }
 
-  if $verify_fuel_docs {
-    $verify_fuel_docs_packages =  [
-      'inkscape',
-      'rst2pdf',
-      'make',
-      'python-sphinx',
-      'python-cloud-sptheme',
-      'plantuml',
-      'python-sphinxcontrib.plantuml',
-    ]
-    each($verify_fuel_docs_packages) |$package| {
-      if ! defined(Package[$package]) {
-        package { $package :
-          ensure => installed,
-        }
-      }
+  if ($verify_fuel_docs) {
+    $verify_fuel_docs_packages =  {
+      'inkscape' => {},
+      'rst2pdf' => {},
+      'make' => {},
+      'python-sphinx' => {},
+      'python-cloud-sptheme' => {},
+      'plantuml' => {},
+      'python-sphinxcontrib.plantuml' => {},
     }
+    create_resources(package, $verify_fuel_docs_packages, {
+      ensure => 'present',
+    })
+    #each($verify_fuel_docs_packages) |$package| {
+    #  if ! defined(Package[$package]) {
+    #    package { $package :
+    #      ensure => installed,
+    #    }
+    #  }
+    #}
   }
 
-  if $fuelweb_iso {
+  if ($fuelweb_iso) {
     class { '::nginx::share' :
       fuelweb_iso_create => true,
     }

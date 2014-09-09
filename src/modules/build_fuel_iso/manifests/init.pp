@@ -1,6 +1,6 @@
 # Class: build_fuel_iso
 #
-class build_fuel_iso(
+class build_fuel_iso (
   $external_host = false,
 ) {
   include dpkg
@@ -10,10 +10,14 @@ class build_fuel_iso(
   $packages = $build_fuel_iso::params::packages
 
   realize Virtual::Repos::Repository['docker']
+
+  #create_resources(package, $packages, {
+  #  ensure => 'present',
+  #})
   each($packages) |$package| {
-    if ! defined(Package[$package]) {
+    if (!defined(Package[$package])) {
       package { $package :
-        ensure => installed,
+        ensure => 'present',
       }
     }
   }

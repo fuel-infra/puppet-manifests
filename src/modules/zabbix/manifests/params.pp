@@ -5,10 +5,14 @@ class zabbix::params {
   # Agent default configuration
   #
   $agent_allow_root = false
+  $agent_apply_firewall_rules = false
   $agent_debug_level = 3
-  $agent_enable_firewall = false
   $agent_enable_remote_commands = true
-  $agent_firewall_allow_sources = []
+  $agent_firewall_allow_sources = {
+    '1000 - zabbix connections allow' => {
+      source => '127.0.0.1/32',
+    }
+  }
   $agent_hostname = $::fqdn
   $agent_hostname_item = $::fqdn
   $agent_include = '/etc/zabbix/zabbix_agentd.conf.d/'
@@ -41,7 +45,7 @@ class zabbix::params {
   $frontend_db_schema = ''
   $frontend_db_socket = undef
   $frontend_db_user = 'zabbix'
-  $frontend_firewall_allow_sources = []
+  $frontend_firewall_allow_sources = {}
   $frontend_image_format_default = 'IMAGE_FORMAT_PNG'
   $frontend_install_ping_handler = false
   $frontend_nginx_config_template = 'zabbix/frontend/nginx.conf.erb'
@@ -70,7 +74,7 @@ class zabbix::params {
   $server_db_socket = undef
   $server_db_user = 'zabbix'
   $server_debug_level = 3
-  $server_firewall_allow_sources = []
+  $server_firewall_allow_sources = {}
   $server_fping6_location = '/usr/bin/fping'
   $server_fping_location = '/usr/bin/fping6'
   $server_history_cache_size = floor($::memorysize_mb/128*1024*1024)

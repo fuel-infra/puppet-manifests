@@ -27,7 +27,7 @@ class pxe_deployment {
 node /(mc([0-9]+)n([0-9]+)|srv([0-9]+))-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   $ldap = hiera_hash('ldap')
 
-  class { 'fuel_project::jenkins::slave' :
+  class { '::fuel_project::jenkins::slave' :
     run_tests         => true,
     build_fuel_iso    => true,
     fuelweb_iso       => true,

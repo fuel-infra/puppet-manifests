@@ -1,27 +1,27 @@
 # Class: zabbix::agent
 #
 class zabbix::agent (
-  $zabbix_server = $::zabbix::params::agent_zabbix_server,
+  $allow_root = $::zabbix::params::agent_allow_root,
+  $apply_firewall_rules = $::zabbix::params::agent_apply_firewall_rules,
+  $debug_level = $::zabbix::params::agent_debug_level,
+  $enable_remote_commands = $::zabbix::params::agent_enable_remote_commands,
+  $firewall_allow_sources = $::zabbix::params::agent_firewall_allow_sources,
+  $hostname = $::zabbix::params::agent_hostname,
+  $hostname_item = $::zabbix::params::agent_hostname_item,
+  $include = $::zabbix::params::agent_include,
   $listen_address = $::zabbix::params::agent_listen_address,
   $listen_port = $::zabbix::params::agent_listen_port,
   $log_file = $::zabbix::params::agent_log_file,
-  $debug_level = $::zabbix::params::agent_debug_level,
-  $enable_remote_commands = $::zabbix::params::agent_enable_remote_commands,
   $log_remote_commands = $::zabbix::params::agent_log_remote_commands,
-  $start_agents = $::zabbix::params::agent_start_agents,
-  $server_active = $::zabbix::params::agent_server_active,
-  $refresh_active_checks = $::zabbix::params::agent_refresh_active_checks,
-  $hostname = $::zabbix::params::agent_hostname,
-  $hostname_item = $::zabbix::params::agent_hostname_item,
   $max_lines_per_second = $::zabbix::params::agent_max_lines_per_second,
-  $allow_root = $::zabbix::params::agent_allow_root,
-  $timeout = $::zabbix::params::agent_timeout,
-  $include = $::zabbix::params::agent_include,
-  $unsafe_user_parameters = $::zabbix::params::agent_unsafe_user_parameters,
-  $firewall_defaults = $::zabbix::params::agent_enable_firewall,
-  $firewall_allow_sources = $::zabbix::params::agent_firewall_allow_sources,
   $package = $::zabbix::params::agent_package,
-  $service = $::zabbix::params::agent_service
+  $refresh_active_checks = $::zabbix::params::agent_refresh_active_checks,
+  $server_active = $::zabbix::params::agent_server_active,
+  $service = $::zabbix::params::agent_service,
+  $start_agents = $::zabbix::params::agent_start_agents,
+  $timeout = $::zabbix::params::agent_timeout,
+  $unsafe_user_parameters = $::zabbix::params::agent_unsafe_user_parameters,
+  $zabbix_server = $::zabbix::params::agent_zabbix_server,
 ) inherits ::zabbix::params {
   include zabbix::params
   include zabbix::agent::service

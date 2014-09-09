@@ -35,9 +35,9 @@ class system_tests {
   ]
 
   each($packages) |$package| {
-    if ! defined(Package[$package]){
+    if (!defined(Package[$package])) {
       package { $package :
-        ensure => installed,
+        ensure => 'present',
       }
     }
   }
