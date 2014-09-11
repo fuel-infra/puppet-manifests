@@ -180,6 +180,13 @@ system:
 zabbix:
   server: 'zabbix.test.local'
 
+
+fuel_project::seed::firewall_allow_sources:
+  '1000 - allow seed connections from 10.0.0.0/8':
+    source: '10.0.0.0/8'
+fuel_project::seed::tracker_firewall_allow_sources:
+  '1000 - allow tracker connections from 0.0.0.0/0':
+    source: '0.0.0.0/0'
 mysql::server::root_password: 'peNTZ7GA2Zr90y'
 mysql::server::package_name: 'percona-server-server'
 

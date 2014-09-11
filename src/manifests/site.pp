@@ -41,17 +41,10 @@ node 'ctorrent-msk.msk.mirantis.net' {
 }
 
 node /(seed-(cz|us)1\.fuel-infra\.org)/ {
-  $external_host = true
-
-  class { '::fuel_project::common' :
-    external_host => $external_host,
-  }
-  include nginx
-  class { 'nginx::share' : fuelweb_iso_create => true }
-  include seed::web
-  class { '::opentracker' :
-    apply_firewall_rules   => true,
-    firewall_allow_sources => ['0.0.0.0/0'],
+  class { '::fuel_project::seed' :
+    external_host                => true,
+    apply_firewall_rules         => true,
+    tracker_apply_firewall_rules => true,
   }
 }
 

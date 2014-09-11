@@ -28,8 +28,6 @@ class fuel_project::common (
   include ::system
 
   if $external_host {
-    $firewall = hiera_hash('firewall')
-
     class { '::zabbix::agent' :
       zabbix_server        => $zabbix['server_external'],
       server_active        => false,

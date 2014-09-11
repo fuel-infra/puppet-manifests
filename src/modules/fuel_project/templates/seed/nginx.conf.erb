@@ -1,21 +1,21 @@
 server {
-        server_name                        _;
-        listen                             17333;
+        server_name <%= @service_fqdn %>;
+        listen <%= @seed_port %>;
 
         access_log /var/log/nginx/seed.access.log proxy;
         error_log /var/log/nginx/seed.error.log;
 
         location / {
                 <% if @external_host
-                @allowed_ips.each {|ip| %>
+                @firewall_allow_sources.each {|ip| %>
                 <%= "allow #{ip};" %>
                 <% } %>
                 deny all;
                 <% end %>
 
                 dav_methods  PUT;
-                root /var/www;
+                root <%= @seed_dir %>;
 
-                client_max_body_size 5G;
+                client_max_body_size <%= @client_max_body_size %>;
         }
 }

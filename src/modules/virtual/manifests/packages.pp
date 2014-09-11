@@ -11,7 +11,6 @@ class virtual::packages {
   # sed -n '/\$packages = \[/,/\]/{/\$packages/d;/\]/d;p}' modules/virtual/manifests/packages.pp | sort
   $packages = [
     'coreutils',
-    'gitweb',
     'ipmitool',
     'nfs-kernel-server',
     'python-django-pxetool',

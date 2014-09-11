@@ -96,13 +96,19 @@ class gerrit (
   $gerrit_site = '/var/lib/gerrit/review_site'
 
   if ($gitweb) {
-    realize Package['gitweb']
-
-    Class['nginx']->
-      Package['gitweb']
+    if (!defined(Package['gitweb'])) {
+      package { 'gitweb' :
+        ensure  => 'present',
+        require => Class['nginx'],
+      }
+    }
   }
 
-  realize Package['unzip']
+  if (!defined(Package['unzip'])) {
+    package { 'unzip' :
+      ensure => 'present',
+    }
+  }
 
   package { 'openjdk-7-jre-headless':
     ensure => present,
