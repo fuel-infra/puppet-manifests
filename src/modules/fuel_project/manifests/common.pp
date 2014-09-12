@@ -42,6 +42,18 @@ class fuel_project::common (
     }
   }
 
+  if (!defined(Package['tmux'])) {
+    package { 'tmux' :
+      ensure => 'present',
+    }
+  }
+
+  if (!defined(Package['screen'])) {
+    package{ 'screen' :
+      ensure => 'present',
+    }
+  }
+
   if($ldap) {
     class { '::ssh::ldap' :}
   }
