@@ -44,6 +44,7 @@ MODULES["puppetlabs-ntp"]="3.1.2"
 MODULES["puppetlabs-postgresql"]="3.4.2"
 MODULES["puppetlabs-stdlib"]="4.3.2"
 MODULES["maestrodev-rvm"]="1.6.4"
+MODULES["thias-sysctl"]="1.0.0"
 
 SOURCE_MODULES["https://github.com/teran/puppet-libvirt"]="0.3.2-2virsh-pool-bug"
 

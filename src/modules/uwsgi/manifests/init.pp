@@ -10,15 +10,7 @@ class uwsgi {
   package { $packages :
     ensure => 'present',
   }->
-  file { '/etc/sysctl.d/10-uwsgi-somaxconn.conf' :
-    ensure  => 'present',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template('uwsgi/sysctl.conf'),
-  }->
-  exec { 'sysctl-apply' :
-    command   => '/sbin/sysctl --system -p',
-    logoutput => on_failure,
+  sysctl { 'net.core.somaxconn' :
+    value => 4096,
   }
 }
