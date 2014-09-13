@@ -192,6 +192,20 @@ ssh::ldap::sudoers_base: 'ou=sudoers,dc=company,dc=net'
 ssh::ldap::bind_policy: 'soft'
 ssh::ldap::ldap_ignore_users: 'backup,bin,daemon,games,gnats,irc,landscape,libuuid,list,lp,mail,man,messagebus,mysql,nagios,news,ntp,postfix,proxy,puppet,root,sshd,sync,sys,syslog,uucp,whoopsie,www-data,zabbix'
 
+sysctl::base::values:
+  net.ipv4.ip_forward:
+    value: '0'
+  net.ipv4.tcp_syncookies:
+    value: 1
+  net.ipv4.tcp_window_scaling:
+    value: 1
+  net.ipv4.tcp_congestion_control:
+    value: cubic
+  net.ipv4.tcp_no_metrics_save:
+    value: 1
+  net.ipv4.tcp_moderate_rcvbuf:
+    value: 1
+
 zabbix::agent::apply_firewall_rules: false
 zabbix::agent::firewall_allow_sources:
   '1000 - zabbix agent connections from 192.168.0.0/16':
