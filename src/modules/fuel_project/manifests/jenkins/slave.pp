@@ -84,33 +84,62 @@ class fuel_project::jenkins::slave (
   # Web tests by verify-fuel-web, stackforge-verify-fuel-web
   if $verify_fuel_web {
     $verify_fuel_web_packages = {
-      'inkscape' => {},
-      'rst2pdf' => {},
       'python2.6' => {},
       'python2.6-dev' => {},
       'python-all-dev' => {},
-      'python-sphinx' => {},
-      'python-cloud-sptheme' => {},
-      'python-virtualenv' => {},
-      'python-tox' => {},
       'nodejs-legacy' => {},
       'npm' => {},
-      'libxslt1-dev' => {},
     }
-
-    #each($verify_fuel_web_packages) |$package| {
-    #  if ! defined(Package[$package]) {
-    #    package { $package :
-    #      ensure => installed,
-    #    }
-    #  }
-    #}
     create_resources(package, $verify_fuel_web_packages, {
       ensure => 'present',
     })
+
+    if (!defined(Package['python-tox'])) {
+      package { 'python-tox' :
+        ensure => 'present',
+      }
+    }
+
+    if (!defined(Package['libxslt1-dev'])) {
+      package { 'libxslt1-dev' :
+        ensure => 'present',
+      }
+    }
+
+    if (!defined(Package['inkscape'])) {
+      package { 'inkscape' :
+        ensure => 'present',
+      }
+    }
+
+    if (!defined(Package['rst2pdf'])) {
+      package { 'rst2pdf' :
+        ensure => 'present',
+      }
+    }
+
+    if (!defined(Package['python-sphinx'])) {
+      package { 'python-sphinx' :
+        ensure => 'present',
+      }
+    }
+
+    if (!defined(Package['python-cloud-sptheme'])) {
+      package { 'python-cloud-sptheme' :
+        ensure => 'present',
+      }
+    }
+
+    if (!defined(Package['python-virtualenv'])) {
+      package { 'python-virtualenv' :
+        ensure => 'present',
+      }
+    }
+
     if (!defined(Class['postgresql::server'])) {
       class { 'postgresql::server' : }
     }
+
     postgresql::server::db { 'nailgun':
       user     => 'nailgun',
       password => 'nailgun',
@@ -167,42 +196,58 @@ class fuel_project::jenkins::slave (
   if ($simple_syntax_check) {
     $syntax_check_packages = {
       'python-flake8' => {},
-      'python-tox' => {},
       'puppet-lint' => {},
-      'libxslt1-dev' => {},
     }
-    #each($syntax_check_packages) |$package| {
-    #  if ! defined(Package[$package]) {
-    #    package { $package :
-    #      ensure => installed,
-    #    }
-    #  }
-    #}
     create_resources(package, $syntax_check_packages, {
       ensure => 'present',
     })
+
+    if (!defined(Package['python-tox'])) {
+      package { 'python-tox' :
+        ensure => 'present',
+      }
+    }
+
+    if (!defined(Package['libxslt1-dev'])) {
+      package { 'libxslt1-dev' :
+        ensure => 'present',
+      }
+    }
   }
 
   if ($verify_fuel_docs) {
     $verify_fuel_docs_packages =  {
-      'inkscape' => {},
-      'rst2pdf' => {},
       'make' => {},
-      'python-sphinx' => {},
-      'python-cloud-sptheme' => {},
       'plantuml' => {},
       'python-sphinxcontrib.plantuml' => {},
     }
     create_resources(package, $verify_fuel_docs_packages, {
       ensure => 'present',
     })
-    #each($verify_fuel_docs_packages) |$package| {
-    #  if ! defined(Package[$package]) {
-    #    package { $package :
-    #      ensure => installed,
-    #    }
-    #  }
-    #}
+
+    if (!defined(Package['inkscape'])) {
+      package { 'inkscape' :
+        ensure => 'present',
+      }
+    }
+
+    if (!defined(Package['rst2pdf'])) {
+      package { 'rst2pdf' :
+        ensure => 'present',
+      }
+    }
+
+    if (!defined(Package['python-sphinx'])) {
+      package { 'python-sphinx' :
+        ensure => 'present',
+      }
+    }
+
+    if (!defined(Package['python-cloud-sptheme'])) {
+      package { 'python-cloud-sptheme' :
+        ensure => 'present',
+      }
+    }
   }
 
   if ($fuelweb_iso) {
