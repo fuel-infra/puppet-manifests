@@ -194,6 +194,9 @@ mysql::server::root_password: 'peNTZ7GA2Zr90y'
 mysql::server::package_name: 'percona-server-server'
 
 puppet::agent::puppet_server: 'pxetool.test.local'
+puppet::server::firewall_allow_sources:
+  '100 - ssh connections from 10.108.0.0/16':
+    source: '10.108.0.0/16'
 
 pxetool::additional_repos:
   - 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /'
@@ -203,6 +206,7 @@ pxetool::firewall_allow_sources:
     source: '10.108.0.0/16'
   '1000 - pxetool connections from 172.18.0.0/16':
     source: '172.18.0.0/16'
+pxetool::mirror: 'archive.ubuntu.com'
 pxetool::root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
 pxetool::timezone: 'UTC'
 

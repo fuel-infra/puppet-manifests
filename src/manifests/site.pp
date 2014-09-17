@@ -49,7 +49,7 @@ node /(seed-(cz|us)1\.fuel-infra\.org)/ {
 }
 
 node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
-  class { 'fuel_project::jenkins::slave' :
+  class { '::fuel_project::jenkins::slave' :
     external_host       => true,
     run_tests           => true,
     simple_syntax_check => true,
@@ -74,7 +74,7 @@ node /mirror(\d+)\.fuel-infra\.org/ {
 }
 
 node /build(\d+)\.fuel-infra\.org/ {
-  class { 'fuel_project::jenkins::slave' :
+  class { '::fuel_project::jenkins::slave' :
     external_host  => true,
     build_fuel_iso => true,
   }
@@ -98,24 +98,14 @@ node 'fuel-puppet.vm.mirantis.net' {
 }
 
 node 'twin1a-srt.srt.mirantis.net' {
-  $ldap = hiera_hash('ldap')
-
-  class { 'fuel_project::jenkins::slave' :
-    run_tests         => true,
-    ldap              => true,
-    ldap_uri          => $ldap['uri'],
-    ldap_base         => $ldap['base'],
-    tls_cacertdir     => $ldap['tls_cacertdir'],
-    pam_password      => $ldap['pam_password'],
-    pam_filter        => $ldap['pam_filter'],
-    sudoers_base      => $ldap['sudoers_base'],
-    bind_policy       => $ldap['bind_policy'],
-    ldap_ignore_users => $ldap['ignore_users'],
+  class { '::fuel_project::jenkins::slave' :
+    run_tests => true,
+    ldap      => true,
   }
 }
 
 node 'lab-cz.bud.mirantis.net' {
-  class { 'fuel_project::lab_cz' :
+  class { '::fuel_project::lab_cz' :
     external_host => false,
   }
 }
@@ -133,7 +123,7 @@ node 'osci-gerrit.vm.mirantis.net' {
   $gerrit = hiera_hash('gerrit')
   $mysql = hiera_hash('mysql')
 
-  class { 'gerrit' :
+  class { '::gerrit' :
     gitweb                              => true,
     gerrit_start_timeout                => $gerrit['start_timeout'],
     mysql_host                          => $gerrit['mysql_host'],
@@ -161,7 +151,7 @@ node 'osci-gerrit.vm.mirantis.net' {
     container_heaplimit                 => floor($::memorysize_mb/2*1024*1024)
   }
 
-  class { 'gerrit::mysql' :
+  class { '::gerrit::mysql' :
     mysql_root_password => $mysql['root_password'],
     database_name       => $gerrit['mysql_database'],
     database_user       => $gerrit['mysql_user'],
@@ -177,7 +167,7 @@ node 'osci-jenkins2.vm.mirantis.net' {
 
   $params = hiera_hash('osci-jenkins')
 
-  class { 'jenkins::master' :
+  class { '::jenkins::master' :
     service_fqdn                     => $params['service_fqdn'],
     ssl_cert_file_contents           => $params['ssl_cert_file_contents'],
     ssl_key_file_contents            => $params['ssl_key_file_contents'],
@@ -192,14 +182,104 @@ node 'osci-jenkins2.vm.mirantis.net' {
   }
 }
 
-node 'test-server' {
-  # puppet apply --certname test-server -v -d /etc/puppet/manifests/site.pp
+# Test nodes definitions
 
-  include virtual::repos
-
-  realize Repository['jenkins']
-  realize Repository['docker']
+node 'pxetool.test.local' {
+  class { '::fuel_project::puppet::master' :}
+  class { '::pxetool' :}
 }
+
+node 'slave-01.test.local' {
+  class { '::fuel_project::jenkins::slave' :
+    run_tests      => true,
+    build_fuel_iso => true,
+    fuelweb_iso    => true,
+    ldap           => true,
+  }
+}
+
+node 'slave-02.test.local' {
+  class { '::fuel_project::seed' :
+    external_host                => true,
+    apply_firewall_rules         => true,
+    tracker_apply_firewall_rules => true,
+  }
+}
+
+node 'slave-03.test.local' {
+  class { '::fuel_project::common' :}
+  class { '::zabbix::server' :}
+}
+
+node 'slave-04.test.local' {
+  class { '::fuel_project::jenkins::slave' :
+    external_host       => true,
+    run_tests           => true,
+    simple_syntax_check => true,
+    verify_fuel_web     => true,
+    verify_fuel_astute  => true,
+    verify_fuel_docs    => true,
+  }
+}
+
+
+node 'slave-05.test.local' {
+  class { '::fuel_project::jenkins::slave' :
+    external_host  => true,
+    build_fuel_iso => true,
+  }
+}
+
+node 'slave-06.test.local' {
+  $external_host = true
+  $dmz = true
+
+  class { '::fuel_project::common' :
+    external_host => $external_host
+  }
+
+  include ssh::authorized_keys
+
+  $gerrit = hiera_hash('gerrit')
+  $mysql = hiera_hash('mysql')
+
+  class { '::gerrit' :
+    gitweb                              => true,
+    gerrit_start_timeout                => $gerrit['start_timeout'],
+    mysql_host                          => $gerrit['mysql_host'],
+    mysql_database                      => $gerrit['mysql_database'],
+    mysql_user                          => $gerrit['mysql_user'],
+    mysql_password                      => $gerrit['mysql_password'],
+    email_private_key                   => $gerrit['email_private_key'],
+    ssl_cert_file                       => $gerrit['ssl_cert_file'],
+    ssl_cert_file_contents              => $gerrit['ssl_cert_file_contents'],
+    ssl_key_file                        => $gerrit['ssl_key_file'],
+    ssl_key_file_contents               => $gerrit['ssl_key_file_contents'],
+    ssl_chain_file                      => $gerrit['ssl_chain_file'],
+    ssl_chain_file_contents             => $gerrit['ssl_chain_file_contents'],
+    ssh_dsa_key_contents                => $gerrit['ssh_dsa_key_contents'],
+    ssh_dsa_pubkey_contents             => $gerrit['ssh_dsa_pubkey_contents'],
+    ssh_rsa_key_contents                => $gerrit['ssh_rsa_key_contents'],
+    ssh_rsa_pubkey_contents             => $gerrit['ssh_rsa_pubkey_contents'],
+    ssh_project_rsa_key_contents        => $gerrit['project_ssh_rsa_key_contents'],
+    ssh_project_rsa_pubkey_contents     => $gerrit['project_ssh_rsa_pubkey_contents'],
+    ssh_replication_rsa_key_contents    => $gerrit['replication_ssh_rsa_key_contents'],
+    ssh_replication_rsa_pubkey_contents => $gerrit['replication_ssh_rsa_pubkey_contents'],
+    contactstore                        => $gerrit['contactstore'],
+    service_fqdn                        => $gerrit['service_fqdn'],
+    canonicalweburl                     => $gerrit['service_url'],
+    container_heaplimit                 => floor($::memorysize_mb/2*1024*1024)
+  }
+
+  class { '::gerrit::mysql' :
+    mysql_root_password => $mysql['root_password'],
+    database_name       => $gerrit['mysql_database'],
+    database_user       => $gerrit['mysql_user'],
+    database_password   => $gerrit['mysql_password'],
+  }
+}
+
+# Default
 
 node default {
   notify { 'Default node invocation' :}
