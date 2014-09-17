@@ -4,6 +4,7 @@ class pxetool::params {
   $additional_repos = []
   $apply_firewall_rules = false
   $config = '/etc/pxetool.py'
+  $disk_pattern = '(\/dev\/sd([a-z]+)|\/dev\/(x)?vd([a-z]+))'
   $firewall_allow_sources = {}
   $mirror = 'archive.ubuntu.com'
   $nginx_conf = '/etc/nginx/sites-available/pxetool.conf'

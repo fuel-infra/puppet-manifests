@@ -4,6 +4,7 @@ class pxetool (
   $additional_repos = $::pxetool::params::mirror,
   $apply_firewall_rules = $::pxetool::params::apply_firewall_rules,
   $config = $::pxetool::params::config,
+  $disk_pattern = $::pxetool::params::disk_pattern,
   $firewall_allow_sources = $::pxetool::params::firewall_allow_sources,
   $mirror = $::pxetool::params::mirror,
   $nginx_conf = $::pxetool::params::nginx_conf,
