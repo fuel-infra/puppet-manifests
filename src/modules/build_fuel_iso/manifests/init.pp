@@ -11,16 +11,7 @@ class build_fuel_iso (
 
   realize Virtual::Repos::Repository['docker']
 
-  #create_resources(package, $packages, {
-  #  ensure => 'present',
-  #})
-  each($packages) |$package| {
-    if (!defined(Package[$package])) {
-      package { $package :
-        ensure => 'present',
-      }
-    }
-  }
+  ensure_packages($packages)
 
   if ! defined(Package['multistrap']) {
     package { 'multistrap' :

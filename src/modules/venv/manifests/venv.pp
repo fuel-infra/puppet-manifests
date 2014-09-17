@@ -8,15 +8,14 @@ define venv::venv (
 ) {
 
 
-  $packages = {
-    'git' => {},
-    'libffi-dev' => {},
-    'postgresql-server-dev-all' => {},
-    'python-dev' => {},
-  }
-  create_resources(package, $packages, {
-    ensure => 'present',
-  })
+  $packages = [
+    'git',
+    'libffi-dev',
+    'postgresql-server-dev-all',
+    'python-dev',
+  ]
+
+  ensure_packages($packages)
 
   if (!defined(Package['python-virtualenv'])) {
     package { 'python-virtualenv' :
