@@ -12,5 +12,11 @@ class uwsgi {
   }->
   sysctl { 'net.core.somaxconn' :
     value => 4096,
+  }->
+  service { 'uwsgi' :
+    ensure     => 'running',
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => false,
   }
 }

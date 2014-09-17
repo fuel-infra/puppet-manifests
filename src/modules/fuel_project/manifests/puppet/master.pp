@@ -15,13 +15,13 @@ class fuel_project::puppet::master (
   $puppet_config = '/etc/puppet/puppet.conf',
   $puppet_config_template = 'puppet/puppet.conf.erb',
   $puppet_environment = 'production',
-  $puppet_server = '',
+  $puppet_server = $::fqdn,
 ) {
   class { '::fuel_project::common' :
     external_host => $external_host,
   }->
   class { '::puppet::master' :
-    apply_firewall_rules   => $external_host,
+    apply_firewall_rules   => $apply_firewall_rules,
     firewall_allow_sources => $firewall_allow_sources,
     hiera_backends         => $hiera_backends,
     hiera_config           => $hiera_config,
@@ -34,6 +34,6 @@ class fuel_project::puppet::master (
     puppet_config          => $puppet_config,
     puppet_config_template => $puppet_config_template,
     puppet_environment     => $puppet_environment,
-    puppet_server          => $puppet['master'],
+    puppet_server          => $puppet_server,
   }
 }

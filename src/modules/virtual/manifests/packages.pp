@@ -13,7 +13,6 @@ class virtual::packages {
     'coreutils',
     'ipmitool',
     'nfs-kernel-server',
-    'python-django-pxetool',
     'python-netaddr',
     'syslinux',
     'tzdata',

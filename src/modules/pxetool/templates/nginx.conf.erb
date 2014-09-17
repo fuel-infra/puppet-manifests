@@ -1,6 +1,6 @@
 server {
     server_name <%= @fqdn %>;
-    listen 80;
+    listen <%= @service_port %>;
 
     access_log /var/log/nginx/pxetool.access.log proxy;
     error_log /var/log/nginx/pxetool.error.log;

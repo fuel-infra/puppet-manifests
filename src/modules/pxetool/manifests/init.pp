@@ -1,29 +1,26 @@
 # Class: pxetool
 #
-class pxetool {
+class pxetool (
+  $additional_repos = $::pxetool::params::mirror,
+  $apply_firewall_rules = $::pxetool::params::apply_firewall_rules,
+  $config = $::pxetool::params::config,
+  $firewall_allow_sources = $::pxetool::params::firewall_allow_sources,
+  $mirror = $::pxetool::params::mirror,
+  $nginx_conf = $::pxetool::params::nginx_conf,
+  $nginx_conf_link = $::pxetool::params::nginx_conf_link,
+  $package = $::pxetool::params::package,
+  $puppet_master = $::pxetool::params::puppet_master,
+  $root_password_hash = $::pxetool::params::root_password_hash,
+  $service_port = $::pxetool::params::service_port,
+  $timezone = $::pxetool::params::timezone,
+) inherits ::pxetool::params {
   include nginx
   include uwsgi
-  include virtual::packages
 
   include pxetool::params
 
-  # configuration
-  $additional_repos = $pxetool::params::additional_repos
-  $config = $pxetool::params::config
-  $mirror = $pxetool::params::mirror
-  $nginx_conf = $pxetool::params::nginx_conf
-  $nginx_conf_link = $pxetool::params::nginx_conf_link
-  $packages = $pxetool::params::packages
-
-  $puppet = hiera_hash('puppet')
-  $system = hiera_hash('system')
-
-  $puppet_master = $puppet['master']
-  $root_password_hash = $system['root_password_hash']
-  $timezone = $system['timezone']
-
   # installing required $packages
-  realize Package[$packages]
+  ensure_packages($package)
 
   # creating database schema
   exec { 'pxetool-syncdb' :
@@ -35,6 +32,7 @@ class pxetool {
   exec { 'pxetool-migratedb' :
     command => '/usr/share/pxetool/webapp/pxetool/manage.py migrate --all',
     user    => 'www-data',
+    require => Exec['pxetool-syncdb']
   }
 
   # /etc/pxetool.py
@@ -45,7 +43,12 @@ class pxetool {
     owner   => 'www-data',
     group   => 'www-data',
     content => template('pxetool/pxetool.py.erb'),
-  }
+    require => [
+      Exec['pxetool-syncdb'],
+      Exec['pxetool-migratedb']
+    ]
+  }~>
+  Service['uwsgi']
 
   # /etc/nginx/sites-available/pxetool.conf
   # virtual host file for nginx
@@ -55,32 +58,24 @@ class pxetool {
     owner   => 'root',
     group   => 'root',
     content => template('pxetool/nginx.conf.erb'),
-  }
+    require => Class['nginx'],
+  }~>
+  Service['nginx']
 
   # /etc/nginx/sites-enabled/pxetool.conf
   # symlink to activate virtual host configuration for nginx
   file { $nginx_conf_link :
-    ensure => 'link',
-    target => $nginx_conf,
+    ensure  => 'link',
+    target  => $nginx_conf,
+    require => File[$nginx_conf],
   }
 
-  Package[$packages]->
-    Class['nginx']->
-    File[$config]->
-    Exec['pxetool-syncdb']->
-    Exec['pxetool-migratedb']->
-    File[$nginx_conf]->
-    File[$nginx_conf_link]~>
-    Class['uwsgi']~>
-    Class['nginx::service']
-
-    Class['nginx']->
-      File[$config]~>
-      Class['uwsgi']~>
-      Class['nginx::service']
-
-    Class['nginx']->
-      File[$nginx_conf]->
-      File[$nginx_conf_link]~>
-      Class['nginx::service']
+  if ($apply_firewall_rules) {
+    include firewall_defaults::pre
+    create_resources(firewall, $firewall_allow_sources, {
+      dport   => $service_port,
+      action  => 'accept',
+      require => Class['firewall_defaults::pre'],
+    })
+  }
 }

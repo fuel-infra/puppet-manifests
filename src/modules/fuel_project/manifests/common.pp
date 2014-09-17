@@ -24,7 +24,9 @@ class fuel_project::common (
     puppet_server => $puppet['master'],
   }
   include ::ssh::authorized_keys
-  include ::ssh::sshd
+  class { '::ssh::sshd' :
+    apply_firewall_rules => $external_host,
+  }
   include ::system
 
   if $external_host {

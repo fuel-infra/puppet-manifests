@@ -173,6 +173,9 @@ system:
     'aurlapova@mirantis.com':
       type: ssh-rsa
       key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCjdHDTn2fO4R5uhtGpah1OVX1e1mfQT4CTVMxpfK5LkkrSk4cVeqLvJw7DrKWjavz73pqQllgToq4NNbl+92+4C+SoiqsrteAzqgjmS8bnPjS7PEbyyFItwKayaOySlq2Lm4JUv0N0VgDP1TrE/SArGBFIjl/ECkFsD5QfcVFsqv1tFHbJ0hQPsDwHEiQjZGBqKmLdMNzp2WdfwiyKuPct/0O9Qt7kSl80bb8+Rmv01ePgQAl0ciPfJvVk5nyCtEU34GD9TwD0fBAJQ1/HMIOtkrj0s2veFHaEB2j+5Rg4bHv2Ms7DzPRtWZ+hnuNXNmS2AlqABKVhhO5v/N25ZUmR'
+    'anikitin@mirantis.com':
+      type: ssh-rsa
+      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDbxNYg5JL0wQ8pSY3PuvQPtoPb37lC3qoCWkdTIeQldH57u5L3TEV7K4WxghNiqdKgmY4cvKmo2YWm3mBGvTvBj3kLJqkjIy+ftncqDgRR2nhZAMvEaQbP4k6JmgGGwIwdv/wszcH6dEuf+BEGTtaWytjUNTO8fmuGQV0o5GgKi2C8Nj5zkzXrIcL/Gn1RITVv6n9MNIQ8OpN5FfIpO2v8OXKMc7MqB4pr3ZOnnjUUvD5LdFcEUf2Za46O6uvJLCkle4gzIHQGx51+1XnknscMGWR9pcmtb6Za4DcpJgiROR9Qvq1X0ZD1f3frE2IMTfPnZX9OU3l+AqyXvp5oztV5'
   root_email: 'root@test.com'
   root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
   timezone: UTC
@@ -190,6 +193,19 @@ fuel_project::seed::tracker_firewall_allow_sources:
 mysql::server::root_password: 'peNTZ7GA2Zr90y'
 mysql::server::package_name: 'percona-server-server'
 
+puppet::agent::puppet_server: 'pxetool.test.local'
+
+pxetool::additional_repos:
+  - 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /'
+pxetool::apply_firewall_rules: false
+pxetool::firewall_allow_sources:
+  '1000 - pxetool connections from 10.108.0.0/16':
+    source: '10.108.0.0/16'
+  '1000 - pxetool connections from 172.18.0.0/16':
+    source: '172.18.0.0/16'
+pxetool::root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
+pxetool::timezone: 'UTC'
+
 ssh::ldap::ldap_uri: 'ldap://ldap'
 ssh::ldap::ldap_base: 'dc=company,dc=net'
 ssh::ldap::tls_cacertdir: '/etc/openldap/cacerts'
@@ -198,6 +214,11 @@ ssh::ldap::pam_filter: '|(&(accessTo=%{hostname})(trustModel=byhost))(trustModel
 ssh::ldap::sudoers_base: 'ou=sudoers,dc=company,dc=net'
 ssh::ldap::bind_policy: 'soft'
 ssh::ldap::ldap_ignore_users: 'backup,bin,daemon,games,gnats,irc,landscape,libuuid,list,lp,mail,man,messagebus,mysql,nagios,news,ntp,postfix,proxy,puppet,root,sshd,sync,sys,syslog,uucp,whoopsie,www-data,zabbix'
+ssh::sshd::firewall_allow_sources:
+  '100 - ssh connections from 10.108.0.0/16':
+    source: '10.108.0.0/16'
+  '100 - ssh connections from 172.18.0.0/16':
+    source: '172.18.0.0/16'
 
 sysctl::base::values:
   net.ipv4.ip_forward:

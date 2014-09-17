@@ -1,6 +1,9 @@
 # Class: ssh::sshd
 #
-class ssh::sshd {
+class ssh::sshd (
+  $apply_firewall_rules = $::ssh::params::apply_firewall_rules,
+  $firewall_allow_sources = $::ssh::params::firewall_allow_sources,
+) {
   include ssh::params
 
   $packages = $ssh::params::packages
@@ -26,12 +29,13 @@ class ssh::sshd {
     hasrestart => false,
   }
 
-  if $external_host {
-    Class['firewall_defaults::pre'] ->
-    firewall { '100 allow ssh connections' :
-      dport  => 22,
-      action => 'accept',
-    }
+  if ($apply_firewall_rules) {
+    include firewall_defaults::pre
+    create_resources(firewall, $firewall_allow_sources, {
+      dport   => 22,
+      action  => 'accept',
+      require => Class['firewall_defaults::pre'],
+    })
   }
 
   File[$sshd_config]~>
