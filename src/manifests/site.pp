@@ -182,6 +182,16 @@ node 'osci-jenkins2.vm.mirantis.net' {
   }
 }
 
+node /tpi\d\d\.bud\.mirantis\.net/ {
+  class { '::fuel_project::jenkins::slave' :
+    run_tests      => true,
+  }
+}
+
+node 'tpi-puppet.vm.mirantis.net' {
+  class { '::fuel_project::puppet::master' :}
+}
+
 # Test nodes definitions
 
 node 'pxetool.test.local' {
