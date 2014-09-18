@@ -42,6 +42,7 @@ MODULES["puppetlabs-concat"]="1.0.4"
 MODULES["puppetlabs-mysql"]="2.3.1"
 MODULES["puppetlabs-ntp"]="3.1.2"
 MODULES["puppetlabs-postgresql"]="3.4.2"
+MODULES["puppetlabs-rsync"]="0.3.1"
 MODULES["puppetlabs-stdlib"]="4.3.2"
 MODULES["maestrodev-rvm"]="1.6.4"
 MODULES["thias-sysctl"]="1.0.0"
@@ -59,6 +60,7 @@ for MOD in ${!MODULES[*]} ; do
     if ! puppet module upgrade $MOD --version ${MODULES[$MOD]} >/dev/null 2>&1
     then
       # This will get run in cron, so silence non-error output
+      echo "Installing ${MOD} ..."
       puppet module install --target-dir $MODULE_PATH $MOD --version ${MODULES[$MOD]} >/dev/null
     fi
   fi
@@ -84,6 +86,7 @@ for MOD in ${!SOURCE_MODULES[*]} ; do
     if [ ! -d ${MODULE_PATH}/${MODULE_NAME}/.git ]; then
       echo "Found directory ${MODULE_PATH}/${MODULE_NAME} that is not a git repo, deleting it and reinstalling from source"
       remove_module $MODULE_NAME
+      echo "Cloning ${MODULE_PATH}/${MODULE_NAME} ..."
       git clone $MOD "${MODULE_PATH}/${MODULE_NAME}"
     elif [ `${GIT_CMD_BASE} remote show origin | grep 'Fetch URL' | awk -F'URL: ' '{print $2}'` != $MOD ]; then
       echo "Found remote in ${MODULE_PATH}/${MODULE_NAME} that does not match desired remote ${MOD}, deleting dir and re-cloning"

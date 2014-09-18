@@ -213,6 +213,8 @@ node 'slave-02.test.local' {
     external_host                => true,
     apply_firewall_rules         => true,
     tracker_apply_firewall_rules => true,
+    mirror                       => true,
+    mirror_apply_firewall_rules  => true,
   }
 }
 

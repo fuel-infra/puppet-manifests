@@ -190,6 +190,12 @@ fuel_project::seed::firewall_allow_sources:
 fuel_project::seed::tracker_firewall_allow_sources:
   '1000 - allow tracker connections from 0.0.0.0/0':
     source: '0.0.0.0/0'
+fuel_project::seed::mirror_firewall_allow_sources:
+  '1000 - allow rsync connections from 0.0.0.0/0':
+    source: '0.0.0.0/0'
+fuel_project::seed::mirror_sync_hosts_allow:
+  - 10.108.0.0/16
+  - 192.168.1.1/24
 mysql::server::root_password: 'peNTZ7GA2Zr90y'
 mysql::server::package_name: 'percona-server-server'
 
