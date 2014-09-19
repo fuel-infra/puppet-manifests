@@ -2,8 +2,6 @@
 class fuel_project::lab_cz (
   $external_host = true,
 ) {
-  include virtual::packages
-
   # Used for network managment
   class { 'common' :
     external_host => $external_host
@@ -18,7 +16,7 @@ class fuel_project::lab_cz (
     unix_sock_group    => 'libvirtd',
   }
 
-  realize Package[[
+  $packages = [
     'syslinux',
     'python-paramiko',
     'python-netaddr',
@@ -26,7 +24,9 @@ class fuel_project::lab_cz (
     'nfs-kernel-server',
     'ipmitool',
     'vlan',
-  ]]
+  ]
+
+  ensure_packages($packages)
 
   file { '/etc/exports' :
     ensure  => 'present',

@@ -3,9 +3,8 @@
 class system::timezone (
   $timezone = 'UTC',
 ) {
-  include virtual::packages
 
-  realize Package['tzdata']
+  ensure_packages(['tzdata'])
 
   file { '/etc/timezone' :
     ensure  => 'present',

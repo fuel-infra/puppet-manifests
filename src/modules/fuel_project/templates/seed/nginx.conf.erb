@@ -1,21 +1,33 @@
 server {
-        server_name <%= @service_fqdn %>;
+        server_name <%= @service_fqdn %> <%= @fqdn %>;
         listen <%= @seed_port %>;
 
         access_log /var/log/nginx/seed.access.log proxy;
         error_log /var/log/nginx/seed.error.log;
 
         location / {
-                <% if @external_host
-                @firewall_allow_sources.each {|ip| %>
-                <%= "allow #{ip};" %>
-                <% } %>
-                deny all;
+                <% if @external_host %>
+                <% @firewall_allow_sources.each {|ip| %>
+                <%= "allow #{ip[1]["source"]};" %>
+                <% } %>deny all;
                 <% end %>
 
                 dav_methods  PUT;
                 root <%= @seed_dir %>;
 
                 client_max_body_size <%= @client_max_body_size %>;
+        }
+}
+
+server {
+        server_name <%= @service_fqdn %> <%= @fqdn %>;
+        listen 80;
+
+        access_log /var/log/nginx/seed.access.log proxy;
+        error_log /var/log/nginx/seed.error.log;
+
+        location / {
+                root <%= @seed_dir %>;
+                autoindex off;
         }
 }

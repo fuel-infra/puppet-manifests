@@ -1,0 +1,12 @@
+server {
+        server_name <%= @service_fqdn %> mirror.<%= @fqdn %>;
+        listen <%= @port %>;
+
+        access_log /var/log/nginx/mirror.access.log proxy;
+        error_log /var/log/nginx/mirror.error.log;
+
+        location / {
+                root <%= @dir %>;
+                autoindex on;
+        }
+}

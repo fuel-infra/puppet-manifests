@@ -68,7 +68,6 @@ class gerrit (
   include jeepyb
   include nginx
   include pip
-  include virtual::packages
   include virtual::users
 
   file { '/etc/nginx/sites-available/gerrit.conf' :

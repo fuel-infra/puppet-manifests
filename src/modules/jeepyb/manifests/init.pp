@@ -1,7 +1,6 @@
 # == Class: jeepyb
 #
 class jeepyb {
-  include virtual::packages
   include mysql::bindings::python
 
   if ! defined(Package['python-paramiko']) {
@@ -27,7 +26,7 @@ class jeepyb {
         package { 'python-yaml':
           ensure => present,
         }
-        Realize Package['python-pip']
+        ensure_packages(['python-pip'])
       }
     }
     'RedHat': {
@@ -36,7 +35,7 @@ class jeepyb {
           ensure => present,
         }
       }
-      Realize Package['python-pip']
+      ensure_packages(['python-pip'])
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} The 'jeepyb' module only supports osfamily Debian or RedHat.")

@@ -32,7 +32,7 @@ class opentracker (
     hasrestart => false,
   }
 
-  if $firewall_allow_sources {
+  if ($apply_firewall_rules) {
     include firewall_defaults::pre
     Class['firewall_defaults::pre']->
       firewall { '1000 allow TCP connections to opentracker' :

@@ -15,15 +15,10 @@ class fuel_project::common (
   $puppet = hiera_hash('puppet')
   $zabbix = hiera_hash('zabbix')
 
-  include ::dpkg
-  class { '::ntp':
-    servers  => ['pool.ntp.org'],
-    restrict => ['127.0.0.1'],
-  }
-  class { '::puppet::agent' :
-    puppet_server => $puppet['master'],
-  }
-  include ::ssh::authorized_keys
+  class { '::dpkg' :}
+  class { '::ntp' :}
+  class { '::puppet::agent' :}
+  class { '::ssh::authorized_keys' :}
   class { '::ssh::sshd' :
     apply_firewall_rules => $external_host,
   }

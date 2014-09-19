@@ -1,6 +1,10 @@
 # Class: nginx
 #
-class nginx {
+class nginx (
+  $apply_firewall_rules = false,
+  $firewall_allow_sources = {},
+  $create_www_dir = false,
+) {
   include nginx::params
 
   include nginx::service
@@ -11,6 +15,14 @@ class nginx {
 
   package { $packages :
     ensure => 'present',
+  }
+
+  if ($create_www_dir) {
+    file { '/var/www' :
+      ensure => 'directory',
+      owner  => 'root',
+      group  => 'root',
+    }
   }
 
   file { '/etc/nginx/sites-available/stub_status.conf' :
@@ -54,5 +66,14 @@ class nginx {
     group   => 'www-data',
     mode    => '0700',
     require => Package[$packages],
+  }
+
+  if ($apply_firewall_rules) {
+    include firewall_defaults::pre
+    create_resources(firewall, $firewall_allow_sources, {
+      dport   => 80,
+      action  => 'accept',
+      require => Class['firewall_defaults::pre'],
+    })
   }
 }

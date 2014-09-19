@@ -41,11 +41,22 @@ node 'ctorrent-msk.msk.mirantis.net' {
 }
 
 node /(seed-(cz|us)1\.fuel-infra\.org)/ {
+  class { '::fuel_project::common' :
+    external_host => true,
+  }
   class { '::fuel_project::seed' :
     external_host                => true,
     apply_firewall_rules         => true,
     tracker_apply_firewall_rules => true,
   }
+  class { '::fuel_project::mirror' :
+    apply_firewall_rules => true,
+  }
+}
+
+node /osci-mirror-(msk|srt|kha)\.(msk|srt|kha)\.mirantis\.net/ {
+  class { '::fuel_project::common' :}
+  class { '::fuel_project::mirror' :}
 }
 
 node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
@@ -86,14 +97,9 @@ node 'monitor-product.vm.mirantis.net' {
 }
 
 node 'fuel-puppet.vm.mirantis.net' {
-  $firewall = hiera_hash('firewall')
-  $puppet = hiera_hash('puppet')
-
   class { '::fuel_project::puppet::master' :
-    apply_firewall_rules   => true,
-    external_host          => true,
-    firewall_allow_sources => $firewall['known_networks'],
-    puppet_server          => $puppet['master'],
+    apply_firewall_rules => true,
+    external_host        => true,
   }
 }
 
@@ -209,37 +215,37 @@ node 'slave-01.test.local' {
 }
 
 node 'slave-02.test.local' {
+  class { '::fuel_project::common' :
+    external_host => false,
+  }
+  class { '::opentracker' :}
+}
+
+node 'slave-03.test.local' {
+  class { '::fuel_project::jenkins::slave' :
+    run_tests => true,
+    ldap      => true,
+  }
+}
+
+node 'slave-04.test.local' {
+  class { '::fuel_project::common' :
+    external_host => true,
+  }
   class { '::fuel_project::seed' :
     external_host                => true,
     apply_firewall_rules         => true,
     tracker_apply_firewall_rules => true,
-    mirror                       => true,
-    mirror_apply_firewall_rules  => true,
   }
-}
-
-node 'slave-03.test.local' {
-  class { '::fuel_project::common' :}
-  class { '::zabbix::server' :}
-}
-
-node 'slave-04.test.local' {
-  class { '::fuel_project::jenkins::slave' :
-    external_host       => true,
-    run_tests           => true,
-    simple_syntax_check => true,
-    verify_fuel_web     => true,
-    verify_fuel_astute  => true,
-    verify_fuel_docs    => true,
+  class { '::fuel_project::mirror' :
+    apply_firewall_rules => true,
   }
 }
 
 
 node 'slave-05.test.local' {
-  class { '::fuel_project::jenkins::slave' :
-    external_host  => true,
-    build_fuel_iso => true,
-  }
+  class { '::fuel_project::common' :}
+  class { '::fuel_project::mirror' :}
 }
 
 node 'slave-06.test.local' {
@@ -288,6 +294,24 @@ node 'slave-06.test.local' {
     database_name       => $gerrit['mysql_database'],
     database_user       => $gerrit['mysql_user'],
     database_password   => $gerrit['mysql_password'],
+  }
+}
+
+node 'slave-07.test.local' {
+  class { '::fuel_project::jenkins::slave' :
+    external_host  => true,
+    build_fuel_iso => true,
+  }
+}
+
+node 'slave-08.test.local' {
+  class { '::fuel_project::common' :}
+  class { '::zabbix::server' :}
+}
+
+node 'slave-09.test.local' {
+  class { '::fuel_project::lab_cz' :
+    external_host => false,
   }
 }
 
