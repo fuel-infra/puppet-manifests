@@ -50,19 +50,6 @@ class ssh::ldap (
     content => template('ssh/common-session.erb'),
   }
 
-  file { '/usr/local/bin/ldap2sshkeys.sh' :
-    ensure  => 'present',
-    mode    => '0700',
-    owner   => 'root',
-    group   => 'root',
-    content => template('ssh/ldap2sshkeys.sh.erb'),
-  }
-
-  exec { 'sync-ssh-keys' :
-    command   => '/usr/local/bin/ldap2sshkeys.sh',
-    logoutput => on_failure,
-  }
-
   service { 'nscd' :
     ensure     => running,
     enable     => true,
@@ -70,36 +57,21 @@ class ssh::ldap (
     hasrestart => false,
   }
 
-  cron { 'ldap2sshkeys' :
-    command => "/usr/local/bin/ldap2sshkeys.sh ${::hostname} 2>&1 | logger -t ldap2sshkeys",
-    user    => root,
-    hour    => '*',
-    minute  => 0,
-  }
-
   Class['ssh::sshd']->
     Package[$ldap_packages]->
     File['/etc/ldap.conf']->
     File['/etc/nsswitch.conf']->
     File['/etc/pam.d/common-session']->
-    File['/usr/local/bin/ldap2sshkeys.sh']->
-    Service['nscd']->
-    Cron['ldap2sshkeys']
+    Service['nscd']
 
   Class['ssh::sshd']->
     File['/etc/ldap.conf']->
-    File['/usr/local/bin/ldap2sshkeys.sh']~>
-    Service['nscd']->
-    Cron['ldap2sshkeys']
+    Service['nscd']
 
   Class['ssh::sshd']->
     File['/etc/pam.d/common-session']->
-    File['/usr/local/bin/ldap2sshkeys.sh']~>
-    Service['nscd']->
-    Cron['ldap2sshkeys']
+    Service['nscd']
 
   Class['ssh::sshd']->
-    File['/usr/local/bin/ldap2sshkeys.sh']~>
-    Service['nscd']->
-    Cron['ldap2sshkeys']
+    Service['nscd']
 }

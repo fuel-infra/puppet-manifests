@@ -50,6 +50,28 @@ class fuel_project::common (
 
   if($ldap) {
     class { '::ssh::ldap' :}
+
+    file { '/usr/local/bin/ldap2sshkeys.sh' :
+      ensure  => 'present',
+      mode    => '0700',
+      owner   => 'root',
+      group   => 'root',
+      content => template('fuel_project/common/ldap2sshkeys.sh.erb'),
+    }
+
+    exec { 'sync-ssh-keys' :
+      command   => '/usr/local/bin/ldap2sshkeys.sh',
+      logoutput => on_failure,
+      require   => File['/usr/local/bin/ldap2sshkeys.sh'],
+    }
+
+    cron { 'ldap2sshkeys' :
+      command => "/usr/local/bin/ldap2sshkeys.sh ${::hostname} 2>&1 | logger -t ldap2sshkeys",
+      user    => root,
+      hour    => '*',
+      minute  => 0,
+      require => File['/usr/local/bin/ldap2sshkeys.sh'],
+    }
   }
 
   class { '::apt' :
