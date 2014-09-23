@@ -189,9 +189,7 @@ node 'osci-jenkins2.vm.mirantis.net' {
 }
 
 node /tpi\d\d\.bud\.mirantis\.net/ {
-  class { '::fuel_project::jenkins::slave' :
-    run_tests      => true,
-  }
+  class { '::fuel_project::tpi::lab' :}
 }
 
 node 'tpi-puppet.vm.mirantis.net' {
