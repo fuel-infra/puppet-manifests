@@ -32,7 +32,6 @@ class fuel_project::jenkins::slave (
     ldap_ignore_users => $ldap_ignore_users,
   }
   include venv
-  include system_tests
   include transmission_daemon
 
   if $external_host == true {
@@ -50,6 +49,8 @@ class fuel_project::jenkins::slave (
 
   # Run system tests
   if ($run_tests == true) {
+    include venv
+
     class { '::libvirt' :
       listen_tls         => false,
       listen_tcp         => true,
@@ -72,18 +73,171 @@ class fuel_project::jenkins::slave (
       require   => Class['libvirt'],
     }
 
-    if ! defined(Package['qemu-kvm']) {
-      package { 'qemu-kvm' :
-        ensure => installed
-      }
+    $sudo_commands = ['/sbin/ebtables']
+    $workspace = '/home/jenkins/workspace'
+
+    $system_tests_packages = [
+      # dependencies
+      'libevent-dev',
+      'python-anyjson',
+      'python-glanceclient',
+      'python-ipaddr',
+      'python-keystoneclient',
+      'python-novaclient',
+      'python-paramiko',
+      'python-proboscis',
+      'python-seed-cleaner',
+      'python-seed-client',
+      'python-xmlbuilder',
+      'python-yaml',
+
+      # diagnostic utilities
+      'htop',
+      'sysstat',
+      'dstat',
+      'vncviewer',
+      'tcpdump',
+
+      # usefull utils
+      'screen',
+      'mc',
+    ]
+
+    ensure_packages($system_tests_packages)
+
+    exec { 'workspace-create' :
+      command   => "mkdir -p ${workspace}",
+      provider  => 'shell',
+      user      => 'jenkins',
+      cwd       => '/tmp',
+      logoutput => on_failure,
     }
+
+    class { 'devops' :
+      install_cron_cleanup => true,
+    }
+
+    file { '/home/jenkins/venv-nailgun-tests/lib/python2.7/site-packages/devops/local_settings.py' :
+      ensure  => link,
+      target  => '/etc/devops/local_settings.py',
+      require => [
+        Class['devops'],
+        Venv::Venv['venv-nailgun-tests']
+      ]
+    }
+
+    file { '/etc/sudoers.d/systest' :
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0600',
+      content => template('fuel_project/jenkins/slave/system_tests.sudoers.d.erb'),
+    }
+
+    file { '/usr/local/bin/seed-downloads-cleanup.sh' :
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      source  => 'puppet:///modules/fuel_project/bin/seed-downloads-cleanup.sh',
+      require => Package['python-seed-cleaner'],
+    }
+
+    cron { 'seed-downloads-cleanup' :
+      command => '/usr/local/bin/seed-downloads-cleanup.sh | logger -t seed-downloads-cleanup',
+      user    => root,
+      hour    => '*/4',
+      minute  => 0,
+      require => File['/usr/local/bin/seed-downloads-cleanup.sh'],
+    }
+
+    Package[$system_tests_packages]->
+      Venv::Venv['venv-nailgun-tests']->
+      Exec['workspace-create']
   }
 
   # Buiid ISO
   if ($build_fuel_iso == true) {
-    class { '::build_fuel_iso' :
-      external_host => $external_host,
+    $build_fuel_iso_packages = [
+      'bc',
+      'build-essential',
+      'createrepo',
+      'debootstrap',
+      'extlinux',
+      'genisoimage',
+      'git',
+      'isomd5sum',
+      'kpartx',
+      'libconfig-auto-perl',
+      'libmysqlclient-dev',
+      'libparse-debian-packages-perl',
+      'lrzip',
+      'lxc-docker',
+      'nodejs',
+      'nodejs-legacy',
+      'npm',
+      'python-daemon',
+      'python-ipaddr',
+      'python-jinja2',
+      'python-nose',
+      'python-paramiko',
+      'python-pbr',
+      'python-pip',
+      'python-setuptools',
+      'python-xmlbuilder',
+      'python-yaml',
+      'realpath',
+      'ruby-bundler',
+      'ruby-builder',
+      'ruby-dev',
+      'rubygems-integration',
+      'unzip',
+      'yum',
+      'yum-utils',
+    ]
+
+    ensure_packages($build_fuel_iso_packages)
+
+    if ! defined(Package['multistrap']) {
+      package { 'multistrap' :
+        ensure => '2.1.6ubuntu3'
+      }
     }
+
+    # Meta(pinnings, holds, etc.)
+    # apt::hold supported in puppetlabs-apt >= 1.5:
+    # apt::hold { 'multistrap': version => '2.1.6ubuntu3' }
+    apt::pin { 'multistrap' :
+      packages => 'multistrap',
+      version  => '2.1.6ubuntu3',
+      priority => 1000,
+    }
+    # /Meta(pinnings, holds, etc.)
+
+    exec { 'install-grunt-cli' :
+      command   => '/usr/bin/npm install -g grunt-cli',
+      logoutput => on_failure,
+    }
+
+    file { 'jenkins-sudo-for-build_iso' :
+      path    => '/etc/sudoers.d/build_fuel_iso',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('fuel_project/jenkins/slave/build_iso.sudoers.d.erb')
+    }
+
+    if $external_host {
+      firewall { '010 accept all to docker0 interface':
+        proto   => 'all',
+        iniface => 'docker0',
+        action  => 'accept',
+        require => Package[$build_fuel_iso_packages],
+      }
+    }
+
+    Package[$build_fuel_iso_packages]->
+      Exec['install-grunt-cli']
   }
 
   # *** Custom tests ***

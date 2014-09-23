@@ -10,11 +10,5 @@ class system::tools {
   }
 
   $packages = ['atop','curl','htop','sysstat']
-  each($packages) |$package| {
-    if ! defined(Package[$package]) {
-      package { $package :
-        ensure => installed,
-      }
-    }
-  }
+  ensure_packages($packages)
 }
