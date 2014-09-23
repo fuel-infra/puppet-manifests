@@ -7,7 +7,4 @@ class venv {
     options      => '--system-site-packages',
     user         => 'jenkins',
   }
-
-  Class['dpkg'] ->
-    Venv::Venv['venv-nailgun-tests']
 }

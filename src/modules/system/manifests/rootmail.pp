@@ -29,8 +29,7 @@ class system::rootmail (
     logoutput => on_failure,
   }
 
-  Class['dpkg']->
-    Package[$packages]->
+  Package[$packages]->
     File[$aliases]->
     Exec[$newaliases]
 }

@@ -54,8 +54,7 @@ class transmission_daemon {
     logoutput   => on_failure,
   }
 
-  Class['dpkg'] ->
-    Package[$packages] ->
+  Package[$packages] ->
     File["${config}-new"] ->
     File[$download_dir] ~>
     Exec["${service}-reload"]

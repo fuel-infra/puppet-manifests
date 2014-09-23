@@ -102,8 +102,7 @@ class system_tests {
     }
   }
 
-  Class['dpkg']->
-    Package[$packages]->
+  Package[$packages]->
     Venv::Venv['venv-nailgun-tests']->
     Exec['workspace-create']
 }

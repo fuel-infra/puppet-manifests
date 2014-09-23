@@ -8,7 +8,6 @@ class jenkins::slave {
   if ! defined(Package['openjdk-7-jre-headless']) {
     package { 'openjdk-7-jre-headless' :
       ensure  => present,
-      require => Class['dpkg'],
     }
   }
 

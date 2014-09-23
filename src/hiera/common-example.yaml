@@ -184,6 +184,48 @@ zabbix:
   server: 'zabbix.test.local'
 
 
+apt::sources:
+  mirror:
+    location: 'http://archive.ubuntu.com/ubuntu/'
+    release: "%{::lsbdistcodename}"
+    key: 'C0B21F32'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main restricted universe multiverse'
+    include_src: false
+    include_deb: true
+  mirror_updates:
+    location: 'http://archive.ubuntu.com/ubuntu/'
+    release: "%{::lsbdistcodename}-updates"
+    key: 'C0B21F32'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main restricted universe multiverse'
+    include_src: false
+    include_deb: true
+  devops:
+    location: 'http://fuel-repository.mirantis.com/devops/ubuntu/'
+    release: '/'
+    key: 'C1EC35C7D5A05778'
+    key_server: 'keyserver.ubuntu.com'
+    repos: ''
+    include_src: false
+    include_deb: true
+  docker:
+    location: 'https://get.docker.io/ubuntu'
+    release: 'docker'
+    key: 'A88D21E9'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main'
+    include_src: false
+    include_deb: true
+  jenkins:
+    location: 'http://pkg.jenkins-ci.org/debian-stable/'
+    release: 'binary/'
+    key: 'D50582E6'
+    key_server: 'keyserver.ubuntu.com'
+    repos: ''
+    include_src: false
+    include_deb: true
+
 fuel_project::seed::firewall_allow_sources:
   '1000 - allow seed connections from 10.0.0.0/8':
     source: '10.0.0.0/8'

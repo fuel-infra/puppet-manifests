@@ -3,13 +3,9 @@
 class build_fuel_iso (
   $external_host = false,
 ) {
-  include dpkg
-  include virtual::repos
   include build_fuel_iso::params
 
   $packages = $build_fuel_iso::params::packages
-
-  realize Virtual::Repos::Repository['docker']
 
   ensure_packages($packages)
 
@@ -51,8 +47,7 @@ class build_fuel_iso (
     }
   }
 
-  Class['dpkg']->
-    Package[$packages]->
+  Package[$packages]->
     Exec['install-grunt-cli']->
     File['jenkins-sudo-for-build_iso']
 }

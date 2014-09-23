@@ -1,8 +1,6 @@
 # Class: jenkins::swarm_slave
 #
 class jenkins::swarm_slave {
-  include dpkg
-
   include jenkins::params
   include virtual::users
 
@@ -18,7 +16,6 @@ class jenkins::swarm_slave {
 
   package { $packages :
     ensure  => 'present',
-    require => Class['dpkg'],
   }
 
   if ! defined(User['jenkins']) {

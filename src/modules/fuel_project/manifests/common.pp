@@ -15,7 +15,6 @@ class fuel_project::common (
   $puppet = hiera_hash('puppet')
   $zabbix = hiera_hash('zabbix')
 
-  class { '::dpkg' :}
   class { '::ntp' :}
   class { '::puppet::agent' :}
   class { '::ssh::authorized_keys' :}
@@ -51,5 +50,14 @@ class fuel_project::common (
 
   if($ldap) {
     class { '::ssh::ldap' :}
+  }
+
+  class { '::apt' :
+    always_apt_update    => true,
+    disable_keys         => false,
+    purge_sources_list   => true,
+    purge_sources_list_d => true,
+    purge_preferences_d  => true,
+    update_timeout       => 300,
   }
 }
