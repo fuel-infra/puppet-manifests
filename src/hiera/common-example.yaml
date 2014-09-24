@@ -133,16 +133,6 @@ osci_jenkins:
   jjb_username: 'jjb_user'
   jjb_password:	'jjb_pass'
 
-jenkins:
-  swarm_server: 'http://jenkins-master.test.local/'
-  swarm_user: 'jenkins-robotson'
-  swarm_password: 'BTRfeHyibQlM2M'
-  swarm_labels: 'swarm 14_04'
-  ssh_keys:
-    'jenkins@mytestserver':
-      type: ssh-rsa
-      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCwjGe9ZfzdgeEkQQiGBDhOpgMEMJm6bfsJwKTXNTDtHDuMZJzWzHLm/64/71ht4pPnKsivQZzBLMTChdkOfqX4kQtl1CX3bo8lukV+3hv2y42HTwOKM1Ay9Tj+cQ5JqWOIT3lINJQ1maNeNH3khXLYq6T60w8k4wo+rezsTX1bkzg3OSThSASBsSfGgLG184LE7aj+24EJl4M6wQueRamXCmVsB+RyDSBFKJOeqqZwlOiWrgHnGv5qxfrGcc+6UCStI9L5JK8IFuK8z0oA8paEOzYgSz7MemmYUJu5r80DJ+7N5chMfg0cCSioNhtgSIjAziIEl26jNt+t3r/zQ04x'
-
 ldap:
   uri: 'ldap://ldap'
   base: 'dc=company,dc=net'
@@ -240,6 +230,15 @@ fuel_project::mirror::sync_hosts_allow:
   - 192.168.1.1/24
 fuel_project::mirror::service_fqdn: 'mirror.test.local'
 fuel_project::seed::service_fqdn: 'seed.test.local'
+
+jenkins::slave::authorized_keys:
+  'jenkins@mytestserver':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCwjGe9ZfzdgeEkQQiGBDhOpgMEMJm6bfsJwKTXNTDtHDuMZJzWzHLm/64/71ht4pPnKsivQZzBLMTChdkOfqX4kQtl1CX3bo8lukV+3hv2y42HTwOKM1Ay9Tj+cQ5JqWOIT3lINJQ1maNeNH3khXLYq6T60w8k4wo+rezsTX1bkzg3OSThSASBsSfGgLG184LE7aj+24EJl4M6wQueRamXCmVsB+RyDSBFKJOeqqZwlOiWrgHnGv5qxfrGcc+6UCStI9L5JK8IFuK8z0oA8paEOzYgSz7MemmYUJu5r80DJ+7N5chMfg0cCSioNhtgSIjAziIEl26jNt+t3r/zQ04x'
+jenkins::swarm_slave::master: 'http://jenkins-master.test.local/'
+jenkins::swarm_slave::user: 'jenkins-robotson'
+jenkins::swarm_slave::password: 'BTRfeHyibQlM2M'
+jenkins::swarm_slave::labels: 'swarm 14_04'
 
 mysql::server::root_password: 'peNTZ7GA2Zr90y'
 mysql::server::package_name: 'percona-server-server'

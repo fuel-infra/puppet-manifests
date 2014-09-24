@@ -1,17 +1,12 @@
 # Class: jenkins::slave
 #
-class jenkins::slave {
-  include virtual::users
+class jenkins::slave (
+  $java_package = $::jenkins::params::slave_java_package,
+  $authorized_keys = $::jenkins::params::slave_authorized_keys,
+) inherits ::jenkins::params {
+  ensure_packages([$java_package])
 
-  $jenkins = hiera_hash('jenkins')
-
-  if ! defined(Package['openjdk-7-jre-headless']) {
-    package { 'openjdk-7-jre-headless' :
-      ensure  => present,
-    }
-  }
-
-  if ! defined(User['jenkins']) {
+  if (!defined(User['jenkins'])) {
     user { 'jenkins' :
       ensure     => 'present',
       name       => 'jenkins',
@@ -24,17 +19,12 @@ class jenkins::slave {
     }
   }
 
-  exec { 'ssh_review.openstack.org' :
-    command   =>
-      'ssh -o StrictHostKeyChecking=no -p 29418 review.openstack.org ; exit 0',
-    user      => 'jenkins',
-    logoutput => 'on_failure',
-    require   => Ssh_authorized_key[keys($jenkins['ssh_keys'])]
-  }
-
-  create_resources(ssh_authorized_key, $jenkins['ssh_keys'], {
-    ensure  => present,
+  create_resources(ssh_authorized_key, $authorized_keys, {
+    ensure  => 'present',
     user    => 'jenkins',
-    require => [ User['jenkins'], Package['openjdk-7-jre-headless'] ]
+    require => [
+      User['jenkins'],
+      Package[$java_package],
+    ],
   })
 }

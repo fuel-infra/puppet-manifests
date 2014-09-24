@@ -1,24 +1,12 @@
 # == Class: jenkins::job_builder
 #
 class jenkins::job_builder (
-  $url = '',
-  $username = '',
-  $password = '',
-) {
-
-  # A lot of things need yaml, be conservative requiring this package to avoid
-  # conflicts with other modules.
-  if ! defined(Package['python-yaml']) {
-    package { 'python-yaml':
-      ensure => present,
-    }
-  }
-
-  if ! defined(Package['python-jenkins']) {
-    package { 'python-jenkins':
-      ensure => present,
-    }
-  }
+  $url = $::jenkins::params::job_builder_url,
+  $username = $::jenkins::params::job_builder_username,
+  $password = $::jenkins::params::job_builder_password,
+  $packages = $::jenkins::params::job_builder_packages,
+) inherits ::jenkins::params {
+  ensure_packages($packages)
 
   file { '/etc/jenkins_jobs':
     ensure => directory,

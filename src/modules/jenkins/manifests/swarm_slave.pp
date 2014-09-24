@@ -1,24 +1,16 @@
 # Class: jenkins::swarm_slave
 #
-class jenkins::swarm_slave {
-  include jenkins::params
-  include virtual::users
+class jenkins::swarm_slave (
+  $labels = $::jenkins::params::swarm_labels,
+  $master = $::jenkins::params::swarm_master,
+  $package = $::jenkins::params::swarm_package,
+  $password = $::jenkins::params::swarm_password,
+  $service = $::jenkins::params::swarm_service,
+  $user = $::jenkins::params::swarm_user,
+) inherits ::jenkins::params{
+  ensure_packages([$package])
 
-  $packages = $jenkins::params::swarm_packages
-  $service = $jenkins::params::service
-
-  $jenkins = hiera_hash('jenkins')
-
-  $jenkins_master = $jenkins['swarm_server']
-  $jenkins_user = $jenkins['swarm_user']
-  $jenkins_password = $jenkins['swarm_password']
-  $labels = $jenkins['swarm_labels']
-
-  package { $packages :
-    ensure  => 'present',
-  }
-
-  if ! defined(User['jenkins']) {
+  if (!defined(User['jenkins'])) {
     user { 'jenkins' :
       ensure     => 'present',
       name       => 'jenkins',
@@ -38,7 +30,7 @@ class jenkins::swarm_slave {
     mode    => '0600',
     content => template('jenkins/swarm_slave.conf.erb'),
     require => [
-      Package[$packages],
+      Package[$package],
       User['jenkins']
     ]
   }~>
