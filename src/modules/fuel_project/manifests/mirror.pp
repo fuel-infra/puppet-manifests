@@ -24,6 +24,7 @@ class fuel_project::mirror (
     ensure  => 'directory',
     owner   => 'www-data',
     group   => 'www-data',
+    mode    => '0755',
     require => Class['nginx'],
   }
 
@@ -53,6 +54,8 @@ class fuel_project::mirror (
     gid             => 'www-data',
     hosts_allow     => $sync_hosts_allow,
     hosts_deny      => ['*'],
+    incoming_chmod  => '0755',
+    outgoing_chmod  => '0644',
     list            => 'yes',
     lock_file       => '/var/run/rsync_mirror_sync.lock',
     max_connections => 100,
