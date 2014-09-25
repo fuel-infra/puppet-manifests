@@ -1,13 +1,18 @@
 # Class: jenkins::params
 #
 class jenkins::params {
-  $slave_packages = [
-    'openjdk-7-jre-headless'
+  $job_builder_packages = [
+    'python-jenkins',
+    'python-yaml',
   ]
 
-  $swarm_packages = [
-    'jenkins-swarm-slave'
-  ]
+  $slave_authorized_keys = {}
+  $slave_java_package = 'openjdk-7-jre-headless'
 
-  $service = 'jenkins-swarm-slave'
+  $swarm_labels = ''
+  $swarm_master = ''
+  $swarm_user = ''
+  $swarm_password = ''
+  $swarm_package = 'jenkins-swarm-slave'
+  $swarm_service = 'jenkins-swarm-slave'
 }

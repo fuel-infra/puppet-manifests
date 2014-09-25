@@ -1,4 +1,4 @@
-# Class: fuel_project::jenkins_slave
+# Class: fuel_project::jenkins::slave
 #
 class fuel_project::jenkins::slave (
   $external_host         = false,
@@ -36,9 +36,16 @@ class fuel_project::jenkins::slave (
   include transmission_daemon
 
   if $external_host == true {
-    include ::jenkins::slave
+    class { '::jenkins::slave' :}
+
+    ssh::known_host { 'review.openstack.org-known-hosts' :
+      host    => 'review.openstack.org',
+      port    => 29418,
+      user    => 'jenkins',
+      require => Class['::jenkins::slave'],
+    }
   } else {
-    include ::jenkins::swarm_slave
+    class { '::jenkins::swarm_slave' :}
   }
 
   # Run system tests
