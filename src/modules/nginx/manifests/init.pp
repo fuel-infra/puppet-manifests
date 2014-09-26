@@ -55,9 +55,8 @@ class nginx (
   }~>
   Service['nginx']
 
-  class { 'zabbix::item' :
-    name     => 'nginx',
-    template => 'nginx/zabbix_items.conf.erb',
+  zabbix::item { 'nginx' :
+    content => 'puppet:///modules/nginx/zabbix_items.conf.erb',
   }
 
   file { '/var/lib/nginx/cache' :

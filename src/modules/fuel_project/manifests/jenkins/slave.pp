@@ -80,6 +80,7 @@ class fuel_project::jenkins::slave (
       # dependencies
       'libevent-dev',
       'python-anyjson',
+      'python-cinderclient',
       'python-glanceclient',
       'python-ipaddr',
       'python-keystoneclient',

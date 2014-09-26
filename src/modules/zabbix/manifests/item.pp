@@ -1,26 +1,21 @@
-# Class: zabbix::item
+# Define: zabbix::item
 #
-class zabbix::item (
-  $name = '',
+define zabbix::item (
   $items = [],
-  $raw_content = false,
-  $template = false
+  $raw_content = '',
+  $content = false,
 ) {
   include zabbix::agent::service
   include zabbix::params
 
   $service = $::zabbix::params::agent_service
 
-  if $name {
-    file { "/etc/zabbix/zabbix_agentd.conf.d/${name}.conf" :
+  if $title {
+    file { "/etc/zabbix/zabbix_agentd.conf.d/${title}.conf" :
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template(
-        $template ? {
-          false   => 'zabbix/item.erb',
-          default => $template
-        }),
+      source  => $content,
       require => Class['zabbix::agent'],
       notify  => Service[$service]
     }

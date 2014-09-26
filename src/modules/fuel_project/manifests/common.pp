@@ -60,4 +60,12 @@ class fuel_project::common (
     purge_preferences_d  => true,
     update_timeout       => 300,
   }
+
+  zabbix::item { 'sofware-zabbix-check' :
+    content => 'puppet:///modules/fuel_project/common/zabbix/software.conf',
+  }
+
+  zabbix::item { 'hardware-zabbix-check' :
+    content => 'puppet:///modules/fuel_project/common/zabbix/hardware.conf',
+  }
 }
