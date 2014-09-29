@@ -13,9 +13,9 @@ class fuel_project::puppet::master (
   $hiera_merge_behavior = 'deeper',
   $hiera_yaml_datadir = '/var/lib/hiera',
   $puppet_config = '/etc/puppet/puppet.conf',
-  $puppet_config_template = 'puppet/puppet.conf.erb',
   $puppet_environment = 'production',
   $puppet_server = $::fqdn,
+  $puppet_master_run_with = 'nginx+uwsgi',
 ) {
   class { '::fuel_project::common' :
     external_host => $external_host,
@@ -31,9 +31,9 @@ class fuel_project::puppet::master (
     hiera_logger           => $hiera_logger,
     hiera_merge_behavior   => $hiera_merge_behavior,
     hiera_yaml_datadir     => $hiera_yaml_datadir,
-    puppet_config          => $puppet_config,
-    puppet_config_template => $puppet_config_template,
-    puppet_environment     => $puppet_environment,
-    puppet_server          => $puppet_server,
+    config                 => $puppet_config,
+    environment            => $puppet_environment,
+    server                 => $puppet_server,
+    puppet_master_run_with => $puppet_master_run_with
   }
 }

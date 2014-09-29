@@ -241,8 +241,10 @@ jenkins::swarm_slave::labels: 'swarm 14_04'
 mysql::server::root_password: 'peNTZ7GA2Zr90y'
 mysql::server::package_name: 'percona-server-server'
 
-puppet::agent::puppet_server: 'pxetool.test.local'
-puppet::server::firewall_allow_sources:
+puppet::agent::server: 'pxetool.test.local'
+puppet::agent::parser: 'future'
+puppet::master::autosign: true
+puppet::master::firewall_allow_sources:
   '100 - ssh connections from 10.108.0.0/16':
     source: '10.108.0.0/16'
 

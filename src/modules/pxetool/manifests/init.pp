@@ -72,6 +72,15 @@ class pxetool (
     require => File[$nginx_conf],
   }
 
+  uwsgi::application { 'pxetool' :
+    plugins => 'python',
+    uid     => 'www-data',
+    gid     => 'www-data',
+    socket  => '127.0.0.1:7931',
+    chdir   => '/usr/share/pxetool/webapp/pxetool',
+    module  => 'pxetool.wsgi',
+  }
+
   if ($apply_firewall_rules) {
     include firewall_defaults::pre
     create_resources(firewall, $firewall_allow_sources, {

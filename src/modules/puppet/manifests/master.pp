@@ -1,65 +1,117 @@
 # Class: puppet::master
 #
 class puppet::master (
-  $apply_firewall_rules = false,
-  $firewall_allow_sources = [],
-  $hiera_backends = ['yaml'],
-  $hiera_config = '/etc/hiera.yaml',
-  $hiera_config_template = 'puppet/hiera.yaml.erb',
-  $hiera_hierarchy = ['common'],
-  $hiera_json_datadir = '/var/lib/hiera',
-  $hiera_logger = 'console',
-  $hiera_merge_behavior = 'deep',
-  $hiera_yaml_datadir = '/var/lib/hiera',
-  $puppet_config = '/etc/puppet/puppet.conf',
-  $puppet_config_template = 'puppet/puppet.conf.erb',
-  $puppet_environment = 'production',
-  $puppet_master_package = 'puppetmaster',
-  $puppet_master_service = 'puppetmaster',
-  $puppet_server = '',
-) {
-  if (!defined(File[$puppet_config])) {
-    file { $puppet_config :
-      ensure  => 'present',
-      mode    => '0644',
-      owner   => 'puppet',
-      group   => 'puppet',
-      content => template(
-        'puppet/puppet.conf.erb', 'puppet/puppet-master.conf.erb'),
-    }
-  } else {
-    File <| title == $puppet_config |> {
-      ensure  => 'present',
-      mode    => '0644',
-      owner   => 'puppet',
-      group   => 'puppet',
-      content => template(
-        'puppet/puppet.conf.erb', 'puppet/puppet-master.conf.erb'),
-    }
+  $apply_firewall_rules = $::puppet::params::apply_firewall_rules,
+  $firewall_allow_sources = $::puppet::params::firewall_allow_sources,
+  $hiera_backends = $::puppet::params::hiera_backends,
+  $hiera_config = $::puppet::params::hiera_config,
+  $hiera_config_template = $::puppet::params::hiera_config_template,
+  $hiera_hierarchy = $::puppet::params::hiera_hierarchy,
+  $hiera_json_datadir = $::puppet::params::hiera_json_datadir,
+  $hiera_logger = $::puppet::params::hiera_logger,
+  $hiera_merge_behavior = $::puppet::params::hiera_merge_behavior,
+  $hiera_yaml_datadir = $::puppet::params::hiera_yaml_datadir,
+  $autosign = $::puppet::params::autosign,
+  $config = $::puppet::params::config,
+  $config_template = $::puppet::params::master_config_template,
+  $environment = $::puppet::params::environment,
+  $package = $::puppet::params::master_package,
+  $service = $::puppet::params::master_service,
+  $server = '',
+  $puppet_master_run_with = 'webrick', # or nginx+uwsgi
+) inherits ::puppet::params {
+  puppet::config { 'master-config' :
+    hiera_backends        => $hiera_backends,
+    hiera_config          => $hiera_config,
+    hiera_config_template => $hiera_config_template,
+    hiera_hierarchy       => $hiera_hierarchy,
+    hiera_json_datadir    => $hiera_json_datadir,
+    hiera_logger          => $hiera_logger,
+    hiera_merge_behavior  => $hiera_merge_behavior,
+    hiera_yaml_datadir    => $hiera_yaml_datadir,
+    config                => $config,
+    config_template       => $config_template,
+    environment           => $environment,
   }
 
-  if (!defined(Package[$puppet_master_package])) {
-    package { $puppet_master_package :
+  if (!defined(Package[$package])) {
+    package { $package :
       ensure => 'present',
     }
   }
 
-  if ($hiera_merge_behaviour == 'deeper') {
+  if ($hiera_merge_behavior == 'deeper') {
     package { 'deep_merge' :
       ensure   => 'present',
       provider => 'gem',
     }
   }
 
-  service { $puppet_master_service :
-    ensure     => running,
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => false,
-    require    => [
-      Package[$puppet_master_package],
-      File[$puppet_config]
-    ]
+  if ($puppet_master_run_with == 'webrick') {
+    service { $service :
+      ensure     => 'running',
+      enable     => true,
+      hasstatus  => true,
+      hasrestart => false,
+      require    => [
+        Package[$package],
+        File[$puppet_config]
+      ]
+    }
+  }
+  elsif ($puppet_master_run_with == 'nginx+uwsgi') {
+    service { $service :
+      ensure => 'stopped',
+      enable => false,
+    }
+    if (!defined(Class['uwsgi'])) {
+      class { 'uwsgi' :}
+    }
+
+    if (!defined(Class['nginx'])) {
+      class { 'nginx' :}
+    }
+
+    file { '/etc/puppet/rack' :
+      ensure => 'directory',
+    }
+
+    file { '/etc/puppet/rack/config.ru' :
+      ensure  => 'present',
+      owner   => 'puppet',
+      group   => 'puppet',
+      mode    => '0644',
+      content => template('puppet/config.ru.erb'),
+      require => File['/etc/puppet/rack'],
+    }
+
+    uwsgi::application { 'puppetmaster' :
+      plugins => 'rack',
+      rack    => '/etc/puppet/rack/config.ru',
+      chdir   => '/etc/puppet/rack',
+      env     => 'HOME=/var/lib/puppet',
+      uid     => 'puppet',
+      gid     => 'puppet',
+      socket  => '127.0.0.1:8141',
+    }
+
+    file { '/etc/nginx/sites-available/puppetmaster.conf' :
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('puppet/nginx.conf.erb'),
+      require => Class['nginx'],
+    }
+
+    file { '/etc/nginx/sites-enabled/puppetmaster.conf' :
+      ensure  => 'link',
+      target  => '/etc/nginx/sites-available/puppetmaster.conf',
+      require => File['/etc/nginx/sites-available/puppetmaster.conf']
+    }~>
+    Service['nginx']
+  } else {
+    fail "Unknown value for puppet_master_run_with parameter: ${puppet_master_run_with}"
   }
 
   file { $hiera_config :
@@ -68,7 +120,7 @@ class puppet::master (
     group   => 'puppet',
     mode    => '0400',
     content => template($hiera_config_template),
-    require => Package[$puppet_master_package]
+    require => Package[$package]
   }
 
   if $apply_firewall_rules {
