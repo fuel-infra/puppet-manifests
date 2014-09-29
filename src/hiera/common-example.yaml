@@ -229,6 +229,8 @@ fuel_project::mirror::sync_hosts_allow:
   - 10.108.0.0/16
   - 192.168.1.1/24
 fuel_project::mirror::service_fqdn: 'mirror.test.local'
+fuel_project::mirror::service_aliases:
+  - repo.test.local
 fuel_project::seed::service_fqdn: 'seed.test.local'
 
 jenkins::slave::authorized_keys:

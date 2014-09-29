@@ -1,5 +1,5 @@
 server {
-        server_name <%= @service_fqdn %> mirror.<%= @fqdn %>;
+        server_name <%= @service_fqdn %> mirror.<%= @fqdn %> <%= @service_aliases.join(' ') %>;
         listen <%= @port %>;
 
         access_log /var/log/nginx/mirror.access.log proxy;

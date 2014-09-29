@@ -7,6 +7,7 @@ class fuel_project::mirror (
   $firewall_allow_sources = {},
   $port = 80,
   $service_fqdn = "mirror.${::fqdn}",
+  $service_aliases = [],
   $sync_hosts_allow = [],
 ) {
   if (!defined(Class['::nginx'])) {
