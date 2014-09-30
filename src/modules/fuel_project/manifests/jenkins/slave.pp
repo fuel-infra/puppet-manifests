@@ -199,21 +199,34 @@ class fuel_project::jenkins::slave (
 
     ensure_packages($build_fuel_iso_packages)
 
-    if ! defined(Package['multistrap']) {
+    if (!defined(Package['multistrap'])) {
       package { 'multistrap' :
         ensure => '2.1.6ubuntu3'
       }
     }
-
-    # Meta(pinnings, holds, etc.)
-    # apt::hold supported in puppetlabs-apt >= 1.5:
-    # apt::hold { 'multistrap': version => '2.1.6ubuntu3' }
     apt::pin { 'multistrap' :
       packages => 'multistrap',
       version  => '2.1.6ubuntu3',
       priority => 1000,
     }
-    # /Meta(pinnings, holds, etc.)
+
+    # LP: https://bugs.launchpad.net/ubuntu/+source/libxml2/+bug/1375637
+    if (!defined(Package['libxml2'])) {
+      package { 'libxml2' :
+        ensure => '2.9.1+dfsg1-ubuntu1',
+      }
+    }
+    if (!defined(Package['python-libxml2'])) {
+      package { 'python-libxml2' :
+        ensure => '2.9.1+dfsg1-ubuntu1',
+      }
+    }
+    apt::pin { 'libxml2' :
+      packages => 'libxml2 python-libxml2',
+      version  => '2.9.1+dfsg1-ubuntu1',
+      priority => 1000,
+    }
+    # /LP
 
     exec { 'install-grunt-cli' :
       command   => '/usr/bin/npm install -g grunt-cli',
