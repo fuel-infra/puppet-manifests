@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -x
+
+apt-get update
+apt-get upgrade -y
+apt-get install -y puppet
+
+mkdir -p /var/log/puppet
+touch /var/log/puppet/firstboot.log
+chown root:root /var/log/puppet/firstboot.log
+chmod 400 /var/log/puppet/firstboot.log
+
+(
+    puppet agent --enable
+    PUPPET_CMD='puppet agent -tvd'
+    $PUPPET_CMD --server __PUPPET_MASTER__ --waitforcert 30
+    $PUPPET_CMD --server __PUPPET_MASTER__
+    $PUPPET_CMD --server __PUPPET_MASTER__
+    $PUPPET_CMD
+
+    LASTPUPPET_EXC="$?"
+    if [[ "${LASTPUPPET_EXC}" == "2" ]]
+    then
+        touch /etc/puppet/install_ok
+    else
+        touch /etc/puppet/install_fail
+    fi
+) 2>&1 | tee /var/log/puppet/firstboot.log
