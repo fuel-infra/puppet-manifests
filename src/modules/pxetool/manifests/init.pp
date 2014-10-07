@@ -27,6 +27,7 @@ class pxetool (
   exec { 'pxetool-syncdb' :
     command => '/usr/share/pxetool/webapp/pxetool/manage.py syncdb --noinput',
     user    => 'www-data',
+    require => Package[$package],
   }
 
   # running migrations
