@@ -75,7 +75,7 @@ class devops (
     }
 
     cron { 'devops-env-cleanup' :
-      command => '/usr/local/bin/devops-env-cleanup.sh | logger -t devops-env-cleanup',
+      command => '/usr/local/bin/devops-env-cleanup.sh 2>&1 | logger -t devops-env-cleanup',
       user    => root,
       hour    => 16, # 16:00 UTC
       minute  => 0,
