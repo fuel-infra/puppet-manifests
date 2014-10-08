@@ -33,19 +33,32 @@ class zabbix::agent (
   }
 
   file { '/etc/zabbix/zabbix_agentd.conf' :
+    ensure  => 'present',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template('zabbix/zabbix_agentd.conf.erb'),
+    content => template('zabbix/agent/zabbix_agentd.conf.erb'),
     require => Package[$package],
   }->
   file { '/etc/sudoers.d/zabbix' :
+    ensure  => 'present',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
     content => template('zabbix/sudoers.erb')
   }~>
   Service[$service]
+
+  if ($::osfamily == 'Debian') {
+    file { '/etc/logrotate.d/zabbix-agent' :
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => 'zabbix/agent/logrotate.erb',
+      require => Package[$package],
+    }
+  }
 
   if ($apply_firewall_rules) {
     include firewall_defaults::pre
