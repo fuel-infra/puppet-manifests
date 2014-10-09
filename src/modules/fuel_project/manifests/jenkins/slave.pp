@@ -137,12 +137,17 @@ class fuel_project::jenkins::slave (
       content => template('fuel_project/jenkins/slave/system_tests.sudoers.d.erb'),
     }
 
+    $storage_dirs = [
+      '/var/www/fuelweb-iso',
+      '/srv/downloads'
+    ]
+
     file { '/usr/local/bin/seed-downloads-cleanup.sh' :
       ensure  => 'present',
       owner   => 'root',
       group   => 'root',
       mode    => '0755',
-      source  => 'puppet:///modules/fuel_project/bin/seed-downloads-cleanup.sh',
+      content => template('fuel_project/common/seed-downloads-cleanup.sh.erb'),
       require => Package['python-seed-cleaner'],
     }
 
