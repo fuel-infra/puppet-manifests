@@ -12,9 +12,6 @@ class fuel_project::common (
   $bind_policy       = '',
   $ldap_ignore_users = '',
 ) {
-  $puppet = hiera_hash('puppet')
-  $zabbix = hiera_hash('zabbix')
-
   class { '::ntp' :}
   class { '::puppet::agent' :}
   class { '::ssh::authorized_keys' :}
@@ -23,17 +20,8 @@ class fuel_project::common (
   }
   include ::system
 
-  if $external_host {
-    class { '::zabbix::agent' :
-      zabbix_server        => $zabbix['server_external'],
-      server_active        => false,
-      apply_firewall_rules => true,
-    }
-  } else {
-    class { '::zabbix::agent' :
-      zabbix_server => $zabbix['server'],
-      server_active => $zabbix['server'],
-    }
+  class { '::zabbix::agent' :
+    apply_firewall_rules => $external_host,
   }
 
   if (!defined(Package['tmux'])) {
