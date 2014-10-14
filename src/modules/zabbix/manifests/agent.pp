@@ -55,7 +55,7 @@ class zabbix::agent (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => 'zabbix/agent/logrotate.erb',
+      content => template('zabbix/agent/logrotate.erb'),
       require => Package[$package],
     }
   }
