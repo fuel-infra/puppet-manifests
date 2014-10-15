@@ -80,29 +80,8 @@ class zabbix::server (
     }
   }
 
-  class { '::mysql::server':
-    package_name     => $mysql_package,
-    root_password    => $mysql_root_password,
-    override_options => {
-      'mysqld' => {
-        'innodb_buffer_pool_size'       => $innodb_buffer_pool_size,
-        'innodb_file_per_table'         => $innodb_file_per_table,
-        'innodb_flush_method'           => 'O_DIRECT',
-        'join_buffer_size'              => '256M',
-        'lock_wait_timeout'             => 120,
-        'log_queries_not_using_indexes' => 1,
-        'max_connections'               => $max_connections,
-        'query_cache_size'              => '64M',
-        'query_cache_type'              => 1,
-        'read_rnd_buffer_size'          => '4M',
-        'slow_query_log'                => 1,
-        'slow_query_log_file'           => '/var/log/mysql/slow.log',
-        'sort_buffer_size'              => '4M',
-        'table_open_cache'              => '256M',
-        'thread_cache_size'             => '4M',
-      },
-    },
-    users            => {
+  class { '::mysql::server' :
+    users     => {
       'zabbix@localhost' => {
         password_hash => mysql_password($db_password),
       },
@@ -110,12 +89,12 @@ class zabbix::server (
         password_hash => mysql_password($db_password),
       }
     },
-    databases        => {
+    databases => {
       'zabbix' => {
         charset => 'utf8',
       }
     },
-    grants           => {
+    grants    => {
       'zabbix@localhost/zabbix.*' => {
         options    => ['GRANT'],
         privileges => ['ALTER', 'CREATE', 'INDEX', 'SELECT', 'INSERT', 'UPDATE', 'DELETE'],
@@ -168,12 +147,24 @@ class zabbix::server (
     group   => 'zabbix',
     mode    => '0400',
     content => template('zabbix/server/zabbix_server.conf.erb'),
-    require => Package[$package]
-  }~>
+    require => Package[$package],
+    notify  => Service[$service],
+  }
+
   service { $service :
     ensure     => 'running',
     enable     => true,
-    hasstatus  => false,
-    hasrestart => false,
+    hasstatus  => true,
+    hasrestart => true,
+    require    => [
+      Package[$package],
+      File[$config],
+    ]
+  }
+
+  if ($::osfamily == 'Debian') {
+    Service[$service] {
+      provider => 'debian'
+    }
   }
 }

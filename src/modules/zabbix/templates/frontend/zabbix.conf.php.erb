@@ -2,7 +2,7 @@
 // Zabbix GUI configuration file
 global $DB;
 
-$DB['TYPE']     = '<%= @db_driver %>';
+$DB['TYPE']     = '<%= @db_driver.upcase %>';
 $DB['SERVER']   = '<%= @db_host %>';
 $DB['PORT']     = '<%= @db_port %>';
 $DB['DATABASE'] = '<%= @db_name %>';
