@@ -6,9 +6,15 @@ class zabbix::agent::service {
   $service = $zabbix::params::agent_service
 
   service { $service :
-    ensure     => running,
+    ensure     => 'running',
     enable     => true,
     hasstatus  => true,
-    hasrestart => false,
+    hasrestart => true,
+  }
+
+  if ($::osfamily == 'Debian') {
+    Service[$service] {
+      provider => 'debian'
+    }
   }
 }

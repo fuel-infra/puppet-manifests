@@ -18,6 +18,7 @@ class fuel_project::jenkins::slave (
   $sudoers_base          = '',
   $bind_policy           = '',
   $ldap_ignore_users     = '',
+  $keep_iso_for_days     = 10,
 ) {
   class { '::fuel_project::common' :
     external_host     => $external_host,
@@ -142,6 +143,7 @@ class fuel_project::jenkins::slave (
       '/srv/downloads'
     ]
 
+    $mtime = $keep_iso_for_days
     file { '/usr/local/bin/seed-downloads-cleanup.sh' :
       ensure  => 'present',
       owner   => 'root',
