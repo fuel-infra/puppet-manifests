@@ -33,6 +33,10 @@ node /(mc([0-9]+)n([0-9]+)|srv([0-9]+))-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   }
 }
 
+node /jenkins-product-(kha|pl)\.(vm|poz)\.mirantis\.net/ {
+  class { '::fuel_project::jenkins::slave' :}
+}
+
 node 'ctorrent-msk.msk.mirantis.net' {
   class { '::fuel_project::common' :
     external_host => false,
@@ -116,7 +120,7 @@ node 'lab-cz.bud.mirantis.net' {
   }
 }
 
-node 'osci-gerrit.vm.mirantis.net' {
+node /osci-gerrit(2)?\.vm\.mirantis\.net/ {
   $external_host = true
   $dmz = true
 
