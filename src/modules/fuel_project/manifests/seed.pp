@@ -50,6 +50,8 @@ class fuel_project::seed (
     "${seed_dir}/fuelweb-iso",
   ]
 
+  ensure_packages('python-seed-cleaner')
+
   file { '/usr/local/bin/seed-downloads-cleanup.sh' :
     ensure  => 'present',
     owner   => 'root',
