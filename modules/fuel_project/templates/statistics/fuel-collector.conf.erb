@@ -1,0 +1,23 @@
+server {
+    server_name <%= @fqdn %>;
+    listen <%= @service_port %>;
+
+    access_log /var/log/nginx/collector.access.log proxy;
+    error_log /var/log/nginx/collector.error.log;
+
+    ssl                       on;
+    ssl_certificate           <%= @ssl_cert_file %>;
+    ssl_certificate_key       <%= @ssl_key_file %>;
+    ssl_ciphers               EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:EDH+aRSA:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS:!RC4;
+    ssl_prefer_server_ciphers on;
+    ssl_protocols             TLSv1 TLSv1.1 TLSv1.2;
+    ssl_session_cache         shared:SSL:10m;
+    ssl_session_timeout       10m;
+    ssl_stapling              on;
+    ssl_stapling_verify       on;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass 127.0.0.1:7932;
+    }
+}

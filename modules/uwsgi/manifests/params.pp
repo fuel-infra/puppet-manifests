@@ -18,6 +18,7 @@ class uwsgi::params {
   $somaxconn = 65535
 
   $buffer_size = 65535
+  $callable = undef
   $chdir = '/'
   $chmod = 644
   $enable_threads = true

@@ -2,6 +2,7 @@
 #
 define uwsgi::application (
   $buffer_size = $::uwsgi::params::buffer_size,
+  $callable = $::uwsgi::params::callable,
   $chdir = $::uwsgi::params::chdir,
   $chmod = $::uwsgi::params::chmod,
   $enable_threads = $::uwsgi::params::enable_threads,

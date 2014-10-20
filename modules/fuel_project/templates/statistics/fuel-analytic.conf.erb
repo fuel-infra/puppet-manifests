@@ -1,0 +1,54 @@
+server {
+    server_name <%= @fqdn %>;
+    listen <%= @service_port %>;
+
+    access_log /var/log/nginx/analytic.access.log proxy;
+    error_log /var/log/nginx/analytic.error.log;
+
+    ssl                       on;
+    ssl_certificate           <%= @ssl_cert_file %>;
+    ssl_certificate_key       <%= @ssl_key_file %>;
+    ssl_ciphers               EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:EDH+aRSA:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS:!RC4;
+    ssl_prefer_server_ciphers on;
+    ssl_protocols             TLSv1 TLSv1.1 TLSv1.2;
+    ssl_session_cache         shared:SSL:10m;
+    ssl_session_timeout       10m;
+    ssl_stapling              on;
+    ssl_stapling_verify       on;
+
+    location / {
+        <% if @commercial %><% @firewall_allow_sources.each {|ip| %>
+        <%= "allow #{ip[1]["source"]};" %>
+        <% } %>
+        deny all;
+        <% end %>
+        root /var/www/analytic/analytics/static;
+    }
+}
+
+server {
+  server_name <%= @fqdn %>;
+  listen 80;
+  rewrite ^ https://$server_name$request_uri? permanent;
+}
+
+server {
+    server_name <%= @fqdn %>;
+    listen 9200;
+
+    access_log /var/log/nginx/elastic.access.log proxy;
+    error_log /var/log/nginx/elastic.error.log;
+
+    location ~ ^/fuel/[A-Za-z_]/(_count|_search) {
+        <% if @commercial %><% @firewall_allow_sources.each {|ip| %>
+        <%= "allow #{ip[1]["source"]};" %>
+        <% } %>
+        deny all;
+        <% end %>
+        proxy_pass http://127.0.0.1:9201;
+    }
+
+    location / {
+        return   403;
+    }
+}

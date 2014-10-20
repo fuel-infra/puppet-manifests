@@ -9,6 +9,7 @@ class fuel_project::jenkins::slave (
   $verify_fuel_astute    = false,
   $verify_fuel_docs      = false,
   $build_fuel_plugins    = false,
+  $verify_fuel_stats     = false,
   $ldap                  = false,
   $fuelweb_iso           = false,
   $ldap_uri              = '',
@@ -286,6 +287,11 @@ class fuel_project::jenkins::slave (
   }
 
   # *** Custom tests ***
+
+  # anonymous statistics tests
+  if $verify_fuel_stats {
+    class { '::fuel_project::statistics::tests' : }
+  }
 
   # Web tests by verify-fuel-web, stackforge-verify-fuel-web
   if $verify_fuel_web {

@@ -80,6 +80,7 @@ node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
     verify_fuel_astute  => true,
     verify_fuel_docs    => true,
     build_fuel_plugins  => true,
+    verify_fuel_stats   => true,
   }
 }
 
@@ -193,6 +194,50 @@ node /tpi\d\d\.bud\.mirantis\.net/ {
 node 'tpi-puppet.vm.mirantis.net' {
   class { '::fuel_project::puppet::master' :}
 }
+
+# *** Anonymous Statistics servers ***
+node 'product-stats.mirantis.com' {
+  class {'::fuel_project::statistics::analytic':
+    development          => false,
+    commercial           => true,
+    apply_firewall_rules => true,
+  }
+}
+
+node 'collector.mirantis.com' {
+  class {'::fuel_project::statistics::collector':
+    development          => false,
+    apply_firewall_rules => true,
+  }
+}
+
+node 'stats.fuel-infra.org' {
+  class {'::fuel_project::statistics::analytic':
+    development          => false,
+    commercial           => false,
+    apply_firewall_rules => true,
+  }
+}
+
+node 'collector.fuel-infra.org' {
+  class {'::fuel_project::statistics::collector':
+    development          => false,
+    apply_firewall_rules => true,
+  }
+}
+
+node 'fuel-collect.vm.mirantis.net' {
+  class {'::fuel_project::statistics::collector':
+    development => true,
+  }
+}
+
+node 'fuel-stats.vm.mirantis.net' {
+  class {'::fuel_project::statistics::analytic':
+    development   => true,
+  }
+}
+
 
 # Test nodes definitions
 
@@ -309,6 +354,18 @@ node 'slave-08.test.local' {
 node 'slave-09.test.local' {
   class { '::fuel_project::lab_cz' :
     external_host => false,
+  }
+}
+
+node 'slave-10.test.local' {
+  class {'::fuel_project::statistics::collector':
+    development => true,
+  }
+}
+
+node 'slave-11.test.local' {
+  class {'::fuel_project::statistics::analytic':
+    development => true,
   }
 }
 

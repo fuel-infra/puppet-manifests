@@ -242,6 +242,14 @@ apt::sources:
     repos: ''
     include_src: false
     include_deb: true
+  elasticsearch:
+    location: 'http://packages.elasticsearch.org/elasticsearch/1.3/debian'
+    release: 'stable'
+    repos: 'main'
+    key: 'D88E42B4'
+    key_server: 'keyserver.ubuntu.com'
+    include_src: false
+    include_deb: true
 
 fuel_project::seed::firewall_allow_sources:
   '1000 - allow seed connections from 10.0.0.0/8':
