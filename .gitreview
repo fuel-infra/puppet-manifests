@@ -1,5 +1,5 @@
 [gerrit]
-host=gerrit.mirantis.com
+host=review.fuel-infra.org
 port=29418
-project=fuel-qa-team/config-puppet-manifests
+project=fuel-infra/puppet-manifests
 
