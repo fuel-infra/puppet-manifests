@@ -43,7 +43,7 @@ class puppet::agent (
     vardir              => $vardir,
   }
 
-  ensure_packages($package)
+  ensure_packages([$package])
 
   service { $service :
     ensure  => 'stopped',
