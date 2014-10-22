@@ -61,8 +61,8 @@ class pxetool (
     group   => 'root',
     content => template('pxetool/nginx.conf.erb'),
     require => Class['nginx'],
-  }~>
-  Service['nginx']
+    notify  => Service['nginx'],
+  }
 
   # /etc/nginx/sites-enabled/pxetool.conf
   # symlink to activate virtual host configuration for nginx
@@ -70,6 +70,7 @@ class pxetool (
     ensure  => 'link',
     target  => $nginx_conf,
     require => File[$nginx_conf],
+    notify  => Service['nginx'],
   }
 
   uwsgi::application { 'pxetool' :
