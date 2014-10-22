@@ -15,7 +15,6 @@ class jenkins::slave (
       managehome => true,
       system     => true,
       comment    => 'Jenkins',
-      groups     => 'www-data',
     }
   }
 

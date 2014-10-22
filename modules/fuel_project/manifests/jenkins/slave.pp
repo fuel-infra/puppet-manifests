@@ -245,6 +245,15 @@ class fuel_project::jenkins::slave (
     }
     # /LP
 
+    group { 'docker' :
+      ensure => 'present',
+    }
+
+    User <| title == 'jenkins' |> {
+      groups  => ['www-data', 'docker'],
+      require => Group['docker'],
+    }
+
     exec { 'install-grunt-cli' :
       command   => '/usr/bin/npm install -g grunt-cli',
       logoutput => on_failure,
