@@ -8,6 +8,7 @@ class fuel_project::jenkins::slave (
   $verify_fuel_web       = false,
   $verify_fuel_astute    = false,
   $verify_fuel_docs      = false,
+  $build_fuel_plugins    = false,
   $ldap                  = false,
   $fuelweb_iso           = false,
   $ldap_uri              = '',
@@ -393,4 +394,30 @@ class fuel_project::jenkins::slave (
       fuelweb_iso_create => true,
     }
   }
+
+  # Verify and Build fuel-plugins project
+  if ($build_fuel_plugins) {
+    $build_fuel_plugins_packages = [
+      'rpm',
+      'createrepo',
+      'dpkg-dev',
+      'libyaml-dev',
+      'python-dev',
+      'ruby-dev',
+      'gcc',
+      'python2.6',
+      'python2.6-dev',
+      'python-tox',
+      'python-virtualenv',
+    ]
+
+    ensure_packages($build_fuel_plugins_packages)
+
+    # we also need fpm gem
+    package { 'fpm' :
+      ensure   => 'present',
+      provider => 'gem',
+    }
+  }
+
 }

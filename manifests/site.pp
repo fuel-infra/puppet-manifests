@@ -218,8 +218,9 @@ node 'slave-02.test.local' {
 
 node 'slave-03.test.local' {
   class { '::fuel_project::jenkins::slave' :
-    run_tests => true,
-    ldap      => true,
+    run_tests          => true,
+    ldap               => true,
+    build_fuel_plugins => true,
   }
 }
 
