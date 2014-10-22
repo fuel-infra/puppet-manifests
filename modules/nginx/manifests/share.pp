@@ -20,31 +20,37 @@ class nginx::share(
     group   => 'root',
     content => template('nginx/share.conf.erb'),
     require => Class['nginx']
-  }->
+  }
+
   file { '/etc/nginx/sites-enabled/share.conf' :
-    ensure => 'link',
-    target => '/etc/nginx/sites-available/share.conf',
-  }->
-  file { '/var/www' :
-    ensure => 'directory',
-  }~>
-  Service['nginx']
+    ensure  => 'link',
+    target  => '/etc/nginx/sites-available/share.conf',
+    require => File['/etc/nginx/sites-available/share.conf']
+  }
+
+  ensure_resource ('file', '/var/www', {
+    ensure  => 'directory',
+    owner   => 'www-data',
+    group   => 'www-data',
+  })
 
   if($fuelweb_iso_create) {
     file { '/var/www/fuelweb-iso' :
-      ensure => 'directory',
-      owner  => 'www-data',
-      group  => 'www-data',
-      mode   => '0775',
+      ensure  => 'directory',
+      owner   => 'www-data',
+      group   => 'www-data',
+      mode    => '0775',
+      require => File['/var/www'],
     }
   }
 
   if($fwm_create) {
     file { '/var/www/fwm' :
-      ensure => 'directory',
-      owner  => 'www-data',
-      group  => 'www-data',
-      mode   => '0775',
+      ensure  => 'directory',
+      owner   => 'www-data',
+      group   => 'www-data',
+      mode    => '0775',
+      require => File['/var/www'],
     }
   }
 

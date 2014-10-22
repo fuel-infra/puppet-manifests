@@ -208,12 +208,19 @@ class fuel_project::jenkins::slave (
 
     ensure_packages($build_fuel_iso_packages)
 
+    ensure_resource('file', '/var/www', {
+      ensure  => 'directory',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+    })
+
     ensure_resource('file', '/var/www/fwm', {
       ensure  => 'directory',
       owner   => 'jenkins',
       group   => 'jenkins',
       mode    => '0755',
-      require => User['jenkins'],
+      require => [ User['jenkins'],  File['/var/www'] ],
     })
 
     if (!defined(Package['multistrap'])) {
