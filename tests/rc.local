@@ -12,6 +12,12 @@ chown root:root /var/log/puppet/firstboot.log
 chmod 400 /var/log/puppet/firstboot.log
 
 (
+    if ! [[ -f "/etc/firstboot_cleanup_flag" ]]
+    then
+        rm -rvf /etc/puppet/ssl /var/lib/puppet/ssl
+        touch /etc/firstboot_cleanup_flag
+    fi
+
     puppet agent --enable
     PUPPET_CMD='puppet agent -tvd'
     $PUPPET_CMD --server __PUPPET_MASTER__ --waitforcert 30

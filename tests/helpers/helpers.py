@@ -29,6 +29,9 @@ import xmlrpclib
 import paramiko
 
 
+class TimeoutError:
+    pass
+
 
 def icmp_ping(host, timeout=1):
     """Run ICMP ping
@@ -85,7 +88,6 @@ def wait(predicate, interval=5, timeout=60):
             0,
             min(interval, start_time + timeout - time.time()))
         time.sleep(seconds_to_sleep)
-
     return timeout + start_time - time.time()
 
 
@@ -98,5 +100,3 @@ def _wait(raising_predicate, expected=Exception, interval=5, timeout=None):
             if timeout and start_time + timeout < time.time():
                 raise
             time.sleep(interval)
-
-
