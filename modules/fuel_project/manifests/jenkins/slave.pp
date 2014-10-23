@@ -160,6 +160,8 @@ class fuel_project::jenkins::slave (
       content => template('fuel_project/jenkins/slave/system_tests.sudoers.d.erb'),
     }
 
+    sysctl::value{'net.bridge.bridge-nf-call-iptables': value => '0'}
+
     Package[$system_tests_packages]->
       Venv::Venv['venv-nailgun-tests']->
       Exec['workspace-create']
