@@ -1,0 +1,36 @@
+####################################################################################
+# This is puppet template, any changies shall be discarted after puppet agent run! #
+####################################################################################
+
+server {
+  listen 82;
+  root /srv/obs/repos;
+}
+
+server {
+  listen 443;
+  server_name                <%= hostname %>;
+  ssl                        on;
+  ssl_certificate            <%= @ssl_cert_file %>;
+  ssl_certificate_key        <%= @ssl_key_file %>;
+  ssl_session_timeout        5m;
+  ssl_protocols              TLSv1;
+  ssl_ciphers                ALL:!aNULL:!eNULL:!SSLv2:!LOW:!EXP:!MD5:@STRENGTH;
+  ssl_prefer_server_ciphers  on;
+
+
+  root        /srv/www/obs/api/public;
+  access_log  <%= @access_log_file %>;
+  error_log   <%= @error_log_file %>;
+
+  passenger_enabled       on;
+  passenger_spawn_method  smart;
+  passenger_min_instances 2;
+  passenger_user          wwwrun;
+  passenger_group         www;
+  rails_env               production;
+
+  include vhosts.d/internal_redirect.include;
+}
+
+passenger_pre_start http://localhost:443/;

@@ -355,3 +355,63 @@ zabbix::server::service_fqdn: 'zabbix.test.local'
 zabbix::server::start_pollers: 4
 zabbix::server::mysql_package: 'percona-server-server'
 zabbix::server::mysql_root_password: 'peNTZ7GA2Zr90y'
+
+obs_server::mysql::db_name: 'obs_db'
+obs_server::mysql::db_user: 'obs_ueser'
+obs_server::mysql::db_password: 'lz8j5V5j3H4MqZ'
+obs_server::repo::repo_url: 'http://download.opensuse.org/repositories/OBS:/Server:/2.5/openSUSE_13.1/'
+obs_server::repo::repo_name: 'OBS_Server_2.5'
+obs_server::nginx::access_log_file: '/srv/www/obs/api/log/nginx-obs-api-access.log'
+obs_server::nginx::error_log_file: '/srv/www/obs/api/log/nginx-obs-api-error.log'
+
+obs_server::ssl_cert_file: '/srv/obs/certs/server.crt'
+obs_server::ssl_cert_file_contents: |
+  -----BEGIN CERTIFICATE-----
+  MIIDAjCCAeoCCQCyRpkj6ONVVjANBgkqhkiG9w0BAQUFADBDMQswCQYDVQQGEwJV
+  QTERMA8GA1UEChMITWlyYW50aXMxITAfBgNVBAMTGHZhZ3JhbnQua2hhLm1pcmFu
+  dGlzLm5ldDAeFw0xNDEwMTQwOTA3MzBaFw0yNDAzMzEwOTA3MzBaMEMxCzAJBgNV
+  BAYTAlVBMREwDwYDVQQKEwhNaXJhbnRpczEhMB8GA1UEAxMYdmFncmFudC5raGEu
+  bWlyYW50aXMubmV0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyjVR
+  VcdfRgJMkFtlYiLOXVv350d2EYVlr+XDjvGR7cpLbkOMaV7npw4+LYnAeMpPobNB
+  93X3u1+i5RT6NpUPM+4zwaICxdr2w5jqRjjRYWYawwiNdG6RJ5wGcYPFUVAFDtVj
+  JM36syJq4FeJ4qWngUVnXB+HlQtnLjqpcUqegZjSCPjV25qbtlJDvh2w3EO0UDsz
+  F0qY+thBNOpL+VbZVkAL1EBfKKeJstJE4jsgLTsmc+Q3T0a5wY1thHgGQCz6Y5q4
+  z+1fl/LPd/CFb3vfbfgb/guSaNfPWNQZo08cEulqFdNA1zhHa290uweVfnBNH8+r
+  GLvtcseNhHu8CCw64wIDAQABMA0GCSqGSIb3DQEBBQUAA4IBAQAY8mxHIV6CWxFV
+  NuwDM6wWaHzDpeoVnIrGCytoNaM6I/ewtAYHg9RG/1jD+IxyY4DeyrVt6rjNIBIi
+  Md5DvHInsNOYH/BNxGVA+ky0rfSJZzHbwySL3B+fnIiKBJmYVEbICIDRHdl6IjsV
+  v2Xvm5xUW3v3hQDe0LWrOsHN4xxdwddpLarmuVaDJNZi40Ur+ubrQ54EZxLYB1F5
+  paM/qe9SOxQjG8uTEaGA6mcyjH9KPrwpdjds6ejk22i42ZVgv0BJboizzmeUgDWh
+  me82Hv4XV8Y29dc7i3rY/+k3uWs+u58DmH03IE1SUw119VQr1zULF8LYJr7XiKXP
+  0S3GYrjO
+  -----END CERTIFICATE-----
+
+obs_server::ssl_key_file: '/srv/obs/certs/server.key'
+obs_server::ssl_key_file_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpAIBAAKCAQEAyjVRVcdfRgJMkFtlYiLOXVv350d2EYVlr+XDjvGR7cpLbkOM
+  aV7npw4+LYnAeMpPobNB93X3u1+i5RT6NpUPM+4zwaICxdr2w5jqRjjRYWYawwiN
+  dG6RJ5wGcYPFUVAFDtVjJM36syJq4FeJ4qWngUVnXB+HlQtnLjqpcUqegZjSCPjV
+  25qbtlJDvh2w3EO0UDszF0qY+thBNOpL+VbZVkAL1EBfKKeJstJE4jsgLTsmc+Q3
+  T0a5wY1thHgGQCz6Y5q4z+1fl/LPd/CFb3vfbfgb/guSaNfPWNQZo08cEulqFdNA
+  1zhHa290uweVfnBNH8+rGLvtcseNhHu8CCw64wIDAQABAoIBAQDD+19Ek0LdGNda
+  RqsBrZhz1fJ1H8bofnErRbb/cVUtspbfXOrXKdu+B0juXAfHStZZc+Mo1BZybeP0
+  whstEdW1UFargrnLSElJFIlj3Cfbjdm8VCq9wXhAerGoDb4N7E+qq9k2z8j/HAmY
+  PF/w4vtxiHIAULLZGz87CDI4EsmD8n9nIxehzwBRRMUiS35JQOXrtx+5yYIOBpPK
+  bbVF622MoPKb1ht3Lab75xesrQNEoAe1GpRl6PAxuUrSp+2mhvKud1tAfVKGIAqC
+  kBWVCmXHAwPYOEXjQgGL4iZff+VtxBjI33VAvcJ7PyGtoTfyiQT3ai8/BUDtRmdR
+  rJKU3qcJAoGBAO+dpmUIvdP4AecWRjmPaKRpr49LZnCHGvvlXJpgA/p1eFJHIUr4
+  b3TyvF1opAw47qOIKdNM0FotiOL2eA2FsesHAJaSvxGfLV/Oqv7R3CRREpJOJFWJ
+  fwKR7xhguLiwOQwuXwOwN1BV2iZHW97D5ftIJun+Bj4fiOn9+im78YW1AoGBANgI
+  3jx9oqafFC0NuZElwdLgHvo227UGxyREMbINQ6eFk6T6PRZRuO7Mg8Fn4Nct0Wac
+  jD/4Aq/+9aOYV7Wz7+fEOH9AKj3zFhRosy1nnTZ0SD+PouRFvrDCQLzBMJuJcCRU
+  4B39RisbdgDk1nLbBUL9Mlub1INEl9775ZcUdx03AoGBAM20Y5K9DGoasVd3cdYc
+  XVM4P7Uen9Tex7WUVAlbgE7V5fOMiPJZkSWu9TKjkKHFhmjxjiaN/RhNmwRtXucM
+  7Y69Ni4N0OYJ5uQnAfk8pGaxCuZ7GworvdOxALfG4Q38ixz/+iWqc/INoffWrvHw
+  71DnwjCDGUzfuaRXmxmU9WU5AoGAUUP8vYqRPdaHk28fSB+I6teOL5elTFKxZM4W
+  V6Evuvu/j4bmpde2FnZudbmq1acRp2TqSUH1WNky9AhhriNy8p9YlV3Axi8ENkcw
+  Z7sbY5mYd/iDURV/ZySbj6WosEmiGrim2gElfR/GYw2yMeB7+Tgf0mArL/oEm0fs
+  lMmJCT8CgYA3TgecyiuKF4BF3tFsOtzJ/sSC/FtNxFLPQR39M8NMD/7O4RcG7OfZ
+  tPBZGWuXgG26NqAW1tTwr6FkRzpZQjnwQ/wUVEoeVvbCuogcaZy6qeRWSG6X9HZs
+  T9ERG0/OY5uGFvqWv/UVkphxB+9lEVqFWDd2KkqBNC6taKN9Vw6Arw==
+  -----END RSA PRIVATE KEY-----

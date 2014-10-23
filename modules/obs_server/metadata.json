@@ -1,0 +1,28 @@
+{
+  "name": "obs_server",
+  "version": "0.0.1",
+  "author": "Dmitry Kaigarodtsev",
+  "summary": "Module for installing OBS (openSUSE Build Service)",
+  "license": "Apache-2.0",
+  "source": "",
+  "project_page": "",
+  "issues_url": "",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "11 SP1"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    }
+  ],
+  "dependencies": [
+    {"name":"darin/zypprepo","version_requirement":">= 1.0.1"},
+    {"name":"puppetlabs/mysql","version_requirement":">= 2.3.1"}
+  ]
+}

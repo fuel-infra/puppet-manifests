@@ -1,0 +1,10 @@
+####################################################################################
+# This is puppet template, any changies shall be discarted after puppet agent run! #
+####################################################################################
+
+production:
+  adapter: mysql2
+  database: <%= @db_name %>
+  username: <%= @db_user %>
+  password: <%= @db_password %>
+  encoding: utf8
