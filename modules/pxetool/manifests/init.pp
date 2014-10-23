@@ -1,7 +1,7 @@
 # Class: pxetool
 #
 class pxetool (
-  $additional_repos = $::pxetool::params::mirror,
+  $additional_repos = $::pxetool::params::additional_repos,
   $apply_firewall_rules = $::pxetool::params::apply_firewall_rules,
   $config = $::pxetool::params::config,
   $disk_pattern = $::pxetool::params::disk_pattern,
