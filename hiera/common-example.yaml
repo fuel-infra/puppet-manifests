@@ -217,6 +217,42 @@ mysql:
 puppet:
   master: 'pxetool.test.local'
 
+release_status::mysql_database: 'release'
+release_status::mysql_user: 'release'
+release_status::mysql_password: 'Ab5eP1RMDG2k'
+release_status::ssl_key_file_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIICXAIBAAKBgQCgMUCw07YE4L3gNamu0a6SLkpbZ8cdXNk3V7ICTwrQ8/Kkdhp6
+  OY0QED7vc4YhN8IcDAIcX+Ilp93Dq6r7R5WnS/CxwJGpl+bQrbyWqfomwk0cfQaV
+  L8xSTlGdvwFMXktZVkVpY8AW+gM3aj9CzSs5BsRU5ShqXI+5vEg2cAxZNwIDAQAB
+  AoGAPkQmwxTn0WmSJI53UE6MrqFzoafrC4zFme9qb99Ncv7/t9F4ZT3tiOrnq6eZ
+  4VuNBd3dDC5w9vYTCzW1Fksy7eDpOv5PztlmRz0vagE4WKYOoLmhWEdN0CqJtsKe
+  lfHJUg3dBrsg5Cht7fBCDDT312jvN07gN6NZipNww0yBB0ECQQDPy+Nu4ZJ1PsHX
+  zEj3lwLhbREeSLvK0FoZPs1gb6b0KPURTwRjdHelCJUsTt7R7nwTOBFIEyRJ+DsK
+  g5NJ37jxAkEAxVpe2uUo83PvXb2U+zjkvl9iInGx/nqT+G+tkyd/gRg+SmX/dbeU
+  tNmbhusZkKHP0QL8bBtWo3P185lGyCX0pwJAH7Qc5Br4bHkBvDoH2/anUtuAJB22
+  wS/ev0FMtmzyjQf+tABZTA9F/eD8WYFDD8aSGaCRSmzZOYvs/iKrAzdmEQJBAJfK
+  rWCBl6DA0B/ynC8qEE4YgRtrBXNtBni0NPYVEC3T3r1MfFMnc1oycTwxgYVL39Ks
+  EEh6MoYfv9GwV8/D2csCQDcWGDffRGe/4PUMdCobTVcvLi/CvgleFUeZtxnXHrzU
+  RXgNFurxv+CBSH6p0yMsM0MNB/luyi5G6f8ZqwK+Nwk=
+  -----END RSA PRIVATE KEY-----
+release_status::ssl_cert_file_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIICXAIBAAKBgQCgMUCw07YE4L3gNamu0a6SLkpbZ8cdXNk3V7ICTwrQ8/Kkdhp6
+  OY0QED7vc4YhN8IcDAIcX+Ilp93Dq6r7R5WnS/CxwJGpl+bQrbyWqfomwk0cfQaV
+  L8xSTlGdvwFMXktZVkVpY8AW+gM3aj9CzSs5BsRU5ShqXI+5vEg2cAxZNwIDAQAB
+  AoGAPkQmwxTn0WmSJI53UE6MrqFzoafrC4zFme9qb99Ncv7/t9F4ZT3tiOrnq6eZ
+  4VuNBd3dDC5w9vYTCzW1Fksy7eDpOv5PztlmRz0vagE4WKYOoLmhWEdN0CqJtsKe
+  lfHJUg3dBrsg5Cht7fBCDDT312jvN07gN6NZipNww0yBB0ECQQDPy+Nu4ZJ1PsHX
+  zEj3lwLhbREeSLvK0FoZPs1gb6b0KPURTwRjdHelCJUsTt7R7nwTOBFIEyRJ+DsK
+  g5NJ37jxAkEAxVpe2uUo83PvXb2U+zjkvl9iInGx/nqT+G+tkyd/gRg+SmX/dbeU
+  tNmbhusZkKHP0QL8bBtWo3P185lGyCX0pwJAH7Qc5Br4bHkBvDoH2/anUtuAJB22
+  wS/ev0FMtmzyjQf+tABZTA9F/eD8WYFDD8aSGaCRSmzZOYvs/iKrAzdmEQJBAJfK
+  rWCBl6DA0B/ynC8qEE4YgRtrBXNtBni0NPYVEC3T3r1MfFMnc1oycTwxgYVL39Ks
+  EEh6MoYfv9GwV8/D2csCQDcWGDffRGe/4PUMdCobTVcvLi/CvgleFUeZtxnXHrzU
+  RXgNFurxv+CBSH6p0yMsM0MNB/luyi5G6f8ZqwK+Nwk=
+  -----END RSA PRIVATE KEY-----
+
 system:
   root_keys:
     'acharykov@mirantis.com':

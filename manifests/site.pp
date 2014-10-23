@@ -262,6 +262,11 @@ node 'fuel-stats.vm.mirantis.net' {
   }
 }
 
+node 'web01.fuel-infra.org' {
+  class { '::fuel_project::common' :}
+  class { '::release_status' :}
+}
+
 
 # Test nodes definitions
 
@@ -277,6 +282,7 @@ node 'slave-01.test.local' {
     fuelweb_iso    => true,
     ldap           => true,
   }
+  class { '::release_status::updater' :}
 }
 
 node 'slave-02.test.local' {
@@ -403,6 +409,11 @@ node 'slave-12.test.local' {
     apply_firewall_rules => false,
     service_port         => 7777,
   }
+}
+
+node 'slave-16.test.local' {
+  class { '::fuel_project::common' :}
+  class { '::release_status' :}
 }
 
 # Default
