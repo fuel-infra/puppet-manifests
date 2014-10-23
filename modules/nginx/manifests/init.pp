@@ -18,10 +18,12 @@ class nginx (
   }
 
   if ($create_www_dir) {
-    file { '/var/www' :
-      ensure => 'directory',
-      owner  => 'root',
-      group  => 'root',
+    if ! defined(File['/var/www']) {
+      file { '/var/www':
+        ensure => 'directory',
+        owner  => 'root',
+        group  => 'root',
+      }
     }
   }
 

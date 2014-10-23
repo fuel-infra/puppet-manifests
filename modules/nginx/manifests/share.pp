@@ -28,11 +28,13 @@ class nginx::share(
     require => File['/etc/nginx/sites-available/share.conf']
   }
 
-  ensure_resource ('file', '/var/www', {
-    ensure  => 'directory',
-    owner   => 'www-data',
-    group   => 'www-data',
-  })
+  if ! defined(File['/var/www']) {
+    file { '/var/www':
+      ensure => 'directory',
+      owner  => 'root',
+      group  => 'root',
+    }
+  }
 
   if($fuelweb_iso_create) {
     file { '/var/www/fuelweb-iso' :
