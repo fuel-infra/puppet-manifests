@@ -18,7 +18,8 @@ class fuel_project::jenkins::slave (
   $sudoers_base          = '',
   $bind_policy           = '',
   $ldap_ignore_users     = '',
-  $keep_iso_for_days     = 10,
+  $keep_iso_days         = 10,
+  $storage_dirs          = ['/var/www/fuelweb-iso', '/srv/downloads'],
 ) {
   class { '::fuel_project::common' :
     external_host     => $external_host,
@@ -46,6 +47,25 @@ class fuel_project::jenkins::slave (
     }
   } else {
     class { '::jenkins::swarm_slave' :}
+  }
+
+  ensure_packages(['python-seed-cleaner', 'python-seed-client'])
+
+  file { '/usr/local/bin/seed-downloads-cleanup.sh' :
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    content => template('fuel_project/common/seed-downloads-cleanup.sh.erb'),
+    require => Package['python-seed-cleaner'],
+  }
+
+  cron { 'seed-downloads-cleanup' :
+    command => '/usr/local/bin/seed-downloads-cleanup.sh | logger -t seed-downloads-cleanup',
+    user    => root,
+    hour    => '*/4',
+    minute  => 0,
+    require => File['/usr/local/bin/seed-downloads-cleanup.sh'],
   }
 
   # Run system tests
@@ -136,29 +156,6 @@ class fuel_project::jenkins::slave (
       group   => 'root',
       mode    => '0600',
       content => template('fuel_project/jenkins/slave/system_tests.sudoers.d.erb'),
-    }
-
-    $storage_dirs = [
-      '/var/www/fuelweb-iso',
-      '/srv/downloads'
-    ]
-
-    $mtime = $keep_iso_for_days
-    file { '/usr/local/bin/seed-downloads-cleanup.sh' :
-      ensure  => 'present',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0755',
-      content => template('fuel_project/common/seed-downloads-cleanup.sh.erb'),
-      require => Package['python-seed-cleaner'],
-    }
-
-    cron { 'seed-downloads-cleanup' :
-      command => '/usr/local/bin/seed-downloads-cleanup.sh | logger -t seed-downloads-cleanup',
-      user    => root,
-      hour    => '*/4',
-      minute  => 0,
-      require => File['/usr/local/bin/seed-downloads-cleanup.sh'],
     }
 
     Package[$system_tests_packages]->

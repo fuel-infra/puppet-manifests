@@ -1,4 +1,4 @@
 #!/bin/bash
 
-/usr/bin/find <%= @storage_dirs.join(' ') %> -type f -mtime +<%= @mtime || 10 %> -delete 2>&1 | logger -t seed-downloads-cleanup
-/usr/bin/seedcleaner.py 2>&1 | logger -t seed-downloads-cleanup
+/usr/bin/find <%= @storage_dirs.join(' ') %> -type f -mtime +<%= @keep_iso_days || 10 %> -delete 2>&1 | /usr/bin/logger -t seed-downloads-cleanup
+/usr/bin/seedcleaner.py 2>&1 | /usr/bin/logger -t seed-downloads-cleanup
