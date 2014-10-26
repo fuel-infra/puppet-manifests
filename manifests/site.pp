@@ -176,26 +176,11 @@ node /osci-gerrit(2)?\.vm\.mirantis\.net/ {
 }
 
 node 'osci-jenkins2.vm.mirantis.net' {
-  $external_host = true
   class { '::fuel_project::common' :
-    external_host => $external_host,
+    external_host => true,
   }
 
-  $params = hiera_hash('osci-jenkins')
-
-  class { '::jenkins::master' :
-    service_fqdn                     => $params['service_fqdn'],
-    ssl_cert_file_contents           => $params['ssl_cert_file_contents'],
-    ssl_key_file_contents            => $params['ssl_key_file_contents'],
-    jenkins_ssh_private_key_contents => $params['jenkins_ssh_private_key_contents'],
-    jenkins_ssh_public_key_contents  => $params['jenkins_ssh_public_key_contents'],
-    jenkins_address                  => $params['jenkins_address'],
-    jenkins_java_args                => $params['jenkins_java_args'],
-    jjb_username                     => $params['jjb_username'],
-    jjb_password                     => $params['jjb_password'],
-    apply_firewall_rules             => true,
-    firewall_allow_sources           => ['0.0.0.0/0'],
-  }
+  class { '::jenkins::master' :}
 }
 
 node /tpi\d\d\.bud\.mirantis\.net/ {

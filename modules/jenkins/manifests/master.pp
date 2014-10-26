@@ -25,10 +25,6 @@ class jenkins::master (
   $jjb_password = '',
   ) {
 
-  include virtual::repos
-  realize Virtual::Repos::Repository['docker']
-  realize Virtual::Repos::Repository['jenkins']
-
   # Install base packages
 
   package { 'openjdk-7-jre-headless':
@@ -51,7 +47,6 @@ class jenkins::master (
     hasrestart => false,
   }
 
-  Virtual::Repos::Repository['jenkins'] ~>
   Package['openjdk-7-jre-headless'] ~>
   Package['jenkins'] ~>
   Service['jenkins']
