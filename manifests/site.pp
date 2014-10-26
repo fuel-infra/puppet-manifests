@@ -33,14 +33,16 @@ node /(mc([0-9]+)n([0-9]+)|srv([0-9]+))-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   }
 }
 
-node /cacher01-(mnv|cz)\.vm\.mirantis\.net/ {
+node /cacher01-(cz|kha|mnv|pl)\.vm\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
     keep_iso_days => 2,
   }
 }
 
 node /jenkins-product-(kha|pl)\.(vm|poz)\.mirantis\.net/ {
-  class { '::fuel_project::jenkins::slave' :}
+  class { '::fuel_project::jenkins::slave' :
+    keep_iso_days => 2,
+  }
 }
 
 node 'ctorrent-msk.msk.mirantis.net' {
