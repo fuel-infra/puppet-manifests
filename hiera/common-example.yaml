@@ -163,6 +163,9 @@ jenkins::master::jenkins_address: '127.0.0.1'
 jenkins::master::jenkins_java_args: '-Xmx1500m -Xms1024m -Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/Moscow'
 jenkins::master::jjb_username: 'jjb_user'
 jenkins::master::jjb_password: 'jjb_pass'
+jenkins::master::firewall_allow_sources:
+  '1000 - jenkins connections from 0.0.0.0/0':
+    source: '0.0.0.0/0'
 
 ldap:
   uri: 'ldap://ldap'
@@ -270,10 +273,9 @@ mysql::server::root_password: 'peNTZ7GA2Zr90y'
 mysql::server::package_name: 'percona-server-server'
 
 puppet::agent::server: 'pxetool.test.local'
-puppet::agent::parser: 'future'
 puppet::master::autosign: true
 puppet::master::firewall_allow_sources:
-  '100 - ssh connections from 10.108.0.0/16':
+  '1000 - puppet master connections from 10.108.0.0/16':
     source: '10.108.0.0/16'
 
 pxetool::additional_repos:

@@ -146,18 +146,11 @@ class jenkins::master (
 
 
   if $apply_firewall_rules {
-    each($firewall_allow_sources) |$ip| {
-      Class['firewall_defaults::pre'] ->
-      firewall { '1000 allow HTTP for Jenkins' :
-        dport  => 80,
-        action => 'accept',
-        source => $ip,
-      }
-      firewall { '1000 allow HTTPS for Jenkins' :
-        dport  => 443,
-        action => 'accept',
-        source => $ip,
-      }
-    }
+    include firewall_defaults::pre
+    create_resources(firewall, $firewall_allow_sources, {
+      dport   => [80, 443],
+      action  => 'accept',
+      require => Class['firewall_defaults::pre'],
+    })
   }
-  }
+}

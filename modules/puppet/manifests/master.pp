@@ -124,17 +124,11 @@ class puppet::master (
   }
 
   if $apply_firewall_rules {
-    $port = 8140
-    $proto = 'tcp'
-
-    each($firewall_allow_sources) |$ip| {
-      firewall { "1000 puppetmaster - src ${ip} ; dst ${proto}/${port}" :
-        dport   => $port,
-        proto   => $proto,
-        source  => $ip,
-        action  => 'accept',
-        require => Class['firewall_defaults::pre'],
-      }
-    }
+    include firewall_defaults::pre
+    create_resources(firewall, $firewall_allow_sources, {
+      dport   => '8140',
+      action  => 'accept',
+      require => Class['firewall_defaults::pre'],
+    })
   }
 }

@@ -3,9 +3,7 @@
 echo "puppet=`puppet --version`"
 echo "puppet-lint=`puppet-lint --version | awk '{print $NF}'`"
 
-find . -name '*.pp' | xargs -P1 -L1 puppet parser validate \
-          --parser future \
-          --verbose
+find . -name '*.pp' | xargs -P1 -L1 puppet parser validate --verbose
 
 find . -name '*.pp' | xargs -P1 -L1 puppet-lint \
           --fail-on-warnings \
@@ -19,4 +17,3 @@ find . -name '*.pp' | xargs -P1 -L1 puppet-lint \
 
 find . -name '*.erb' | xargs -P1 -L1 -I '%' erb \
           -P -x -T '-' % | ruby -c
-

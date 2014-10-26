@@ -16,13 +16,8 @@ class system {
 
   $packages = $system::params::packages
 
-  each($packages) |$package| {
-    if ! defined(Package[$package]) {
-      package { $package :
-        ensure => installed,
-      }
-    }
-  }
+  ensure_packages($packages)
+
   realize User['root']
 
   # FIXME: Legacy from IT's puppet agent
