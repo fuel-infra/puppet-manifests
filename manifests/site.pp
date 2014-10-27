@@ -79,6 +79,7 @@ node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
     verify_fuel_web     => true,
     verify_fuel_astute  => true,
     verify_fuel_docs    => true,
+    build_fuel_plugins  => true,
   }
 }
 
