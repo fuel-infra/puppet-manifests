@@ -52,7 +52,7 @@ fi
 
 MODULES["puppetlabs-apt"]="1.6.0"
 MODULES["puppetlabs-firewall"]="1.1.3"
-MODULES["puppetlabs-concat"]="1.0.4"
+MODULES["puppetlabs-concat"]="1.1.0"
 MODULES["puppetlabs-mysql"]="2.3.1"
 MODULES["puppetlabs-ntp"]="3.1.2"
 MODULES["puppetlabs-postgresql"]="3.4.2"
@@ -62,9 +62,11 @@ MODULES["maestrodev-rvm"]="1.6.4"
 MODULES["thias-sysctl"]="1.0.0"
 MODULES["darin-zypprepo"]="1.0.1"
 MODULES["elasticsearch/elasticsearch"]="0.4.0"
+MODULES["ripienaar-module_data"]="0.0.3"
 
 SOURCE_MODULES["https://github.com/teran/puppet-libvirt"]="0.3.2-2virsh-pool-bug"
 SOURCE_MODULES["https://github.com/SergK/puppet-znc"]="0.0.8"
+SOURCE_MODULES["https://github.com/teran/puppet-nginx"]="0.1.1+uwsgi+proxy+crl"
 
 MODULE_LIST=`puppet module list`
 

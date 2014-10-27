@@ -10,15 +10,17 @@ class fuel_project::mirror (
   $service_aliases = [],
   $sync_hosts_allow = [],
 ) {
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :
-      apply_firewall_rules => $apply_firewall_rules,
-      create_www_dir       => true,
-    }
-  }
-  include ::nginx::service
   class { 'rsync':
     package_ensure => 'present',
+  }
+
+  if (!defined(File['/var/www'])) {
+    file { '/var/www' :
+      ensure => 'directory',
+      owner  => 'root',
+      group  => 'root',
+      before => File[$dir]
+    }
   }
 
   file { $dir :
@@ -66,22 +68,14 @@ class fuel_project::mirror (
     require         => File[$dir],
   }
 
-  file { '/etc/nginx/sites-available/mirror.conf' :
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('fuel_project/mirror/nginx.conf.erb'),
-    require => Class['nginx'],
-  }~>
-  Service['nginx']
-
-  file { '/etc/nginx/sites-enabled/mirror.conf' :
-    ensure  => 'link',
-    target  => '/etc/nginx/sites-available/mirror.conf',
-    require => File['/etc/nginx/sites-available/mirror.conf'],
-  }~>
-  Service['nginx']
+  if (!defined(Class['nginx'])) {
+    class { 'nginx' :}
+  }
+  nginx::resource::vhost { 'mirror' :
+    ensure      => 'present',
+    www_root    => '/var/www/mirror',
+    server_name => [$service_fqdn, "mirror.${::fqdn}"]
+  }
 
   if ($apply_firewall_rules) {
     include firewall_defaults::pre

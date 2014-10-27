@@ -7,8 +7,6 @@ class pxetool (
   $disk_pattern = $::pxetool::params::disk_pattern,
   $firewall_allow_sources = $::pxetool::params::firewall_allow_sources,
   $mirror = $::pxetool::params::mirror,
-  $nginx_conf = $::pxetool::params::nginx_conf,
-  $nginx_conf_link = $::pxetool::params::nginx_conf_link,
   $package = $::pxetool::params::package,
   $puppet_master = $::pxetool::params::puppet_master,
   $root_password_hash = $::pxetool::params::root_password_hash,
@@ -52,25 +50,26 @@ class pxetool (
   }~>
   Service['uwsgi']
 
-  # /etc/nginx/sites-available/pxetool.conf
-  # virtual host file for nginx
-  file { $nginx_conf :
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('pxetool/nginx.conf.erb'),
-    require => Class['nginx'],
-    notify  => Service['nginx'],
+  if (!defined(Class['nginx'])) {
+    class { '::nginx' :}
+  }
+  nginx::resource::vhost { 'pxetool' :
+    ensure              => 'present',
+    listen_port         => 80,
+    server_name         => [$::fqdn],
+    uwsgi               => '127.0.0.1:7931',
+    location_cfg_append => {
+      uwsgi_connect_timeout => '3m',
+      uwsgi_read_timeout    => '3m',
+      uwsgi_send_timeout    => '3m',
+    }
   }
 
-  # /etc/nginx/sites-enabled/pxetool.conf
-  # symlink to activate virtual host configuration for nginx
-  file { $nginx_conf_link :
-    ensure  => 'link',
-    target  => $nginx_conf,
-    require => File[$nginx_conf],
-    notify  => Service['nginx'],
+  nginx::resource::location { 'pxetool-static' :
+    ensure   => 'present',
+    vhost    => 'pxetool',
+    location => '/static/',
+    www_root => '/usr/share/pxetool/webapp/pxetool',
   }
 
   uwsgi::application { 'pxetool' :

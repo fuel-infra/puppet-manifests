@@ -404,8 +404,11 @@ class fuel_project::jenkins::slave (
   }
 
   if ($fuelweb_iso) {
-    class { '::nginx::share' :
-      fuelweb_iso_create => true,
+    class { '::nginx' :}
+    nginx::resource::vhost { 'share':
+      server_name => ['_'],
+      autoindex   => 'on',
+      www_root    => '/var/www',
     }
   }
 

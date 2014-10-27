@@ -6,8 +6,8 @@ class jenkins::master (
   $apply_firewall_rules = false,
   $firewall_allow_sources = [],
   # Nginx parameters
-  $ssl_cert_file = '/etc/nginx/jenkins.crt',
-  $ssl_key_file = '/etc/nginx/jenkins.key',
+  $ssl_cert_file = '/etc/ssl/jenkins.crt',
+  $ssl_key_file = '/etc/ssl/jenkins.key',
   $ssl_cert_file_contents = '',
   $ssl_key_file_contents = '',
   # FIXME: chain certificates are not used in nginx conf right now
@@ -106,21 +106,42 @@ class jenkins::master (
 
   # Setup nginx
 
-  include nginx
+  if (!defined(Class['::nginx'])) {
+    class { '::nginx' :}
+  }
 
-  file { '/etc/nginx/sites-available/jenkins.conf' :
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('jenkins/nginx.conf.erb'),
-    require => Class['nginx'],
-  }->
-  file { '/etc/nginx/sites-enabled/jenkins.conf' :
-    ensure => 'link',
-    target => '/etc/nginx/sites-available/jenkins.conf',
-  }~>
-  Service['nginx']
+  ::nginx::resource::vhost { 'jenkins-http' :
+    ensure              => 'present',
+    listen_port         => 80,
+    www_root            => '/var/www',
+    location_cfg_append => {
+      rewrite => '^ https://$server_name$request_uri? permanent',
+    },
+  }
+  ::nginx::resource::vhost { 'jenkins' :
+    ensure              => 'present',
+    listen_port         => 443,
+    server_name         => [$service_fqdn, $::fqdn],
+    ssl                 => true,
+    ssl_cert            => $ssl_cert_file,
+    ssl_key             => $ssl_key_file,
+    ssl_cache           => 'shared:SSL:10m',
+    ssl_session_timeout => '10m',
+    ssl_stapling        => true,
+    ssl_stapling_verify => true,
+    proxy               => 'http://127.0.0.1:8080',
+    location_cfg_append => {
+      client_max_body_size => '8G',
+      proxy_redirect       => 'off',
+      proxy_read_timeout   => 120,
+      proxy_set_header     => {
+        'X-Forwarded-For'   => '$remote_addr',
+        'X-Forwarded-Proto' => 'https',
+        'X-Real-IP'         => '$remote_addr',
+        'Host'              => '$host',
+      },
+    },
+  }
 
   if $ssl_cert_file_contents != '' {
     file { $ssl_cert_file:
@@ -128,8 +149,7 @@ class jenkins::master (
       group   => 'root',
       mode    => '0400',
       content => $ssl_cert_file_contents,
-      require => Class['nginx'],
-      before  => File['/etc/nginx/sites-available/jenkins.conf'],
+      before  => Nginx::Resource::Vhost['jenkins'],
     }
   }
 
@@ -139,8 +159,7 @@ class jenkins::master (
       group   => 'root',
       mode    => '0400',
       content => $ssl_key_file_contents,
-      require => Class['nginx'],
-      before  => File['/etc/nginx/sites-available/jenkins.conf'],
+      before  => Nginx::Resource::Vhost['jenkins'],
     }
   }
 

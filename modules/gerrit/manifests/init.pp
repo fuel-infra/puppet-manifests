@@ -66,23 +66,64 @@ class gerrit (
   $enable_javamelody_top_menu = false,
 ) {
   include jeepyb
-  include nginx
   include pip
   include virtual::users
 
-  file { '/etc/nginx/sites-available/gerrit.conf' :
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('gerrit/nginx.conf.erb'),
-    require => Class['nginx'],
-  }->
-  file { '/etc/nginx/sites-enabled/gerrit.conf' :
-    ensure => 'link',
-    target => '/etc/nginx/sites-available/gerrit.conf',
-  }~>
-  Class['nginx::service']
+  if (!defined(Class['::nginx'])) {
+    class { '::nginx' :}
+  }
+
+  ::nginx::resource::vhost { 'gerrit' :
+    ensure               => 'present',
+    server_name          => [$service_fqdn, $::fqdn],
+    rewrite_to_https     => true,
+    ssl                  => true,
+    ssl_cert             => $ssl_cert_file,
+    ssl_key              => $ssl_key_file,
+    ssl_cache            => 'shared:SSL:10m',
+    ssl_session_timeout  => '10m',
+    proxy                => 'http://127.0.0.1:8081',
+    use_default_location => false,
+  }
+
+  ::nginx::resource::location { 'gerrit-proxy' :
+    ensure             => 'present',
+    vhost              => 'gerrit',
+    ssl                => true,
+    ssl_only           => true,
+    location           => '/',
+    proxy              => 'http://127.0.0.1:8081',
+    proxy_redirect     => 'off',
+    proxy_read_timeout => 120,
+    proxy_set_header   => [
+      'X-Forwarded-For $remote_addr',
+      'Host $host',
+    ],
+  }
+
+  ::nginx::resource::location { 'gerrit-static' :
+    ensure                => 'present',
+    vhost                 => 'gerrit',
+    ssl                   => true,
+    ssl_only              => true,
+    location              => '~* \.cache\.(html|gif|png|css|jar|swf|js)$',
+    proxy                 => 'http://127.0.0.1:8081',
+    proxy_cache_min_uses  => 1,
+    proxy_cache_use_stale => 'timeout',
+    proxy_cache_valid     => 'any 60m',
+    proxy_ignore_headers  => [
+      'Cache-Control',
+      'Expires',
+      'Set-Cookie',
+      'X-Accel-Expires',
+    ],
+    proxy_redirect        => 'off',
+    proxy_read_timeout    => 120,
+    proxy_set_header      => [
+      'X-Forwarded-For $remote_addr',
+      'Host $host',
+    ],
+  }
 
   realize User['gerrit']
 
@@ -98,7 +139,7 @@ class gerrit (
     if (!defined(Package['gitweb'])) {
       package { 'gitweb' :
         ensure  => 'present',
-        require => Class['nginx'],
+        require => Class['::nginx'],
       }
     }
   }
@@ -263,8 +304,10 @@ class gerrit (
       group   => 'root',
       mode    => '0640',
       content => $ssl_cert_file_contents,
-      before  => File['/etc/nginx/sites-enabled/gerrit.conf'],
-      require => Class['nginx'],
+      before  => [
+        File['/etc/nginx/sites-enabled/gerrit.conf'],
+        Nginx::Resource::Vhost['gerrit'],
+      ],
     }
   }
 
@@ -274,8 +317,10 @@ class gerrit (
       group   => 'root',
       mode    => '0400',
       content => $ssl_key_file_contents,
-      before  => File['/etc/nginx/sites-enabled/gerrit.conf'],
-      require => Class['nginx'],
+      before  => [
+        File['/etc/nginx/sites-enabled/gerrit.conf'],
+        Nginx::Resource::Vhost['gerrit'],
+      ],
     }
   }
 
@@ -285,8 +330,10 @@ class gerrit (
       group   => 'root',
       mode    => '0400',
       content => $ssl_chain_file_contents,
-      before  => File['/etc/nginx/sites-enabled/gerrit.conf'],
-      require => Class['nginx'],
+      before  => [
+        File['/etc/nginx/sites-enabled/gerrit.conf'],
+        Nginx::Resource::Vhost['gerrit'],
+      ],
     }
   }
 

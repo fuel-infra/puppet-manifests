@@ -20,6 +20,8 @@ class fuel_project::puppet::master (
   class { '::fuel_project::common' :
     external_host => $external_host,
   }->
+  class { '::fuel_project::nginx' :
+  }->
   class { '::puppet::master' :
     apply_firewall_rules   => $apply_firewall_rules,
     firewall_allow_sources => $firewall_allow_sources,

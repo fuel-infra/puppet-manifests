@@ -11,33 +11,29 @@ class fuel_project::seed (
   $tracker_apply_firewall_rules = false,
   $tracker_firewall_allow_sources = {},
 ) {
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :
-      apply_firewall_rules => $apply_firewall_rules,
-      create_www_dir       => true,
-    }
-  }
-  include ::nginx::service
   class { '::opentracker' :
     apply_firewall_rules   => $tracker_apply_firewall_rules,
     firewall_allow_sources => $tracker_firewall_allow_sources,
   }
-  file { '/etc/nginx/sites-available/seed.conf' :
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('fuel_project/seed/nginx.conf.erb'),
-    require => Class['nginx'],
-  }~>
-  Service['nginx']
 
-  file { '/etc/nginx/sites-enabled/seed.conf' :
-    ensure  => 'link',
-    target  => '/etc/nginx/sites-available/seed.conf',
-    require => File['/etc/nginx/sites-available/seed.conf'],
-  }~>
-  Service['nginx']
+  if (!defined(Class['::nginx'])) {
+    class { '::nginx' :}
+  }
+  nginx::resource::vhost { 'seed' :
+    ensure      => 'present',
+    autoindex   => 'off',
+    www_root    => $seed_dir,
+    server_name => [$server_fqdn, "seed.${::fqdn}"]
+  }
+
+  if (!defined(File['/var/www'])) {
+    file { '/var/www' :
+      ensure => 'directory',
+      owner  => 'root',
+      group  => 'root',
+      before => File[$seed_dir]
+    }
+  }
 
   file { $seed_dir :
     ensure  => 'directory',

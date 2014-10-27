@@ -70,10 +70,6 @@ class puppet::master (
       class { 'uwsgi' :}
     }
 
-    if (!defined(Class['nginx'])) {
-      class { 'nginx' :}
-    }
-
     file { '/etc/puppet/rack' :
       ensure => 'directory',
     }
@@ -98,21 +94,32 @@ class puppet::master (
       socket  => '127.0.0.1:8141',
     }
 
-    file { '/etc/nginx/sites-available/puppetmaster.conf' :
-      ensure  => 'present',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      content => template('puppet/nginx.conf.erb'),
-      require => Class['nginx'],
+    if (!defined(Class['nginx'])) {
+      class { '::nginx' :}
     }
-
-    file { '/etc/nginx/sites-enabled/puppetmaster.conf' :
-      ensure  => 'link',
-      target  => '/etc/nginx/sites-available/puppetmaster.conf',
-      require => File['/etc/nginx/sites-available/puppetmaster.conf']
-    }~>
-    Service['nginx']
+    nginx::resource::vhost { 'puppetmaster' :
+      ensure                 => 'present',
+      listen_port            => 8140,
+      ssl_port               => 8140,
+      server_name            => [$::fqdn],
+      ssl                    => true,
+      ssl_cert               => "/var/lib/puppet/ssl/certs/${::fqdn}.pem",
+      ssl_key                => "/var/lib/puppet/ssl/private_keys/${::fqdn}.pem",
+      ssl_crl                => '/var/lib/puppet/ssl/crl.pem',
+      ssl_client_certificate => '/var/lib/puppet/ssl/certs/ca.pem',
+      ssl_verify_client      => 'optional',
+      uwsgi                  => '127.0.0.1:8141',
+      location_cfg_append    => {
+        uwsgi_connect_timeout => '3m',
+        uwsgi_read_timeout    => '3m',
+        uwsgi_send_timeout    => '3m',
+        uwsgi_modifier1       => 7,
+        uwsgi_param           => {
+          'SSL_CLIENT_S_DN'   => '$ssl_client_s_dn',
+          'SSL_CLIENT_VERIFY' => '$ssl_client_verify',
+        },
+      }
+    }
   } else {
     fail "Unknown value for puppet_master_run_with parameter: ${puppet_master_run_with}"
   }

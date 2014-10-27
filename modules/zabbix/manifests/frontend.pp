@@ -43,26 +43,36 @@ class zabbix::frontend (
     }
   }
 
-  file { '/etc/nginx/sites-available/zabbix-server.conf' :
-    ensure  => 'present',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template($nginx_config_template),
-    require => Class['nginx'],
-  }->
-  file { '/etc/nginx/sites-enabled/zabbix-server.conf' :
-    ensure => 'link',
-    target => '/etc/nginx/sites-available/zabbix-server.conf',
-  }->
+  if (!defined(Class['nginx'])) {
+    class { '::nginx' :}
+  }
+  nginx::resource::vhost { 'zabbix-server' :
+    ensure               => 'present',
+    listen_port          => 80,
+    server_name          => [$service_fqdn, $::fqdn],
+    use_default_location => false,
+  }
+
+  nginx::resource::location { 'zabbix-server-static' :
+    vhost    => 'zabbix-server',
+    location => '/',
+    www_root => '/usr/share/zabbix',
+  }
+
+  nginx::resource::location { 'zabbix-server-php' :
+    vhost    => 'zabbix-server',
+    location => '~ \.php$',
+    fastcgi  => '127.0.0.1:9000',
+    www_root => '/usr/share/zabbix',
+  }
+
   service { 'php5-fpm' :
     ensure  => 'running',
     require => [
       Package['php5-fpm'],
       Package['php5-mysql'],
     ]
-  }~>
-  Service['nginx']
+  }
 
   if ($apply_firewall_rules) {
     include firewall_defaults::pre
