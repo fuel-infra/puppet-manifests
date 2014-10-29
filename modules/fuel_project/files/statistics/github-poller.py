@@ -29,10 +29,11 @@ def __main__():
     # Ok, we need to update local repos
     migration = False
     for diff in repo.head.commit.diff(remote_fetch.commit):
-        print "Changed file {0}".format(diff.b_blob.abspath)
-        if DB_MIGRATION in diff.b_blob.abspath:
-            print "Migration found"
-            migration = True
+        if diff.b_blob:
+            print "Changed file {0}".format(diff.b_blob.abspath)
+            if DB_MIGRATION in diff.b_blob.abspath:
+                print "Migration found"
+                migration = True
 
     print "Pull from remote repo"
     repo.remotes.origin.pull()

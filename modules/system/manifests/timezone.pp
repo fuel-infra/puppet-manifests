@@ -15,8 +15,8 @@ class system::timezone (
   }
 
   file { '/etc/localtime' :
-    ensure => 'present',
-    source => "file:///usr/share/zoneinfo/${timezone}",
+    ensure => 'link',
+    target => "/usr/share/zoneinfo/${timezone}",
     mode   => '0644',
     owner  => 'root',
     group  => 'root',

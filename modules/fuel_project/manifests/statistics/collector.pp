@@ -18,7 +18,8 @@ class fuel_project::statistics::collector (
   $ssl_cert_file_contents = '',
 ) {
   class { '::fuel_project::common':
-    ldap => $ldap,
+    ldap          => $ldap,
+    external_host => $apply_firewall_rules,
   }
 
   if (!defined(Class['::nginx'])) {
@@ -63,6 +64,7 @@ class fuel_project::statistics::collector (
     group   => 'root',
     mode    => '0400',
     content => $ssl_key_file_contents,
+    require => Package['nginx']
   }
 
   file { $ssl_cert_file :
@@ -70,6 +72,7 @@ class fuel_project::statistics::collector (
     group   => 'root',
     mode    => '0400',
     content => $ssl_cert_file_contents,
+    require => Package['nginx']
   }
 
   # Postgresql configuration
@@ -148,7 +151,7 @@ class fuel_project::statistics::collector (
       gid      => 'collector',
       socket   => '127.0.0.1:7932',
       chdir    => '/var/www/collector/collector',
-      module   => 'collector.api.app',
+      module   => 'collector.api.app_test',
       callable => 'app',
       require  => Exec['clone-github-collector'],
     }
@@ -158,14 +161,14 @@ class fuel_project::statistics::collector (
 
   if ($apply_firewall_rules) {
     include firewall_defaults::pre
-    firewall { 'Allow analytic psql connection' :
+    firewall { '1000 Allow analytic psql connection' :
       ensure  => present,
       source  => "${analytic_ip}/32",
       dport   => $psql_port,
       action  => 'accept',
       require => Class['firewall_defaults::pre'],
     }
-    firewall { 'Allow https collector connection' :
+    firewall { '1000 Allow https collector connection' :
       ensure  => present,
       dport   => $service_port,
       proto   => 'tcp',

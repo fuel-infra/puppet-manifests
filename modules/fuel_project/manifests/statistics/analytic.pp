@@ -15,7 +15,8 @@ class fuel_project::statistics::analytic (
   $ssl_cert_file_contents = '',
 ) {
   class { '::fuel_project::common':
-    ldap => $ldap,
+    external_host => $apply_firewall_rules,
+    ldap          => $ldap,
   }
 
   if (!defined(Class['::nginx'])) {
@@ -157,7 +158,7 @@ class fuel_project::statistics::analytic (
         require => Class['firewall_defaults::pre'],
       })
     } else {
-      firewall { 'Allow http and https collector connection' :
+      firewall { '1000 Allow http and https collector connection' :
         ensure  => present,
         port    => [80, $service_port],
         proto   => 'tcp',

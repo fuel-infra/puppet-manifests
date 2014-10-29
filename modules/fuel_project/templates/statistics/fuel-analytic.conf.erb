@@ -16,6 +16,15 @@ server {
     ssl_stapling              on;
     ssl_stapling_verify       on;
 
+    location ~ ^(/fuel)?(/[A-Za-z_])?/(_count|_search) {
+        <% if @commercial %><% @firewall_allow_sources.each {|ip| %>
+        <%= "allow #{ip[1]["source"]};" %>
+        <% } %>
+        deny all;
+        <% end %>
+        proxy_pass http://127.0.0.1:9200;
+    }
+
     location / {
         <% if @commercial %><% @firewall_allow_sources.each {|ip| %>
         <%= "allow #{ip[1]["source"]};" %>
@@ -30,25 +39,4 @@ server {
   server_name <%= @fqdn %>;
   listen 80;
   rewrite ^ https://$server_name$request_uri? permanent;
-}
-
-server {
-    server_name <%= @fqdn %>;
-    listen 9200;
-
-    access_log /var/log/nginx/elastic.access.log proxy;
-    error_log /var/log/nginx/elastic.error.log;
-
-    location ~ ^/fuel/[A-Za-z_]/(_count|_search) {
-        <% if @commercial %><% @firewall_allow_sources.each {|ip| %>
-        <%= "allow #{ip[1]["source"]};" %>
-        <% } %>
-        deny all;
-        <% end %>
-        proxy_pass http://127.0.0.1:9201;
-    }
-
-    location / {
-        return   403;
-    }
 }
