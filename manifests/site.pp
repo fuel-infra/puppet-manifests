@@ -33,7 +33,7 @@ node /(mc([0-9]+)n([0-9]+)|srv([0-9]+))-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   }
 }
 
-node /cacher01-(cz|kha|mnv|pl)\.vm\.mirantis\.net/ {
+node /cacher01-(cz|kha|mnv|poz)\.vm\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
     keep_iso_days => 2,
   }
