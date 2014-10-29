@@ -3,7 +3,7 @@
 class fuel_project::puppet::master (
   $apply_firewall_rules = false,
   $external_host = false,
-  $firewall_allow_sources = [],
+  $firewall_allow_sources = {},
   $hiera_backends = ['yaml'],
   $hiera_config = '/etc/hiera.yaml',
   $hiera_config_template = 'puppet/hiera.yaml.erb',
