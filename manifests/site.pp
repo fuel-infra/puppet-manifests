@@ -9,6 +9,10 @@ File {
   replace => true,
 }
 
+Package {
+  require => Exec['apt_update'],
+}
+
 stage { 'pre' :
   before => Stage['main'],
 }
@@ -110,7 +114,7 @@ node 'monitor-product.vm.mirantis.net' {
   class { '::zabbix::server' :}
 }
 
-node 'fuel-puppet.vm.mirantis.net' {
+node /fuel-puppet(-tst)?\.vm\.mirantis\.net/ {
   class { '::fuel_project::puppet::master' :
     apply_firewall_rules => true,
     external_host        => true,

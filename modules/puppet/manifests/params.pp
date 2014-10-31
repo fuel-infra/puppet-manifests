@@ -2,7 +2,7 @@
 #
 class puppet::params {
   $apply_firewall_rules = false
-  $firewall_allow_sources = []
+  $firewall_allow_sources = {}
   $hiera_backends = ['yaml']
   $hiera_config = '/etc/hiera.yaml'
   $hiera_config_template = 'puppet/hiera.yaml.erb'
