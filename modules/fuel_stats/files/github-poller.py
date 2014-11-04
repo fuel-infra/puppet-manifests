@@ -15,7 +15,7 @@ DB_MIGRATION = REPO_LOCAL + "/collector/collector/api/db/migrations"
 
 def __main__():
     try:
-        repo = Repo(REPO_LOCAL, odbt=GitDB)
+        repo = Repo(REPO_LOCAL, odbt=GitCmdObjectDB)
     except InvalidGitRepositoryError:
         print "Invalid GIT repository path"
         exit(1)
@@ -27,6 +27,8 @@ def __main__():
         exit(0)
 
     # Ok, we need to update local repos
+    git = repo.git
+    git.stash()
     migration = False
     for diff in repo.head.commit.diff(remote_fetch.commit):
         if diff.b_blob:
@@ -38,13 +40,15 @@ def __main__():
     print "Pull from remote repo"
     repo.remotes.origin.pull()
 
+    # TODO: Add checking that git stash apply worked ok
+    git.stash("apply")
     if migration:
         os.system(
             "python {0} --mode=test db upgrade -d {1}".format(
                 MANAGE_COLLECTOR, DB_MIGRATION
             )
         )
-    # os.system("service uwsgi restart")
+    os.system("sudo service uwsgi restart")
 
 
 if __name__ == "__main__":

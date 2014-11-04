@@ -61,6 +61,7 @@ MODULES["puppetlabs-stdlib"]="4.3.2"
 MODULES["maestrodev-rvm"]="1.6.4"
 MODULES["thias-sysctl"]="1.0.0"
 MODULES["darin-zypprepo"]="1.0.1"
+MODULES["elasticsearch/elasticsearch"]="0.4.0"
 
 SOURCE_MODULES["https://github.com/teran/puppet-libvirt"]="0.3.2-2virsh-pool-bug"
 

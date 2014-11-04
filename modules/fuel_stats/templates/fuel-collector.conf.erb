@@ -5,6 +5,7 @@ server {
     access_log /var/log/nginx/collector.access.log proxy;
     error_log /var/log/nginx/collector.error.log;
 
+    <%- if @ssl_key_file != '' and @ssl_cert_file != '' -%>
     ssl                       on;
     ssl_certificate           <%= @ssl_cert_file %>;
     ssl_certificate_key       <%= @ssl_key_file %>;
@@ -15,8 +16,22 @@ server {
     ssl_session_timeout       10m;
     ssl_stapling              on;
     ssl_stapling_verify       on;
+    <%- end -%>
 
     location / {
+        <%- if @firewall_enable -%>
+        <%- if @firewall_allow_sources != {} -%>
+        <%- @firewall_allow_sources.each { |ip| -%>
+        <%= "allow #{ip[1]["source"]};" %>
+        <%- } -%>
+        deny all;
+        <%- elif @firewall_allow_sources != {} -%>
+        <%- @firewall_deny_sources.each { |ip| -%>
+        <%= "allow #{ip[1]["source"]};" %>
+        <%- } -%>
+        allow all;
+        <%- end -%>
+        <%- end -%>
         include uwsgi_params;
         uwsgi_pass 127.0.0.1:7932;
     }
