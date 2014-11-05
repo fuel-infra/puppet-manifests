@@ -85,6 +85,7 @@ class puppet::master (
       mode    => '0644',
       content => template('puppet/config.ru.erb'),
       require => File['/etc/puppet/rack'],
+      before  => Class['uwsgi'],
     }
 
     uwsgi::application { 'puppetmaster' :

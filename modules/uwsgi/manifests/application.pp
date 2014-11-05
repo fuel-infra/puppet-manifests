@@ -30,7 +30,10 @@ define uwsgi::application (
     owner   => 'root',
     group   => 'root',
     content => template('uwsgi/application.yaml.erb'),
-    require => Package[$::uwsgi::params::package],
+    require => [
+      Package[$::uwsgi::params::package],
+      Package[$::uwsgi::params::plugins_packages[$plugins]],
+    ],
     notify  => Service[$::uwsgi::params::service],
   }->
   file { "/etc/uwsgi/apps-enabled/${title}.yaml" :
