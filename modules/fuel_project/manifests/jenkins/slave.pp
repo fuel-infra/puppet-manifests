@@ -184,6 +184,7 @@ class fuel_project::jenkins::slave (
       'libconfig-auto-perl',
       'libmysqlclient-dev',
       'libparse-debian-packages-perl',
+      'libyaml-dev',
       'lrzip',
       'lxc-docker',
       'nodejs',
