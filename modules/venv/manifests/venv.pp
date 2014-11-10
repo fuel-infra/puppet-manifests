@@ -39,7 +39,10 @@ define venv::venv (
       user      => $user,
       cwd       => $path,
       logoutput => on_failure,
-      require   => Exec['venv-create'],
+      require   => [
+        Exec['venv-create'],
+        Package[$packages],
+      ],
     }
   }
 }
