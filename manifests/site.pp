@@ -88,7 +88,7 @@ node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
-node /pxe-product-(msk|srt|cz)\.((msk|srt)\.mirantis\.net|fuel-infra\.org)/ {
+node /pxe-product2?-(msk|srt|cz)\.((msk|srt|vm)\.mirantis\.net|fuel-infra\.org)/ {
   include pxe_deployment
 }
 
