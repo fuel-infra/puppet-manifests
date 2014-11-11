@@ -61,8 +61,10 @@ class puppet::master (
   }
   elsif ($puppet_master_run_with == 'nginx+uwsgi') {
     service { $service :
-      ensure => 'stopped',
-      enable => false,
+      ensure  => 'stopped',
+      enable  => false,
+      require => Package[$package],
+      notify  => Service[nginx],
     }
     if (!defined(Class['uwsgi'])) {
       class { 'uwsgi' :}
