@@ -62,7 +62,10 @@ class devops (
   file { '/usr/lib/python2.7/dist-packages/devops/local_settings.py' :
     ensure  => link,
     target  => '/etc/devops/local_settings.py',
-    require => File['/etc/devops/local_settings.py'],
+    require => [
+      File['/etc/devops/local_settings.py'],
+      Package['python-devops'],
+    ]
   }
 
   if $install_cron_cleanup {
