@@ -105,6 +105,8 @@ gerrit::commentlinks:
     match: '(<p>|[\\s(])([0-9a-f]{40})(</p>|[\\s.,;:)])'
     html: '$1<a href=\"#q,$2,n,z\">$2</a>$3'
 
+gerrit::email: 'review@test.local'
+
 jenkins::master::service_fqdn: 'jenkins-product.test.local'
 
 jenkins::master::ssl_cert_file: '/etc/ssl/jenkins.crt'
