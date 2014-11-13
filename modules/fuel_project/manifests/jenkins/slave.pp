@@ -14,6 +14,7 @@ class fuel_project::jenkins::slave (
   $fuelweb_iso           = false,
   $ldap_uri              = '',
   $ldap_base             = '',
+  $nailgun_db            = ['nailgun'],
   $tls_cacertdir         = '',
   $pam_password          = '',
   $pam_filter            = '',
@@ -321,7 +322,7 @@ class fuel_project::jenkins::slave (
       class { 'postgresql::server' : }
     }
 
-    postgresql::server::db { 'nailgun':
+    postgresql::server::db { $nailgun_db:
       user     => 'nailgun',
       password => 'nailgun',
     }

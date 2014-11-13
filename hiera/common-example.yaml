@@ -251,6 +251,17 @@ apt::sources:
     include_src: false
     include_deb: true
 
+fuel_project::jenkins::slave::nailgun_db:
+  - 'nailgun'
+  - 'nailgun0'
+  - 'nailgun1'
+  - 'nailgun2'
+  - 'nailgun3'
+  - 'nailgun4'
+  - 'nailgun5'
+  - 'nailgun6'
+  - 'nailgun7'
+
 fuel_project::seed::firewall_allow_sources:
   '1000 - allow seed connections from 10.0.0.0/8':
     source: '10.0.0.0/8'
