@@ -64,6 +64,7 @@ MODULES["darin-zypprepo"]="1.0.1"
 MODULES["elasticsearch/elasticsearch"]="0.4.0"
 
 SOURCE_MODULES["https://github.com/teran/puppet-libvirt"]="0.3.2-2virsh-pool-bug"
+SOURCE_MODULES["https://github.com/SergK/puppet-znc"]="0.0.8"
 
 MODULE_LIST=`puppet module list`
 
