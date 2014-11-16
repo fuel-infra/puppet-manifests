@@ -113,6 +113,16 @@ class gerrit (
     ensure => present,
   }
 
+  package { 'gerrit':
+    ensure  => present,
+    require => [
+      File['/var/lib/gerrit/review_site/etc/gerrit.config'],
+      File['/var/lib/gerrit/review_site/etc/secure.config'],
+      File['/var/lib/gerrit/review_site/lib/mysql-connector-java.jar'],
+      File['/var/lib/gerrit/review_site/lib/bcprov.jar'],
+    ],
+  }
+
   if $external_host {
     firewall { '1000 allow gerrit connections' :
       dport   => ['80', '443', '29418'],
@@ -122,12 +132,11 @@ class gerrit (
     }
   }
 
-  package { 'gerrit':
-    ensure  => present,
-    require => [
-      File['/var/lib/gerrit/review_site/etc/gerrit.config'],
-      File['/var/lib/gerrit/review_site/etc/secure.config'],
-    ],
+  file { '/var/lib/gerrit/review_site/bin/' :
+    ensure  => 'directory',
+    recurse => true,
+    owner   => 'root',
+    group   => 'root',
   }
 
   file { '/var/lib/gerrit/review_site/bin/gerrit.sh' :
@@ -136,6 +145,7 @@ class gerrit (
     group   => 'root',
     mode    => '0755',
     content => template('gerrit/gerrit.init.d.erb'),
+    require => File['/var/lib/gerrit/review_site/bin/'],
   }
 
   package { 'openjdk-6-jre-headless':
@@ -254,6 +264,7 @@ class gerrit (
       mode    => '0640',
       content => $ssl_cert_file_contents,
       before  => File['/etc/nginx/sites-enabled/gerrit.conf'],
+      require => Class['nginx'],
     }
   }
 
@@ -264,6 +275,7 @@ class gerrit (
       mode    => '0400',
       content => $ssl_key_file_contents,
       before  => File['/etc/nginx/sites-enabled/gerrit.conf'],
+      require => Class['nginx'],
     }
   }
 
@@ -274,6 +286,7 @@ class gerrit (
       mode    => '0400',
       content => $ssl_chain_file_contents,
       before  => File['/etc/nginx/sites-enabled/gerrit.conf'],
+      require => Class['nginx'],
     }
   }
 
@@ -387,7 +400,8 @@ class gerrit (
   }
 
   package { 'libmysql-java':
-    ensure => present,
+    ensure  => present,
+    require => Package['openjdk-7-jre-headless']
   }
 
   file { '/var/lib/gerrit/review_site/lib/mysql-connector-java.jar':
@@ -396,7 +410,6 @@ class gerrit (
     require => [
       Package['libmysql-java'],
       File['/var/lib/gerrit/review_site/lib'],
-      Package['gerrit'],
     ],
     notify  => Service['gerrit'],
   }
@@ -407,7 +420,8 @@ class gerrit (
   }
 
   package { 'libbcprov-java':
-    ensure => present,
+    ensure  => present,
+    require => Package['openjdk-7-jre-headless'],
   }
   file { '/var/lib/gerrit/review_site/lib/bcprov.jar':
     ensure  => link,
