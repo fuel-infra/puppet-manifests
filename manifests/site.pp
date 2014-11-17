@@ -9,9 +9,7 @@ File {
   replace => true,
 }
 
-Package {
-  require => Exec['apt_update'],
-}
+Exec['apt_update'] -> Package <| |>
 
 stage { 'pre' :
   before => Stage['main'],
