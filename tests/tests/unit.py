@@ -40,7 +40,7 @@ hosts_file = None
 
 TESTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-SSH = "ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -l ubuntu"
+SSH = "ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i {0} -l ubuntu".format(test_config['rsa_private_key'])
 
 
 def init_nova_connection():
