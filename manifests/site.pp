@@ -37,6 +37,16 @@ node /(mc([0-9]+)n([0-9]+)|srv([0-9]+))-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   }
 }
 
+node /srv(22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37)\.bud\.mirantis\.net/ {
+  class { '::fuel_project::jenkins::slave' :
+    run_tests      => true,
+    build_fuel_iso => true,
+    fuelweb_iso    => true,
+    ldap           => true,
+  }
+}
+
+
 node /cacher01-(cz|kha|mnv|poz)\.vm\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
     keep_iso_days => 2,
