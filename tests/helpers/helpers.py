@@ -29,8 +29,12 @@ import xmlrpclib
 import paramiko
 
 
-class TimeoutError:
-    pass
+class TimeoutError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return self.message
 
 
 def icmp_ping(host, timeout=1):

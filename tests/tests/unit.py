@@ -2,6 +2,7 @@
 from novaclient.client import Client
 from novaclient import exceptions
 from proboscis import test
+from proboscis.asserts import assert_equal
 from proboscis.asserts import assert_true
 import paramiko
 from helpers.helpers import wait, tcp_ping
@@ -24,6 +25,7 @@ test_config = {
     'count': int(os.getenv('count', '10')),
     'domain': os.getenv('domain', 'test.local'),
     'rsa_private_key': os.getenv('rsa_private_key', '~/.ssh/id_rsa'),
+    'ssh_timeout': int(os.getenv('ssh_timeout', '300')),
 }
 
 slave_hosts = map(lambda x: "slave-{0:02}".format(x+1),
@@ -95,11 +97,12 @@ def create_server(hostnames=["slave-01"]):
             key_name=keypair,
         )
         while getattr(server, 'OS-EXT-STS:vm_state') != 'active':
-            print hostname + ": " + getattr(server, 'OS-EXT-STS:vm_state')
+            print ("Create server [{0}]: current status {1}".
+                format(hostname, getattr(server, 'OS-EXT-STS:vm_state')))
             try:
                 server = nova_client.servers.find(name=hostname)
             except exceptions.NotFound:
-                print "%s not found" % hostname
+                print "{1} not found".format(hostname)
                 pass
             time.sleep(1)
         server.add_floating_ip(hosts[server.name]['ip'])
@@ -107,8 +110,9 @@ def create_server(hostnames=["slave-01"]):
 
     for i in range(len(servers)):
         ip = hosts[hostnames[i]]['ip']
-        print "Wating for {ip}".format(ip=ip)
-        wait(lambda: tcp_ping(ip, '22'), 5, 300)
+        print ("Wating for ssh on {0} for {1} seconds".
+            format(ip, test_config['ssh_timeout']))
+        wait(lambda: tcp_ping(ip, '22'), 5, test_config['ssh_timeout'])
         ssh = connect(ip)
         hostname = hostnames[i]
         ssh_run(ssh, "echo 127.0.0.1 {0}.{1} {0} | sudo tee -a /etc/hosts".
@@ -153,8 +157,10 @@ def puppet_master_installation():
     create_server(["pxetool"])
     master_ip = ip = hosts["pxetool"]['ip']
     ssh = connect(ip)
-    os.system(("rsync --delete -e '{ssh}' --rsync-path='sudo rsync' -aqc " +
-              " {src}/ {ip}:/etc/puppet/").format(ssh=SSH, src=SRC_DIR, ip=ip))
+    exit_code = os.system((
+        "rsync --delete -e '{ssh}' --rsync-path='sudo rsync' -aqc " +
+        " {src}/ {ip}:/etc/puppet/").format(ssh=SSH, src=SRC_DIR, ip=ip))
+    assert_equal(exit_code, 0)
     ssh_run(ssh, "sudo mkdir /var/lib/hiera; sudo ln -s " +
             "/etc/puppet/hiera/common-example.yaml /var/lib/hiera/common.yaml")
     ssh_run(ssh, "sudo sh -x /etc/puppet/bin/install_puppet_master.sh")
