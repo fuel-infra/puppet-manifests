@@ -22,8 +22,6 @@ chmod 400 /var/log/puppet/firstboot.log
     PUPPET_CMD='puppet agent -tvd'
     $PUPPET_CMD --server __PUPPET_MASTER__ --waitforcert 30
     $PUPPET_CMD --server __PUPPET_MASTER__
-    $PUPPET_CMD --server __PUPPET_MASTER__
-    $PUPPET_CMD
 
     LASTPUPPET_EXC="$?"
     if [[ "${LASTPUPPET_EXC}" == "2" ]]

@@ -42,8 +42,14 @@ hosts_file = None
 
 TESTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-SSH = "ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i {0} -l ubuntu".format(test_config['rsa_private_key'])
-
+SSH = 'ssh -o{opts} -i {pkey} -l {user}'.format(
+    opts=' -o'.join([
+        'StrictHostKeyChecking=no',
+        'UserKnownHostsFile=/dev/null'
+    ]),
+    pkey=test_config['rsa_private_key'],
+    user='ubuntu'
+)
 
 def init_nova_connection():
     global nova_client
@@ -168,16 +174,19 @@ def puppet_master_installation():
 
 def error_log_checker(host):
     """Check for SSL puppet master error"""
-    log = ssh_run(hosts[host]['ssh'], "sudo cat /var/log/puppet/firstboot.log")
+    ssh = hosts[host]['ssh']
+    log = ssh_run(
+        ssh,
+        "sudo cat /var/log/puppet/firstboot.log | grep \"puppet cert clean\"")
 
     # We are looking for phrase
     # On the master:
     #   puppet cert clean slave-07.test.local
     if "puppet cert clean" in log:
         pxetool = connect(hosts['pxetool']['ip'])
-        ssh_run("sudo puppet cert --clean {0}".format(host))
-        ssh_run(hosts['pxetool']['ssh'], "sudo rm -rf /var/lib/puppet/ssl/")
-        i, o, e = ssh.exec_command("sudo bash -x /tmp/rc.local".format(timer))
+        ssh_run(ssh, "sudo puppet cert --clean {0}".format(host))
+        ssh_run(ssh, "sudo rm -rf /var/lib/puppet/ssl/")
+        i, o, e = ssh.exec_command("sudo bash -x /tmp/rc.local")
         hosts[host]['ssh_stdout'] = o
         return False
     return True
@@ -194,8 +203,6 @@ def slave_install():
         hosts[host]['ssh'] = ssh
         sftp = ssh.open_sftp()
         sftp.put(TESTS_DIR + "/rc.local", "/tmp/rc.local")
-        ssh_run(ssh, "echo 'deb http://fuel-repository.mirantis.com/devops/ubuntu/ /' | sudo tee -a /etc/apt/sources.list")
-        ssh_run(ssh, "sudo apt-get update")
         ssh_run(ssh, "sed -i 's/__PUPPET_MASTER__/{host}/' /tmp/rc.local"
                 .format(host="pxetool.test.local"))
         i, o, e = ssh.exec_command(
