@@ -28,19 +28,21 @@ class pxe_deployment {
 
 node /(mc([0-9]+)n([0-9]+)|srv([0-9]+))-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
-    run_tests      => true,
-    build_fuel_iso => true,
-    fuelweb_iso    => true,
-    ldap           => true,
+    run_tests           => true,
+    build_fuel_iso      => true,
+    fuelweb_iso         => true,
+    ldap                => true,
+    jenkins_swarm_slave => true,
   }
 }
 
 node /srv(22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37)-bud\.bud\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
-    run_tests      => true,
-    build_fuel_iso => true,
-    fuelweb_iso    => true,
-    ldap           => true,
+    run_tests           => true,
+    build_fuel_iso      => true,
+    fuelweb_iso         => true,
+    ldap                => true,
+    jenkins_swarm_slave => true,
   }
 }
 
@@ -131,8 +133,9 @@ node /fuel-puppet(-tst)?\.vm\.mirantis\.net/ {
 
 node 'twin1a-srt.srt.mirantis.net' {
   class { '::fuel_project::jenkins::slave' :
-    run_tests => true,
-    ldap      => true,
+    run_tests           => true,
+    ldap                => true,
+    jenkins_swarm_slave => true,
   }
 }
 
@@ -276,9 +279,10 @@ node 'slave-02.test.local' {
 
 node 'slave-03.test.local' {
   class { '::fuel_project::jenkins::slave' :
-    run_tests          => true,
-    ldap               => true,
-    build_fuel_plugins => true,
+    run_tests           => true,
+    ldap                => true,
+    build_fuel_plugins  => true,
+    jenkins_swarm_slave => true,
   }
 }
 
