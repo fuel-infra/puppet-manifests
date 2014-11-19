@@ -17,3 +17,5 @@ find . -name '*.pp' | xargs -P1 -L1 puppet-lint \
 
 find . -name '*.erb' | xargs -P1 -L1 -I '%' erb \
           -P -x -T '-' % | ruby -c
+
+find tests -name '*.py' | xargs -P1 -L1 flake8 --show-source --ignore=F401
