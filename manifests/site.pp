@@ -381,6 +381,13 @@ node 'slave-11.test.local' {
   }
 }
 
+node 'slave-12.test.local' {
+  class { '::fuel_project::znc' :
+    apply_firewall_rules => false,
+    service_port         => 7777,
+  }
+}
+
 # Default
 
 node default {
