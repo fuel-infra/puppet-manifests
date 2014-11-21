@@ -5,7 +5,7 @@ from proboscis import test
 from proboscis.asserts import assert_equal
 from proboscis.asserts import assert_true
 import paramiko
-from helpers.helpers import wait, tcp_ping
+from helpers.helpers import wait, tcp_ping, TimeoutError
 import time
 import os
 import sys
@@ -160,7 +160,14 @@ def allocate_hostnames():
 def puppet_master_installation():
     global master_ip
     init_nova_connection()
-    create_server(["pxetool"])
+    # ToDo: remove this exeption block after upgrade to newer OpenStack
+    # Sometimes allocation floating ip doesn't work correctly
+    # so it is needed to run recreate server
+    try:
+        create_server(["pxetool"])
+    except TimeoutError:
+        nova_clean_instances()
+        create_server(["pxetool"])
     master_ip = ip = hosts["pxetool"]['ip']
     ssh = connect(ip)
     exit_code = os.system((
