@@ -414,6 +414,7 @@ class fuel_project::jenkins::slave (
       'createrepo',
       'dpkg-dev',
       'libyaml-dev',
+      'make',
       'python-dev',
       'ruby-dev',
       'gcc',
@@ -429,6 +430,7 @@ class fuel_project::jenkins::slave (
     package { 'fpm' :
       ensure   => 'present',
       provider => 'gem',
+      require  => Package['make'],
     }
   }
 
