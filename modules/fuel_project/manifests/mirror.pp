@@ -31,15 +31,17 @@ class fuel_project::mirror (
     require => Class['nginx'],
   }
 
-  class { 'rsync::server' :
-    gid        => 'root',
-    uid        => 'root',
-    use_chroot => 'yes',
-    use_xinetd => false,
+  if (!defined(Class['::rsync::server'])) {
+    class { '::rsync::server' :
+      gid        => 'root',
+      uid        => 'root',
+      use_chroot => 'yes',
+      use_xinetd => false,
+    }
   }
 
-  rsync::server::module{ 'mirror':
-    comment         => 'Fuel rsync mirror',
+  ::rsync::server::module{ 'mirror':
+    comment         => 'Fuel mirror rsync share',
     uid             => 'nobody',
     gid             => 'nogroup',
     list            => 'yes',
@@ -51,8 +53,8 @@ class fuel_project::mirror (
     require         => File[$dir],
   }
 
-  rsync::server::module{ 'mirror-sync':
-    comment         => 'Fuel sync',
+  ::rsync::server::module{ 'mirror-sync':
+    comment         => 'Fuel mirror sync',
     uid             => 'www-data',
     gid             => 'www-data',
     hosts_allow     => $sync_hosts_allow,
@@ -68,10 +70,10 @@ class fuel_project::mirror (
     require         => File[$dir],
   }
 
-  if (!defined(Class['nginx'])) {
-    class { 'nginx' :}
+  if (!defined(Class['::fuel_project::nginx'])) {
+    class { '::fuel_project::nginx' :}
   }
-  nginx::resource::vhost { 'mirror' :
+  ::nginx::resource::vhost { 'mirror' :
     ensure      => 'present',
     www_root    => '/var/www/mirror',
     server_name => [$service_fqdn, "mirror.${::fqdn}"]

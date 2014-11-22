@@ -16,14 +16,14 @@ class fuel_project::seed (
     firewall_allow_sources => $tracker_firewall_allow_sources,
   }
 
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :}
+  if (!defined(Class['::fuel_project::nginx'])) {
+    class { '::fuel_project::nginx' :}
   }
   nginx::resource::vhost { 'seed' :
     ensure      => 'present',
     autoindex   => 'off',
     www_root    => $seed_dir,
-    server_name => [$server_fqdn, "seed.${::fqdn}"]
+    server_name => [$service_fqdn, "seed.${::fqdn}"]
   }
 
   if (!defined(File['/var/www'])) {

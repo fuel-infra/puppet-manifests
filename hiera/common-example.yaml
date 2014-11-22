@@ -313,6 +313,11 @@ fuel_project::mirror::service_aliases:
   - repo.test.local
 fuel_project::seed::service_fqdn: 'seed.test.local'
 
+fuel_project::updates::service_fqdn: 'updates.test.local'
+fuel_project::updates::sync_hosts_allow:
+  - 10.108.0.0/16
+  - 192.168.1.1/24
+
 jenkins::slave::authorized_keys:
   'jenkins@mytestserver':
     type: ssh-rsa
