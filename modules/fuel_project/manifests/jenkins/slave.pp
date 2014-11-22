@@ -37,7 +37,7 @@ class fuel_project::jenkins::slave (
     bind_policy       => $bind_policy,
     ldap_ignore_users => $ldap_ignore_users,
   }
-  include venv
+
   class { 'transmission::daemon' :}
 
   if $jenkins_swarm_slave == true {
