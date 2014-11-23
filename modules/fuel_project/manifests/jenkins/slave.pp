@@ -23,6 +23,7 @@ class fuel_project::jenkins::slave (
   $ldap_ignore_users     = '',
   $keep_iso_days         = 10,
   $storage_dirs          = ['/var/www/fuelweb-iso', '/srv/downloads'],
+  $jenkins_swarm_slave   = false,
 ) {
   class { '::fuel_project::common' :
     external_host     => $external_host,
@@ -39,7 +40,10 @@ class fuel_project::jenkins::slave (
   include venv
   class { 'transmission::daemon' :}
 
-  if $external_host == true {
+  if $jenkins_swarm_slave == true {
+    class { '::jenkins::swarm_slave' :}
+
+  } else {
     class { '::jenkins::slave' :}
 
     ssh::known_host { 'review.openstack.org-known-hosts' :
@@ -48,8 +52,6 @@ class fuel_project::jenkins::slave (
       user    => 'jenkins',
       require => Class['::jenkins::slave'],
     }
-  } else {
-    class { '::jenkins::swarm_slave' :}
   }
 
   ensure_packages(['python-seed-cleaner', 'python-seed-client'])
