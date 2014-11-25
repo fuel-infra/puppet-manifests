@@ -176,7 +176,7 @@ def puppet_master_installation():
     assert_equal(exit_code, 0)
     ssh_run(ssh, "sudo mkdir /var/lib/hiera; sudo ln -s " +
             "/etc/puppet/hiera/common-example.yaml /var/lib/hiera/common.yaml")
-    ssh_run(ssh, "sudo sh -x /etc/puppet/bin/install_puppet_master.sh")
+    ssh_run(ssh, "sudo sh -x /etc/puppet/bin/install_puppet_master.sh 2>&1")
 
 
 def error_log_checker(host):
@@ -191,7 +191,7 @@ def error_log_checker(host):
     #   puppet cert clean slave-07.test.local
     if "puppet cert clean" in log:
         ssh_run(ssh, "sudo rm -rf /var/lib/puppet/ssl/")
-        i, o, e = ssh.exec_command("sudo bash -x /tmp/rc.local")
+        i, o, e = ssh.exec_command("sudo bash -x /tmp/rc.local 2>&1")
         hosts[host]['ssh_stdout'] = o
         return False
     return True
@@ -211,7 +211,7 @@ def slave_install():
         ssh_run(ssh, "sed -i 's/__PUPPET_MASTER__/{host}/' /tmp/rc.local"
                 .format(host="pxetool.test.local"))
         i, o, e = ssh.exec_command(
-            'sleep {0}; sudo bash -x /tmp/rc.local'.format(
+            'sleep {0}; sudo bash -x /tmp/rc.local 2>&1'.format(
                 timer))
         timer += 30
         hosts[host]['ssh_stdout'] = o
