@@ -6,9 +6,16 @@ from proboscis.asserts import assert_equal
 from proboscis.asserts import assert_true
 import paramiko
 from helpers.helpers import wait, tcp_ping, TimeoutError
+import re
 import time
 import os
 import sys
+
+TESTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+with open("{}/manifests/site.pp".format(SRC_DIR)) as f:
+    slave_hosts = re.findall('node \'(.*)\.test\.local\'', f.read())
+slave_hosts.remove('pxetool')
 
 test_config = {
     'nova_config': {
@@ -22,14 +29,12 @@ test_config = {
     'network': os.getenv('nova_network', 'test_network'),
     'image': os.getenv('nova_image', 'ubuntu14.04'),
     'keypair': os.getenv('nova_keypair'),
-    'count': int(os.getenv('count', '10')),
+    'count': int(os.getenv('count', str(len(slave_hosts)))),
     'domain': os.getenv('domain', 'test.local'),
     'rsa_private_key': os.getenv('rsa_private_key', '~/.ssh/id_rsa'),
     'ssh_timeout': int(os.getenv('ssh_timeout', '300')),
 }
 
-slave_hosts = map(lambda x: "slave-{0:02}".format(x + 1),
-                  range(test_config['count']))
 nova_client = None
 flavor = None
 image = None
@@ -40,8 +45,6 @@ master_hostname = None
 hosts = {}
 hosts_file = None
 
-TESTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 SSH = 'ssh -o{opts} -i {pkey} -l {user}'.format(
     opts=' -o'.join([
         'StrictHostKeyChecking=no',
