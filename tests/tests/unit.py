@@ -5,7 +5,7 @@ from proboscis import test
 from proboscis.asserts import assert_equal
 from proboscis.asserts import assert_true
 import paramiko
-from helpers.helpers import wait, tcp_ping
+from helpers.helpers import wait, tcp_ping, TimeoutError
 import time
 import os
 import sys
@@ -28,7 +28,7 @@ test_config = {
     'ssh_timeout': int(os.getenv('ssh_timeout', '300')),
 }
 
-slave_hosts = map(lambda x: "slave-{0:02}".format(x+1),
+slave_hosts = map(lambda x: "slave-{0:02}".format(x + 1),
                   range(test_config['count']))
 nova_client = None
 flavor = None
@@ -50,6 +50,7 @@ SSH = 'ssh -o{opts} -i {pkey} -l {user}'.format(
     pkey=test_config['rsa_private_key'],
     user='ubuntu'
 )
+
 
 def init_nova_connection():
     global nova_client
@@ -100,11 +101,10 @@ def create_server(hostnames=["slave-01"]):
             hostname,
             flavor=flavor,
             image=image,
-            key_name=keypair,
-        )
+            key_name=keypair)
         while getattr(server, 'OS-EXT-STS:vm_state') != 'active':
-            print ("Create server [{0}]: current status {1}".
-                format(hostname, getattr(server, 'OS-EXT-STS:vm_state')))
+            print ("Create server [{0}]: current status {1}".format(
+                hostname, getattr(server, 'OS-EXT-STS:vm_state')))
             try:
                 server = nova_client.servers.find(name=hostname)
             except exceptions.NotFound:
@@ -116,8 +116,8 @@ def create_server(hostnames=["slave-01"]):
 
     for i in range(len(servers)):
         ip = hosts[hostnames[i]]['ip']
-        print ("Wating for ssh on {0} for {1} seconds".
-            format(ip, test_config['ssh_timeout']))
+        print ('Wating for ssh on {0} for {1} seconds'.format(
+            ip, test_config['ssh_timeout']))
         wait(lambda: tcp_ping(ip, '22'), 5, test_config['ssh_timeout'])
         ssh = connect(ip)
         hostname = hostnames[i]
@@ -160,7 +160,14 @@ def allocate_hostnames():
 def puppet_master_installation():
     global master_ip
     init_nova_connection()
-    create_server(["pxetool"])
+    # ToDo: remove this exeption block after upgrade to newer OpenStack
+    # Sometimes allocation floating ip doesn't work correctly
+    # so it is needed to run recreate server
+    try:
+        create_server(["pxetool"])
+    except TimeoutError:
+        nova_clean_instances()
+        create_server(["pxetool"])
     master_ip = ip = hosts["pxetool"]['ip']
     ssh = connect(ip)
     exit_code = os.system((
@@ -183,8 +190,6 @@ def error_log_checker(host):
     # On the master:
     #   puppet cert clean slave-07.test.local
     if "puppet cert clean" in log:
-        pxetool = connect(hosts['pxetool']['ip'])
-        ssh_run(ssh, "sudo puppet cert --clean {0}".format(host))
         ssh_run(ssh, "sudo rm -rf /var/lib/puppet/ssl/")
         i, o, e = ssh.exec_command("sudo bash -x /tmp/rc.local")
         hosts[host]['ssh_stdout'] = o
@@ -206,9 +211,8 @@ def slave_install():
         ssh_run(ssh, "sed -i 's/__PUPPET_MASTER__/{host}/' /tmp/rc.local"
                 .format(host="pxetool.test.local"))
         i, o, e = ssh.exec_command(
-            "sleep {0}; sudo bash -x /tmp/rc.local".format(
-                 timer
-        ))
+            'sleep {0}; sudo bash -x /tmp/rc.local'.format(
+                timer))
         timer += 30
         hosts[host]['ssh_stdout'] = o
         hosts[host]['opened'] = True
@@ -243,7 +247,8 @@ def slave_install():
     for host in slave_hosts:
         result = ssh_run(hosts[host]['ssh'], "ls -1 /etc/puppet/install_*")
         if not 'install_ok' in result:
-            print "Host {host} ({ip}) has failed".format(host=host, ip=hosts[host]['ip'])
+            print "Host {host} ({ip}) has failed".format(
+                host=host, ip=hosts[host]['ip'])
             Success = False
     print "Finish"
     assert_true(Success)

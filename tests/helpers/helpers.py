@@ -12,21 +12,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import BaseHTTPServer
-import httplib
-import logging
 import os
-import posixpath
-import random
-from SimpleHTTPServer import SimpleHTTPRequestHandler
 import socket
-import stat
-from threading import Thread
 import time
-import urllib
-import xmlrpclib
-
-import paramiko
 
 
 class TimeoutError(Exception):
