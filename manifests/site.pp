@@ -267,6 +267,17 @@ node 'web01.fuel-infra.org' {
   class { '::release_status' :}
 }
 
+node 'gfs01-msk.vm.mirantis.net' {
+  class { '::fuel_project::glusterfs' :  }
+}
+
+node 'gfs02-msk.vm.mirantis.net' {
+  class { '::fuel_project::glusterfs' :
+    create_pool     => true,
+    gfs_pool        => [ 'gfs01-msk.vm.mirantis.net','gfs02-msk.vm.mirantis.net' ],
+    gfs_volume_name => 'data',
+  }
+}
 
 # Test nodes definitions
 
@@ -411,7 +422,19 @@ node 'slave-12.test.local' {
   }
 }
 
-node 'slave-16.test.local' {
+node 'slave-13.test.local' {
+  class { '::fuel_project::glusterfs' :  }
+}
+
+node 'slave-14.test.local' {
+  class { '::fuel_project::glusterfs' :
+    create_pool     => true,
+    gfs_pool        => [ 'slave-13.test.local','slave-14.test.local' ],
+    gfs_volume_name => 'data',
+  }
+}
+
+node 'slave-15.test.local' {
   class { '::fuel_project::common' :}
   class { '::release_status' :}
 }

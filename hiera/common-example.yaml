@@ -334,6 +334,10 @@ fuel_project::jenkins::slave::nailgun_db:
   - 'nailgun6'
   - 'nailgun7'
 
+fuel_project::glusterfs::firewall_allow_sources:
+  '1000 - allow glusterfs daemon connections from 0.0.0.0/0':
+    source: '0.0.0.0/0'
+
 fuel_project::seed::firewall_allow_sources:
   '1000 - allow seed connections from 10.0.0.0/8':
     source: '10.0.0.0/8'
