@@ -57,6 +57,75 @@ class zabbix::params {
   $frontend_zabbix_server_port = '10051'
 
   #
+  # Proxy default configuration
+  #
+  $proxy_apply_firewall_rules = false
+  $proxy_cache_size = '8M'
+  $proxy_config = '/etc/zabbix/zabbix_proxy.conf'
+  $proxy_config_frequency = 3600
+  $proxy_config_template = 'zabbix/proxy/zabbix_proxy.conf.erb'
+  $proxy_data_sender_frequency = 1
+  #$proxy_db_driver
+  $proxy_db_host = '127.0.0.1'
+  $proxy_db_name = 'zabbix'
+  $proxy_db_password = 'zabbix'
+  $proxy_db_port = 3306
+  $proxy_db_socket = undef
+  $proxy_db_user = 'zabbix'
+  $proxy_debug_level = 3
+  $proxy_enable_snmp_bulk_requests = true
+  $proxy_external_scripts = '/etc/zabbix/external.d'
+  $proxy_firewall_allow_sources = {}
+  $proxy_fping6_location = '/usr/sbin/fping6'
+  $proxy_fping_location = '/usr/sbin/fping'
+  $proxy_heartbeat_frequency = '60'
+  $proxy_history_cache_size = '8M'
+  $proxy_history_text_cache_size = '16M'
+  $proxy_hostname = $::fqdn
+  $proxy_hostname_item = 'system.hostname'
+  $proxy_housekeeping_frequency = '1'
+  $proxy_include = undef
+  $proxy_java_gateway = undef
+  $proxy_java_gateway_port = 10052
+  $proxy_listen_ip = '0.0.0.0'
+  $proxy_listen_port = '10051'
+  $proxy_load_module = undef
+  $proxy_load_module_path = undef
+  $proxy_local_buffer = '0'
+  $proxy_log_file = '/var/log/zabbix-proxy/zabbix_proxy.log'
+  $proxy_log_file_size = '1'
+  $proxy_log_slow_queries = '0'
+  $proxy_mode = 'passive'
+  $proxy_offline_buffer = '1'
+  $proxy_package = 'zabbix-proxy-mysql'
+  $proxy_pid_file = '/var/run/zabbix/zabbix_proxy.pid'
+  $proxy_server_port = '10051'
+  $proxy_server = undef
+  $proxy_service = 'zabbix-proxy'
+  $proxy_snmp_trapper_file = '/tmp/zabbix_traps.tmp'
+  $proxy_source_ip = undef
+  $proxy_ssh_key_location = undef
+  $proxy_start_db_syncers = '4'
+  $proxy_start_discoverers = '1'
+  $proxy_start_http_pollers = '1'
+  $proxy_start_ipmi_pollers = '0'
+  $proxy_start_java_pollers = '0'
+  $proxy_start_pingers = '1'
+  $proxy_start_pollers = '5'
+  $proxy_start_pollers_unreachable = '1'
+  $proxy_start_snmp_trapper = false
+  $proxy_start_trappers = '5'
+  $proxy_start_vmware_collectors = '0'
+  $proxy_timeout = '3'
+  $proxy_tmp_dir = '/tmp'
+  $proxy_trapper_timeout = '300'
+  $proxy_unavailable_delay = '60'
+  $proxy_unreachable_delay = '15'
+  $proxy_unreachable_period = '300'
+  $proxy_vmware_cache_size = '8M'
+  $proxy_vmware_frequency = '60'
+
+  #
   # Server default configuration
   #
   $server_alert_script_path = '/etc/zabbix/alert.d/'

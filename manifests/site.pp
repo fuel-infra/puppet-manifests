@@ -124,6 +124,11 @@ node 'monitor-product.vm.mirantis.net' {
   class { '::zabbix::server' :}
 }
 
+node /zbxproxy0([0-9]+)-([a-z]+)\.vm\.mirantis\.net/ {
+  class { '::fuel_project::common' :}
+  class { '::zabbix::proxy' :}
+}
+
 node /fuel-puppet(-tst)?\.vm\.mirantis\.net/ {
   class { '::fuel_project::puppet::master' :
     apply_firewall_rules => true,
