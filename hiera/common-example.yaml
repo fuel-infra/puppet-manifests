@@ -409,8 +409,8 @@ obs_server::repo::repo_name: 'OBS_Server_2.5'
 obs_server::nginx::access_log_file: '/srv/www/obs/api/log/nginx-obs-api-access.log'
 obs_server::nginx::error_log_file: '/srv/www/obs/api/log/nginx-obs-api-error.log'
 
-obs_server::ssl_cert_file: '/srv/obs/certs/server.crt'
-obs_server::ssl_cert_file_contents: |
+obs_server::nginx::ssl_cert_file: '/srv/obs/certs/server.crt'
+obs_server::nginx::ssl_cert_file_contents: |
   -----BEGIN CERTIFICATE-----
   MIIDAjCCAeoCCQCyRpkj6ONVVjANBgkqhkiG9w0BAQUFADBDMQswCQYDVQQGEwJV
   QTERMA8GA1UEChMITWlyYW50aXMxITAfBgNVBAMTGHZhZ3JhbnQua2hhLm1pcmFu
@@ -431,8 +431,8 @@ obs_server::ssl_cert_file_contents: |
   0S3GYrjO
   -----END CERTIFICATE-----
 
-obs_server::ssl_key_file: '/srv/obs/certs/server.key'
-obs_server::ssl_key_file_contents: |
+obs_server::nginx::ssl_key_file: '/srv/obs/certs/server.key'
+obs_server::nginx::ssl_key_file_contents: |
   -----BEGIN RSA PRIVATE KEY-----
   MIIEpAIBAAKCAQEAyjVRVcdfRgJMkFtlYiLOXVv350d2EYVlr+XDjvGR7cpLbkOM
   aV7npw4+LYnAeMpPobNB93X3u1+i5RT6NpUPM+4zwaICxdr2w5jqRjjRYWYawwiN
