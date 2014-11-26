@@ -40,6 +40,7 @@ class ssh::ldap (
     owner   => 'root',
     group   => 'root',
     content => template('ssh/nsswitch.conf.erb'),
+    notify  => Service['nscd'],
   }
 
   file { '/etc/pam.d/common-session' :
@@ -60,18 +61,8 @@ class ssh::ldap (
   Class['ssh::sshd']->
     Package[$ldap_packages]->
     File['/etc/ldap.conf']->
+    File['/etc/ldap/ldap.conf']->
     File['/etc/nsswitch.conf']->
     File['/etc/pam.d/common-session']->
-    Service['nscd']
-
-  Class['ssh::sshd']->
-    File['/etc/ldap.conf']->
-    Service['nscd']
-
-  Class['ssh::sshd']->
-    File['/etc/pam.d/common-session']->
-    Service['nscd']
-
-  Class['ssh::sshd']->
     Service['nscd']
 }
