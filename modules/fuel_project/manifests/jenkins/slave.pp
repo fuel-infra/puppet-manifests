@@ -164,12 +164,14 @@ class fuel_project::jenkins::slave (
     }
 
     sysctl { 'net.bridge.bridge-nf-call-iptables' :
-      value => '0'
+      value   => '0',
+      require => Package[$system_tests_packages],
     }
 
     Package[$system_tests_packages]->
       Venv::Venv['venv-nailgun-tests']->
       Exec['workspace-create']
+
   }
 
   # Buiid ISO
