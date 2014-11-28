@@ -8,7 +8,7 @@ class fuel_stats::analytic (
   $elastic_tcp_port       = '9300',
   $nginx_conf             = '/etc/nginx/sites-available/fuel-analytic.conf',
   $nginx_conf_link        = '/etc/nginx/sites-enabled/fuel-analytic.conf',
-  $service_port           = 80;
+  $service_port           = 80,
   $ssl_key_file           = '',
   $ssl_key_file_contents  = '',
   $ssl_cert_file          = '',
