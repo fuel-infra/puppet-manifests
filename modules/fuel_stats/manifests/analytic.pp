@@ -8,7 +8,7 @@ class fuel_stats::analytic (
   $elastic_tcp_port       = '9300',
   $nginx_conf             = '/etc/nginx/sites-available/fuel-analytic.conf',
   $nginx_conf_link        = '/etc/nginx/sites-enabled/fuel-analytic.conf',
-  $service_port           = 80,
+  $service_port           = $fuel_stats::params::service_port,
   $ssl_key_file           = '',
   $ssl_key_file_contents  = '',
   $ssl_cert_file          = '',
@@ -53,13 +53,20 @@ class fuel_stats::analytic (
   # nginx configuration
   # /etc/nginx/sites-available/fuel-analytic.conf
   # virtual host file for nginx
+  if $development {
+    $www_root = '/var/www/analytic/analytics/static'
+  } else {
+    $www_root = '/usr/share/fuel-stats-analytics/static'
+  }
+
   file { $nginx_conf :
     ensure  => 'present',
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    content => template('fuel_project/statistics/fuel-analytic.conf.erb'),
+    content => template('fuel_stats/fuel-analytic.conf.erb'),
     require => Class['nginx'],
+    notify  => Service['nginx'],
   }
 
   # /etc/nginx/sites-enabled/fuel-analytic.conf
@@ -81,6 +88,13 @@ class fuel_stats::analytic (
       'transport.tcp.port' => $elastic_tcp_port,
     },
     require      => Class['apt'],
+    notify       => Service['elasticsearch']
+  }
+
+  service { 'elasticsearch':
+    ensure  => 'running',
+    enable  => true,
+    require => Class['elasticsearch']
   }
 
   if $development {
@@ -132,10 +146,6 @@ class fuel_stats::analytic (
     }
   } else {
     package { 'fuel-stats-analytics' :
-      ensure => 'installed',
-    }
-
-    package { 'fuel-stats-migration' :
       ensure => 'installed',
     }
   }
