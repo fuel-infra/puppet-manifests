@@ -74,9 +74,12 @@ class fuel_project::mirror (
     class { '::fuel_project::nginx' :}
   }
   ::nginx::resource::vhost { 'mirror' :
-    ensure      => 'present',
-    www_root    => '/var/www/mirror',
-    server_name => [$service_fqdn, "mirror.${::fqdn}"]
+    ensure              => 'present',
+    www_root            => '/var/www/mirror',
+    server_name         => [$service_fqdn, "mirror.${::fqdn}"],
+    location_cfg_append => {
+        autoindex => 'on',
+    },
   }
 
   if ($apply_firewall_rules) {
