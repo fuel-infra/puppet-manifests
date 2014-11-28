@@ -79,6 +79,10 @@ node /(seed-(cz|us)1\.fuel-infra\.org)/ {
     apply_firewall_rules => true,
   }
 
+  class { '::fuel_project::plugins' :
+    apply_firewall_rules => true,
+  }
+
   class { '::fuel_project::updates' :
     apply_firewall_rules => true,
   }
@@ -311,6 +315,10 @@ node 'slave-04.test.local' {
     tracker_apply_firewall_rules => true,
   }
   class { '::fuel_project::mirror' :
+    apply_firewall_rules => true,
+  }
+
+  class { '::fuel_project::plugins' :
     apply_firewall_rules => true,
   }
 
