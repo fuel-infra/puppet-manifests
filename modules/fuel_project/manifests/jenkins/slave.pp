@@ -140,6 +140,7 @@ class fuel_project::jenkins::slave (
       user      => 'jenkins',
       cwd       => '/tmp',
       logoutput => on_failure,
+      require   => User['jenkins'],
     }
 
     class { 'devops' :
@@ -168,13 +169,9 @@ class fuel_project::jenkins::slave (
       require => Package[$system_tests_packages],
     }
 
-    Package[$system_tests_packages]->
-      Venv::Venv['venv-nailgun-tests']->
-      Exec['workspace-create']
-
   }
 
-  # Buiid ISO
+  # Build ISO
   if ($build_fuel_iso == true) {
     $build_fuel_iso_packages = [
       'bc',
