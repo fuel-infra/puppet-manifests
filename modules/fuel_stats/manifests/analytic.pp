@@ -26,10 +26,7 @@ class fuel_stats::analytic (
   }
 
   if (!defined(Class['::nginx'])) {
-    class { '::nginx' :
-      apply_firewall_rules => $firewall_enable,
-      create_www_dir       => true,
-    }
+    class { '::nginx' : }
   }
 
   if $ssl_key_file != '' {
@@ -65,7 +62,6 @@ class fuel_stats::analytic (
     owner   => 'root',
     group   => 'root',
     content => template('fuel_stats/fuel-analytic.conf.erb'),
-    require => Class['nginx'],
     notify  => Service['nginx'],
   }
 

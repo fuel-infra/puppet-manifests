@@ -19,10 +19,7 @@ class fuel_stats::collector (
   $firewall_deny_sources  = {},
 ) inherits fuel_stats::params {
   if (!defined(Class['::nginx'])) {
-    class { '::nginx' :
-      apply_firewall_rules => $firewall_enable,
-      create_www_dir       => false,
-    }
+    class { '::nginx' : }
   }
 
   # nginx configuration
@@ -34,8 +31,6 @@ class fuel_stats::collector (
     owner   => 'root',
     group   => 'root',
     content => template('fuel_stats/fuel-collector.conf.erb'),
-    require => Class['nginx'],
-    notify  => Service['nginx']
   }
 
   # /etc/nginx/sites-enabled/fuel-collector.conf
@@ -53,7 +48,6 @@ class fuel_stats::collector (
       group   => 'root',
       mode    => '0400',
       content => $ssl_key_file_contents,
-      require => Package['nginx']
     }
   }
 
@@ -63,7 +57,6 @@ class fuel_stats::collector (
       group   => 'root',
       mode    => '0400',
       content => $ssl_cert_file_contents,
-      require => Package['nginx']
     }
   }
 
