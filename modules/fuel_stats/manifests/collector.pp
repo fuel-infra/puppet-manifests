@@ -4,11 +4,12 @@ class fuel_stats::collector (
   $auto_update            = $fuel_stats::params::auto_update,
   $fuel_stats_repo        = $fuel_stats::params::fuel_stats_repo,
   $psql_user              = $fuel_stats::params::psql_user,
-  $psql_pass              = $fuel_stats::params::psql_user,
-  $psql_db                = $fuel_stats::params::psql_user,
+  $psql_pass              = $fuel_stats::params::psql_pass,
+  $psql_db                = $fuel_stats::params::psql_db,
   $analytic_ip            = '127.0.0.1',
   $nginx_conf             = '/etc/nginx/sites-available/fuel-collector.conf',
   $nginx_conf_link        = '/etc/nginx/sites-enabled/fuel-collector.conf',
+  $service_port           = $fuel_stats::params::service_port,
   $ssl_key_file           = '',
   $ssl_key_file_contents  = '',
   $ssl_cert_file          = '',
@@ -93,6 +94,14 @@ class fuel_stats::collector (
     password => postgresql_password($psql_user, $psql_pass),
   }
 
+  file { '/etc/collector.py':
+    ensure  => 'file',
+    content => template('fuel_stats/collect.py.erb'),
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+  }
+
   if $development {
     $packages = [
       'python-pip',
@@ -153,6 +162,7 @@ class fuel_stats::collector (
       uid      => 'collector',
       gid      => 'collector',
       socket   => '127.0.0.1:7932',
+      env      => 'COLLECTOR_SETTINGS=/etc/collector.py',
       chdir    => '/var/www/collector/collector',
       module   => 'collector.api.app_test',
       callable => 'app',
@@ -162,7 +172,16 @@ class fuel_stats::collector (
     package { 'fuel-stats-collector' :
       ensure => 'installed',
     }
+    uwsgi::application { 'collector':
+      plugins  => 'python',
+      uid      => 'collector',
+      gid      => 'collector',
+      socket   => '127.0.0.1:7932',
+      chdir    => '/usr/lib/python2.7/dist-packages',
+      module   => 'collector.api.app_prod',
+      callable => 'app',
   }
+}
 
   file { '/var/log/fuel-stats':
     ensure => 'directory',

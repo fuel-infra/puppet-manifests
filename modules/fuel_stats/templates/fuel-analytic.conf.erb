@@ -51,12 +51,14 @@ server {
         <%- end -%>
         <%- end -%>
         expires -1;
-        root /var/www/analytic/analytics/static;
+        root <%= @www_root %>;
     }
 }
 
+<%- if @ssl_key_file != '' and @ssl_cert_file != '' -%>
 server {
   server_name <%= @fqdn %>;
   listen 80;
   rewrite ^ https://$server_name$request_uri? permanent;
 }
+<%- end -%>

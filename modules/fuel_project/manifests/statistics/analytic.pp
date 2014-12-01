@@ -1,18 +1,10 @@
 # Anonymous statistics analytic
 class fuel_project::statistics::analytic (
   $development            = false,
-  $service_port           = 443,
   $firewall_enable        = false,
   $firewall_allow_sources = {},
   $firewall_deny_sources  = {},
   $ldap                   = false,
-  $fuel_stats_repo        = 'https://github.com/stackforge/fuel-stats',
-  $nginx_conf             = '/etc/nginx/sites-available/fuel-collector.conf',
-  $nginx_conf_link        = '/etc/nginx/sites-enabled/fuel-collector.conf',
-  $ssl_key_file           = '',
-  $ssl_key_file_contents  = '',
-  $ssl_cert_file          = '',
-  $ssl_cert_file_contents = '',
 ) {
   class { '::fuel_project::common':
     external_host => $firewall_enable,
@@ -20,15 +12,10 @@ class fuel_project::statistics::analytic (
   }
 
   class { 'fuel_stats::analytic':
-    service_port           => $service_port,
     firewall_enable        => $firewall_enable,
-    nginx_conf             => $nginx_conf,
-    nginx_conf_link        => $nginx_conf_link,
-    ssl_key_file           => $ssl_key_file,
-    ssl_key_file_contents  => $ssl_key_file_contents,
-    ssl_cert_file          => $ssl_cert_file,
-    ssl_cert_file_contents => $ssl_cert_file_contents,
   }
+
+  class { 'fuel_stats::migration': }
 
   if ($firewall_enable) {
     include firewall_defaults::pre

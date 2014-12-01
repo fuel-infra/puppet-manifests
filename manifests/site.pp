@@ -256,13 +256,13 @@ node 'collector.fuel-infra.org' {
 
 node 'fuel-collect.vm.mirantis.net' {
   class {'::fuel_project::statistics::collector':
-    development => true,
+    development => false,
   }
 }
 
 node 'fuel-stats.vm.mirantis.net' {
   class {'::fuel_project::statistics::analytic':
-    development   => true,
+    development   => false,
   }
 }
 
