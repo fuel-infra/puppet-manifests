@@ -191,8 +191,10 @@ def error_log_checker(host):
     #   puppet cert clean slave-07.test.local
     if "puppet cert clean" in log:
         pxetool = connect(hosts['pxetool']['ip'])
-        ssh_run(pxetool, "sudo puppet cert clean {0} 2>&1".format(host))
-        ssh_run(ssh, "sudo rm -rf /var/lib/puppet/ssl/ 2>&1")
+        ssh_run(pxetool, "sudo puppet cert list --all")
+        ssh_run(pxetool, "sudo puppet cert clean {}.{} 2>&1".format(
+            host, test_config['domain']))
+        ssh_run(ssh, "sudo rm -vrf /var/lib/puppet/ssl/ 2>&1")
         i, o, e = ssh.exec_command("sudo bash -x /tmp/rc.local 2>&1")
         hosts[host]['ssh_stdout'] = o
         return False
