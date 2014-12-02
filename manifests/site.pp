@@ -283,6 +283,12 @@ node 'gfs02-msk.vm.mirantis.net' {
   }
 }
 
+node 'plugins-msk.vm.mirantis.net' {
+  class { '::fuel_project::jenkins::slave' :
+    install_docker => true,
+  }
+}
+
 # Test nodes definitions
 
 node 'pxetool.test.local' {
@@ -311,6 +317,7 @@ node 'slave-03.test.local' {
     ldap                => true,
     build_fuel_plugins  => true,
     jenkins_swarm_slave => true,
+    install_docker      => true,
   }
 }
 

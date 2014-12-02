@@ -9,6 +9,7 @@ class fuel_project::jenkins::slave (
   $verify_fuel_astute    = false,
   $verify_fuel_docs      = false,
   $build_fuel_plugins    = false,
+  $install_docker        = false,
   $verify_fuel_stats     = false,
   $ldap                  = false,
   $fuelweb_iso           = false,
@@ -24,6 +25,7 @@ class fuel_project::jenkins::slave (
   $keep_iso_days         = 10,
   $storage_dirs          = ['/var/www/fuelweb-iso', '/srv/downloads'],
   $jenkins_swarm_slave   = false,
+  $docker_package        = '',
 ) {
   class { '::fuel_project::common' :
     external_host     => $external_host,
@@ -187,7 +189,6 @@ class fuel_project::jenkins::slave (
       'libparse-debian-packages-perl',
       'libyaml-dev',
       'lrzip',
-      'lxc-docker',
       'nodejs',
       'nodejs-legacy',
       'npm',
@@ -257,15 +258,6 @@ class fuel_project::jenkins::slave (
     }
     # /LP
 
-    group { 'docker' :
-      ensure => 'present',
-    }
-
-    User <| title == 'jenkins' |> {
-      groups  => ['www-data', 'docker'],
-      require => Group['docker'],
-    }
-
     exec { 'install-grunt-cli' :
       command   => '/usr/bin/npm install -g grunt-cli',
       logoutput => on_failure,
@@ -277,15 +269,6 @@ class fuel_project::jenkins::slave (
       group   => 'root',
       mode    => '0644',
       content => template('fuel_project/jenkins/slave/build_iso.sudoers.d.erb')
-    }
-
-    if $external_host {
-      firewall { '010 accept all to docker0 interface':
-        proto   => 'all',
-        iniface => 'docker0',
-        action  => 'accept',
-        require => Package[$build_fuel_iso_packages],
-      }
     }
 
     Package[$build_fuel_iso_packages]->
@@ -434,6 +417,42 @@ class fuel_project::jenkins::slave (
       ensure   => 'present',
       provider => 'gem',
       require  => Package['make'],
+    }
+  }
+
+  if $install_docker or $build_fuel_iso {
+    if !$docker_package {
+      fail('You must define docker package explicitly')
+    }
+
+    if (!defined(Package[$docker_package])) {
+      package { $docker_package :
+        ensure  => 'present',
+        require => Package['lxc-docker'],
+      }
+    }
+
+    package { 'lxc-docker' :
+      ensure => 'absent',
+    }
+
+    group { 'docker' :
+      ensure  => 'present',
+      require => Package[$docker_package],
+    }
+
+    User <| title == 'jenkins' |> {
+      groups  => ['www-data', 'docker'],
+      require => Group['docker'],
+    }
+
+    if $external_host {
+      firewall { '010 accept all to docker0 interface':
+        proto   => 'all',
+        iniface => 'docker0',
+        action  => 'accept',
+        require => Package[$docker_package],
+      }
     }
   }
 
