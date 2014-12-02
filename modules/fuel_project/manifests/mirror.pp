@@ -89,7 +89,7 @@ class fuel_project::mirror (
   if ($apply_firewall_rules) {
     include firewall_defaults::pre
     create_resources(firewall, $firewall_allow_sources, {
-      dport   => 873,
+      dport   => [$port, 873],
       action  => 'accept',
       require => Class['firewall_defaults::pre'],
     })
