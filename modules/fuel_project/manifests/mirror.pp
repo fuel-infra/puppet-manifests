@@ -76,7 +76,11 @@ class fuel_project::mirror (
   ::nginx::resource::vhost { 'mirror' :
     ensure              => 'present',
     www_root            => '/var/www/mirror',
-    server_name         => [$service_fqdn, "mirror.${::fqdn}"],
+    server_name         => [
+      $service_fqdn,
+      "mirror.${::fqdn}",
+      join($service_aliases, ' ')
+    ],
     location_cfg_append => {
         autoindex => 'on',
     },
