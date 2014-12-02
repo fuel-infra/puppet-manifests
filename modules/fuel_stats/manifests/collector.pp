@@ -162,8 +162,13 @@ class fuel_stats::collector (
       require  => Exec['clone-github-collector'],
     }
   } else {
+    package { 'python-sqlalchemy' :
+      ensure => '0.8.4-1build1',
+    }
+
     package { 'fuel-stats-collector' :
-      ensure => 'installed',
+      ensure  => 'installed',
+      require => Package['python-sqlalchemy'],
     }
     uwsgi::application { 'collector':
       plugins  => 'python',
