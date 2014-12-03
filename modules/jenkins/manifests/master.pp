@@ -130,10 +130,10 @@ class jenkins::master (
     ssl_stapling        => true,
     ssl_stapling_verify => true,
     proxy               => 'http://127.0.0.1:8080',
+    proxy_read_timeout  => 120,
     location_cfg_append => {
       client_max_body_size => '8G',
       proxy_redirect       => 'off',
-      proxy_read_timeout   => 120,
       proxy_set_header     => {
         'X-Forwarded-For'   => '$remote_addr',
         'X-Forwarded-Proto' => 'https',

@@ -301,10 +301,8 @@ node 'slave-01.test.local' {
 }
 
 node 'slave-02.test.local' {
-  class { '::fuel_project::common' :
-    external_host => false,
-  }
-  class { '::opentracker' :}
+  class { '::fuel_project::common' :  }
+  class { '::jenkins::master' :}
 }
 
 node 'slave-03.test.local' {
@@ -445,6 +443,13 @@ node 'slave-14.test.local' {
 node 'slave-15.test.local' {
   class { '::fuel_project::common' :}
   class { '::release_status' :}
+}
+
+node 'slave-16.test.local' {
+  class { '::fuel_project::common' :
+    external_host => false,
+  }
+  class { '::opentracker' :}
 }
 
 # Default

@@ -589,7 +589,7 @@ nginx::package_ensure: present
 nginx::manage_repo: false
 
 #passed to nginx::service class
-nginx::configtest_enable: false
+nginx::configtest_enable: true
 nginx::service_ensure: running
 nginx::service_restart: '/etc/init.d/nginx configtest && /etc/init.d/nginx restart'
 
