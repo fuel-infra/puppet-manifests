@@ -5,6 +5,8 @@ class fuel_project::seed (
   $client_max_body_size = '5G',
   $external_host = false,
   $firewall_allow_sources = {},
+  # FIXME: Make one list for hosts on L3 and L7
+  $vhost_acl_allow = [],
   $seed_dir = '/var/www/seed',
   $seed_port = 17333,
   $service_fqdn = "seed.${::fqdn}",
@@ -19,11 +21,25 @@ class fuel_project::seed (
   if (!defined(Class['::fuel_project::nginx'])) {
     class { '::fuel_project::nginx' :}
   }
-  nginx::resource::vhost { 'seed' :
+  ::nginx::resource::vhost { 'seed' :
     ensure      => 'present',
     autoindex   => 'off',
     www_root    => $seed_dir,
-    server_name => [$service_fqdn, "seed.${::fqdn}"]
+    server_name => [$service_fqdn, $::fqdn]
+  }
+
+  ::nginx::resource::vhost { 'seed-upload' :
+    ensure              => 'present',
+    autoindex           => 'off',
+    www_root            => $seed_dir,
+    listen_port         => $seed_port,
+    server_name         => [$::fqdn],
+    location_cfg_append => {
+      dav_methods          => 'PUT',
+      client_max_body_size => $client_max_body_size,
+      allow                => $vhost_acl_allow,
+      deny                 => 'all',
+    }
   }
 
   if (!defined(File['/var/www'])) {

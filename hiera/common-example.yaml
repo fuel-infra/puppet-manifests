@@ -344,6 +344,8 @@ fuel_project::seed::firewall_allow_sources:
 fuel_project::seed::tracker_firewall_allow_sources:
   '1000 - allow tracker connections from 0.0.0.0/0':
     source: '0.0.0.0/0'
+fuel_project::seed::vhost_acl_allow:
+  - 127.0.0.1
 fuel_project::mirror::firewall_allow_sources:
   '1000 - allow rsync/http connections from 0.0.0.0/0':
     source: '0.0.0.0/0'
