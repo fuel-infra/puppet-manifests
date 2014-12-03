@@ -8,9 +8,8 @@ class fuel_project::tpi::lab (
 
   # these packages will be installed from tpi apt repo defined in hiera
   $tpi_packages = [
-    'linux-image-3.16.2-031602-generic',
-    'linux-headers-3.16.2-031602-generic',
-    'virtualbox-4.3',
+    'linux-image-3.13.0-40-generic',
+    'linux-headers-3.13.0-40-generic',
     'btsync',
   ]
 
