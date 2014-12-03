@@ -54,7 +54,7 @@ class fuel_project::jenkins::slave (
     }
   }
 
-  ensure_packages(['python-seed-cleaner', 'python-seed-client'])
+  ensure_packages(['git', 'python-seed-cleaner', 'python-seed-client'])
 
   file { '/usr/local/bin/seed-downloads-cleanup.sh' :
     ensure  => 'present',
@@ -180,7 +180,6 @@ class fuel_project::jenkins::slave (
       'debootstrap',
       'extlinux',
       'genisoimage',
-      'git',
       'isomd5sum',
       'kpartx',
       'libconfig-auto-perl',
