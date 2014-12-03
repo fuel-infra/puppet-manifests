@@ -1,6 +1,6 @@
 # Anonymous statistics analytic
 class fuel_stats::migration (
-  $development            = $fuel_stats::params::development,
+  $development            = false,
   $psql_host              = $fuel_stats::params::psql_host,
   $psql_user              = $fuel_stats::params::psql_user,
   $psql_pass              = $fuel_stats::params::psql_pass,

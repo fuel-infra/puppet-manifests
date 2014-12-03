@@ -5,7 +5,7 @@ server {
     access_log /var/log/nginx/collector.access.log proxy;
     error_log /var/log/nginx/collector.error.log;
 
-    <%- if @ssl_key_file != '' and @ssl_cert_file != '' -%>
+    <%- if @ssl -%>
     ssl                       on;
     ssl_certificate           <%= @ssl_cert_file %>;
     ssl_certificate_key       <%= @ssl_key_file %>;

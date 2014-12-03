@@ -1,22 +1,23 @@
 # Anonymous statistics analytic
+#
+# you should already have cert and key on FS if you want to use ssl
 class fuel_stats::analytic (
-  $development            = $fuel_stats::params::development,
-  $auto_update            = $fuel_stats::params::auto_update,
-  $fuel_stats_repo        = $fuel_stats::params::fuel_stats_repo,
+  $development            = false,
+  $auto_update            = false,
+  $fuel_stats_repo        = 'https://github.com/stackforge/fuel-stats/',
   $elastic_listen_ip      = '127.0.0.1',
   $elastic_http_port      = '9200',
   $elastic_tcp_port       = '9300',
   $nginx_conf             = '/etc/nginx/sites-available/fuel-analytic.conf',
   $nginx_conf_link        = '/etc/nginx/sites-enabled/fuel-analytic.conf',
-  $service_port           = $fuel_stats::params::service_port,
+  $service_port           = 80,
+  $ssl                    = false,
   $ssl_key_file           = '',
-  $ssl_key_file_contents  = '',
   $ssl_cert_file          = '',
-  $ssl_cert_file_contents = '',
-  $firewall_enable        = $fuel_stats::params::firewall_enable,
+  $firewall_enable        = false,
   $firewall_allow_sources = {},
   $firewall_deny_sources  = {},
-) inherits fuel_stats::params {
+) {
   user { 'analytic':
     ensure     => present,
     home       => '/var/www/analytic',
@@ -27,24 +28,6 @@ class fuel_stats::analytic (
 
   if (!defined(Class['::nginx'])) {
     class { '::nginx' : }
-  }
-
-  if $ssl_key_file != '' {
-    file { $ssl_key_file :
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0400',
-      content => $ssl_key_file_contents,
-    }
-  }
-
-  if $ssl_cert_file != '' {
-    file { $ssl_cert_file :
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0400',
-      content => $ssl_cert_file_contents,
-    }
   }
 
   # nginx configuration

@@ -6,14 +6,13 @@ class fuel_stats::collector (
   $psql_user              = $fuel_stats::params::psql_user,
   $psql_pass              = $fuel_stats::params::psql_pass,
   $psql_db                = $fuel_stats::params::psql_db,
-  $analytic_ip            = '127.0.0.1',
+  $migration_ip           = '127.0.0.1',
   $nginx_conf             = '/etc/nginx/sites-available/fuel-collector.conf',
   $nginx_conf_link        = '/etc/nginx/sites-enabled/fuel-collector.conf',
   $service_port           = $fuel_stats::params::service_port,
-  $ssl_key_file           = '',
-  $ssl_key_file_contents  = '',
+  $ssl                    = false,
   $ssl_cert_file          = '',
-  $ssl_cert_file_contents = '',
+  $ssl_key_file           = '',
   $firewall_enable        = $fuel_stats::params::firewall_enable,
   $firewall_allow_sources = {},
   $firewall_deny_sources  = {},
@@ -42,24 +41,6 @@ class fuel_stats::collector (
     notify  => Service['nginx']
   }
 
-  if $ssl_key_file != '' {
-    file { $ssl_key_file :
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0400',
-      content => $ssl_key_file_contents,
-    }
-  }
-
-  if $ssl_cert_file != '' {
-    file { $ssl_cert_file :
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0400',
-      content => $ssl_cert_file_contents,
-    }
-  }
-
   user { 'collector':
     ensure     => present,
     home       => '/var/www/collector',
@@ -74,9 +55,9 @@ class fuel_stats::collector (
     class { 'postgresql::server':
       listen_addresses           => '*',
       ip_mask_deny_postgres_user => '0.0.0.0/0',
-      ip_mask_allow_all_users    => "${analytic_ip}/32",
+      ip_mask_allow_all_users    => "${migration_ip}/32",
       ipv4acls                   => [
-        "hostssl ${psql_db} ${psql_user} ${analytic_ip}/32 cert",
+        "hostssl ${psql_db} ${psql_user} ${migration_ip}/32 cert",
         "host ${psql_db} ${psql_user} 127.0.0.1/32 md5",
         "local ${psql_db} ${psql_user} md5",
       ],
@@ -178,8 +159,8 @@ class fuel_stats::collector (
       chdir    => '/usr/lib/python2.7/dist-packages',
       module   => 'collector.api.app_prod',
       callable => 'app',
+    }
   }
-}
 
   file { '/var/log/fuel-stats':
     ensure => 'directory',
