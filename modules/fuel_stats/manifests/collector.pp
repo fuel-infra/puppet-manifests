@@ -140,7 +140,11 @@ class fuel_stats::collector (
       chdir    => '/var/www/collector/collector',
       module   => 'collector.api.app_test',
       callable => 'app',
-      require  => Exec['clone-github-collector'],
+      require  => [
+        Exec['clone-github-collector'],
+        File['/etc/collector.py'],
+        User['collector'],
+      ],
     }
   } else {
     package { 'python-sqlalchemy' :
@@ -156,9 +160,14 @@ class fuel_stats::collector (
       uid      => 'collector',
       gid      => 'collector',
       socket   => '127.0.0.1:7932',
+      env      => 'COLLECTOR_SETTINGS=/etc/collector.py',
       chdir    => '/usr/lib/python2.7/dist-packages',
       module   => 'collector.api.app_prod',
       callable => 'app',
+      require  => [
+        File['/etc/collector.py'],
+        User['collector'],
+      ],
     }
   }
 

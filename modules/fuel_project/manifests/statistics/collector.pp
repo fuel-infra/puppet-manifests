@@ -43,6 +43,7 @@ class fuel_project::statistics::collector (
   }
 
   class { 'fuel_stats::collector':
+    development            => $development,
     firewall_enable        => $firewall_enable,
     firewall_allow_sources => $firewall_allow_sources,
     firewall_deny_sources  => $firewall_deny_sources,
