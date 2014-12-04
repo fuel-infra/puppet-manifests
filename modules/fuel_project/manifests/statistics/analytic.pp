@@ -42,6 +42,7 @@ class fuel_project::statistics::analytic (
   }
 
   class { 'fuel_stats::analytic':
+    development            => $development,
     firewall_enable        => $firewall_enable,
     firewall_allow_sources => $firewall_allow_sources,
     firewall_deny_sources  => $firewall_deny_sources,
