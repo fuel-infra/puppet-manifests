@@ -77,53 +77,12 @@ class fuel_stats::analytic (
   }
 
   if $development {
-    $dev_packages = [
-      'python-pip',
-      'git',
-      'libpq-dev',
-      'libpython-dev',
-      'python-git', # github-poller.py
-    ]
-    ensure_packages($dev_packages)
-    file { '/var/www/analytic' :
-      ensure  => 'directory',
-      owner   => 'analytic',
-      group   => 'analytic',
-      mode    => '0755',
-      require => [ Package[$packages], User['analytic']],
-    }
-    exec { 'clone-github-analytic':
-      command     =>
-        "/usr/bin/git clone ${fuel_stats_repo} /var/www/analytic",
-      require     => [ Package[$packages], User['analytic']],
-      refreshonly => true,
-      subscribe   => File['/var/www/analytic'],
-    }
-
-    # github poller script
-    file { '/usr/local/bin/github-poller.py':
-      source => 'puppet:///modules/fuel_stats/github-poller.py',
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0755',
-    }
-
-    if ($auto_update) {
-      # cronjob
-      cron { 'github-poller':
-        command     =>
-          'flock -n -x /tmp/github-poller.lock /usr/local/bin/github-poller.py',
-        environment => 'REPO_LOCAL=/var/www/analytic',
-        user        => 'analytic',
-        hour        => '*',
-        minute      => '*',
-        require     => [
-          File['/usr/local/bin/github-poller.py'],
-          Exec['clone-github-analytic'],
-        ],
-      }
+    # development configuration
+    fuel_stats::dev { 'analytic':
+      require => User['analytic'],
     }
   } else {
+    # production configuration
     package { 'fuel-stats-analytics' :
       ensure => 'installed',
     }

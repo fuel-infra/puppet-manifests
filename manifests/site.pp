@@ -427,11 +427,17 @@ node 'slave-10.test.local' {
   class {'::fuel_project::statistics::collector':
     development => true,
   }
+  class {'::fuel_project::statistics::analytic':
+    development => true,
+  }
 }
 
 node 'slave-11.test.local' {
+  class {'::fuel_project::statistics::collector':
+    development => false,
+  }
   class {'::fuel_project::statistics::analytic':
-    development => true,
+    development => false,
   }
 }
 

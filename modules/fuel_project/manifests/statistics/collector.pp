@@ -12,9 +12,11 @@ class fuel_project::statistics::collector (
   $service_port           = $fuel_project::statistics::params::service_port,
   $migration_ip           = '127.0.0.1',
 ) inherits fuel_project::statistics::params {
-  class { '::fuel_project::common':
-    ldap          => $ldap,
-    external_host => $firewall_enable,
+  if ! defined (Class['fuel_project::common']) {
+    class { '::fuel_project::common':
+      ldap          => $ldap,
+      external_host => $firewall_enable,
+    }
   }
 
   if $ssl_cert_file != '' and $ssl_key_file != '' {

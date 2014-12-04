@@ -36,9 +36,11 @@ class fuel_project::statistics::analytic (
     $real_service_port = $service_port
   }
 
-  class { '::fuel_project::common':
-    external_host => $firewall_enable,
-    ldap          => $ldap,
+  if ! defined (Class['fuel_project::common']) {
+    class { '::fuel_project::common':
+      ldap          => $ldap,
+      external_host => $firewall_enable,
+    }
   }
 
   class { 'fuel_stats::analytic':
@@ -52,7 +54,10 @@ class fuel_project::statistics::analytic (
     service_port           => $real_service_port,
   }
 
-  class { 'fuel_stats::migration': }
+  class { 'fuel_stats::migration':
+    development => $development,
+    require     => Class['fuel_stats::analytic'],
+  }
 
   if ($firewall_enable) {
     include firewall_defaults::pre

@@ -77,58 +77,9 @@ class fuel_stats::collector (
   }
 
   if $development {
-    $packages = [
-      'python-pip',
-      'git',
-      'libpq-dev',
-      'libpython-dev',
-      'python-git', # github-poller.py
-    ]
-
-    ensure_packages($packages)
-    file { '/var/www/collector':
-      ensure  => 'directory',
-      owner   => 'collector',
-      group   => 'collector',
-      mode    => '0755',
-      require => [ Package[$packages], User['collector']],
-    }
-    exec {'clone-github-collector':
-      command     =>
-        "/usr/bin/git clone ${fuel_stats_repo} /var/www/collector",
-      user        => 'collector',
-      refreshonly => true,
-      subscribe   => File['/var/www/collector'],
-    }
-    exec {'fuel-collector-pip':
-      command =>
-        '/usr/bin/pip install -r /var/www/collector/collector/requirements.txt',
-      user    => 'root',
-      require => Exec['clone-github-collector'],
-    }
-
-    # github poller script
-    file { '/usr/local/bin/github-poller.py':
-      source => 'puppet:///modules/fuel_stats/github-poller.py',
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0755',
-    }
-
-    if ($auto_update) {
-      # cronjob
-      cron { 'github-poller':
-        command     =>
-          'flock -n -x /tmp/github-poller.lock /usr/local/bin/github-poller.py',
-        environment => 'REPO_LOCAL=/var/www/collector',
-        user        => 'collector',
-        hour        => '*',
-        minute      => '*',
-        require     => [
-          File['/usr/local/bin/github-poller.py'],
-          Exec['clone-github-collector'],
-        ],
-      }
+    # development configuration
+    fuel_stats::dev { 'collector':
+      require => User['collector'],
     }
     # uwsgi configuration
     uwsgi::application { 'collector':
@@ -141,19 +92,15 @@ class fuel_stats::collector (
       module   => 'collector.api.app_test',
       callable => 'app',
       require  => [
-        Exec['clone-github-collector'],
         File['/etc/collector.py'],
-        User['collector'],
+        File['/var/log/fuel-stats'],
+        Fuel_stats::Dev['collector'],
       ],
     }
   } else {
-    package { 'python-sqlalchemy' :
-      ensure => '0.8.4-1build1',
-    }
-
+    # production configuration
     package { 'fuel-stats-collector' :
       ensure  => 'installed',
-      require => Package['python-sqlalchemy'],
     }
     uwsgi::application { 'collector':
       plugins  => 'python',
@@ -166,6 +113,7 @@ class fuel_stats::collector (
       callable => 'app',
       require  => [
         File['/etc/collector.py'],
+        File['/var/log/fuel-stats'],
         User['collector'],
       ],
     }
