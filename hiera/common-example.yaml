@@ -378,8 +378,10 @@ jenkins::swarm_slave::user: 'jenkins-robotson'
 jenkins::swarm_slave::password: 'BTRfeHyibQlM2M'
 jenkins::swarm_slave::labels: 'swarm 14_04'
 
+mysql::client::package_name: 'percona-server-client-5.6'
 mysql::server::root_password: 'peNTZ7GA2Zr90y'
-mysql::server::package_name: 'percona-server-server'
+mysql::server::package_name: 'percona-server-server-5.6'
+mysql::server::root_password: 'WpUrXaC92cZQ4XHMLpfraTRsl16ZtoTu'
 
 puppet::agent::server: 'pxetool.test.local'
 puppet::master::autosign: true

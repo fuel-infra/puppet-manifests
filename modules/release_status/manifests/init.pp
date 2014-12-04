@@ -23,9 +23,8 @@ class release_status (
   ensure_packages($package)
 
   # creating application user and group
-  user {$app_user:
+  user { $app_user :
     ensure => 'present',
-    gid    => $app_user,
   }
 
   # install mysql packages and apply mysql settings
