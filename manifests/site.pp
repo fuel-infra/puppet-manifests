@@ -313,6 +313,24 @@ node 'plugins-msk.vm.mirantis.net' {
   }
 }
 
+node 'mongo-secondary-1.vm.mirantis.net' {
+  class {'::fuel_project::mongo_common':
+    primary => false,
+  }
+}
+
+node 'mongo-secondary-2.vm.mirantis.net' {
+  class {'::fuel_project::mongo_common':
+    primary => false,
+  }
+}
+
+node 'mongo-primary.vm.mirantis.net' {
+  class {'::fuel_project::mongo_common':
+    primary => true,
+  }
+}
+
 # Test nodes definitions
 
 node 'pxetool.test.local' {
@@ -439,6 +457,24 @@ node 'slave-16.test.local' {
 
 node 'slave-17.test.local' {
   class { '::fuel_project::nailgun_demo' :
+  }
+}
+
+node 'slave-18.test.local' {
+  class {'::fuel_project::mongo_common':
+    primary => false,
+  }
+}
+
+node 'slave-19.test.local' {
+  class {'::fuel_project::mongo_common':
+    primary => false,
+  }
+}
+
+node 'slave-20.test.local' {
+  class {'::fuel_project::mongo_common':
+    primary => true,
   }
 }
 

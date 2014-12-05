@@ -71,6 +71,7 @@ SOURCE_MODULES["https://github.com/monester/puppet-libvirt"]="0.3.2-3"
 SOURCE_MODULES["https://github.com/SergK/puppet-znc"]="0.0.9"
 SOURCE_MODULES["https://github.com/teran/puppet-nginx"]="0.1.1+uwsgi+proxy+crl+ignore_headers"
 SOURCE_MODULES["https://github.com/SergK/puppet-glusterfs"]="0.0.4"
+SOURCE_MODULES["https://github.com/iberezovskiy/puppet-mongodb"]="0.1"
 
 MODULE_LIST=`puppet module list`
 

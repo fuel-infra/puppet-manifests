@@ -693,3 +693,26 @@ nginx::config::daemon_user: www-data
 
 fuel_project::nailgun_demo::server_name: 'demo.fuel-infra.org'
 fuel_project::nailgun_demo::lock_file: '/usr/share/fuel-web/nailgun/static/js/libs/bower/requirejs/js/require.js'
+
+mongodb::server::keyfile: '/etc/mongodb.key'
+mongodb::server::keyfile_content: '3188816874'
+mongodb::server::port: 27017
+mongodb::server::verbose: true
+mongodb::server::use_syslog: true
+mongodb::server::bind_ip:
+  - '0.0.0.0'
+mongodb::server::replset: 'ceilometer'
+mongodb::server::set_parameter: 'logLevel=1'
+mongodb::server::auth: true
+
+mongodb::replset::replset_setup: true
+mongodb::replset::replset_members:
+  - 'slave-18.test.local'
+  - 'slave-19.test.local'
+  - 'slave-20.test.local'
+
+fuel_project::mongodb::user: 'ceilometer'
+fuel_project::mongodb::admin_username: 'admin'
+fuel_project::mongodb::password: 'aE1nHkR6qXj2'
+fuel_project::mongodb::admin_password: 'Hy6mi2uINsIQ'
+fuel_project::mongodb::admin_database: 'admin'
