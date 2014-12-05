@@ -8,7 +8,6 @@ class jenkins::swarm_slave (
   $service = $::jenkins::params::swarm_service,
   $user = $::jenkins::params::swarm_user,
 ) inherits ::jenkins::params{
-  ensure_packages([$package])
 
   if (!defined(User['jenkins'])) {
     user { 'jenkins' :
@@ -22,6 +21,13 @@ class jenkins::swarm_slave (
     }
   }
 
+  if (!defined(Package[$package])) {
+    package { $package :
+        ensure  => 'present',
+        require => User['jenkins'],
+    }
+  }
+
   file { '/etc/default/jenkins-swarm-slave' :
     ensure  => 'present',
     owner   => 'root',
@@ -30,9 +36,11 @@ class jenkins::swarm_slave (
     content => template('jenkins/swarm_slave.conf.erb'),
     require => [
       Package[$package],
-      User['jenkins']
-    ]
-  }~>
+      User['jenkins'],
+    ],
+    notify  => Service[$service],
+  }
+
   service { $service :
     ensure     => 'running',
     enable     => true,
