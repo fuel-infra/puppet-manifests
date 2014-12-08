@@ -241,6 +241,12 @@ node 'tpi-puppet.vm.mirantis.net' {
   class { '::fuel_project::puppet::master' :}
 }
 
+node 'demo.fuel-infra.org' {
+  class { '::fuel_project::nailgun_demo' :
+    apply_firewall_rules => true,
+  }
+}
+
 # *** Anonymous Statistics servers ***
 node 'product-stats.mirantis.com' {
   class {'::fuel_project::statistics::analytic':
@@ -478,6 +484,11 @@ node 'slave-16.test.local' {
     external_host => false,
   }
   class { '::opentracker' :}
+}
+
+node 'slave-17.test.local' {
+  class { '::fuel_project::nailgun_demo' :
+  }
 }
 
 # Default

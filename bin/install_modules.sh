@@ -50,6 +50,7 @@ fi
 # - our intent was not to limit it's use and it should be Apache
 # licensed
 
+MODULES["puppetlabs-vcsrepo"]="1.2.0"
 MODULES["puppetlabs-apt"]="1.6.0"
 MODULES["puppetlabs-firewall"]="1.1.3"
 MODULES["puppetlabs-concat"]="1.1.0"
