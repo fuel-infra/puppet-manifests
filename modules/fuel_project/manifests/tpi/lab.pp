@@ -9,8 +9,10 @@ class fuel_project::tpi::lab (
 
   # these packages will be installed from tpi apt repo defined in hiera
   $tpi_packages = [
-    'linux-image-3.13.0-40-generic',
-    'linux-headers-3.13.0-40-generic',
+    'linux-image-3.13.0-39-generic',
+    'linux-image-extra-3.13.0-39-generic',
+    'linux-headers-3.13.0-39',
+    'linux-headers-3.13.0-39-generic',
     'btsync',
   ]
 
