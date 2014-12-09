@@ -106,6 +106,14 @@ node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
+node /packtest([0-9]{2})\.bud\.mirantis\.net/ {
+  class { '::fuel_project::jenkins::slave' :
+    run_tests           => true,
+    ldap                => true,
+    jenkins_swarm_slave => true,
+  }
+}
+
 node /pxe-product2?-(msk|srt|cz)\.((msk|srt|vm)\.mirantis\.net|fuel-infra\.org)/ {
   include pxe_deployment
 }
