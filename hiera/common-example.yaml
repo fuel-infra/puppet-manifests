@@ -519,6 +519,7 @@ obs_server::nginx::ssl_key_file_contents: |
   T9ERG0/OY5uGFvqWv/UVkphxB+9lEVqFWDd2KkqBNC6taKN9Vw6Arw==
   -----END RSA PRIVATE KEY-----
 
+fuel_project::znc::service_port: 7777
 znc::motd: 'Welcome to the Fuel World!'
 znc::global_modules:
   - 'webadmin'
