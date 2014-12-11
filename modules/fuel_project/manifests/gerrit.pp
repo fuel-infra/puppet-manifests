@@ -3,7 +3,10 @@
 class fuel_project::gerrit (
   $external_host = true,
   $dmz = true,
+  $replication = [],
+  $replication_mode = '',
 ) {
+
   class { '::fuel_project::common' :
     external_host => $external_host
   }
@@ -43,5 +46,24 @@ class fuel_project::gerrit (
     database_password => $gerrit['mysql_password'],
   }
 
-  class { '::hideci' :}
+  class { '::gerrit::hideci' :}
+
+  if ($replication_mode == 'master') {
+    class { '::fuel_project::gerrit::master_config' :}
+
+    file { '/var/lib/gerrit/review_site/etc/replication.config':
+      ensure  => present,
+      owner   => 'gerrit',
+      group   => 'gerrit',
+      mode    => '0644',
+      content => template('fuel_project/gerrit/replication.config.erb'),
+      replace => true,
+      require => File['/var/lib/gerrit/review_site/etc'],
+    }
+
+  }
+
+  if ($replication_mode == 'slave') {
+    class { '::fuel_project::gerrit::slave_config' :}
+  }
 }

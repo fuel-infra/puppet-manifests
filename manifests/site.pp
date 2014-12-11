@@ -385,6 +385,10 @@ node 'slave-05.test.local' {
   class { '::fuel_project::mirror' :}
 }
 
+node 'slave-06.test.local' {
+  class { '::fuel_project::gerrit' : }
+}
+
 node 'slave-07.test.local' {
   class { '::fuel_project::jenkins::slave' :
     external_host  => true,
@@ -475,6 +479,10 @@ node 'slave-20.test.local' {
 
 node 'slave-21.test.local' {
   class { '::fuel_project::devops_tools' :}
+}
+
+node 'slave-22.test.local' {
+  class { '::fuel_project::gerrit' : }
 }
 
 # Sandbox

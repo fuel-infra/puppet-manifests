@@ -3,18 +3,18 @@
 
 <% replication.each do |replication| -%>
 [remote "<%= replication['name'] %>"]
-	url = <%= replication['url'] %>${name}.git
-<% if replication['replicationDelay'] != nil -%>
-	replicationDelay = <%= replication['replicationDelay'] %>
+	url = <%= replication['uri'] %>${name}.git
+<% if replication['replication_delay'] != nil -%>
+	replicationDelay = <%= replication['replication_delay'] %>
 <% end -%>
 <% if replication['threads'] != nil -%>
 	threads = <%= replication['threads'] %>
 <% end -%>
-<% if replication['authGroup'] != nil -%>
-	authGroup = <%= replication['authGroup'] %>
+<% if replication['auth_group'] != nil -%>
+	authGroup = <%= replication['auth_group'] %>
 <% end -%>
-<% if replication['replicatePermissions'] != nil -%>
-	replicatePermissions = <%= replication['replicatePermissions'] %>
+<% if replication['replicate_permissions'] != nil -%>
+	replicatePermissions = <%= replication['replicate_permissions'] %>
 <% end -%>
 <% if replication['mirror'] != nil -%>
 	mirror = <%= replication['mirror'] %>

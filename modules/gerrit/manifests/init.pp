@@ -62,7 +62,6 @@ class gerrit (
   $replication = [],
   $gitweb = true,
   $web_repo_url = '',
-  $testmode = false,
   $secondary_index = false,
   $secondary_index_type = 'LUCENE',
   $enable_javamelody_top_menu = false,
@@ -82,6 +81,7 @@ class gerrit (
     server_name          => [$service_fqdn, $::fqdn],
     rewrite_to_https     => true,
     ssl                  => true,
+    ssl_port             => 443,
     ssl_cert             => $ssl_cert_file,
     ssl_key              => $ssl_key_file,
     ssl_cache            => 'shared:SSL:10m',
@@ -130,6 +130,15 @@ class gerrit (
       'X-Forwarded-For $remote_addr',
       'Host $host',
     ],
+  }
+
+  ::nginx::resource::location { 'static' :
+    ensure   => 'present',
+    vhost    => 'gerrit',
+    ssl      => true,
+    ssl_only => true,
+    location => '/static/',
+    www_root => '/var/lib/gerrit/review_site',
   }
 
   user { 'gerrit' :
@@ -234,21 +243,9 @@ class gerrit (
       '/var/lib/gerrit/review_site/hooks',
       '/var/lib/gerrit/.ssh',
     ]:
-    ensure  => 'directory',
-  }
-
-  # Skip replication if we're in test mode
-  if ($testmode == false) {
-    # Template uses $replication
-    file { '/var/lib/gerrit/review_site/etc/replication.config':
-      ensure  => present,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0444',
-      content => template('gerrit/replication.config.erb'),
-      replace => true,
-      require => File['/var/lib/gerrit/review_site/etc'],
-    }
+    ensure => 'directory',
+    owner  => 'gerrit',
+    group  => 'gerrit',
   }
 
   # Gerrit sets these permissions in 'init'; don't fight them.

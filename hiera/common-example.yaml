@@ -169,6 +169,36 @@ gerrit:
   start_timeout: 600
 
 gerrit::allow_remote_admin: true
+gerrit::hideci::ci_regex: '/^(openstack-ci-.*|mos-infra-ci|ci-build-.*|VM Check Install .*)$/'
+gerrit::ssh_replication_rsa_key_contents: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEowIBAAKCAQEAt2pF+f8G4s5wIW/P3zdY8vUM5w8JDZZ9KdLWw3Iv+uGhrQ1r
+    HJJhJwWqMPZr/JGPKoB2PwXwFWnDqrNXBqUFzBp9a3wei5nOAimA2/JRUL0vhGyW
+    SBTgonXv+3krpbgrL5MPr7ffZikcv4+RDPrK4+rmNt7Xw6B9xoZsZpIvq0kGofXT
+    MQApByguE93KKTdOvaDOR1VB8HdczDDnLgECq6xY5FvbSgTO1Q/1Q5FbaQhvUCF/
+    ylBnTWd8Hqui+OqPyn4B+iythiVNry87ZZ7Q/oIESlcqnkt0BGL1CQ7VbhwTEwOO
+    EP+SIhLuEB+d88onuqz0fpCljY29fQu5Ev+2qwIDAQABAoIBAGhSjhKvt57xhF3A
+    Vx/DP1iRgRE7QA72daKARZ9NJ3UvOOJRK4dIyvGDC1ZmEu3JbQDjqF4YZoIHcj95
+    Whpxama4+nVUV5tXlBEuwhhYL2AY+xn7GU9OcKZ3JlSGiwjrQ8T/hICRuQNGhw99
+    /SbAzv3r8Z1sCpU+h8uPUcDVjT+ChcV2q8FPTDQDfvzKYs1ImDO3E6XrdgXaQVT+
+    r+/N+SFXI9yGCQMF6q/e92NUUalzuB0anC6FKlnsAKXue+AfO1wTgkekRxnzvSUO
+    GV3bL9fM2huMGriKT9OnaFLJooSfcpVmqStsPIPP4Jgzdr8oWmmpjtkC0JNSJm5u
+    qypfW4ECgYEA8bupamzttVcYmDbtg5LBiQvimRM5VIQjKq+W1M/w93FzJpnajZBF
+    4LpyR5mCQvhikKziBL9a4xqtVmciIQb/qYx2bNFUXN9r552MFnnJqtQOBJvJS160
+    a0ycEy77vaXSjQPRNaAETrjZfhYlmexEhmHzAt8UgUzXd1AXjXnhTjsCgYEAwj18
+    1PIlpMFXkM5zueKA1S+JW8QBzZpeM2FqfGo4Fv1Yq3B776+WyJgXS+hWUgGvHded
+    sk5j+Gfd7JCB1LJNKnT6maurrwaF0JhU5BAlKORz7kM8+4nyPAUOsOJGXzDa2XRq
+    +PdU0YRV1uGjGwEgoxA7MLSnSYsckC2F6080glECgYBoihWsFst+HtpeCXMR8YeM
+    8vzd4jhq2nIy5Zi/E+ZLvF5mFSc1DW2K0FbXrAVvXOeTVZCxKOfvSvwnX5ac3d/2
+    vO4CBU0MlPqfQbzxg125aNdfGtgkpiI0PP9KNIld7LZvkXUKUddLDBnSs1Uzib/g
+    tb9YQI0nlcmgqZxl7I2JPQKBgBXKQA7De2WYKvKbtm/L8Rf5VTduLaWbA6ZP71o1
+    sEUj9qaE3+JrmEa4iSSC0+wvNC3s2kv+b0iWnlbDf00VE4MHzHUgxQnFeY2FCUDs
+    br6/oiHAeT7eosYI6zT8rVhQaryqSrXTSTiX1+lbNqj432hrkbhNC9c8O+AQu01C
+    fWmBAoGBALyrrBS1NoFeE6srZP+9BlC/BUA2rd0WBoJY0ZQsQE6Gks6vUEHlTPLp
+    Fqex0kUWDy8LaScrBsQU9/tSfhEvxwxmHG0C4rNgleCzuFLnAQKSdSZKYUVffPLM
+    mCchIgIWJkTGVvJE5s3ZgvOcyun3wOvPhJDO0kmod1EzvRiRvUT5
+    -----END RSA PRIVATE KEY-----
+
 gerrit::commentlinks:
   -
     name: 'bugheader'
@@ -206,8 +236,6 @@ gerrit::commentlinks:
 gerrit::email: 'review@test.local'
 gerrit::cache_web_session_age: '1w'
 gerrit::nginx_log_format: 'proxy'
-
-hideci::ciRegex: '/^(openstack-ci-.*|mos-infra-ci|ci-build-.*|VM Check Install .*)$/'
 
 jenkins::master::service_fqdn: 'jenkins-product.test.local'
 jenkins::master::security_model: 'ldap'
@@ -407,6 +435,23 @@ system::mta_local_only: true
 system::timezone: 'UTC'
 system::root_password: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
 system::install_tools: true
+
+fuel_project::gerrit::master_config::host: 'slave-22.test.local'
+fuel_project::gerrit::master_config::user: 'gerrit-replicator'
+fuel_project::gerrit::master_config::identity_file: '~/.ssh/id_rsa'
+fuel_project::gerrit::master_config::strict_host_key_checking: 'no'
+fuel_project::gerrit::master_config::preferred_authentications: 'publickey'
+fuel_project::gerrit::replication:
+  -
+    name: 'slave-22'
+    uri: 'gerrit-replicator@slave-22.test.local:/var/lib/gerrit/review_site/git/'
+    replication_delay: '0'
+    replicate_permissions: 'true'
+    threads: '3'
+fuel_project::gerrit::slave_config::authorized_keys:
+  'gerrit@slave-06':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC3akX5/wbiznAhb8/fN1jy9QznDwkNln0p0tbDci/64aGtDWsckmEnBaow9mv8kY8qgHY/BfAVacOqs1cGpQXMGn1rfB6Lmc4CKYDb8lFQvS+EbJZIFOCide/7eSuluCsvkw+vt99mKRy/j5EM+srj6uY23tfDoH3Ghmxmki+rSQah9dMxACkHKC4T3copN069oM5HVUHwd1zMMOcuAQKrrFjkW9tKBM7VD/VDkVtpCG9QIX/KUGdNZ3weq6L46o/KfgH6LK2GJU2vLztlntD+ggRKVyqeS3QEYvUJDtVuHBMTA44Q/5IiEu4QH53zyie6rPR+kKWNjb19C7kS/7ar'
 
 fuel_project::jenkins::slave::ldap_sudo_group: 'fuel-core-team'
 fuel_project::jenkins::slave::nailgun_db:
