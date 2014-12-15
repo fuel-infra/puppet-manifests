@@ -65,7 +65,7 @@ MODULES["elasticsearch/elasticsearch"]="0.4.0"
 MODULES["ripienaar-module_data"]="0.0.3"
 
 SOURCE_MODULES["https://github.com/teran/puppet-libvirt"]="0.3.2-2virsh-pool-bug"
-SOURCE_MODULES["https://github.com/SergK/puppet-znc"]="0.0.8"
+SOURCE_MODULES["https://github.com/SergK/puppet-znc"]="0.0.9"
 SOURCE_MODULES["https://github.com/teran/puppet-nginx"]="0.1.1+uwsgi+proxy+crl+ignore_headers"
 SOURCE_MODULES["https://github.com/SergK/puppet-glusterfs"]="0.0.4"
 
