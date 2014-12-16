@@ -99,7 +99,7 @@ class release_status (
     ssl_session_timeout => '10m',
     ssl_stapling        => true,
     ssl_stapling_verify => true,
-    uwsgi               => '127.0.0.1:7931',
+    uwsgi               => '127.0.0.1:7939',
     location_cfg_append => {
       uwsgi_connect_timeout => '3m',
       uwsgi_read_timeout    => '3m',
