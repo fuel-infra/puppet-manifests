@@ -166,6 +166,12 @@ node 'lab-cz.bud.mirantis.net' {
   }
 }
 
+node 'review-solr-tst01.vm.mirantis.net' {
+  class { '::fuel_project::common' :
+    external_host => false,
+  }
+}
+
 node /osci-gerrit(2)?\.vm\.mirantis\.net/ {
   $external_host = true
   $dmz = true
