@@ -108,9 +108,8 @@ node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
 
 node /packtest([0-9]{2})\.bud\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
-    run_tests           => true,
-    ldap                => true,
-    jenkins_swarm_slave => true,
+    run_tests => true,
+    ldap      => true,
   }
 }
 
