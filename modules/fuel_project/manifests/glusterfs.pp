@@ -32,8 +32,14 @@ class fuel_project::glusterfs (
   $owner_gid = 165,
 
 ){
-  class { '::fuel_project::common':
+  class { '::fuel_project::common' :
     external_host => $apply_firewall_rules,
+  }
+
+  if !defined(Class[::zabbix::agent]) {
+    class { '::zabbix::agent' :
+      apply_firewall_rules => $apply_firewall_rules,
+    }
   }
 
   class { '::glusterfs': }
@@ -94,6 +100,30 @@ class fuel_project::glusterfs (
     content => template('fuel_project/glusterfs/glusterd.vol.erb'),
     require => Class['glusterfs::package'],
     notify  => Class['glusterfs::service'],
+  }
+
+  # put monitoring scripts
+  file { '/usr/local/bin' :
+    ensure  => directory,
+    recurse => remote,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0754',
+    source  => 'puppet:///modules/fuel_project/glusterfs/zabbix/glubix',
+  }
+
+  # update sudoerc for zabbix user with monitoring scripts
+  file { '/etc/sudoers.d/zabbix_glusterfs' :
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0640',
+    content => template('fuel_project/glusterfs/sudoers_zabbix_glusterfs.erb')
+  }
+
+  zabbix::item { 'glusterfs-zabbix-check' :
+    content => 'puppet:///modules/fuel_project/glusterfs/zabbix/userparams-glubix.conf',
+    notify  => Service[$::zabbix::params::agent_service],
   }
 
   if $apply_firewall_rules {
