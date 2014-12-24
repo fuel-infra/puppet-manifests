@@ -1,11 +1,24 @@
-#!/usr/bin/env python
+#    Copyright 2013 - 2014 Mirantis, Inc.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
 from novaclient.client import Client
 from novaclient import exceptions
 from proboscis import test
 from proboscis.asserts import assert_equal
 from proboscis.asserts import assert_true
 import paramiko
-from helpers.helpers import wait, tcp_ping, TimeoutError
+import yaml
+from helpers.helpers import wait, tcp_ping, TimeoutError, merge_dict
 import re
 import time
 import os
@@ -17,23 +30,66 @@ with open("{}/manifests/site.pp".format(SRC_DIR)) as f:
     slave_hosts = re.findall('node \'(.*)\.test\.local\'', f.read())
 slave_hosts.remove('pxetool')
 
+# Default configuration
 test_config = {
     'nova_config': {
         'version': '2',
-        'username': os.getenv('nova_username'),
-        'api_key': os.getenv('nova_password'),
-        'auth_url': os.getenv('nova_url', 'http://127.0.0.1:5000/v2.0'),
-        'project_id': os.getenv('nova_project', 'DevOps'),
+        'username': '',
+        'api_key': '',
+        'auth_url': 'http://127.0.0.1:5000/v2.0',
+        'project_id': 'DevOps',
     },
-    'flavor': os.getenv('nova_flavor', 'm1.small'),
-    'network': os.getenv('nova_network', 'test_network'),
-    'image': os.getenv('nova_image', 'ubuntu14.04'),
-    'keypair': os.getenv('nova_keypair'),
-    'count': int(os.getenv('count', str(len(slave_hosts)))),
-    'domain': os.getenv('domain', 'test.local'),
-    'rsa_private_key': os.getenv('rsa_private_key', '~/.ssh/id_rsa'),
-    'ssh_timeout': int(os.getenv('ssh_timeout', '300')),
+    'flavor': 'm1.small',
+    'network': 'test_network',
+    'image': 'ubuntu14.04',
+    'keypair': 'tdevops',
+    'count': str(len(slave_hosts)),
+    'domain': 'test.local',
+    'rsa_private_key': '~/.ssh/id_rsa',
+    'ssh_timeout': '300',
 }
+
+# Configuring from files
+cfg_file = ''
+if 'TEST_CONFIG' in os.environ:
+    try:
+        with open(os.environ['TEST_CONFIG']) as f:
+            cfg_file = yaml.load(f)
+    except IOError, err:
+        if err.errno == 2:
+            print "No such config file"
+            exit(1)
+        raise
+test_config = merge_dict(test_config, cfg_file)
+
+# Configuring from environment variables
+env_config = {'nova_config': {}}
+NOVA_ENV_NAMES = {
+    'nova_username': 'username',
+    'nova_password': 'api_key',
+    'nova_url': 'auth_url',
+    'nova_project': 'project_id',
+}
+ENV_NAMES = {
+    'nova_flavor': 'flavor',
+    'nova_network': 'network',
+    'nova_image': 'image',
+    'nova_keypair': 'keypair',
+    'count': 'count',
+    'domain': 'domain',
+    'rsa_private_key': 'rsa_private_key',
+    'ssh_timeout': 'ssh_timeout'
+}
+
+for key, value in os.environ.iteritems():
+    if key in NOVA_ENV_NAMES.keys():
+        env_config['nova_config'][NOVA_ENV_NAMES[key]] = value
+    if key in ENV_NAMES:
+        env_config[ENV_NAMES[key]] = value
+test_config = merge_dict(test_config, env_config)
+
+if type(test_config['ssh_timeout']) != int:
+    test_config['ssh_timeout'] = int(test_config['ssh_timeout'])
 
 nova_client = None
 flavor = None

@@ -25,6 +25,14 @@ class TimeoutError(Exception):
         return self.message
 
 
+def merge_dict(d1, d2):
+    for k, v in d2.iteritems():
+        if type(v) == dict:
+            v = merge_dict(d1[k], d2[k])
+        d1[k] = v
+    return d1
+
+
 def icmp_ping(host, timeout=1):
     """Run ICMP ping
 
