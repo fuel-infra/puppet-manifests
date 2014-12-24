@@ -84,4 +84,9 @@ class fuel_project::common (
   zabbix::item { 'hardware-zabbix-check' :
     content => 'puppet:///modules/fuel_project/common/zabbix/hardware.conf',
   }
+
+  mount { '/' :
+    ensure  => 'present',
+    options => 'defaults,errors=remount-ro,noatime,nodiratime,barrier=0',
+  }
 }
