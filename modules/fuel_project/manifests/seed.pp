@@ -8,6 +8,7 @@ class fuel_project::seed (
   # FIXME: Make one list for hosts on L3 and L7
   $vhost_acl_allow = [],
   $seed_dir = '/var/www/seed',
+  $pattern_to_clean = 'fuel-\*',  # to use in seed-downloads-cleanup.sh
   $seed_port = 17333,
   $service_fqdn = "seed.${::fqdn}",
   $tracker_apply_firewall_rules = false,
