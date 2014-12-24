@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+
+export BRANCH=${BRANCH:-<%= @manifests_branch %>}
+export TMPDIR=${TMPDIR:-<%= @manifests_tmpdir %>}
+export REPO=${REPO:-<%= @manifests_repo %>}
+export BINPATH=${BINPATH:-<%= @manifests_binpath %>}
+export MANIFESTSPATH=${MANIFESTSPATH:-<%= @manifests_manifestspath %>}
+export MODULESPATH=${MODULESPATH:-<%= @manifests_modulespath %>}
+
+(
+  flock -n 9 || exit 1
+  echo "Clean up..."
+  rm -rvf "${TMPDIR}"
+
+  echo "Cloning..."
+  git clone "${REPO}" "${TMPDIR}"
+  cd "${TMPDIR}"
+  git checkout "${BRANCH}"
+
+  echo "Linking..."
+  rm -rvf "${BINPATH}"
+  rm -rvf "${MANIFESTSPATH}"
+  rm -rvf "${MODULESPATH}"
+
+  mv "${TMPDIR}/bin" "${BINPATH}"
+  mv "${TMPDIR}/manifests" "${MANIFESTSPATH}"
+  mv "${TMPDIR}/modules" "${MODULESPATH}"
+
+  echo "Running modules update"
+  ${BINPATH}/install_modules.sh
+) 9>/var/lock/puppet-manifests-update.lock
