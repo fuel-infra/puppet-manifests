@@ -285,9 +285,8 @@ node 'fuel-stats.vm.mirantis.net' {
   }
 }
 
-node 'web01.fuel-infra.org' {
-  class { '::fuel_project::common' :}
-  class { '::release_status' :}
+node /(web01\.fuel-infra\.org|web01-tst\.vm\.mirantis\.net)/ {
+  class { '::fuel_project::web' :}
 }
 
 node 'gfs01-msk.vm.mirantis.net' {
