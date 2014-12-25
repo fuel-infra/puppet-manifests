@@ -558,9 +558,6 @@ znc::global_modules:
   - 'partyline'
 znc::znc_admin_user: 'AdminZ'
 znc::znc_admin_pass: 'HEREs0meRnD!'
-znc::znc_admin_channels:
-  - '#persTest'
-  - '#persTest1'
 znc::ssl_source: |
   -----BEGIN CERTIFICATE-----
   MIIEUTCCAzmgAwIBAgIJALKnvM7CPEmWMA0GCSqGSIb3DQEBDQUAMHgxFjAUBgNV
