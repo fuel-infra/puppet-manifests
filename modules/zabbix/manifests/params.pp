@@ -76,8 +76,8 @@ class zabbix::params {
   $proxy_enable_snmp_bulk_requests = true
   $proxy_external_scripts = '/etc/zabbix/external.d'
   $proxy_firewall_allow_sources = {}
-  $proxy_fping6_location = '/usr/sbin/fping6'
-  $proxy_fping_location = '/usr/sbin/fping'
+  $proxy_fping6_location = '/usr/bin/fping6'
+  $proxy_fping_location = '/usr/bin/fping'
   $proxy_heartbeat_frequency = '60'
   $proxy_history_cache_size = '8M'
   $proxy_history_text_cache_size = '16M'
@@ -144,8 +144,8 @@ class zabbix::params {
   $server_db_user = 'zabbix'
   $server_debug_level = 3
   $server_firewall_allow_sources = {}
-  $server_fping6_location = '/usr/bin/fping'
-  $server_fping_location = '/usr/bin/fping6'
+  $server_fping6_location = '/usr/bin/fping6'
+  $server_fping_location = '/usr/bin/fping'
   $server_history_cache_size = floor($::memorysize_mb/128*1024*1024)
   $server_history_text_cache_size = floor($::memorysize_mb/128*1024*1024)
   $server_housekeeping_frequency = 1
