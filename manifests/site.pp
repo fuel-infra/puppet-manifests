@@ -135,6 +135,12 @@ node /build(\d+)\.fuel-infra\.org/ {
   }
 }
 
+node /irc-bouncer([0-9]{2})\.fuel-infra\.org/ {
+  class { '::fuel_project::znc' :
+    apply_firewall_rules => true,
+  }
+}
+
 node 'monitor-product.vm.mirantis.net' {
   class { '::fuel_project::common' :}
   class { '::zabbix::server' :}
@@ -450,7 +456,6 @@ node 'slave-11.test.local' {
 node 'slave-12.test.local' {
   class { '::fuel_project::znc' :
     apply_firewall_rules => false,
-    service_port         => 7777,
   }
 }
 
