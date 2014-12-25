@@ -269,6 +269,9 @@ system:
     'anikitin@mirantis.com':
       type: ssh-rsa
       key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDbxNYg5JL0wQ8pSY3PuvQPtoPb37lC3qoCWkdTIeQldH57u5L3TEV7K4WxghNiqdKgmY4cvKmo2YWm3mBGvTvBj3kLJqkjIy+ftncqDgRR2nhZAMvEaQbP4k6JmgGGwIwdv/wszcH6dEuf+BEGTtaWytjUNTO8fmuGQV0o5GgKi2C8Nj5zkzXrIcL/Gn1RITVv6n9MNIQ8OpN5FfIpO2v8OXKMc7MqB4pr3ZOnnjUUvD5LdFcEUf2Za46O6uvJLCkle4gzIHQGx51+1XnknscMGWR9pcmtb6Za4DcpJgiROR9Qvq1X0ZD1f3frE2IMTfPnZX9OU3l+AqyXvp5oztV5'
+    'skulanov@mirantis.com':
+      type: ssh-rsa
+      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC7QBh6Tu+qb49KO/0DYiucbswniuB6J0JV8XDyVQTklDUOBPi6ySIjq/PxDsgaom2nS1wsEt2XnelF2ue5z1tK0vTT6XFLZ6wvP6xtK2yaJKkpGskL/18/p+PSWEoG7tKypkUaflYOzb/mTYuYEGnfJ8cM6LtevJfdmr1rTMkix8jDhwDtKivPsvs2Ujh1e7eQwX3bEPY/SYpT7iOniSiV4wxvvOIvqdI1YctAaNCufdkGwdEd7vm8Vyz/HZAn/iAv3IE7SIAx0z8SasNeJlml1S4nGeLcL3fBXYE+3cbnGjXIZo+5OV0nFRII4ILgzlrdzKls8D3yGypumDvww03r'
   root_email: 'root@test.com'
   root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
   timezone: UTC
