@@ -357,6 +357,13 @@ fuel_project::jenkins::slave::nailgun_db:
   - 'nailgun6'
   - 'nailgun7'
 
+fuel_project::glusterfs::owner_uid: 165
+fuel_project::glusterfs::owner_gid: 165
+fuel_project::glusterfs::gfs_volume_name: 'data'
+fuel_project::glusterfs::gfs_brick_point: '/mnt/brick'
+fuel_project::glusterfs::gfs_pool:
+  - 'slave-13.test.local'
+  - 'slave-14.test.local'
 fuel_project::glusterfs::firewall_allow_sources:
   '1000 - allow glusterfs daemon connections from 0.0.0.0/0':
     source: '0.0.0.0/0'

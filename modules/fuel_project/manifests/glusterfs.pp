@@ -18,6 +18,8 @@
 #     gluster volume create $gfs_volume_name replica 2 transport tcp \
 #          $gfs_pool[0]:$gfs_brick_point $gfs_pool[1]:$gfs_brick_point force
 #
+# All gluster customization:
+# http://docs.openstack.org/admin-guide-cloud/content/glusterfs_backend.html
 #
 class fuel_project::glusterfs (
   $apply_firewall_rules = false,
@@ -26,6 +28,8 @@ class fuel_project::glusterfs (
   $gfs_pool = [ 'slave-13.test.local','slave-14.test.local' ],
   $gfs_volume_name = 'data',
   $gfs_brick_point = '/mnt/brick',
+  $owner_uid = 165,
+  $owner_gid = 165,
 
 ){
   class { '::fuel_project::common':
@@ -34,21 +38,62 @@ class fuel_project::glusterfs (
 
   class { '::glusterfs': }
 
+  # permissions will be managed by glsuterfs itself
   file { $gfs_brick_point:
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    recurse => true,
+    ensure => directory,
+    mode   => '0775',
   }
 
-  if $create_pool == true {
-    glusterfs_pool { $gfs_pool: } ->
+  if $create_pool {
+    glusterfs_pool { $gfs_pool: }
+
     glusterfs_vol { $gfs_volume_name :
       replica => 2,
       brick   => [ "${gfs_pool[0]}:${gfs_brick_point}", "${gfs_pool[1]}:${gfs_brick_point}"],
       force   => true,
-      require => File[$gfs_brick_point],
+      require => [
+        File[$gfs_brick_point],
+        Glusterfs_pool[$gfs_pool],
+      ],
     }
+
+    exec { "set_volume_uid_${gfs_volume_name}":
+      command => "gluster volume set ${gfs_volume_name} storage.owner-uid ${owner_uid}",
+      user    => 'root',
+      unless  => "gluster volume info| grep 'storage\.owner-uid: ${owner_uid}'",
+      require => Glusterfs_vol[$gfs_volume_name],
+    }
+
+    exec { "set_volume_gid_${gfs_volume_name}":
+      command => "gluster volume set ${gfs_volume_name} storage.owner-gid ${owner_gid}",
+      user    => 'root',
+      unless  => "gluster volume info| grep 'storage\.owner-gid: ${owner_gid}'",
+      require => Glusterfs_vol[$gfs_volume_name],
+    }
+
+    exec { "set_volume_param_${gfs_volume_name}":
+      command => "gluster volume set ${gfs_volume_name} server.allow-insecure on",
+      user    => 'root',
+      unless  => 'gluster volume info| grep "server\.allow-insecure: on"',
+      notify  => Exec["restart_volume_${gfs_volume_name}"],
+      require => Glusterfs_vol[$gfs_volume_name],
+    }
+
+    exec { "restart_volume_${gfs_volume_name}":
+      command     => "echo y | gluster volume stop ${gfs_volume_name}; gluster volume start ${gfs_volume_name}",
+      user        => 'root',
+      refreshonly => true,
+    }
+
+  }
+
+  file { '/etc/glusterfs/glusterd.vol' :
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    content => template('fuel_project/glusterfs/glusterd.vol.erb'),
+    require => Class['glusterfs::package'],
+    notify  => Class['glusterfs::service'],
   }
 
   if $apply_firewall_rules {
