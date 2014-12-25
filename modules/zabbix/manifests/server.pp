@@ -125,6 +125,13 @@ class zabbix::server (
   exec { 'flag-installation-complete' :
     command  => 'touch /etc/zabbix/zabbix_server_installed.flag',
     provider => 'shell',
+    notify   => Service[$service],
+  }
+
+  file { '/etc/default/zabbix-server' :
+    ensure  => 'present',
+    content => template('zabbix/server/zabbix_server_default.erb'),
+    require => Package[$package],
   }
 
   package { $package :

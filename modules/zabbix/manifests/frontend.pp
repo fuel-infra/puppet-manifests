@@ -25,23 +25,7 @@ class zabbix::frontend (
   include nginx
   include nginx::service
 
-  package { $package :
-    ensure  => 'present',
-    require => Class['nginx'],
-  }
-
-  if (!defined(Package['php5-fpm'])) {
-    package { 'php5-fpm' :
-      ensure => 'present',
-    }
-  }
-
-  if (!defined(Package['php5-mysql'])) {
-    package { 'php5-mysql' :
-      ensure  => 'present',
-      require => Package['php5-fpm']
-    }
-  }
+  include php::fpm::daemon
 
   if (!defined(Class['nginx'])) {
     class { '::nginx' :}
@@ -66,22 +50,20 @@ class zabbix::frontend (
     www_root => '/usr/share/zabbix',
   }
 
-  service { 'php5-fpm' :
-    ensure  => 'running',
-    require => [
-      Package['php5-fpm'],
-      Package['php5-mysql'],
-    ]
+  php::fpm::conf { 'www':
+    listen    => '127.0.0.1:9000',
+    user      => 'www-data',
+    php_value => {
+      post_max_size      => 16M,
+      max_execution_time => 300,
+      max_input_time     => 300,
+      'date.timezone'    => UTC,
+      'cgi.fix_pathinfo' => 1,
+    },
+    require   => Class['::nginx'],
   }
 
-  if ($apply_firewall_rules) {
-    include firewall_defaults::pre
-    create_resources(firewall, $firewall_allow_sources, {
-      dport   => 80,
-      action  => 'accept',
-      require => Class['firewall_defaults::pre'],
-    })
-  }
+  php::module { [ 'mysql', 'ldap', 'gd' ]: }
 
   file { $config :
     ensure  => 'present',
@@ -102,7 +84,28 @@ class zabbix::frontend (
     }
   }
 
+  if (!defined(Package[$package])) {
+    package { $package :
+      ensure  => 'present',
+      require => [
+        Class['::nginx'],
+        Class['::php::fpm::daemon'],
+        Php::Module['mysql', 'ldap', 'gd'],
+      ],
+    }
+  }
+
   file { '/usr/share/zabbix/setup.php' :
     ensure => 'absent',
   }
+
+  if ($apply_firewall_rules) {
+    include firewall_defaults::pre
+    create_resources(firewall, $firewall_allow_sources, {
+      dport   => 80,
+      action  => 'accept',
+      require => Class['firewall_defaults::pre'],
+    })
+  }
+
 }
