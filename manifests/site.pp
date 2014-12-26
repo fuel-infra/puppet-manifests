@@ -409,10 +409,9 @@ node 'slave-06.test.local' {
   }
 
   class { '::gerrit::mysql' :
-    mysql_root_password => $mysql['root_password'],
-    database_name       => $gerrit['mysql_database'],
-    database_user       => $gerrit['mysql_user'],
-    database_password   => $gerrit['mysql_password'],
+    database_name     => $gerrit['mysql_database'],
+    database_user     => $gerrit['mysql_user'],
+    database_password => $gerrit['mysql_password'],
   }
 }
 
