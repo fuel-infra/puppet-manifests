@@ -1,23 +1,24 @@
-# Class: release_status
+# Class: landing_page
 #
-class release_status (
-  $apply_firewall_rules = $::release_status::params::apply_firewall_rules,
-  $config = $::release_status::params::config,
-  $firewall_allow_sources = $::release_status::params::firewall_allow_sources,
-  $package = $::release_status::params::package,
-  $timezone = $::release_status::params::timezone,
-  $mysql_database = $::release_status::params::mysql_database,
-  $mysql_user = $::release_status::params::mysql_user,
-  $mysql_password = $::release_status::params::mysql_password,
-  $mysql_host = $::release_status::params::mysql_host,
-  $mysql_port = $::release_status::params::mysql_port,
-  $nginx_server_name = $::release_status::params::nginx_server_name,
-  $app_user = $::release_status::params::app_user,
-  $ssl_cert_file = $::release_status::params::ssl_cert_file,
-  $ssl_key_file = $::release_status::params::ssl_key_file,
+class landing_page (
+  $apply_firewall_rules = $::landing_page::params::apply_firewall_rules,
+  $config = $::landing_page::params::config,
+  $config_template = $::landing_page::params::config_template,
+  $firewall_allow_sources = $::landing_page::params::firewall_allow_sources,
+  $package = $::landing_page::params::package,
+  $timezone = $::landing_page::params::timezone,
+  $mysql_database = $::landing_page::params::mysql_database,
+  $mysql_user = $::landing_page::params::mysql_user,
+  $mysql_password = $::landing_page::params::mysql_password,
+  $mysql_host = $::landing_page::params::mysql_host,
+  $mysql_port = $::landing_page::params::mysql_port,
+  $nginx_server_name = $::landing_page::params::nginx_server_name,
+  $app_user = $::landing_page::params::app_user,
+  $ssl_cert_file = $::landing_page::params::ssl_cert_file,
+  $ssl_key_file = $::landing_page::params::ssl_key_file,
   $ssl_cert_file_contents = '',
   $ssl_key_file_contents = '',
-) inherits ::release_status::params {
+) inherits ::landing_page::params {
 
   # installing required $packages
   ensure_packages($package)
@@ -43,14 +44,14 @@ class release_status (
     ],
   }
 
-  # /usr/share/release-status/release/settings.py
-  # release_status main configuration file
+  # /usr/share/landing_page/release/settings.py
+  # landing_page main configuration file
   file { $config :
     ensure  => 'present',
     mode    => '0600',
     owner   => $app_user,
     group   => $app_user,
-    content => template('release_status/release_status.py.erb'),
+    content => template($config_template),
     require => [
       User[$app_user],
       Package[$package],
@@ -59,17 +60,17 @@ class release_status (
   }
 
   # creating database schema
-  exec { 'release_status-syncdb' :
-    command => '/usr/share/release-status/manage.py syncdb --noinput',
+  exec { 'landing_page-syncdb' :
+    command => '/usr/share/landing_page/manage.py syncdb --noinput',
     user    => $app_user,
     require => File[$config],
   }
 
   # running migrations
-  exec { 'release_status-migratedb' :
-    command => '/usr/share/release-status/manage.py migrate --all',
+  exec { 'landing_page-migratedb' :
+    command => '/usr/share/landing_page/manage.py migrate --all',
     user    => $app_user,
-    require => Exec['release_status-syncdb']
+    require => Exec['landing_page-syncdb']
   }~>
   Service['uwsgi']
 
@@ -113,15 +114,15 @@ class release_status (
     location => '/static/',
     ssl      => true,
     ssl_only => true,
-    www_root => '/usr/share/release-status',
+    www_root => '/usr/share/landing_page',
   }
 
-  ::uwsgi::application { 'release_status' :
+  ::uwsgi::application { 'landing_page' :
     plugins => 'python',
     uid     => $app_user,
     gid     => $app_user,
     socket  => '127.0.0.1:7939',
-    chdir   => '/usr/share/release-status',
+    chdir   => '/usr/share/landing_page',
     module  => 'release.wsgi',
   }
 

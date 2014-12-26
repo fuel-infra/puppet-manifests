@@ -28,6 +28,8 @@ class fuel_project::jenkins::slave (
   $storage_dirs          = ['/var/www/fuelweb-iso', '/srv/downloads'],
   $jenkins_swarm_slave   = false,
   $docker_package        = '',
+  $sudo_commands         = ['/sbin/ebtables'],
+  $workspace             = '/home/jenkins/workspace',
 ) {
   class { '::fuel_project::common' :
     external_host     => $external_host,
@@ -77,9 +79,14 @@ class fuel_project::jenkins::slave (
     require => File['/usr/local/bin/seed-downloads-cleanup.sh'],
   }
 
+  # release status reports
+  if ($build_fuel_iso == true or $run_tests == true) {
+    class { '::landing_page::updater' :}
+  }
+
   # Run system tests
   if ($run_tests == true) {
-    include venv
+    include ::venv
 
     class { '::libvirt' :
       listen_tls         => false,
@@ -104,9 +111,6 @@ class fuel_project::jenkins::slave (
       target    => '/var/lib/libvirt/images',
       require   => Class['libvirt'],
     }
-
-    $sudo_commands = ['/sbin/ebtables']
-    $workspace = '/home/jenkins/workspace'
 
     $system_tests_packages = [
       # dependencies

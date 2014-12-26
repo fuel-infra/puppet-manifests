@@ -4,7 +4,7 @@ import os
 
 PROJECT_ROOT = os.path.dirname(__file__)
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -24,7 +24,7 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 TIME_ZONE = '<%= @timezone %>'
 
@@ -88,6 +88,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'south',
+
+    'landing_page',
     'security',
     'sheet',
 )

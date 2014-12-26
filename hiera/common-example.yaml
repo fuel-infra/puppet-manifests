@@ -1,4 +1,54 @@
 ---
+apt::sources:
+  mirror:
+    location: 'http://archive.ubuntu.com/ubuntu/'
+    release: "%{::lsbdistcodename}"
+    key: 'C0B21F32'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main restricted universe multiverse'
+    include_src: false
+    include_deb: true
+  mirror_updates:
+    location: 'http://archive.ubuntu.com/ubuntu/'
+    release: "%{::lsbdistcodename}-updates"
+    key: 'C0B21F32'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main restricted universe multiverse'
+    include_src: false
+    include_deb: true
+  devops:
+    location: 'http://fuel-repository.mirantis.com/devops/ubuntu/'
+    release: '/'
+    key: 'C1EC35C7D5A05778'
+    key_server: 'keyserver.ubuntu.com'
+    repos: ''
+    include_src: false
+    include_deb: true
+  docker:
+    location: 'https://get.docker.io/ubuntu'
+    release: 'docker'
+    key: 'A88D21E9'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main'
+    include_src: false
+    include_deb: true
+  jenkins:
+    location: 'http://pkg.jenkins-ci.org/debian-stable/'
+    release: 'binary/'
+    key: 'D50582E6'
+    key_server: 'keyserver.ubuntu.com'
+    repos: ''
+    include_src: false
+    include_deb: true
+  elasticsearch:
+    location: 'http://packages.elasticsearch.org/elasticsearch/1.3/debian'
+    release: 'stable'
+    repos: 'main'
+    key: 'D88E42B4'
+    key_server: 'keyserver.ubuntu.com'
+    include_src: false
+    include_deb: true
+
 firewall:
   known_networks:
     - 10.108.0.0/16
@@ -71,6 +121,7 @@ gerrit:
   service_fqdn: 'review.test.local'
   service_url: 'https://review.test.local'
   start_timeout: 600
+
 gerrit::commentlinks:
   -
     name: 'bugheader'
@@ -196,10 +247,11 @@ mysql:
 puppet:
   master: 'pxetool.test.local'
 
-release_status::mysql_database: 'release'
-release_status::mysql_user: 'release'
-release_status::mysql_password: 'Ab5eP1RMDG2k'
-release_status::ssl_key_file_contents: |
+landing_page::config_template: 'fuel_project/landing_page/landing_page.py.erb'
+landing_page::mysql_database: 'release'
+landing_page::mysql_user: 'release'
+landing_page::mysql_password: 'Ab5eP1RMDG2k'
+landing_page::ssl_key_file_contents: |
   -----BEGIN PRIVATE KEY-----
   MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDShAI03KCVyXwo
   uzNKJ4kP/0j4K0SR4Vb0J37yiOwDrURNMKdPRXIp129q1m3WIvrsuQU2QGdoWvpV
@@ -228,7 +280,7 @@ release_status::ssl_key_file_contents: |
   OV8thsdg01VEm5nvLEEkhb8wLzX8FI+2JAjolSDIzXb1zUbxoWelMNjEGzSv8C3E
   uH9ZxEztcMKvnnVUQ8VZBFA=
   -----END PRIVATE KEY-----
-release_status::ssl_cert_file_contents: |
+landing_page::ssl_cert_file_contents: |
   -----BEGIN CERTIFICATE-----
   MIIDtTCCAp2gAwIBAgIJAJtCyTDpODkgMA0GCSqGSIb3DQEBCwUAMHExCzAJBgNV
   BAYTAlJVMQ8wDQYDVQQIDAZNb3Njb3cxDzANBgNVBAcMBk1vc2NvdzERMA8GA1UE
@@ -252,6 +304,11 @@ release_status::ssl_cert_file_contents: |
   JNXfKuhmmr1YmuNkNAwsgTlrYFxKdEBimCtsEMibYzgKT+CYFZf85z0=
   -----END CERTIFICATE-----
 
+landing_page::updater::user: 'release'
+landing_page::updater::application: 'updater'
+landing_page::updater::config: '/etc/release-updater.yaml'
+landing_page::updater::token: 'b3ccf1131c697f26be216753ddac28ca19f05035fbe914968ee7b7c32e274c94c58b3b266e83967093fc52e0527db86e7e92b9b51683b082c08b90c1af552029'
+
 system:
   root_keys:
     'acharykov@mirantis.com':
@@ -273,58 +330,6 @@ system:
   root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
   timezone: UTC
 
-apt::sources:
-  mirror:
-    location: 'http://archive.ubuntu.com/ubuntu/'
-    release: "%{::lsbdistcodename}"
-    key: 'C0B21F32'
-    key_server: 'keyserver.ubuntu.com'
-    repos: 'main restricted universe multiverse'
-    include_src: false
-    include_deb: true
-  mirror_updates:
-    location: 'http://archive.ubuntu.com/ubuntu/'
-    release: "%{::lsbdistcodename}-updates"
-    key: 'C0B21F32'
-    key_server: 'keyserver.ubuntu.com'
-    repos: 'main restricted universe multiverse'
-    include_src: false
-    include_deb: true
-  devops:
-    location: 'http://fuel-repository.mirantis.com/devops/ubuntu/'
-    release: '/'
-    key: 'C1EC35C7D5A05778'
-    key_server: 'keyserver.ubuntu.com'
-    repos: ''
-    include_src: false
-    include_deb: true
-  docker:
-    location: 'https://get.docker.io/ubuntu'
-    release: 'docker'
-    key: 'A88D21E9'
-    key_server: 'keyserver.ubuntu.com'
-    repos: 'main'
-    include_src: false
-    include_deb: true
-  jenkins:
-    location: 'http://pkg.jenkins-ci.org/debian-stable/'
-    release: 'binary/'
-    key: 'D50582E6'
-    key_server: 'keyserver.ubuntu.com'
-    repos: ''
-    include_src: false
-    include_deb: true
-  elasticsearch:
-    location: 'http://packages.elasticsearch.org/elasticsearch/1.3/debian'
-    release: 'stable'
-    repos: 'main'
-    key: 'D88E42B4'
-    key_server: 'keyserver.ubuntu.com'
-    include_src: false
-    include_deb: true
-
-fuel_project::jenkins::slave::verify_fuel_web: true
-fuel_project::jenkins::slave::fuel_web_selenium: true
 fuel_project::jenkins::slave::nailgun_db:
   - 'nailgun'
   - 'nailgun0'
@@ -683,4 +688,3 @@ nginx::config::daemon_user: www-data
 
 fuel_project::nailgun_demo::server_name: 'demo.fuel-infra.org'
 fuel_project::nailgun_demo::lock_file: '/usr/share/fuel-web/nailgun/static/js/libs/bower/requirejs/js/require.js'
-

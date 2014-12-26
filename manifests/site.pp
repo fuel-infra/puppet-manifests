@@ -326,7 +326,7 @@ node 'slave-01.test.local' {
     fuelweb_iso    => true,
     ldap           => true,
   }
-  class { '::release_status::updater' :}
+  class { '::landing_page::updater' :}
 }
 
 node 'slave-02.test.local' {
@@ -475,8 +475,7 @@ node 'slave-14.test.local' {
 }
 
 node 'slave-15.test.local' {
-  class { '::fuel_project::common' :}
-  class { '::release_status' :}
+  class { '::fuel_project::web' :}
 }
 
 node 'slave-16.test.local' {

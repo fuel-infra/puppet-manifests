@@ -1,8 +1,9 @@
-# Class: release_status::params
+# Class: landing_page::params
 #
-class release_status::params {
+class landing_page::params {
   $apply_firewall_rules = false
-  $config = '/usr/share/release-status/release/settings.py'
+  $config = '/usr/share/landing_page/release/settings.py'
+  $config_template = 'landing_page/landing_page.py.erb'
   $firewall_allow_sources = {}
   $mysql_database = 'release'
   $mysql_user = 'release'
@@ -12,10 +13,10 @@ class release_status::params {
   $nginx_server_name = $::fqdn
   $app_user = 'release'
   $package = [
-    'python-django-release-status-web',
+    'landing-page-all',
     'python-mysqldb',
   ]
-  $package_updater = ['python-django-release-status-updater']
+  $package_updater = ['landing-page-release-status-cli']
   $ssl_cert_file = '/etc/ssl/release.crt'
   $ssl_key_file = '/etc/ssl/release.pem'
   $timezone = 'UTC'

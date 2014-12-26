@@ -7,7 +7,7 @@ class fuel_project::puppet::master (
   $hiera_backends = ['yaml'],
   $hiera_config = '/etc/hiera.yaml',
   $hiera_config_template = 'puppet/hiera.yaml.erb',
-  $hiera_hierarchy = ['nodes/%{::clientcert}', 'roles/%{::role}', 'common'],
+  $hiera_hierarchy = ['nodes/%{::clientcert}', 'roles/%{::role}', 'locations/%{::location}', 'common'],
   $hiera_json_datadir = '/var/lib/hiera',
   $hiera_logger = 'console',
   $hiera_merge_behavior = 'deeper',
