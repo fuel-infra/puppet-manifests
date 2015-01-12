@@ -346,6 +346,8 @@ apt::sources:
     include_src: false
     include_deb: true
 
+fuel_project::jenkins::slave::verify_fuel_web: true
+fuel_project::jenkins::slave::fuel_web_selenium: true
 fuel_project::jenkins::slave::nailgun_db:
   - 'nailgun'
   - 'nailgun0'
