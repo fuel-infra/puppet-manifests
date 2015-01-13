@@ -16,6 +16,7 @@ class fuel_project::jenkins::slave (
   $ldap_uri              = '',
   $ldap_base             = '',
   $nailgun_db            = ['nailgun'],
+  $ostf_db               = ['ostf'],
   $tls_cacertdir         = '',
   $pam_password          = '',
   $pam_filter            = '',
@@ -282,7 +283,7 @@ class fuel_project::jenkins::slave (
     class { '::fuel_project::statistics::tests' : }
   }
 
-  # Web tests by verify-fuel-web, stackforge-verify-fuel-web
+  # Web tests by verify-fuel-web, stackforge-verify-fuel-web, verify-fuel-ostf
   if $verify_fuel_web {
     $verify_fuel_web_packages = [
       'inkscape',
@@ -308,6 +309,10 @@ class fuel_project::jenkins::slave (
     postgresql::server::db { $nailgun_db:
       user     => 'nailgun',
       password => 'nailgun',
+    }
+    postgresql::server::db { $ostf_db:
+      user     => 'ostf',
+      password => 'ostf',
     }
     exec { 'install_global_npm' :
       command => '/usr/bin/npm -g install grunt-cli casperjs phantomjs',
