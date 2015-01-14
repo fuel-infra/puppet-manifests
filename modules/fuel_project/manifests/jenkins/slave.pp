@@ -396,6 +396,14 @@ class fuel_project::jenkins::slave (
       autoindex   => 'on',
       www_root    => '/var/www',
     }
+
+    ensure_resource('file', '/var/www/fuelweb-iso', {
+      ensure  => 'directory',
+      owner   => 'jenkins',
+      group   => 'jenkins',
+      mode    => '0755',
+      require => [ User['jenkins'],  File['/var/www'] ],
+    })
   }
 
   # Verify and Build fuel-plugins project
