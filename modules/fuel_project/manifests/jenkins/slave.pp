@@ -285,7 +285,7 @@ class fuel_project::jenkins::slave (
 
   # anonymous statistics tests
   if $verify_fuel_stats {
-    class { '::fuel_project::statistics::tests' : }
+    class { '::fuel_stats::tests' : }
   }
 
   # Web tests by verify-fuel-web, stackforge-verify-fuel-web, verify-fuel-ostf
