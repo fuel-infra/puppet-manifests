@@ -7,6 +7,7 @@ define uwsgi::application (
   $chmod = $::uwsgi::params::chmod,
   $enable_threads = $::uwsgi::params::enable_threads,
   $env = $::uwsgi::params::env,
+  $home = $::uwsgi::params::home,
   $gid = $::uwsgi::params::gid,
   $listen = $::uwsgi::params::listen,
   $master = $::uwsgi::params::master,

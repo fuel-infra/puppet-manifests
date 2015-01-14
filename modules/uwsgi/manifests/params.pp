@@ -20,6 +20,7 @@ class uwsgi::params {
   $buffer_size = 65535
   $callable = undef
   $chdir = '/'
+  $home = undef
   $chmod = 644
   $enable_threads = true
   $env = undef
