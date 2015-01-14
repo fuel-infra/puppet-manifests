@@ -6,9 +6,9 @@ class jenkins::master (
   $apply_firewall_rules = false,
   $firewall_allow_sources = [],
   # Nginx parameters
-  $ssl_cert_file = '/etc/ssl/jenkins.crt',
+  $ssl_cert_file = $::jenkins::params::ssl_cert_file,
+  $ssl_cert_file_contents = $::jenkins::params::ssl_cert_file_contents,
   $ssl_key_file = '/etc/ssl/jenkins.key',
-  $ssl_cert_file_contents = '',
   $ssl_key_file_contents = '',
   # FIXME: chain certificates are not used in nginx conf right now
   $ssl_chain_file_contents = '',
@@ -23,7 +23,7 @@ class jenkins::master (
   $jjb_url = 'http://localhost:8080/',
   $jjb_username = '',
   $jjb_password = '',
-  ) {
+  ) inherits ::jenkins::params{
 
   # Install base packages
 
