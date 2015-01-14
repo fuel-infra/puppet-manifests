@@ -8,6 +8,7 @@ class fuel_project::jenkins::slave (
   $verify_fuel_web       = false,
   $verify_fuel_astute    = false,
   $verify_fuel_docs      = false,
+  $fuel_web_selenium     = false,
   $build_fuel_plugins    = false,
   $install_docker        = false,
   $verify_fuel_stats     = false,
@@ -301,6 +302,14 @@ class fuel_project::jenkins::slave (
     ]
 
     ensure_packages($verify_fuel_web_packages)
+
+    if ($fuel_web_selenium) {
+      $selenium_packages = [
+        'firefox',
+        'xvfb',
+      ]
+      ensure_packages($selenium_packages)
+    }
 
     if (!defined(Class['postgresql::server'])) {
       class { 'postgresql::server' : }
