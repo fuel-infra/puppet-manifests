@@ -16,7 +16,7 @@ class landing_page::params {
     'landing-page-all',
     'python-mysqldb',
   ]
-  $package_updater = ['landing-page-release-status-cli']
+  $package_updater = ['landing-page-release-status-app-cli']
   $ssl_cert_file = '/etc/ssl/release.crt'
   $ssl_key_file = '/etc/ssl/release.pem'
   $timezone = 'UTC'
