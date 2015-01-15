@@ -326,7 +326,6 @@ node 'slave-01.test.local' {
     fuelweb_iso    => true,
     ldap           => true,
   }
-  class { '::landing_page::updater' :}
 }
 
 node 'slave-02.test.local' {
