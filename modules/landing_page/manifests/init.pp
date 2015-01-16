@@ -124,6 +124,7 @@ class landing_page (
     socket  => '127.0.0.1:7939',
     chdir   => '/usr/share/landing_page',
     module  => 'release.wsgi',
+    require => User[$app_user],
   }
 
   if $ssl_cert_file_contents != '' {
