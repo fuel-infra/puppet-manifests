@@ -326,6 +326,12 @@ system:
     'skulanov@mirantis.com':
       type: ssh-rsa
       key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC7QBh6Tu+qb49KO/0DYiucbswniuB6J0JV8XDyVQTklDUOBPi6ySIjq/PxDsgaom2nS1wsEt2XnelF2ue5z1tK0vTT6XFLZ6wvP6xtK2yaJKkpGskL/18/p+PSWEoG7tKypkUaflYOzb/mTYuYEGnfJ8cM6LtevJfdmr1rTMkix8jDhwDtKivPsvs2Ujh1e7eQwX3bEPY/SYpT7iOniSiV4wxvvOIvqdI1YctAaNCufdkGwdEd7vm8Vyz/HZAn/iAv3IE7SIAx0z8SasNeJlml1S4nGeLcL3fBXYE+3cbnGjXIZo+5OV0nFRII4ILgzlrdzKls8D3yGypumDvww03r'
+    'mmatuszkowiak@mirantis.com':
+      type: ssh-rsa
+      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC63QhWE96IF/SRCFWyKJyzOyprc7WlD6RdCClw7BxKum7BDlXfV+fhQupWUdsPVnOaCMwndjG+ZrZXg5okGui4GuL7nucUFYfUhZh252IBM8TM7BkuVd7fmbZ6OD2/4uGTOJRBhO+Jrol9Z2450vaiGZwWrbvWHNPtI+bhx3/4WWxjgZ59NGll220c1cTjGQamvNgtWBWNnsEilmZxinl501EgvDPJ8uewCAS3YA3T9ut11RRJiWKfoMr4H9sFeUTiu1j6ByYlINXMJTNadPzEcV6EW06k1K9oNfJ42F6gYFfjBQK5db83iNTkyA/j4TjfqJ9tlg2cWTp+x2vy8YNV'
+    'pbrzozowski@mirantis.com':
+      type: ssh-rsa
+      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDRIKRrcnGbfOmFH+HcKmvDQzfQxxsgqWH/DihWGOpGsL0Oxd4gw7RztTtYIgsyxzFzWFsYJPNRsCmG7A8T59sUhnELyQxeq4ZQhmHeSDMXFczvJWuYU1JNhX59jH7swvG+1BLumXcnY/zgO3L/m5l71qxuvSEyvYmfTJmxg2nCPiEbUArSU1R5sQ5lNPxFBYEUz1zfXMObGnw11M8vRbAlw7vlRUbgOTV+lMvHI9b61mw5dojNzXW2RQsJD/RTxvfp1WoUL2CWIZ62ZW9YELl39dMiJt6YSomarCa9XhSYHPJ56QCA4iEAOGUGpmQ6LoaAc+qynK3wNXmBc7lwM9kt'
   root_email: 'root@test.com'
   root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
   timezone: UTC
