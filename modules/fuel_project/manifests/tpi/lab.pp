@@ -42,4 +42,21 @@ class fuel_project::tpi::lab (
   File['/etc/btsync/tpi.conf']->
     File['/etc/default/btsync']~>
     Service['btsync']
+
+
+  # transparent hugepage defragmentation leads to slowdowns
+  # in our environments (kvm+vmware workstation), disable it
+  file { '/etc/init.d/disable-hugepage-defrag':
+    mode    => '0755',
+    owner   => 'root',
+    group   => 'root',
+    content => template('fuel_project/tpi/disable-hugepage-defrag.erb'),
+  }
+
+  service { 'disable-hugepage-defrag':
+    ensure  => 'running',
+    enable  => true,
+    require => File['/etc/init.d/disable-hugepage-defrag'],
+  }
+
 }
