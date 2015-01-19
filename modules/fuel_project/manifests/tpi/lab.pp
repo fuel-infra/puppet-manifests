@@ -1,10 +1,12 @@
 # Used for deployment of TPI lab
 class fuel_project::tpi::lab (
   $btsync_secret = $fuel_project::tpi::params::btsync_secret,
+  $sudo_commands = [ '/sbin/ebtables', '/sbin/iptables' ],
 ) {
 
   class { '::fuel_project::jenkins::slave' :
-    run_tests      => true,
+    run_tests     => true,
+    sudo_commands => $sudo_commands,
   }
 
   # these packages will be installed from tpi apt repo defined in hiera
