@@ -251,7 +251,6 @@ node 'demo.fuel-infra.org' {
 node 'product-stats.mirantis.com' {
   class {'::fuel_project::statistics::analytic':
     development          => false,
-    commercial           => true,
     apply_firewall_rules => true,
   }
 }
@@ -266,7 +265,6 @@ node 'collector.mirantis.com' {
 node 'stats.fuel-infra.org' {
   class {'::fuel_project::statistics::analytic':
     development          => false,
-    commercial           => false,
     apply_firewall_rules => true,
   }
 }
