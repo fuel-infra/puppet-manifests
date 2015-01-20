@@ -397,6 +397,7 @@ class fuel_project::jenkins::slave (
       'python-sphinx',
       'python-sphinxcontrib.plantuml',
       'rst2pdf',
+      'texlive-font-utils', # provides epstopdf binary
     ]
 
     ensure_packages($verify_fuel_docs_packages)
