@@ -83,6 +83,7 @@ class landing_page (
     server_name         => [$nginx_server_name],
     listen_port         => 80,
     www_root            => '/var/www',
+    format_log          => 'proxy',
     location_cfg_append => {
       return => '301 https://$server_name$request_uri',
     },
@@ -100,6 +101,7 @@ class landing_page (
     ssl_session_timeout => '10m',
     ssl_stapling        => true,
     ssl_stapling_verify => true,
+    format_log          => 'proxy',
     uwsgi               => '127.0.0.1:7939',
     location_cfg_append => {
       uwsgi_connect_timeout => '3m',

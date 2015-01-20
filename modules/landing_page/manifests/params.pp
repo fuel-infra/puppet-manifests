@@ -2,7 +2,7 @@
 #
 class landing_page::params {
   $apply_firewall_rules = false
-  $config = '/usr/share/landing_page/release/settings.py'
+  $config = '/etc/landing_page/settings.py'
   $config_template = 'landing_page/landing_page.py.erb'
   $firewall_allow_sources = {}
   $mysql_database = 'release'
