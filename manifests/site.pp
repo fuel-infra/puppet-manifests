@@ -250,29 +250,29 @@ node 'demo.fuel-infra.org' {
 # *** Anonymous Statistics servers ***
 node 'product-stats.mirantis.com' {
   class {'::fuel_project::statistics::analytic':
-    development          => false,
-    apply_firewall_rules => true,
+    development     => false,
+    firewall_enable => true,
   }
 }
 
 node 'collector.mirantis.com' {
   class {'::fuel_project::statistics::collector':
-    development          => false,
-    apply_firewall_rules => true,
+    development     => false,
+    firewall_enable => true,
   }
 }
 
 node 'stats.fuel-infra.org' {
   class {'::fuel_project::statistics::analytic':
-    development          => false,
-    apply_firewall_rules => true,
+    development     => false,
+    firewall_enable => true,
   }
 }
 
 node 'collector.fuel-infra.org' {
   class {'::fuel_project::statistics::collector':
-    development          => false,
-    apply_firewall_rules => true,
+    development     => false,
+    firewall_enable => true,
   }
 }
 
