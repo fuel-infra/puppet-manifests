@@ -66,21 +66,21 @@ class fuel_project::glusterfs (
     exec { "set_volume_uid_${gfs_volume_name}":
       command => "gluster volume set ${gfs_volume_name} storage.owner-uid ${owner_uid}",
       user    => 'root',
-      unless  => "gluster volume info| grep 'storage\.owner-uid: ${owner_uid}'",
+      unless  => "gluster volume info| fgrep 'storage.owner-uid: ${owner_uid}'",
       require => Glusterfs_vol[$gfs_volume_name],
     }
 
     exec { "set_volume_gid_${gfs_volume_name}":
       command => "gluster volume set ${gfs_volume_name} storage.owner-gid ${owner_gid}",
       user    => 'root',
-      unless  => "gluster volume info| grep 'storage\.owner-gid: ${owner_gid}'",
+      unless  => "gluster volume info| fgrep 'storage.owner-gid: ${owner_gid}'",
       require => Glusterfs_vol[$gfs_volume_name],
     }
 
     exec { "set_volume_param_${gfs_volume_name}":
       command => "gluster volume set ${gfs_volume_name} server.allow-insecure on",
       user    => 'root',
-      unless  => 'gluster volume info| grep "server\.allow-insecure: on"',
+      unless  => 'gluster volume info| fgrep "server.allow-insecure: on"',
       notify  => Exec["restart_volume_${gfs_volume_name}"],
       require => Glusterfs_vol[$gfs_volume_name],
     }
