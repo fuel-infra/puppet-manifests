@@ -177,7 +177,7 @@ node 'review-solr-tst01.vm.mirantis.net' {
   }
 }
 
-node /osci-gerrit(2)?\.vm\.mirantis\.net/ {
+node /(osci|review)-(gerrit|tst)([0-9]{0,2})?\.vm\.mirantis\.net/ {
   $external_host = true
   $dmz = true
 
