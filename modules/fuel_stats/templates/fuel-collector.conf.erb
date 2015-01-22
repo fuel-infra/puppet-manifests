@@ -1,6 +1,6 @@
 server {
     server_name <%= @fqdn %>;
-    listen <%= @service_port %>;
+    listen <%= @service_port %><% if @ssl %> ssl<% end %>;
 
     access_log /var/log/nginx/collector.access.log proxy;
     error_log /var/log/nginx/collector.error.log;
