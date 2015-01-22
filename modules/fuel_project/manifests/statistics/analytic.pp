@@ -56,7 +56,10 @@ class fuel_project::statistics::analytic (
 
   class { 'fuel_stats::migration':
     development => $development,
-    require     => Class['fuel_stats::analytic'],
+    require     => [
+      Class['fuel_stats::analytic'],
+      Service['elasticsearch'],
+    ]
   }
 
   if ($firewall_enable) {

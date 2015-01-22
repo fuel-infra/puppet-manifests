@@ -49,12 +49,16 @@ class fuel_stats::migration (
     minute  => ['0', '15', '30', '45'],
   }
 
+  # 'tries' is needed because elasticsearch takes too much time
+  # to start and open socket
   exec { 'clear_indices':
-    command => "${migrate_cmd} clear_indices",
-    require => [
+    command   => "${migrate_cmd} clear_indices",
+    require   => [
       File['/var/log/fuel-stats'],
       File['/etc/migration.yaml'],
-    ]
+    ],
+    tries     => 5,
+    try_sleep => 10,
   }
 
   exec { 'create_indices':
