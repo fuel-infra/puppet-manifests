@@ -150,7 +150,7 @@ def ssh_run(ssh, command):
             sys.stdout.write(line)
     except StopIteration:
         pass
-    return buf
+    return buf, ssh_stdout.channel.recv_exit_status()
 
 
 def create_server(hostnames=["slave-01"]):
@@ -235,13 +235,16 @@ def puppet_master_installation():
     assert_equal(exit_code, 0)
     ssh_run(ssh, "sudo mkdir /var/lib/hiera; sudo ln -s " +
             "/etc/puppet/hiera/common-example.yaml /var/lib/hiera/common.yaml")
-    ssh_run(ssh, "sudo sh -x /etc/puppet/bin/install_puppet_master.sh 2>&1")
+    out, exit_code = ssh_run(
+        ssh,
+        "sudo sh -x /etc/puppet/bin/install_puppet_master.sh 2>&1")
+    assert_equal(exit_code, 0)
 
 
 def error_log_checker(host):
     """Check for SSL puppet master error"""
     ssh = hosts[host]['ssh']
-    log = ssh_run(
+    log, exit_code = ssh_run(
         ssh,
         "sudo cat /var/log/puppet/firstboot.log | grep \"puppet cert clean\"")
 
@@ -279,7 +282,6 @@ def slave_install():
         timer += 30
         hosts[host]['ssh_stdout'] = o
         hosts[host]['opened'] = True
-        #ssh_run(ssh, "sudo bash -x /tmp/rc.local")
     hosts['pxetool']['opened'] = False
     opened_count = len(slave_hosts)
     while opened_count > 0:
@@ -308,7 +310,9 @@ def slave_install():
                             host, opened_count)
     Success = True
     for host in slave_hosts:
-        result = ssh_run(hosts[host]['ssh'], "ls -1 /etc/puppet/install_*")
+        result, exit_code = ssh_run(
+            hosts[host]['ssh'],
+            "ls -1 /etc/puppet/install_*")
         if not 'install_ok' in result:
             print "Host {host} ({ip}) has failed".format(
                 host=host, ip=hosts[host]['ip'])
