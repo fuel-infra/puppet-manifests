@@ -7,7 +7,9 @@ Banner /etc/banner
 
 HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_dsa_key
+<% if @osfamily == 'debian' %>
 HostKey /etc/ssh/ssh_host_ecdsa_key
+<% end %>
 UsePrivilegeSeparation yes
 
 KeyRegenerationInterval 3600
@@ -22,7 +24,6 @@ StrictModes yes
 
 RSAAuthentication yes
 PubkeyAuthentication yes
-#AuthorizedKeysFile %h/.ssh/authorized_keys
 
 IgnoreRhosts yes
 RhostsRSAAuthentication no
@@ -44,4 +45,5 @@ AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server
 
 UsePAM yes
-AuthorizedKeysFile /etc/ssh/keys/%u .ssh/authorized_keys
+AuthorizedKeysFile %h/.ssh/authorized_keys
+AuthorizedKeysFile /etc/ssh/keys/%u

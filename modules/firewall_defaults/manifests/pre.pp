@@ -2,9 +2,17 @@
 #
 class firewall_defaults::pre {
   include firewall_defaults::post
-  package { 'iptables-persistent' :
-    ensure => installed,
-  }->
+
+  case $::osfamily {
+    'debian': {
+      package { 'iptables-persistent' :
+        ensure => 'present',
+        before => Resources['firewall']
+      }
+    }
+    default: { }
+  }
+
   resources { 'firewall' :
     purge => true,
   }

@@ -9,7 +9,9 @@ File {
   replace => true,
 }
 
-Exec['apt_update'] -> Package <| |>
+if($::osfamily == 'debian') {
+  Exec['apt_update'] -> Package <| |>
+}
 
 stage { 'pre' :
   before => Stage['main'],
@@ -485,6 +487,12 @@ node 'slave-20.test.local' {
   class {'::fuel_project::mongo_common':
     primary => true,
   }
+}
+
+# Sandbox
+
+node /spacewalk([0-9]{2})-sndbx\.vm\.mirantis\.net/ {
+  class { '::fuel_project::common' :}
 }
 
 # Default

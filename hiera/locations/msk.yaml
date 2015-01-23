@@ -16,7 +16,7 @@ apt::sources:
     include_src: false
     include_deb: true
   devops:
-    location: 'http://fuel-repository.mirantis.com/devops/ubuntu/'
+    location: 'http://mirror.fuel-infra.org/devops/ubuntu/'
     release: '/'
     key: 'C1EC35C7D5A05778'
     key_server: 'keyserver.ubuntu.com'

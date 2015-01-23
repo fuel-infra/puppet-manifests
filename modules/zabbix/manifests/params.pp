@@ -18,7 +18,6 @@ class zabbix::params {
   $agent_include = '/etc/zabbix/zabbix_agentd.conf.d/'
   $agent_listen_address = '0.0.0.0'
   $agent_listen_port = 10050
-  $agent_log_file = '/var/log/zabbix-agent/zabbix_agentd.log'
   $agent_log_remote_commands = true
   $agent_max_lines_per_second = 100
   $agent_package = 'zabbix-agent'
@@ -95,7 +94,6 @@ class zabbix::params {
   $proxy_load_module = undef
   $proxy_load_module_path = undef
   $proxy_local_buffer = '0'
-  $proxy_log_file = '/var/log/zabbix-proxy/zabbix_proxy.log'
   $proxy_log_file_size = '1'
   $proxy_log_slow_queries = '0'
   $proxy_mode = 'passive'
@@ -156,7 +154,6 @@ class zabbix::params {
   $server_install_ping_handler = false
   $server_listen_ip = '0.0.0.0'
   $server_listen_port = 10051
-  $server_log_file = '/var/log/zabbix-server/zabbix_server.log'
   $server_log_file_size = 0
   $server_log_slow_queries = true
   $server_max_housekeeper_delete = 500
@@ -194,4 +191,20 @@ class zabbix::params {
   #
   $mysql_package = 'mysql-server'
   $mysql_root_password = ''
+
+  case $::osfamily {
+    'redhat': {
+      $agent_log_file = '/var/log/zabbix/zabbix_agentd.log'
+      $server_log_file = '/var/log/zabbix/zabbix_server.log'
+      $proxy_log_file = '/var/log/zabbix/zabbix_proxy.log'
+    }
+    'debian': {
+      $agent_log_file = '/var/log/zabbix-agent/zabbix_agentd.log'
+      $server_log_file = '/var/log/zabbix-server/zabbix_server.log'
+      $proxy_log_file = '/var/log/zabbix-proxy/zabbix_proxy.log'
+    }
+    default: {
+      fatal("Unknown osfamily: ${::osfamily}. Probaly your OS is unsupported.")
+    }
+  }
 }

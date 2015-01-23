@@ -17,7 +17,17 @@ class ssh::params {
     'nscd',
   ]
 
-  $service = 'ssh'
+  case $::osfamily {
+    'redhat': {
+      $service = 'sshd'
+    }
+    'debian': {
+      $service = 'ssh'
+    }
+    default: {
+      fatal("Unknown osfamily: ${::osfamily}. Probaly your OS is unsupported.")
+    }
+  }
 
   $sshd_config = '/etc/ssh/sshd_config'
 }

@@ -61,17 +61,18 @@ class fuel_project::common (
     }
   }
 
-  class { '::apt' :
-    always_apt_update    => true,
-    disable_keys         => false,
-    purge_sources_list   => true,
-    purge_sources_list_d => true,
-    purge_preferences_d  => true,
-    update_timeout       => 300,
+  case $::osfamily {
+    'debian': {
+      class { '::apt' :}
+    }
+    'redhat': {
+      class { '::yum' :}
+    }
+    default: { }
   }
 
-  ::zabbix::item { 'software-zabbix-check' :
-    content => 'puppet:///modules/fuel_project/common/zabbix/software.conf',
+  zabbix::item { 'software-zabbix-check' :
+    template => 'fuel_project/common/zabbix/software.conf.erb',
   }
   # FIXME: to make changes compatible in https://review.fuel-infra.org/415
   file { '/etc/zabbix/zabbix_agentd.conf.d/sofware-zabbix-check.conf' :
