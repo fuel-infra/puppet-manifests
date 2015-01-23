@@ -172,9 +172,11 @@ node 'lab-cz.bud.mirantis.net' {
 }
 
 node 'review-solr-tst01.vm.mirantis.net' {
-  class { '::fuel_project::common' :
-    external_host => false,
-  }
+  class { '::fuel_project::common' :}
+}
+
+node 'devops-tools.vm.mirantis.net' {
+  class { '::fuel_project::common' :}
 }
 
 node /(osci|review)-(gerrit|tst)([0-9]{0,2})?\.vm\.mirantis\.net/ {
