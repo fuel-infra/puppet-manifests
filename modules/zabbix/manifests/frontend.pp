@@ -15,6 +15,7 @@ class zabbix::frontend (
   $image_format_default = $::zabbix::params::frontend_image_format_default,
   $install_ping_handler = $::zabbix::params::frontend_install_ping_handler,
   $nginx_config_template = $::zabbix::params::frontend_nginx_config_template,
+  $nginx_format_log = $::zabbix::params::frontend_nginx_format_log,
   $package = $::zabbix::params::frontend_package,
   $ping_handler_template = $::zabbix::params::frontend_ping_handler_template,
   $service_fqdn = $::zabbix::params::frontend_service_fqdn,
@@ -34,6 +35,7 @@ class zabbix::frontend (
     ensure               => 'present',
     listen_port          => 80,
     server_name          => [$service_fqdn, $::fqdn],
+    format_log           => $nginx_format_log,
     use_default_location => false,
   }
 
