@@ -14,6 +14,7 @@ class fuel_project::jenkins::slave (
   $verify_fuel_stats     = false,
   $ldap                  = false,
   $fuelweb_iso           = false,
+  $check_tasks_graph     = false,
   $ldap_uri              = '',
   $ldap_base             = '',
   $nailgun_db            = ['nailgun'],
@@ -385,6 +386,17 @@ class fuel_project::jenkins::slave (
     ]
 
     ensure_packages($syntax_check_packages)
+  }
+
+  # Check tasks graph
+  if ($check_tasks_graph){
+    $tasks_graph_check_packages = [
+      'python-pytest',
+      'python-jsonschema',
+      'python-networkx',
+    ]
+
+    ensure_packages($tasks_graph_check_packages)
   }
 
   # Verify Fuel docs

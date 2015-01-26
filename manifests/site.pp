@@ -103,6 +103,7 @@ node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
     verify_fuel_docs    => true,
     build_fuel_plugins  => true,
     verify_fuel_stats   => true,
+    check_tasks_graph   => true,
   }
 }
 
@@ -321,10 +322,11 @@ node 'pxetool.test.local' {
 
 node 'slave-01.test.local' {
   class { '::fuel_project::jenkins::slave' :
-    run_tests      => true,
-    build_fuel_iso => true,
-    fuelweb_iso    => true,
-    ldap           => true,
+    run_tests         => true,
+    build_fuel_iso    => true,
+    fuelweb_iso       => true,
+    ldap              => true,
+    check_tasks_graph => true,
   }
 }
 
