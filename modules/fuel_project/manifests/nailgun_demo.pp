@@ -162,15 +162,17 @@ class fuel_project::nailgun_demo (
   }
 
   uwsgi::application { 'fuel-web' :
-    plugins => 'python',
-    uid     => 'nailgun',
-    gid     => 'nailgun',
-    socket  => '127.0.0.1:7933',
-    chdir   => '/usr/share/fuel-web/nailgun',
-    home    => '/home/nailgun/python',
-    module  => 'nailgun.wsgi:application',
-    env     => 'DJANGO_SETTINGS_MODULE=nailgun.settings',
-    require => [File_line['fake_mode'],
+    plugins        => 'python',
+    uid            => 'nailgun',
+    gid            => 'nailgun',
+    socket         => '127.0.0.1:7933',
+    chdir          => '/usr/share/fuel-web/nailgun',
+    home           => '/home/nailgun/python',
+    module         => 'nailgun.wsgi:application',
+    env            => 'DJANGO_SETTINGS_MODULE=nailgun.settings',
+    workers        => '8',
+    enable_threads => true,
+    require        => [File_line['fake_mode'],
                 Venv::Exec['venv-bower'],
                 User['nailgun'],],
   }
