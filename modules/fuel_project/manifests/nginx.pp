@@ -13,4 +13,8 @@ class fuel_project::nginx {
       stub_status => true,
     },
   }
+
+  zabbix::item { 'nginx' :
+    content => 'puppet:///modules/fuel_project/zabbix/nginx_items.conf',
+  }
 }
