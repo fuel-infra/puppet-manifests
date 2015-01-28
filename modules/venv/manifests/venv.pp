@@ -6,6 +6,7 @@ define venv::venv (
   $requirements = '',
   $options = '',
   $packages = [],
+  $pip_opts = '',
 ) {
 
 
@@ -31,7 +32,7 @@ define venv::venv (
   if $requirements {
     exec { ". ${path}/bin/activate ; pip install -r ${requirements}" :
       command   => "export HOME='/home/${user}' ; \
-        . ${path}/bin/activate ; pip install -r ${requirements}",
+        . ${path}/bin/activate ; pip install ${pip_opts} -r ${requirements}",
       user      => $user,
       cwd       => $path,
       logoutput => on_failure,

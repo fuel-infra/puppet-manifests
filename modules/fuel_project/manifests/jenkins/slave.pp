@@ -1,6 +1,7 @@
 # Class: fuel_project::jenkins::slave
 #
 class fuel_project::jenkins::slave (
+  $docker_package,
   $external_host                        = false,
   $build_fuel_iso                       = false,
   $run_tests                            = false,
@@ -64,10 +65,13 @@ class fuel_project::jenkins::slave (
       'pattern' => 'fuel-*',
     }
   ],
-  $jenkins_swarm_slave     = false,
-  $docker_package          = '',
-  $sudo_commands           = ['/sbin/ebtables'],
-  $workspace               = '/home/jenkins/workspace',
+  $jenkins_swarm_slave                  = false,
+  $docker_service                       = '',
+  $sudo_commands                        = ['/sbin/ebtables'],
+  $workspace                            = '/home/jenkins/workspace',
+  $gerrit_host                          =  'review.openstack.org',
+  $gerrit_port                          = 29418,
+  $overwrite_known_hosts                = true,
 ) {
   class { '::fuel_project::common' :
     external_host     => $external_host,
@@ -89,11 +93,12 @@ class fuel_project::jenkins::slave (
   } else {
     class { '::jenkins::slave' :}
 
-    ssh::known_host { 'review.openstack.org-known-hosts' :
-      host    => 'review.openstack.org',
-      port    => 29418,
-      user    => 'jenkins',
-      require => Class['::jenkins::slave'],
+    ssh::known_host { 'slave-known-hosts' :
+      host      => $gerrit_host,
+      port      => $gerrit_port,
+      user      => 'jenkins',
+      overwrite => $overwrite_known_hosts,
+      require   => Class['::jenkins::slave'],
     }
   }
 
@@ -640,6 +645,19 @@ class fuel_project::jenkins::slave (
       package { $docker_package :
         ensure  => 'present',
         require => Package['lxc-docker'],
+      }
+    }
+
+    #actually docker have api, and in some cases it will not be automatically started and enabled
+    if $docker_service and (!defined(Service[$docker_service])) {
+      service { $docker_service :
+        ensure    => 'running',
+        enable    => true,
+        hasstatus => true,
+        require   => [
+          Package[$docker_package],
+          Group['docker'],
+        ],
       }
     }
 

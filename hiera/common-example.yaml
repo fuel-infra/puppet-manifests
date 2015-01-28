@@ -4,7 +4,7 @@ apt::disable_keys: false
 apt::purge_sources_list: true
 apt::purge_sources_list_d: true
 apt::purge_preferences_d: true
-apt::update_timeout:: 300
+apt::update_timeout: 300
 apt::sources:
   mirror:
     location: 'http://archive.ubuntu.com/ubuntu/'
