@@ -396,7 +396,7 @@ jenkins::slave::authorized_keys:
 jenkins::swarm_slave::master: 'https://jenkins-master.test.local/'
 jenkins::swarm_slave::user: 'jenkins-robotson'
 jenkins::swarm_slave::password: 'BTRfeHyibQlM2M'
-jenkins::swarm_slave::labels: 'swarm 14_04'
+jenkins::swarm_slave::labels: '14_04'
 
 mysql::client::package_name: 'percona-server-client-5.6'
 mysql::server::package_name: 'percona-server-server-5.6'
