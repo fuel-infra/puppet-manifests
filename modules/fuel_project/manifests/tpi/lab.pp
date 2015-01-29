@@ -7,6 +7,7 @@ class fuel_project::tpi::lab (
   class { '::fuel_project::jenkins::slave' :
     run_tests     => true,
     sudo_commands => $sudo_commands,
+    ldap          => true,
   }
 
   # these packages will be installed from tpi apt repo defined in hiera
@@ -16,6 +17,7 @@ class fuel_project::tpi::lab (
     'linux-headers-3.13.0-39',
     'linux-headers-3.13.0-39-generic',
     'btsync',
+    'sudo-ldap',
   ]
 
   ensure_packages($tpi_packages)
