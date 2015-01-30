@@ -27,6 +27,7 @@ class fuel_project::jenkins::slave (
   $ldap_ignore_users     = '',
   $keep_iso_days         = 10,
   $storage_dirs          = ['/var/www/fuelweb-iso', '/srv/downloads'],
+  $pattern_to_clean       = 'fuel-\*', # to use in seed-downloads-cleanup.sh
   $jenkins_swarm_slave   = false,
   $docker_package        = '',
   $sudo_commands         = ['/sbin/ebtables'],
