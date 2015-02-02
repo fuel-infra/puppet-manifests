@@ -19,6 +19,9 @@ class puppet::master (
   $service = $::puppet::params::master_service,
   $server = '',
   $puppet_master_run_with = 'webrick', # or nginx+uwsgi
+  $nginx_access_log = '/var/log/nginx/access.log',
+  $nginx_error_log = '/var/log/nginx/error.log',
+  $nginx_log_format = undef,
 ) inherits ::puppet::params {
   puppet::config { 'master-config' :
     hiera_backends        => $hiera_backends,
@@ -97,7 +100,7 @@ class puppet::master (
     if (!defined(Class['nginx'])) {
       class { '::nginx' :}
     }
-    nginx::resource::vhost { 'puppetmaster' :
+    ::nginx::resource::vhost { 'puppetmaster' :
       ensure                 => 'present',
       listen_port            => 8140,
       ssl_port               => 8140,
@@ -108,6 +111,9 @@ class puppet::master (
       ssl_crl                => '/var/lib/puppet/ssl/crl.pem',
       ssl_client_certificate => '/var/lib/puppet/ssl/certs/ca.pem',
       ssl_verify_client      => 'optional',
+      access_log             => $nginx_access_log,
+      error_log              => $nginx_error_log,
+      format_log             => $nginx_log_format,
       uwsgi                  => '127.0.0.1:8141',
       location_cfg_append    => {
         uwsgi_connect_timeout => '3m',

@@ -49,7 +49,9 @@ class zabbix::params {
   $frontend_image_format_default = 'IMAGE_FORMAT_PNG'
   $frontend_install_ping_handler = false
   $frontend_nginx_config_template = 'zabbix/frontend/nginx.conf.erb'
-  $frontend_nginx_format_log = undef
+  $frontend_nginx_access_log = '/var/log/nginx/access.log'
+  $frontend_nginx_error_log = '/var/log/nginx/error.log'
+  $frontend_nginx_log_format = undef
   $frontend_package = 'zabbix-frontend-php'
   $frontend_ping_handler_template = 'zabbix/frontend/ping.php.erb'
   $frontend_service_fqdn = undef

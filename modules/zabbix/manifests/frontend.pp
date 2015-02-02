@@ -15,7 +15,9 @@ class zabbix::frontend (
   $image_format_default = $::zabbix::params::frontend_image_format_default,
   $install_ping_handler = $::zabbix::params::frontend_install_ping_handler,
   $nginx_config_template = $::zabbix::params::frontend_nginx_config_template,
-  $nginx_format_log = $::zabbix::params::frontend_nginx_format_log,
+  $nginx_access_log = $::zabbix::params::frontend_nginx_access_log,
+  $nginx_error_log = $::zabbix::params::frontend_nginx_error_log,
+  $nginx_log_format = $::zabbix::params::frontend_nginx_log_format,
   $package = $::zabbix::params::frontend_package,
   $ping_handler_template = $::zabbix::params::frontend_ping_handler_template,
   $service_fqdn = $::zabbix::params::frontend_service_fqdn,
@@ -31,28 +33,30 @@ class zabbix::frontend (
   if (!defined(Class['nginx'])) {
     class { '::nginx' :}
   }
-  nginx::resource::vhost { 'zabbix-server' :
+  ::nginx::resource::vhost { 'zabbix-server' :
     ensure               => 'present',
     listen_port          => 80,
     server_name          => [$service_fqdn, $::fqdn],
-    format_log           => $nginx_format_log,
+    access_log           => $nginx_access_log,
+    error_log            => $nginx_error_log,
+    format_log           => $nginx_log_format,
     use_default_location => false,
   }
 
-  nginx::resource::location { 'zabbix-server-static' :
+  ::nginx::resource::location { 'zabbix-server-static' :
     vhost    => 'zabbix-server',
     location => '/',
     www_root => '/usr/share/zabbix',
   }
 
-  nginx::resource::location { 'zabbix-server-php' :
+  ::nginx::resource::location { 'zabbix-server-php' :
     vhost    => 'zabbix-server',
     location => '~ \.php$',
     fastcgi  => '127.0.0.1:9000',
     www_root => '/usr/share/zabbix',
   }
 
-  php::fpm::conf { 'www':
+  ::php::fpm::conf { 'www':
     listen    => '127.0.0.1:9000',
     user      => 'www-data',
     php_value => {
@@ -65,7 +69,7 @@ class zabbix::frontend (
     require   => Class['::nginx'],
   }
 
-  php::module { [ 'mysql', 'ldap', 'gd' ]: }
+  ::php::module { [ 'mysql', 'ldap', 'gd' ]: }
 
   file { $config :
     ensure  => 'present',

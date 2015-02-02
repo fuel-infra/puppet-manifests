@@ -6,6 +6,9 @@ class fuel_project::updates (
   $apply_firewall_rules = false,
   $firewall_allow_sources = {},
   $sync_hosts_allow = [],
+  $nginx_access_log = '/var/log/nginx/access.log',
+  $nginx_error_log = '/var/log/nginx/error.log',
+  $nginx_log_format = 'proxy',
 ) {
   if (!defined(Class['::fuel_project::nginx'])) {
     class { '::fuel_project::nginx' :}
@@ -13,6 +16,9 @@ class fuel_project::updates (
   ::nginx::resource::vhost { 'updates' :
     ensure      => 'present',
     autoindex   => 'on',
+    access_log  => $nginx_access_log,
+    error_log   => $nginx_error_log,
+    format_log  => $nginx_log_format,
     www_root    => $updates_dir,
     server_name => [$service_fqdn, "updates.${::fqdn}"]
   }

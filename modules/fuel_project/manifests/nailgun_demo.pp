@@ -4,6 +4,9 @@ class fuel_project::nailgun_demo (
   $server_name = '',
   $lock_file = '',
   $apply_firewall_rules = false,
+  $nginx_access_log = '/var/log/nginx/access.log',
+  $nginx_error_log = '/var/log/nginx/error.log',
+  $nginx_log_format = 'proxy',
 ) {
 
   if (!defined(Class['fuel_project::common'])) {
@@ -146,6 +149,9 @@ class fuel_project::nailgun_demo (
     ensure              => 'present',
     listen_port         => 8000,
     server_name         => [$server_name],
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
     uwsgi               => '127.0.0.1:7933',
     location_cfg_append => {
       uwsgi_connect_timeout => '3m',

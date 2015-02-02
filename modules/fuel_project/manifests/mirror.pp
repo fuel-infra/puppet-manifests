@@ -9,6 +9,9 @@ class fuel_project::mirror (
   $service_fqdn = "mirror.${::fqdn}",
   $service_aliases = [],
   $sync_hosts_allow = [],
+  $nginx_access_log = '/var/log/nginx/access.log',
+  $nginx_error_log = '/var/log/nginx/error.log',
+  $nginx_log_format = 'proxy',
 ) {
   class { 'rsync':
     package_ensure => 'present',
@@ -76,6 +79,9 @@ class fuel_project::mirror (
   ::nginx::resource::vhost { 'mirror' :
     ensure              => 'present',
     www_root            => '/var/www/mirror',
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
     server_name         => [
       $service_fqdn,
       "mirror.${::fqdn}",

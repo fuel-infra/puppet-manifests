@@ -23,6 +23,9 @@ class jenkins::master (
   $jjb_url = 'http://localhost:8080/',
   $jjb_username = '',
   $jjb_password = '',
+  $nginx_access_log = '/var/log/nginx/access.log',
+  $nginx_error_log = '/var/log/nginx/error.log',
+  $nginx_log_format = undef,
   ) inherits ::jenkins::params{
 
   # Install base packages
@@ -114,6 +117,9 @@ class jenkins::master (
     ensure              => 'present',
     listen_port         => 80,
     www_root            => '/var/www',
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
     location_cfg_append => {
       rewrite => '^ https://$server_name$request_uri? permanent',
     },
@@ -131,6 +137,9 @@ class jenkins::master (
     ssl_stapling_verify => true,
     proxy               => 'http://127.0.0.1:8080',
     proxy_read_timeout  => 120,
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
     location_cfg_append => {
       client_max_body_size => '8G',
       proxy_redirect       => 'off',

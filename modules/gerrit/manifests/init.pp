@@ -64,6 +64,9 @@ class gerrit (
   $secondary_index = false,
   $secondary_index_type = 'LUCENE',
   $enable_javamelody_top_menu = false,
+  $nginx_access_log = '/var/log/nginx/access.log',
+  $nginx_error_log = '/var/log/nginx/error.log',
+  $nginx_log_format = undef,
 ) {
   include jeepyb
   include pip
@@ -83,6 +86,9 @@ class gerrit (
     ssl_cache            => 'shared:SSL:10m',
     ssl_session_timeout  => '10m',
     proxy                => 'http://127.0.0.1:8081',
+    access_log           => $nginx_access_log,
+    error_log            => $nginx_error_log,
+    format_log           => $nginx_log_format,
     use_default_location => false,
   }
 
@@ -99,6 +105,9 @@ class gerrit (
       'X-Forwarded-For $remote_addr',
       'Host $host',
     ],
+    access_log         => $nginx_access_log,
+    error_log          => $nginx_error_log,
+    format_log         => $nginx_log_format,
   }
 
   ::nginx::resource::location { 'gerrit-static' :

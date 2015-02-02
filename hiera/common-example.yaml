@@ -157,6 +157,7 @@ gerrit::commentlinks:
     html: '$1<a href=\"#q,$2,n,z\">$2</a>$3'
 
 gerrit::email: 'review@test.local'
+gerrit::nginx_log_format: 'proxy'
 
 jenkins::master::service_fqdn: 'jenkins-product.test.local'
 
@@ -230,6 +231,7 @@ jenkins::master::jjb_password: 'jjb_pass'
 jenkins::master::firewall_allow_sources:
   '1000 - jenkins connections from 0.0.0.0/0':
     source: '0.0.0.0/0'
+jenkins::master::nginx_log_format: 'proxy'
 
 ldap:
   uri: 'ldap://ldap'
@@ -304,6 +306,7 @@ landing_page::ssl_cert_file_contents: |
   JNXfKuhmmr1YmuNkNAwsgTlrYFxKdEBimCtsEMibYzgKT+CYFZf85z0=
   -----END CERTIFICATE-----
 
+landing_page::nginx_log_format: 'proxy'
 landing_page::updater::user: 'release'
 landing_page::updater::application: 'updater'
 landing_page::updater::config: '/etc/release-updater.yaml'
@@ -407,6 +410,7 @@ puppet::master::autosign: true
 puppet::master::firewall_allow_sources:
   '1000 - puppet master connections from 10.108.0.0/16':
     source: '10.108.0.0/16'
+puppet::master::nginx_log_format: 'proxy'
 
 pxetool::additional_repos:
   - 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /'
@@ -419,6 +423,7 @@ pxetool::firewall_allow_sources:
 pxetool::mirror: 'archive.ubuntu.com'
 pxetool::root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
 pxetool::timezone: 'UTC'
+pxetool::nginx_log_format: 'proxy'
 
 ssh::ldap::ldap_uri: 'ldap://ldap'
 ssh::ldap::ldap_base: 'dc=company,dc=net'

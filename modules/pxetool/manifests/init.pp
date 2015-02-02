@@ -12,6 +12,9 @@ class pxetool (
   $root_password_hash = $::pxetool::params::root_password_hash,
   $service_port = $::pxetool::params::service_port,
   $timezone = $::pxetool::params::timezone,
+  $nginx_access_log = '/var/log/nginx/access.log',
+  $nginx_error_log = '/var/log/nginx/error.log',
+  $nginx_log_format = undef,
 ) inherits ::pxetool::params {
   include nginx
   include uwsgi
@@ -53,10 +56,13 @@ class pxetool (
   if (!defined(Class['nginx'])) {
     class { '::nginx' :}
   }
-  nginx::resource::vhost { 'pxetool' :
+  ::nginx::resource::vhost { 'pxetool' :
     ensure              => 'present',
     listen_port         => 80,
     server_name         => [$::fqdn],
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
     uwsgi               => '127.0.0.1:7931',
     location_cfg_append => {
       uwsgi_connect_timeout => '3m',
@@ -65,7 +71,7 @@ class pxetool (
     }
   }
 
-  nginx::resource::location { 'pxetool-static' :
+  ::nginx::resource::location { 'pxetool-static' :
     ensure   => 'present',
     vhost    => 'pxetool',
     location => '/static/',
