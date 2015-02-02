@@ -7,14 +7,14 @@ class pxetool (
   $disk_pattern = $::pxetool::params::disk_pattern,
   $firewall_allow_sources = $::pxetool::params::firewall_allow_sources,
   $mirror = $::pxetool::params::mirror,
+  $nginx_access_log = $::pxetool::params::nginx_access_log,
+  $nginx_error_log = $::pxetool::params::nginx_error_log,
+  $nginx_log_format = $::pxetool::params::nginx_log_format,
   $package = $::pxetool::params::package,
   $puppet_master = $::pxetool::params::puppet_master,
   $root_password_hash = $::pxetool::params::root_password_hash,
   $service_port = $::pxetool::params::service_port,
   $timezone = $::pxetool::params::timezone,
-  $nginx_access_log = '/var/log/nginx/access.log',
-  $nginx_error_log = '/var/log/nginx/error.log',
-  $nginx_log_format = undef,
 ) inherits ::pxetool::params {
   include nginx
   include uwsgi
