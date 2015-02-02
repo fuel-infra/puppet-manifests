@@ -240,6 +240,11 @@ node /tpi\d\d\.bud\.mirantis\.net/ {
   class { '::fuel_project::tpi::lab' :}
 }
 
+node 'tpi-s1.bud.mirantis.net' {
+  class { '::fuel_project::common' :  }
+  class { '::jenkins::master' :}
+}
+
 node 'tpi-puppet.vm.mirantis.net' {
   class { '::fuel_project::puppet::master' :}
 }
