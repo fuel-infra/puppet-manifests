@@ -113,6 +113,7 @@ class jenkins::master (
   ::nginx::resource::vhost { 'jenkins-http' :
     ensure              => 'present',
     listen_port         => 80,
+    server_name         => [$service_fqdn, $::fqdn],
     www_root            => '/var/www',
     location_cfg_append => {
       rewrite => '^ https://$server_name$request_uri? permanent',
