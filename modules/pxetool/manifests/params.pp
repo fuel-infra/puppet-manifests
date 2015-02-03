@@ -12,7 +12,11 @@ class pxetool::params {
   $nginx_conf_link = '/etc/nginx/sites-enabled/pxetool.conf'
   $nginx_error_log = '/var/log/nginx/error.log'
   $nginx_log_format = 'proxy'
-  $package = 'python-django-pxetool'
+  $package = [
+    'python-django-pxetool',
+    'python-django-pxetool-template-debian-7-amd64',
+    'python-django-pxetool-template-ubuntu-14.04-amd64'
+  ]
   $puppet_master = $::fqdn
   $root_password_hash = ''
   $service_port = 80
