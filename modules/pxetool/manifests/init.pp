@@ -1,25 +1,38 @@
 # Class: pxetool
 #
 class pxetool (
-  $additional_repos = $::pxetool::params::additional_repos,
-  $apply_firewall_rules = $::pxetool::params::apply_firewall_rules,
-  $config = $::pxetool::params::config,
-  $disk_pattern = $::pxetool::params::disk_pattern,
-  $firewall_allow_sources = $::pxetool::params::firewall_allow_sources,
-  $mirror = $::pxetool::params::mirror,
-  $nginx_access_log = $::pxetool::params::nginx_access_log,
-  $nginx_error_log = $::pxetool::params::nginx_error_log,
-  $nginx_log_format = $::pxetool::params::nginx_log_format,
-  $package = $::pxetool::params::package,
-  $puppet_master = $::pxetool::params::puppet_master,
-  $root_password_hash = $::pxetool::params::root_password_hash,
-  $service_port = $::pxetool::params::service_port,
-  $timezone = $::pxetool::params::timezone,
-) inherits ::pxetool::params {
-  include nginx
-  include uwsgi
-
-  include pxetool::params
+  $additional_repos       = [],
+  $apply_firewall_rules   = false,
+  $config                 = '/etc/pxetool/settings.py',
+  $database_engine        = 'django.db.backends.sqlite3',
+  $database_name          = '/usr/share/pxetool/pxetool/database.sqlite3',
+  $database_user          = '',
+  $database_password      = '',
+  $database_host          = '',
+  $database_port          = '',
+  $disk_pattern           = '(\/dev\/sd([a-z]+)|\/dev\/(x)?vd([a-z]+))',
+  $firewall_allow_sources = {},
+  $mirror                 = 'mirror.yandex.ru',
+  $nginx_access_log       = '/var/log/nginx/access.log',
+  $nginx_error_log        = '/var/log/nginx/error.log',
+  $nginx_log_format       = undef,
+  $package                = [
+    'python-django-pxetool',
+    'python-django-pxetool-template-debian-7-amd64',
+    'python-django-pxetool-template-ubuntu-14.04-amd64'
+  ],
+  $puppet_master          = $::fqdn,
+  $pxelinux_root          = '/var/lib/tftpboot',
+  $pxetool_url            = "http://${::fqdn}",
+  $root_password_hash     = '',
+  $timezone               = 'UTC',
+) {
+  if(!defined(Class['::nginx'])) {
+    class { '::nginx' :}
+  }
+  if(!defined(Class['::uwsgi'])) {
+    class { '::uwsgi' :}
+  }
 
   # installing required $packages
   ensure_packages($package)
@@ -40,17 +53,23 @@ class pxetool (
     require => File[$config],
   }
 
-  # creating database schema
+  file { '/usr/share/pxetool/pxetool' :
+    ensure => 'directory',
+    owner  => 'www-data',
+    group  => 'www-data',
+    mode   => '0755',
+  }
+
   exec { 'pxetool-syncdb' :
     command => '/usr/share/pxetool/manage.py syncdb --noinput',
     user    => 'www-data',
     require => [
       Package[$package],
       File['/usr/share/pxetool/pxetool/settings.py'],
+      File['/usr/share/pxetool/pxetool'],
     ]
   }
 
-  # running migrations
   exec { 'pxetool-migratedb' :
     command => '/usr/share/pxetool/manage.py migrate --all',
     user    => 'www-data',
@@ -61,6 +80,7 @@ class pxetool (
   if (!defined(Class['nginx'])) {
     class { '::nginx' :}
   }
+
   ::nginx::resource::vhost { 'pxetool' :
     ensure              => 'present',
     listen_port         => 80,

@@ -15,17 +15,17 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/usr/share/pxetool/webapp/pxetool/pxetool/development.sqlite3',
-        'USER': '',
+        'ENGINE': '<%= @database_engine %>',
+        'NAME': '<%= @database_name %>',
+        'USER': '<% @database_user %>',
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
     }
 }
 
-PXELINUX_ROOT = '/var/lib/tftpboot'
-PXETOOL_URL = 'http://<%= @fqdn %>'
+PXELINUX_ROOT = '<%= @pxelinux_root %>'
+PXETOOL_URL = '<%= @pxetool_url %>'
 MIRROR_URL = '<%= @mirror %>'
 ADDITIONAL_REPOS = [
 <% @additional_repos.each do |repo| %>
