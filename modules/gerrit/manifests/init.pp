@@ -134,7 +134,14 @@ class gerrit (
     ],
   }
 
-  realize User['gerrit']
+  user { 'gerrit' :
+    ensure     => 'present',
+    name       => 'gerrit',
+    shell      => '/bin/false',
+    home       => '/var/lib/gerrit',
+    managehome => true,
+    comment    => 'Gerrit',
+  }
 
   $java_home = $::lsbdistcodename ? {
     'precise' => '/usr/lib/jvm/java-7-openjdk-amd64/jre',

@@ -312,32 +312,33 @@ landing_page::updater::application: 'updater'
 landing_page::updater::config: '/etc/release-updater.yaml'
 landing_page::updater::token: 'b3ccf1131c697f26be216753ddac28ca19f05035fbe914968ee7b7c32e274c94c58b3b266e83967093fc52e0527db86e7e92b9b51683b082c08b90c1af552029'
 
-system:
-  root_keys:
-    'acharykov@mirantis.com':
-      type: ssh-rsa
-      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCod03I5wxFGU5OW7jYBcyGIb70NOPuYRR7NejVtBXI+C0cVa9hG21PRj424ZwknU3MPJe1DjyT/a1S85oh7USr/FY1RI6RqdEKPYuhhc0pqPQnWFsDzQ1gq9odvcUDUGVeSFXtA4WlHhZZIPKoPgKU0cx0Bjq61aUVjzEERlTthgN9+QBMt+M7GCoKPZx90vA27z6CrGSfoe6EVqDmK1AcqCBLN6huyirI4jAZxS8kbTZ+6LyzEzA8Xx6fklIlDR3vdLZ49D6Phc/U3RFJO4ookV4UwJZ6mPHIbEz1Go3Mlu/+hiG8Cn4ZRk6Uv3Pcc2qmlg0Lo/lUdlkgOc9MVEl9'
-    'afedorova@mirantis.com':
-      type: ssh-rsa
-      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDKgCCELnGto4MROegcB3i68q+j0fTZYNHEWLKx6yYhi1G/xB6sPqhvY14/3unAr0isF2pYEEV2HgG0zUGBCKyaCV9Py9+6Zb1HVAjvw8+6MA2B4dHZr46n+jZmn5c/rNRggaC6mEYEu4RoUefrbyLs7hdxSrQpeyBk3F8GC/4mXBQP4vxXkzkbEn2fLVGCfevip3dLRRt6QoP5dEvyhm3b0s1dlTGQ554Gw3g3gZHBuVqCIk4nc4P0Bz5bn7v93+PLih6S9SdM3RFbIl+KBz1byOqLMQPXH0dwZ0lVsG3PePfnykc9OVNClx4T6JEoxYWECCfHZZULln9gHsGy3PzJ'
-    'ishishkin@mirantis.com':
-      type: ssh-rsa
-      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDFcAddfzAdBcz6llVksZUkjOazVwEsPlqLUohFOr3VRR3Tx6vJ2AMHxnaRwF3JqcKZyPgKQ18M8yVMCfbDZqcHEB8RMN7WLsPICJ7arfRQejuMmnvecVrsmtzBO8KagpwqYULbmJttyfobBmzGoSfHHICkZ2dHDsV0ccSMSBweBFb7yJEaDcoF39a6+06i4CLobWoztIstla3iDydrJyqSpy2iHVdz7VUPu+7sQhaXUBcQWcmdc30v4cva0m6CIcZls6VYbgh3btoHFvQZGGVXX/76zkWgfKYqdtOyC4gmGytP6Tug1UktjEeUDwDi4rlm2E5ewP4+iNFyh/NBVDHl'
-    'anikitin@mirantis.com':
-      type: ssh-rsa
-      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDbxNYg5JL0wQ8pSY3PuvQPtoPb37lC3qoCWkdTIeQldH57u5L3TEV7K4WxghNiqdKgmY4cvKmo2YWm3mBGvTvBj3kLJqkjIy+ftncqDgRR2nhZAMvEaQbP4k6JmgGGwIwdv/wszcH6dEuf+BEGTtaWytjUNTO8fmuGQV0o5GgKi2C8Nj5zkzXrIcL/Gn1RITVv6n9MNIQ8OpN5FfIpO2v8OXKMc7MqB4pr3ZOnnjUUvD5LdFcEUf2Za46O6uvJLCkle4gzIHQGx51+1XnknscMGWR9pcmtb6Za4DcpJgiROR9Qvq1X0ZD1f3frE2IMTfPnZX9OU3l+AqyXvp5oztV5'
-    'skulanov@mirantis.com':
-      type: ssh-rsa
-      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC7QBh6Tu+qb49KO/0DYiucbswniuB6J0JV8XDyVQTklDUOBPi6ySIjq/PxDsgaom2nS1wsEt2XnelF2ue5z1tK0vTT6XFLZ6wvP6xtK2yaJKkpGskL/18/p+PSWEoG7tKypkUaflYOzb/mTYuYEGnfJ8cM6LtevJfdmr1rTMkix8jDhwDtKivPsvs2Ujh1e7eQwX3bEPY/SYpT7iOniSiV4wxvvOIvqdI1YctAaNCufdkGwdEd7vm8Vyz/HZAn/iAv3IE7SIAx0z8SasNeJlml1S4nGeLcL3fBXYE+3cbnGjXIZo+5OV0nFRII4ILgzlrdzKls8D3yGypumDvww03r'
-    'mmatuszkowiak@mirantis.com':
-      type: ssh-rsa
-      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC63QhWE96IF/SRCFWyKJyzOyprc7WlD6RdCClw7BxKum7BDlXfV+fhQupWUdsPVnOaCMwndjG+ZrZXg5okGui4GuL7nucUFYfUhZh252IBM8TM7BkuVd7fmbZ6OD2/4uGTOJRBhO+Jrol9Z2450vaiGZwWrbvWHNPtI+bhx3/4WWxjgZ59NGll220c1cTjGQamvNgtWBWNnsEilmZxinl501EgvDPJ8uewCAS3YA3T9ut11RRJiWKfoMr4H9sFeUTiu1j6ByYlINXMJTNadPzEcV6EW06k1K9oNfJ42F6gYFfjBQK5db83iNTkyA/j4TjfqJ9tlg2cWTp+x2vy8YNV'
-    'pbrzozowski@mirantis.com':
-      type: ssh-rsa
-      key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDRIKRrcnGbfOmFH+HcKmvDQzfQxxsgqWH/DihWGOpGsL0Oxd4gw7RztTtYIgsyxzFzWFsYJPNRsCmG7A8T59sUhnELyQxeq4ZQhmHeSDMXFczvJWuYU1JNhX59jH7swvG+1BLumXcnY/zgO3L/m5l71qxuvSEyvYmfTJmxg2nCPiEbUArSU1R5sQ5lNPxFBYEUz1zfXMObGnw11M8vRbAlw7vlRUbgOTV+lMvHI9b61mw5dojNzXW2RQsJD/RTxvfp1WoUL2CWIZ62ZW9YELl39dMiJt6YSomarCa9XhSYHPJ56QCA4iEAOGUGpmQ6LoaAc+qynK3wNXmBc7lwM9kt'
-  root_email: 'root@test.com'
-  root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
-  timezone: UTC
+ssh::authorized_keys::keys:
+  'acharykov@mirantis.com':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCod03I5wxFGU5OW7jYBcyGIb70NOPuYRR7NejVtBXI+C0cVa9hG21PRj424ZwknU3MPJe1DjyT/a1S85oh7USr/FY1RI6RqdEKPYuhhc0pqPQnWFsDzQ1gq9odvcUDUGVeSFXtA4WlHhZZIPKoPgKU0cx0Bjq61aUVjzEERlTthgN9+QBMt+M7GCoKPZx90vA27z6CrGSfoe6EVqDmK1AcqCBLN6huyirI4jAZxS8kbTZ+6LyzEzA8Xx6fklIlDR3vdLZ49D6Phc/U3RFJO4ookV4UwJZ6mPHIbEz1Go3Mlu/+hiG8Cn4ZRk6Uv3Pcc2qmlg0Lo/lUdlkgOc9MVEl9'
+  'afedorova@mirantis.com':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDKgCCELnGto4MROegcB3i68q+j0fTZYNHEWLKx6yYhi1G/xB6sPqhvY14/3unAr0isF2pYEEV2HgG0zUGBCKyaCV9Py9+6Zb1HVAjvw8+6MA2B4dHZr46n+jZmn5c/rNRggaC6mEYEu4RoUefrbyLs7hdxSrQpeyBk3F8GC/4mXBQP4vxXkzkbEn2fLVGCfevip3dLRRt6QoP5dEvyhm3b0s1dlTGQ554Gw3g3gZHBuVqCIk4nc4P0Bz5bn7v93+PLih6S9SdM3RFbIl+KBz1byOqLMQPXH0dwZ0lVsG3PePfnykc9OVNClx4T6JEoxYWECCfHZZULln9gHsGy3PzJ'
+  'ishishkin@mirantis.com':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDFcAddfzAdBcz6llVksZUkjOazVwEsPlqLUohFOr3VRR3Tx6vJ2AMHxnaRwF3JqcKZyPgKQ18M8yVMCfbDZqcHEB8RMN7WLsPICJ7arfRQejuMmnvecVrsmtzBO8KagpwqYULbmJttyfobBmzGoSfHHICkZ2dHDsV0ccSMSBweBFb7yJEaDcoF39a6+06i4CLobWoztIstla3iDydrJyqSpy2iHVdz7VUPu+7sQhaXUBcQWcmdc30v4cva0m6CIcZls6VYbgh3btoHFvQZGGVXX/76zkWgfKYqdtOyC4gmGytP6Tug1UktjEeUDwDi4rlm2E5ewP4+iNFyh/NBVDHl'
+  'anikitin@mirantis.com':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDbxNYg5JL0wQ8pSY3PuvQPtoPb37lC3qoCWkdTIeQldH57u5L3TEV7K4WxghNiqdKgmY4cvKmo2YWm3mBGvTvBj3kLJqkjIy+ftncqDgRR2nhZAMvEaQbP4k6JmgGGwIwdv/wszcH6dEuf+BEGTtaWytjUNTO8fmuGQV0o5GgKi2C8Nj5zkzXrIcL/Gn1RITVv6n9MNIQ8OpN5FfIpO2v8OXKMc7MqB4pr3ZOnnjUUvD5LdFcEUf2Za46O6uvJLCkle4gzIHQGx51+1XnknscMGWR9pcmtb6Za4DcpJgiROR9Qvq1X0ZD1f3frE2IMTfPnZX9OU3l+AqyXvp5oztV5'
+  'skulanov@mirantis.com':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC7QBh6Tu+qb49KO/0DYiucbswniuB6J0JV8XDyVQTklDUOBPi6ySIjq/PxDsgaom2nS1wsEt2XnelF2ue5z1tK0vTT6XFLZ6wvP6xtK2yaJKkpGskL/18/p+PSWEoG7tKypkUaflYOzb/mTYuYEGnfJ8cM6LtevJfdmr1rTMkix8jDhwDtKivPsvs2Ujh1e7eQwX3bEPY/SYpT7iOniSiV4wxvvOIvqdI1YctAaNCufdkGwdEd7vm8Vyz/HZAn/iAv3IE7SIAx0z8SasNeJlml1S4nGeLcL3fBXYE+3cbnGjXIZo+5OV0nFRII4ILgzlrdzKls8D3yGypumDvww03r'
+  'mmatuszkowiak@mirantis.com':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC63QhWE96IF/SRCFWyKJyzOyprc7WlD6RdCClw7BxKum7BDlXfV+fhQupWUdsPVnOaCMwndjG+ZrZXg5okGui4GuL7nucUFYfUhZh252IBM8TM7BkuVd7fmbZ6OD2/4uGTOJRBhO+Jrol9Z2450vaiGZwWrbvWHNPtI+bhx3/4WWxjgZ59NGll220c1cTjGQamvNgtWBWNnsEilmZxinl501EgvDPJ8uewCAS3YA3T9ut11RRJiWKfoMr4H9sFeUTiu1j6ByYlINXMJTNadPzEcV6EW06k1K9oNfJ42F6gYFfjBQK5db83iNTkyA/j4TjfqJ9tlg2cWTp+x2vy8YNV'
+  'pbrzozowski@mirantis.com':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDRIKRrcnGbfOmFH+HcKmvDQzfQxxsgqWH/DihWGOpGsL0Oxd4gw7RztTtYIgsyxzFzWFsYJPNRsCmG7A8T59sUhnELyQxeq4ZQhmHeSDMXFczvJWuYU1JNhX59jH7swvG+1BLumXcnY/zgO3L/m5l71qxuvSEyvYmfTJmxg2nCPiEbUArSU1R5sQ5lNPxFBYEUz1zfXMObGnw11M8vRbAlw7vlRUbgOTV+lMvHI9b61mw5dojNzXW2RQsJD/RTxvfp1WoUL2CWIZ62ZW9YELl39dMiJt6YSomarCa9XhSYHPJ56QCA4iEAOGUGpmQ6LoaAc+qynK3wNXmBc7lwM9kt'
+
+system::root_email: 'root@test.com'
+system::timezone: 'UTC'
+system::root_password: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
+system::install_tools: true
 
 fuel_project::jenkins::slave::nailgun_db:
   - 'nailgun'

@@ -1,16 +1,18 @@
 # Class: fuel_project::common
 #
 class fuel_project::common (
-  $external_host     = false,
-  $ldap              = false,
-  $ldap_uri          = '',
-  $ldap_base         = '',
-  $tls_cacertdir     = '',
-  $pam_password      = '',
-  $pam_filter        = '',
-  $sudoers_base      = '',
-  $bind_policy       = '',
-  $ldap_ignore_users = '',
+  $external_host      = false,
+  $ldap               = false,
+  $ldap_uri           = '',
+  $ldap_base          = '',
+  $tls_cacertdir      = '',
+  $pam_password       = '',
+  $pam_filter         = '',
+  $sudoers_base       = '',
+  $bind_policy        = '',
+  $ldap_ignore_users  = '',
+  $root_password_hash = 'r00tme',
+  $root_shell         = '/bin/bash'
 ) {
   class { '::ntp' :}
   class { '::puppet::agent' :}
@@ -18,8 +20,7 @@ class fuel_project::common (
   class { '::ssh::sshd' :
     apply_firewall_rules => $external_host,
   }
-  include ::system
-
+  class { '::system' :}
   class { '::zabbix::agent' :
     apply_firewall_rules => $external_host,
   }
