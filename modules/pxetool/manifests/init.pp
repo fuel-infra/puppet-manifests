@@ -24,20 +24,6 @@ class pxetool (
   # installing required $packages
   ensure_packages($package)
 
-  # creating database schema
-  exec { 'pxetool-syncdb' :
-    command => '/usr/share/pxetool/webapp/pxetool/manage.py syncdb --noinput',
-    user    => 'www-data',
-    require => Package[$package],
-  }
-
-  # running migrations
-  exec { 'pxetool-migratedb' :
-    command => '/usr/share/pxetool/webapp/pxetool/manage.py migrate --all',
-    user    => 'www-data',
-    require => Exec['pxetool-syncdb']
-  }
-
   # /etc/pxetool.py
   # pxetool main configuration file
   file { $config :
@@ -46,12 +32,31 @@ class pxetool (
     owner   => 'www-data',
     group   => 'www-data',
     content => template('pxetool/pxetool.py.erb'),
+  }
+
+  file { '/usr/share/pxetool/pxetool/settings.py' :
+    ensure  => 'link',
+    target  => '/etc/pxetool/settings.py',
+    require => File[$config],
+  }
+
+  # creating database schema
+  exec { 'pxetool-syncdb' :
+    command => '/usr/share/pxetool/manage.py syncdb --noinput',
+    user    => 'www-data',
     require => [
-      Exec['pxetool-syncdb'],
-      Exec['pxetool-migratedb']
+      Package[$package],
+      File['/usr/share/pxetool/pxetool/settings.py'],
     ]
-  }~>
-  Service['uwsgi']
+  }
+
+  # running migrations
+  exec { 'pxetool-migratedb' :
+    command => '/usr/share/pxetool/manage.py migrate --all',
+    user    => 'www-data',
+    require => Exec['pxetool-syncdb'],
+    notify  => Service['uwsgi'],
+  }
 
   if (!defined(Class['nginx'])) {
     class { '::nginx' :}
@@ -75,15 +80,15 @@ class pxetool (
     ensure   => 'present',
     vhost    => 'pxetool',
     location => '/static/',
-    www_root => '/usr/share/pxetool/webapp/pxetool',
+    www_root => '/usr/share/pxetool',
   }
 
-  uwsgi::application { 'pxetool' :
+  ::uwsgi::application { 'pxetool' :
     plugins => 'python',
     uid     => 'www-data',
     gid     => 'www-data',
     socket  => '127.0.0.1:7931',
-    chdir   => '/usr/share/pxetool/webapp/pxetool',
+    chdir   => '/usr/share/pxetool',
     module  => 'pxetool.wsgi',
   }
 
