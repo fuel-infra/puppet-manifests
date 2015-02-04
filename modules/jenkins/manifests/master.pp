@@ -116,6 +116,7 @@ class jenkins::master (
   ::nginx::resource::vhost { 'jenkins-http' :
     ensure              => 'present',
     listen_port         => 80,
+    server_name         => [$service_fqdn, $::fqdn],
     www_root            => '/var/www',
     access_log          => $nginx_access_log,
     error_log           => $nginx_error_log,
