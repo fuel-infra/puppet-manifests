@@ -70,7 +70,7 @@ class fuel_project::common (
     update_timeout       => 300,
   }
 
-  zabbix::item { 'software-zabbix-check' :
+  ::zabbix::item { 'software-zabbix-check' :
     content => 'puppet:///modules/fuel_project/common/zabbix/software.conf',
   }
   # FIXME: to make changes compatible in https://review.fuel-infra.org/415
@@ -80,8 +80,17 @@ class fuel_project::common (
   }
   # /FIXME
 
-  zabbix::item { 'hardware-zabbix-check' :
+  ::zabbix::item { 'hardware-zabbix-check' :
     content => 'puppet:///modules/fuel_project/common/zabbix/hardware.conf',
+  }
+
+  file { '/usr/local/bin/zabbix_check_certificate.sh' :
+    ensure => 'present',
+    mode   => '0755',
+    source => 'puppet:///modules/fuel_project/zabbix/zabbix_check_certificate.sh',
+  }
+  ::zabbix::item { 'ssl-certificate-check' :
+    content => 'puppet:///modules/fuel_project/common/zabbix/ssl-certificate-check.conf',
   }
 
   mount { '/' :
