@@ -1,7 +1,7 @@
 # Define: puppet::facter
 #
 define puppet::facter (
-  $hash,
+  $facts,
 ) {
   ensure_packages(['bash'])
 

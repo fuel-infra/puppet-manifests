@@ -12,7 +12,11 @@ class fuel_project::common (
   $bind_policy        = '',
   $ldap_ignore_users  = '',
   $root_password_hash = 'r00tme',
-  $root_shell         = '/bin/bash'
+  $root_shell         = '/bin/bash',
+  $facts              = {
+    'location' => $::location,
+    'role'     => $::role,
+  },
 ) {
   class { '::ntp' :}
   class { '::puppet::agent' :}
@@ -25,17 +29,11 @@ class fuel_project::common (
     apply_firewall_rules => $external_host,
   }
 
-  if (!defined(Package['tmux'])) {
-    package { 'tmux' :
-      ensure => 'present',
-    }
+  ::puppet::facter { 'facts' :
+    facts => $facts,
   }
 
-  if (!defined(Package['screen'])) {
-    package{ 'screen' :
-      ensure => 'present',
-    }
-  }
+  ensure_packages(['tmux', 'screen'])
 
   if($ldap) {
     class { '::ssh::ldap' :}
