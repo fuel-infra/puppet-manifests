@@ -145,6 +145,19 @@ class fuel_project::nailgun_demo (
     require => Vcsrepo['/usr/share/fuel-web'],
   }
 
+  ::nginx::resource::vhost { 'demo-redirect' :
+    ensure              => 'present',
+    listen_port         => 80,
+    server_name         => [$server_name],
+    www_root            => '/var/www',
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
+    location_cfg_append => {
+      rewrite => '^ http://$server_name:8000$request_uri permanent',
+    },
+  }
+
   nginx::resource::vhost { 'demo' :
     ensure              => 'present',
     listen_port         => 8000,
@@ -185,9 +198,9 @@ class fuel_project::nailgun_demo (
 
   if $apply_firewall_rules {
     include firewall_defaults::pre
-    firewall { '1000 Allow demo 8000 connection' :
+    firewall { '1000 Allow demo 80, 8000 connection' :
       ensure  => present,
-      dport   => 8000,
+      dport   => [80, 8000],
       proto   => 'tcp',
       action  => 'accept',
       require => Class['firewall_defaults::pre'],
