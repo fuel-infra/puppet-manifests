@@ -15,7 +15,7 @@ stage { 'pre' :
   before => Stage['main'],
 }
 
-# Class definitions
+notify { 'Revision: $Id$' :}
 
 # Class: pxe_deployment
 #
