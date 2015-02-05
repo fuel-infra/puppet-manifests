@@ -257,44 +257,20 @@ node 'demo.fuel-infra.org' {
 }
 
 # *** Anonymous Statistics servers ***
-node 'product-stats.mirantis.com' {
-  class {'::fuel_project::statistics::analytic':
-    development     => false,
-    firewall_enable => true,
-  }
+node /(product\-)?stats\.(mirantis\.com|fuel-infra\.org)/ {
+  class { '::fuel_project::statistics::analytic' :  }
 }
 
-node 'collector.mirantis.com' {
-  class {'::fuel_project::statistics::collector':
-    development     => false,
-    firewall_enable => true,
-  }
+node /collector\.(mirantis\.com|fuel-infra\.org)/ {
+  class { '::fuel_project::statistics::collector' : }
 }
 
-node 'stats.fuel-infra.org' {
-  class {'::fuel_project::statistics::analytic':
-    development     => false,
-    firewall_enable => true,
-  }
+node /fuel-collect(\-testing)?\.vm\.mirantis\.net/ {
+  class { '::fuel_project::statistics::collector' : }
 }
 
-node 'collector.fuel-infra.org' {
-  class {'::fuel_project::statistics::collector':
-    development     => false,
-    firewall_enable => true,
-  }
-}
-
-node 'fuel-collect.vm.mirantis.net' {
-  class {'::fuel_project::statistics::collector':
-    development => false,
-  }
-}
-
-node 'fuel-stats.vm.mirantis.net' {
-  class {'::fuel_project::statistics::analytic':
-    development   => false,
-  }
+node /fuel-stats(\-testing)?\.vm\.mirantis\.net/ {
+  class { '::fuel_project::statistics::analytic' : }
 }
 
 node /(web01\.fuel-infra\.org|web01-tst\.vm\.mirantis\.net)/ {
