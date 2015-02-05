@@ -336,6 +336,10 @@ node 'mongo-primary.vm.mirantis.net' {
   }
 }
 
+node 'obs-1.mirantis.com' {
+  class { '::obs_server' :}
+}
+
 # Test nodes definitions
 
 node 'pxetool.test.local' {
