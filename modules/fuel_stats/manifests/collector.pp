@@ -97,10 +97,26 @@ class fuel_stats::collector (
         Fuel_stats::Dev['collector'],
       ],
     }
+    $src_path = '/var/www/collector/collector'
+    exec { 'upgrade-collector-db':
+      command     => "${src_path}/manage_collector.py --mode prod db upgrade -d .",
+      environment => 'COLLECTOR_SETTINGS=/etc/collector.py',
+      cwd         => "${src_path}/collector/api/db/migrations",
+      require     => [
+        Fuel_stats::Dev['collector'],
+        File['/etc/collector.py'],
+        Postgresql::Server::Db[$psql_db],
+      ]
+    }
   } else {
     # production configuration
     package { 'fuel-stats-collector' :
       ensure  => 'installed',
+      require => [
+        File['/etc/collector.py'],
+        Postgresql::Server::Db[$psql_db],
+      ],
+      notify  => Service['uwsgi'],
     }
     uwsgi::application { 'collector':
       plugins  => 'python',
@@ -119,9 +135,18 @@ class fuel_stats::collector (
     }
   }
 
-  file { '/var/log/fuel-stats':
-    ensure => 'directory',
-    mode   => '0755',
+  if ! defined(File['/var/log/fuel-stats']) {
+    file { '/var/log/fuel-stats':
+      ensure => 'directory',
+      mode   => '0755',
+      owner  => 'root',
+      group  => 'root',
+    }
+  }
+
+  file { '/var/log/fuel-stats/collector.log':
+    ensure => 'present',
+    mode   => '0644',
     owner  => 'collector',
     group  => 'collector',
   }

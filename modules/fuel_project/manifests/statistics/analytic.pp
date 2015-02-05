@@ -4,7 +4,6 @@ class fuel_project::statistics::analytic (
   $ldap                   = $fuel_project::statistics::params::ldap,
   $firewall_enable        = $fuel_project::statistics::params::firewall_enable,
   $firewall_allow_sources = {},
-  $firewall_deny_sources  = {},
   $ssl_cert_file          = '',
   $ssl_cert_file_contents = '',
   $ssl_key_file           = '',
@@ -44,14 +43,12 @@ class fuel_project::statistics::analytic (
   }
 
   class { 'fuel_stats::analytic':
-    development            => $development,
-    firewall_enable        => $firewall_enable,
-    firewall_allow_sources => $firewall_allow_sources,
-    firewall_deny_sources  => $firewall_deny_sources,
-    ssl                    => $ssl,
-    ssl_cert_file          => $ssl_cert_file,
-    ssl_key_file           => $ssl_key_file,
-    service_port           => $real_service_port,
+    development     => $development,
+    firewall_enable => $firewall_enable,
+    ssl             => $ssl,
+    ssl_cert_file   => $ssl_cert_file,
+    ssl_key_file    => $ssl_key_file,
+    service_port    => $real_service_port,
   }
 
   class { 'fuel_stats::migration':

@@ -1,0 +1,11 @@
+import logging
+
+LOG_FILE = '/var/log/fuel-stats/analytics.log'
+LOG_LEVEL = logging.ERROR
+LOG_ROTATION = False
+LOGGER_NAME = 'analytics'
+ELASTIC_HOST = '<%= @elastic_listen_ip %>'
+ELASTIC_PORT = '<%= @elastic_http_port %>'
+ELASTIC_USE_SSL = False
+ELASTIC_INDEX_FUEL = 'fuel'
+ELASTIC_DOC_TYPE_STRUCTURE = 'structure'

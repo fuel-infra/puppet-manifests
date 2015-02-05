@@ -36,6 +36,28 @@ server {
         proxy_pass http://127.0.0.1:9200;
     }
 
+    location /api {
+        <%- if @firewall_enable -%>
+        <%- if @firewall_allow_sources != {} -%>
+        <%- @firewall_allow_sources.each { |ip| -%>
+        <%= "allow #{ip[1]["source"]};" %>
+        <%- } -%>
+        deny all;
+        <%- elsif @firewall_allow_sources != {} -%>
+        <%- @firewall_deny_sources.each { |ip| -%>
+        <%= "allow #{ip[1]["source"]};" %>
+        <%- } -%>
+        allow all;
+        <%- end -%>
+        <%- end -%>
+        include /etc/nginx/uwsgi_params;
+        uwsgi_pass 127.0.0.1:7933;
+        uwsgi_connect_timeout 3m;
+        uwsgi_read_timeout 3m;
+        uwsgi_send_timeout 3m;
+    }
+
+
     location / {
         <%- if @firewall_enable -%>
         <%- if @firewall_allow_sources != {} -%>
