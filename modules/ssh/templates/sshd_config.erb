@@ -7,7 +7,7 @@ Banner /etc/banner
 
 HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_dsa_key
-<% if @osfamily == 'debian' %>
+<% if @osfamily == 'Debian' %>
 HostKey /etc/ssh/ssh_host_ecdsa_key
 <% end %>
 UsePrivilegeSeparation yes
@@ -45,5 +45,8 @@ AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server
 
 UsePAM yes
+<% if @osfamily == 'Debian' %>
+AuthorizedKeysFile /etc/ssh/keys/%u .ssh/authorized_keys
+<% else %>
 AuthorizedKeysFile %h/.ssh/authorized_keys
-AuthorizedKeysFile /etc/ssh/keys/%u
+<% end %>
