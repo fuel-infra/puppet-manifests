@@ -86,10 +86,103 @@ class fuel_project::jenkins::slave (
     class { '::landing_page::updater' :}
   }
 
+  # FIXME: Legacy compability LP #1418927
+  cron { 'devops-env-cleanup' :
+    ensure => 'absent',
+  }
+  file { '/usr/local/bin/devops-env-cleanup.sh' :
+    ensure => 'absent',
+  }
+  file { '/etc/devops/local_settings.py' :
+    ensure => 'absent',
+  }
+  file { '/etc/devops' :
+    ensure  => 'absent',
+    force   => true,
+    require => File['/etc/devops/local_settings.py'],
+  }
+  package { 'python-devops' :
+    ensure            => 'absent',
+    uninstall_options => ['purge']
+  }
+  # /FIXME
+
+  # python-devops installation
+  ensure_packages(['pkg-config', 'libvirt-dev'])
+
+  if (!defined(Class['postgresql::server'])) {
+    class { 'postgresql::server' : }
+  }
+
+  ::postgresql::server::db { 'devops' :
+    user     => 'devops',
+    password => 'devops',
+  }
+
+  ::postgresql::server::db { 'fuel_devops' :
+    user     => 'fuel_devops',
+    password => 'fuel_devops',
+  }
+
+  ::venv::venv { 'venv-nailgun-tests' :
+    path         => '/home/jenkins/venv-nailgun-tests',
+    requirements => 'https://raw.githubusercontent.com/stackforge/fuel-main/master/fuelweb_test/requirements.txt',
+    user         => 'jenkins',
+    packages     => [
+      'libffi-dev',
+      'postgresql-server-dev-all',
+    ],
+    require      => [
+      Package['pkg-config'],
+      ::Postgresql::Server::Db['devops'],
+    ]
+  }
+
+  ::venv::exec { 'devops-syncdb' :
+    venv    => '/home/jenkins/venv-nailgun-tests',
+    command => 'django-admin.py syncdb --settings=devops.settings',
+    user    => 'jenkins',
+    require => ::Venv::Venv['venv-nailgun-tests'],
+  }
+
+  ::venv::exec { 'devops-migrate' :
+    venv    => '/home/jenkins/venv-nailgun-tests',
+    command => 'django-admin.py migrate --all --settings=devops.settings',
+    user    => 'jenkins',
+    require => ::Venv::Exec['devops-syncdb'],
+  }
+
+  ::venv::venv { 'venv-nailgun-tests-2.9' :
+    path         => '/home/jenkins/venv-nailgun-tests-2.9',
+    requirements => 'https://raw.githubusercontent.com/stackforge/fuel-qa/master/fuelweb_test/requirements.txt',
+    user         => 'jenkins',
+    packages     => [
+      'libffi-dev',
+      'postgresql-server-dev-all',
+    ],
+    require      => [
+      Package['pkg-config'],
+      ::Postgresql::Server::Db['fuel_devops'],
+    ]
+  }
+
+  ::venv::exec { 'devops-syncdb-2.9' :
+    venv    => '/home/jenkins/venv-nailgun-tests-2.9',
+    command => 'django-admin.py syncdb --settings=devops.settings',
+    user    => 'jenkins',
+    require => Venv::Venv['venv-nailgun-tests-2.9'],
+  }
+
+  ::venv::exec { 'devops-migrate-2.9' :
+    venv    => '/home/jenkins/venv-nailgun-tests-2.9',
+    command => 'django-admin.py migrate --all --settings=devops.settings',
+    user    => 'jenkins',
+    require => Venv::Exec['devops-syncdb-2.9'],
+  }
+  # /python-devops installation
+
   # Run system tests
   if ($run_tests == true) {
-    include ::venv
-
     class { '::libvirt' :
       listen_tls         => false,
       listen_tcp         => true,
@@ -153,19 +246,6 @@ class fuel_project::jenkins::slave (
       cwd       => '/tmp',
       logoutput => on_failure,
       require   => User['jenkins'],
-    }
-
-    class { 'devops' :
-      install_cron_cleanup => true,
-    }
-
-    file { '/home/jenkins/venv-nailgun-tests/lib/python2.7/site-packages/devops/local_settings.py' :
-      ensure  => link,
-      target  => '/etc/devops/local_settings.py',
-      require => [
-        Class['devops'],
-        Venv::Venv['venv-nailgun-tests']
-      ]
     }
 
     file { '/etc/sudoers.d/systest' :

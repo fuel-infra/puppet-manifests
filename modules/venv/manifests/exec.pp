@@ -10,13 +10,9 @@ define venv::exec (
   $onlyif = '/bin/true',
 ) {
 
-  if (!defined(Package['python-virtualenv'])) {
-    package { 'python-virtualenv' :
-      ensure => 'present',
-    }
-  }
+  ensure_packages(['python-virtualenv'])
 
-  exec { $command:
+  exec { "${user}@${venv}:${cwd} exec ${command}" :
     command   => "HOME='/home/${user}' ; \
       . ${venv}/bin/activate ; ${command}",
     user      => $user,

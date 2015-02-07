@@ -2,29 +2,25 @@
 #
 define venv::venv (
   $path,
-  $requirements,
-  $options,
-  $user
+  $user = 'root',
+  $requirements = '',
+  $options = '',
+  $packages = [],
 ) {
 
 
-  $packages = [
+  $venv_packages = [
     'git',
-    'libffi-dev',
-    'postgresql-server-dev-all',
     'python-dev',
+    'python-virtualenv',
   ]
 
+  ensure_packages($venv_packages)
   ensure_packages($packages)
 
-  if (!defined(Package['python-virtualenv'])) {
-    package { 'python-virtualenv' :
-      ensure => 'present',
-    }
-  }
-
-  exec { 'venv-create':
+  exec { "virtualenv ${options} ${path}" :
     command   => "virtualenv ${options} ${path}",
+    creates   => $path,
     user      => $user,
     logoutput => on_failure,
     require   => [
@@ -33,14 +29,14 @@ define venv::venv (
   }
 
   if $requirements {
-    exec { 'venv-requirements':
+    exec { ". ${path}/bin/activate ; pip install -r ${requirements}" :
       command   => "export HOME='/home/${user}' ; \
         . ${path}/bin/activate ; pip install -r ${requirements}",
       user      => $user,
       cwd       => $path,
       logoutput => on_failure,
       require   => [
-        Exec['venv-create'],
+        Exec["virtualenv ${options} ${path}"],
         Package[$packages],
       ],
     }
