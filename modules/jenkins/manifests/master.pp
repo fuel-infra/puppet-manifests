@@ -26,7 +26,8 @@ class jenkins::master (
   $nginx_access_log = '/var/log/nginx/access.log',
   $nginx_error_log = '/var/log/nginx/error.log',
   $nginx_log_format = undef,
-  ) inherits ::jenkins::params{
+  $install_zabbix_item = false,
+) inherits ::jenkins::params{
 
   # Install base packages
 
@@ -173,6 +174,20 @@ class jenkins::master (
     }
   }
 
+  if($install_zabbix_item) {
+    file { '/usr/local/bin/jenkins_items.py' :
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      content => template('jenkins/jenkins_items.py.erb'),
+    }
+
+    ::zabbix::item { 'jenkins' :
+      template => 'jenkins/zabbix_item.conf.erb',
+      require  => File['/usr/local/bin/jenkins_items.py'],
+    }
+  }
 
   if $apply_firewall_rules {
     include firewall_defaults::pre
