@@ -129,6 +129,8 @@ class fuel_project::jenkins::slave (
       'python-seed-client',
       'python-xmlbuilder',
       'python-yaml',
+      'python-jenkinsapi',
+      'python-psutil',
 
       # diagnostic utilities
       'htop',
