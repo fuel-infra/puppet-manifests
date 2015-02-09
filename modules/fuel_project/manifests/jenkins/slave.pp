@@ -1,37 +1,37 @@
 # Class: fuel_project::jenkins::slave
 #
 class fuel_project::jenkins::slave (
-  $external_host         = false,
-  $build_fuel_iso        = false,
-  $run_tests             = false,
-  $simple_syntax_check   = false,
-  $verify_fuel_web       = false,
-  $verify_fuel_astute    = false,
-  $verify_fuel_docs      = false,
-  $fuel_web_selenium     = false,
-  $build_fuel_plugins    = false,
-  $install_docker        = false,
-  $verify_fuel_stats     = false,
-  $ldap                  = false,
-  $fuelweb_iso           = false,
-  $check_tasks_graph     = false,
-  $ldap_uri              = '',
-  $ldap_base             = '',
-  $nailgun_db            = ['nailgun'],
-  $ostf_db               = ['ostf'],
-  $tls_cacertdir         = '',
-  $pam_password          = '',
-  $pam_filter            = '',
-  $sudoers_base          = '',
-  $bind_policy           = '',
-  $ldap_ignore_users     = '',
-  $keep_iso_days         = 10,
-  $storage_dirs          = ['/var/www/fuelweb-iso', '/srv/downloads'],
-  $pattern_to_clean       = 'fuel-\*', # to use in seed-downloads-cleanup.sh
-  $jenkins_swarm_slave   = false,
-  $docker_package        = '',
-  $sudo_commands         = ['/sbin/ebtables'],
-  $workspace             = '/home/jenkins/workspace',
+  $external_host           = false,
+  $build_fuel_iso          = false,
+  $run_tests               = false,
+  $simple_syntax_check     = false,
+  $verify_fuel_web         = false,
+  $verify_fuel_astute      = false,
+  $verify_fuel_docs        = false,
+  $fuel_web_selenium       = false,
+  $build_fuel_plugins      = false,
+  $install_docker          = false,
+  $verify_fuel_stats       = false,
+  $ldap                    = false,
+  $fuelweb_iso             = false,
+  $check_tasks_graph       = false,
+  $ldap_uri                = '',
+  $ldap_base               = '',
+  $nailgun_db              = ['nailgun'],
+  $ostf_db                 = ['ostf'],
+  $tls_cacertdir           = '',
+  $pam_password            = '',
+  $pam_filter              = '',
+  $sudoers_base            = '',
+  $bind_policy             = '',
+  $ldap_ignore_users       = '',
+  $keep_iso_days           = 10,
+  $storage_dirs            = ['/var/www/fuelweb-iso', '/srv/downloads'],
+  $pattern_to_clean        = 'fuel-\*', # to use in seed-downloads-cleanup.sh
+  $jenkins_swarm_slave     = false,
+  $docker_package          = '',
+  $sudo_commands           = ['/sbin/ebtables'],
+  $workspace               = '/home/jenkins/workspace',
 ) {
   class { '::fuel_project::common' :
     external_host     => $external_host,
@@ -50,7 +50,6 @@ class fuel_project::jenkins::slave (
 
   if $jenkins_swarm_slave == true {
     class { '::jenkins::swarm_slave' :}
-
   } else {
     class { '::jenkins::slave' :}
 

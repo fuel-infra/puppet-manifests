@@ -9,7 +9,7 @@ from optparse import OptionParser
 parser = OptionParser()
 (options, args) = parser.parse_args()
 
-api_url = '<%= @jjb_url || 'http://localhost:8080' %>'
+api_url = '<%= @jenkins_api_url || 'http://localhost:8080' %>'
 
 def usage():
   print "Usage: jenkins_items.py [OPTIONS]\n"

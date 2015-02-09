@@ -20,13 +20,16 @@ class jenkins::master (
   $jenkins_port = '8080',
   $jenkins_address = '0.0.0.0',
   # Jenkins Job Builder
-  $jjb_url = 'http://localhost:8080/',
-  $jjb_username = '',
-  $jjb_password = '',
+  $jenkins_api_url = 'http://localhost:8080/',
+  $jenkins_api_username = '',
+  $jenkins_api_password = '',
+  $jenkins_api_token = '',
   $nginx_access_log = '/var/log/nginx/access.log',
   $nginx_error_log = '/var/log/nginx/error.log',
   $nginx_log_format = undef,
   $install_zabbix_item = false,
+  $install_label_dumper = false,
+  $label_dumper_destpath = '/var/www/labels',
 ) inherits ::jenkins::params{
 
   # Install base packages
@@ -103,9 +106,9 @@ class jenkins::master (
   # Add Jenkins Job Builder
 
   class { '::jenkins::job_builder' :
-    url      => $jjb_url,
-    username => $jjb_username,
-    password => $jjb_password,
+    url      => $jenkins_api_url,
+    username => $jenkins_api_username,
+    password => $jenkins_api_password,
   }
 
   # Setup nginx
@@ -186,6 +189,38 @@ class jenkins::master (
     ::zabbix::item { 'jenkins' :
       template => 'jenkins/zabbix_item.conf.erb',
       require  => File['/usr/local/bin/jenkins_items.py'],
+    }
+  }
+
+  if($install_label_dumper) {
+    file { '/usr/local/bin/labeldump.py' :
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0700',
+      content => template('jenkins/labeldump.py.erb'),
+    }
+
+    cron { 'labeldump-cronjob' :
+      command => '/bin/test -f /tmp/jenkins.is.fine && /usr/local/bin/labeldump.py 2>&1 | logger -t labeldump',
+      user    => 'root',
+      hour    => '*',
+      minute  => '*/30',
+      require => File['/usr/local/bin/labeldump.py'],
+    }
+
+    file { $label_dumper_destpath :
+      ensure => 'directory',
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
+    }
+
+    ::nginx::resource::location { 'labels' :
+      ensure   => 'present',
+      vhost    => 'jenkins',
+      location => basename($label_dumper_destpath),
+      www_root => dirname($label_dumper_destpath),
     }
   }
 

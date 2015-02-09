@@ -31,7 +31,12 @@ JENKINS_SLAVE_NAME="$(hostname -f)"
 # Log file location for use in Debian init script
 JENKINS_SLAVE_LOG=/var/log/jenkins/$NAME.log
 
-JENKINS_LABELS="<%= @labels.downcase %>"
+if [ "$USE_CACHED_LABELS" == "true" ] && test -f /etc/default/jenkins.labels
+then
+  JENKINS_LABELS="$(cat /etc/default/jenkins.labels)"
+else
+  JENKINS_LABELS="<%= @labels.downcase %>"
+fi
 
 # Arguments to pass to jenkins slave on startup
 JENKINS_ARGS="-name $JENKINS_SLAVE_NAME -master <%= @master %> -username <%= @user %> -password <%= @password %> -mode exclusive -fsroot $JENKINS_HOME"
