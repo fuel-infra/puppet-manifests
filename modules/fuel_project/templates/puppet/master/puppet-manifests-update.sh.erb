@@ -31,7 +31,7 @@ export MODULESPATH=${MODULESPATH:-<%= @manifests_modulespath %>}
     exit 0
   fi
 
-  sed -i "s~\$Id\$~\$Id: ${REVISION} \$~" "${TMPDIR}/manifests/site.pp"
+  sed -i 's~\$Id\$~\$Id: '${REVISION}' \$~' "${TMPDIR}/manifests/site.pp"
 
   echo "Linking..."
   rm -rf "${BINPATH}"
