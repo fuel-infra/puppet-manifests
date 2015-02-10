@@ -26,7 +26,7 @@ JENKINS_HOME=/home/jenkins
 JENKINS_RUN=/var/run/jenkins
 
 # Name of the slave
-JENKINS_SLAVE_NAME="$(hostname -f)"
+JENKINS_SLAVE_NAME="<%= @fqdn %>"
 
 # Log file location for use in Debian init script
 JENKINS_SLAVE_LOG=/var/log/jenkins/$NAME.log
