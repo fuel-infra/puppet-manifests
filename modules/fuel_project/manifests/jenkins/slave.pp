@@ -313,7 +313,8 @@ class fuel_project::jenkins::slave (
 
     if ($fuel_web_selenium) {
       $selenium_packages = [
-        'firefox',
+        'chromium-browser',
+        'chromium-chromedriver',
         'xvfb',
       ]
       ensure_packages($selenium_packages)
