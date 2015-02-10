@@ -40,9 +40,9 @@ class jenkins::swarm_slave (
 
   file { '/etc/default/jenkins-swarm-slave' :
     ensure  => 'present',
-    owner   => 'root',
+    owner   => 'jenkins',
     group   => 'root',
-    mode    => '0600',
+    mode    => '0440',
     content => template('jenkins/swarm_slave.conf.erb'),
     require => [
       Package[$package],
