@@ -34,9 +34,9 @@ if args[0] == 'executors':
   if args[1] == 'busy':
     print data['busyExecutors']
   elif args[1] == 'pbusy':
-    print (data['busyExecutors'] / data['totalExecutors'] * 100)
+    print (float(data['busyExecutors']) / float(data['totalExecutors']) * 100)
   elif args[1] == 'pfree':
-    print (100 - (data['busyExecutors'] / data['totalExecutors'] * 100))
+    print (100 - (float(data['busyExecutors']) / float(data['totalExecutors']) * 100))
   elif args[1] == 'total':
     print data['totalExecutors']
   else:
