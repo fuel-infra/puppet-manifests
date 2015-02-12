@@ -144,13 +144,11 @@ node /irc-bouncer([0-9]{2})\.fuel-infra\.org/ {
 }
 
 node 'monitor-product.vm.mirantis.net' {
-  class { '::fuel_project::common' :}
-  class { '::zabbix::server' :}
+  class { 'fuel_project::zabbix::server' :}
 }
 
 node /zbxproxy0([0-9]+)-([a-z]+)\.vm\.mirantis\.net/ {
-  class { '::fuel_project::common' :}
-  class { '::zabbix::proxy' :}
+  class { 'fuel_project::zabbix::proxy' :}
 }
 
 node /fuel-puppet(-tst)?\.vm\.mirantis\.net/ {
