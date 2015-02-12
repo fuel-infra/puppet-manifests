@@ -298,6 +298,7 @@ class fuel_project::jenkins::slave (
       'ruby-builder',
       'ruby-dev',
       'rubygems-integration',
+      'syslinux',
       'unzip',
       'yum',
       'yum-utils',
