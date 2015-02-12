@@ -11,7 +11,6 @@ class fuel_stats::params(
   $psql_pass              = 'collector',
   $psql_db                = 'collector',
 
-  $firewall_enable        = false,
-
-  $service_port           = 80,
+  $http_port              = 80,
+  $https_port             = 443,
 ) { }

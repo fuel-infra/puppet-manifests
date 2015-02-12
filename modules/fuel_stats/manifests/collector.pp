@@ -7,38 +7,47 @@ class fuel_stats::collector (
   $psql_pass              = $fuel_stats::params::psql_pass,
   $psql_db                = $fuel_stats::params::psql_db,
   $migration_ip           = '127.0.0.1',
-  $nginx_conf             = '/etc/nginx/sites-available/fuel-collector.conf',
-  $nginx_conf_link        = '/etc/nginx/sites-enabled/fuel-collector.conf',
-  $service_port           = $fuel_stats::params::service_port,
+  $http_port              = $fuel_stats::params::http_port,
+  $https_port             = $fuel_stats::params::https_port,
   $ssl                    = false,
   $ssl_cert_file          = '',
   $ssl_key_file           = '',
   $firewall_enable        = $fuel_stats::params::firewall_enable,
-  $firewall_allow_sources = {},
-  $firewall_deny_sources  = {},
+  $firewall_rules         = {},
 ) inherits fuel_stats::params {
   if (!defined(Class['::nginx'])) {
     class { '::nginx' : }
   }
 
-  # nginx configuration
-  # /etc/nginx/sites-available/fuel-collector.conf
-  # virtual host file for nginx
-  file { $nginx_conf :
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('fuel_stats/fuel-collector.conf.erb'),
-  }
-
-  # /etc/nginx/sites-enabled/fuel-collector.conf
-  # symlink to activate virtual host configuration for nginx
-  file { $nginx_conf_link :
-    ensure  => 'link',
-    target  => $nginx_conf,
-    require => File[$nginx_conf],
-    notify  => Service['nginx']
+  if $ssl {
+    ::nginx::resource::vhost { 'collector' :
+      ensure              => 'present',
+      ssl                 => true,
+      ssl_port            => $https_port,
+      listen_port         => $https_port,
+      ssl_cert            => $ssl_cert_file,
+      ssl_key             => $ssl_key_file,
+      server_name         => [$::fqdn],
+      uwsgi               => '127.0.0.1:7932',
+      location_cfg_append => $firewall_rules,
+    }
+    ::nginx::resource::vhost { 'collector-redirect' :
+      ensure              => 'present',
+      listen_port         => $http_port,
+      www_root            => '/var/www',
+      server_name         => [$::fqdn],
+      location_cfg_append => {
+        'rewrite' => "^ https://\$server_name:${https_port}\$request_uri? permanent"
+      },
+    }
+  } else {
+    ::nginx::resource::vhost { 'collector' :
+      ensure              => 'present',
+      listen_port         => $http_port,
+      server_name         => [$::fqdn],
+      uwsgi               => '127.0.0.1:7932',
+      location_cfg_append => $firewall_rules,
+    }
   }
 
   user { 'collector':
@@ -48,7 +57,6 @@ class fuel_stats::collector (
     system     => true,
     shell      => '/usr/sbin/nologin',
   }
-
 
   # Postgresql configuration
   if ! defined(Class['postgresql::server']) {

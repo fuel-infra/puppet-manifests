@@ -8,7 +8,8 @@ class fuel_stats::analytic (
   $elastic_listen_ip      = '127.0.0.1',
   $elastic_http_port      = '9200',
   $elastic_tcp_port       = '9300',
-  $service_port           = 80,
+  $http_port              = $fuel_stats::params::http_port,
+  $https_port             = $fuel_stats::params::https_port,
   $ssl                    = false,
   $ssl_key_file           = '',
   $ssl_cert_file          = '',
@@ -69,7 +70,8 @@ class fuel_stats::analytic (
     ::nginx::resource::vhost { 'analytics' :
       ensure              => 'present',
       ssl                 => $ssl,
-      listen_port         => 443,
+      ssl_port            => $https_port,
+      listen_port         => $https_port,
       ssl_cert            => $ssl_cert_file,
       ssl_key             => $ssl_key_file,
       server_name         => [$::fqdn],
@@ -78,15 +80,17 @@ class fuel_stats::analytic (
     }
     ::nginx::resource::vhost { 'analytics-redirect' :
       ensure              => 'present',
+      listen_port         => $http_port,
       www_root            => $www_root,
       server_name         => [$::fqdn],
       location_cfg_append => {
-        'rewrite' => '^ https://$server_name$request_uri? permanent'
+        'rewrite' => "^ https://\$server_name:${https_port}\$request_uri? permanent"
       },
     }
   } else {
     ::nginx::resource::vhost { 'analytics' :
       ensure              => 'present',
+      listen_port         => $http_port,
       server_name         => [$::fqdn],
       www_root            => $www_root,
       location_cfg_append => $firewall_rules,
