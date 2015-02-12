@@ -11,6 +11,8 @@ class jenkins::swarm_slave (
   $ssl_cert_file_contents = $::jenkins::params::ssl_cert_file_contents,
   $swarm_service = $::jenkins::params::swarm_service,
   $user = $::jenkins::params::swarm_user,
+  $cache_labels = false,
+  $jenkins_fetchlabels_url = '',
 ) inherits ::jenkins::params{
 
   if (!defined(User['jenkins'])) {
@@ -22,6 +24,24 @@ class jenkins::swarm_slave (
       managehome => true,
       system     => true,
       comment    => 'Jenkins',
+    }
+  }
+
+  if($cache_labels == true) {
+    file { '/usr/local/bin/fetchlabels.sh' :
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      content => template('jenkins/fetchlabels.sh.erb'),
+    }
+
+    cron { 'fetchlabels' :
+      command => '/usr/local/bin/fetchlabels.sh 2>&1 | logger -t fetchlabels',
+      user    => 'root',
+      hour    => '*',
+      minute  => '*/30',
+      require => File['/usr/local/bin/fetchlabels.sh'],
     }
   }
 
