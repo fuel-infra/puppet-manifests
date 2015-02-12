@@ -402,6 +402,16 @@ fuel_project::jenkins::slave::nailgun_db:
   - 'nailgun6'
   - 'nailgun7'
 
+fuel_project::jenkins::slave::seed_cleanup_dirs:
+  -
+    dir: '/var/www/fuelweb-iso'
+    ttl: 10
+    pattern: 'fuel-*'
+  -
+    dir: '/srv/downloads'
+    ttl: 1
+    pattern: 'fuel-*'
+
 fuel_project::glusterfs::owner_uid: 165
 fuel_project::glusterfs::owner_gid: 165
 fuel_project::glusterfs::gfs_volume_name: 'data'

@@ -25,9 +25,18 @@ class fuel_project::jenkins::slave (
   $sudoers_base            = '',
   $bind_policy             = '',
   $ldap_ignore_users       = '',
-  $keep_iso_days           = 10,
-  $storage_dirs            = ['/var/www/fuelweb-iso', '/srv/downloads'],
-  $pattern_to_clean        = 'fuel-\*', # to use in seed-downloads-cleanup.sh
+  $seed_cleanup_dirs       = [
+    {
+      'dir'     => '/var/www/fuelweb-iso', # directory to poll
+      'ttl'     => 10, # time to live in days
+      'pattern' => 'fuel-*', # pattern to filter files in directory
+    },
+    {
+      'dir'     => '/srv/downloads',
+      'ttl'     => 1,
+      'pattern' => 'fuel-*',
+    }
+  ],
   $jenkins_swarm_slave     = false,
   $docker_package          = '',
   $sudo_commands           = ['/sbin/ebtables'],
@@ -73,7 +82,7 @@ class fuel_project::jenkins::slave (
   }
 
   cron { 'seed-downloads-cleanup' :
-    command => '/usr/local/bin/seed-downloads-cleanup.sh | logger -t seed-downloads-cleanup',
+    command => '/usr/local/bin/seed-downloads-cleanup.sh 2>&1 | logger -t seed-downloads-cleanup',
     user    => root,
     hour    => '*/4',
     minute  => 0,
