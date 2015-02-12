@@ -130,6 +130,7 @@ class fuel_project::jenkins::slave (
     user         => 'jenkins',
     packages     => [
       'libffi-dev',
+      'libvirt-dev',
       'postgresql-server-dev-all',
     ],
     require      => [
@@ -158,6 +159,7 @@ class fuel_project::jenkins::slave (
     user         => 'jenkins',
     packages     => [
       'libffi-dev',
+      'libvirt-dev',
       'postgresql-server-dev-all',
     ],
     require      => [
