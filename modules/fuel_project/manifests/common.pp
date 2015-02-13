@@ -62,10 +62,10 @@ class fuel_project::common (
   }
 
   case $::osfamily {
-    'debian': {
+    'Debian': {
       class { '::apt' :}
     }
-    'redhat': {
+    'RedHat': {
       class { '::yum' :}
     }
     default: { }

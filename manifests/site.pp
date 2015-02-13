@@ -9,7 +9,7 @@ File {
   replace => true,
 }
 
-if($::osfamily == 'debian') {
+if($::osfamily == 'Debian') {
   Exec['apt_update'] -> Package <| |>
 }
 

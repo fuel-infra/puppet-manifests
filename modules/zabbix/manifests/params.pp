@@ -193,12 +193,12 @@ class zabbix::params {
   $mysql_root_password = ''
 
   case $::osfamily {
-    'redhat': {
+    'RedHat': {
       $agent_log_file = '/var/log/zabbix/zabbix_agentd.log'
       $server_log_file = '/var/log/zabbix/zabbix_server.log'
       $proxy_log_file = '/var/log/zabbix/zabbix_proxy.log'
     }
-    'debian': {
+    'Debian': {
       $agent_log_file = '/var/log/zabbix-agent/zabbix_agentd.log'
       $server_log_file = '/var/log/zabbix-server/zabbix_server.log'
       $proxy_log_file = '/var/log/zabbix-proxy/zabbix_proxy.log'

@@ -18,10 +18,10 @@ class ssh::params {
   ]
 
   case $::osfamily {
-    'redhat': {
+    'RedHat': {
       $service = 'sshd'
     }
-    'debian': {
+    'Debian': {
       $service = 'ssh'
     }
     default: {
