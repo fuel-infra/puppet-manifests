@@ -1,0 +1,2 @@
+jenkins -fstype=bind :/usr/local/jenkins
+* -fstype=nfs4,rw,nosuid,soft <% @nfs_servers.each do |server| -%> <%= server %>:/home/& <% end -%>
