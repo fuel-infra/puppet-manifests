@@ -106,6 +106,7 @@ node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
     build_fuel_plugins  => true,
     verify_fuel_stats   => true,
     check_tasks_graph   => true,
+    fuel_web_selenium   => true,
   }
 }
 
@@ -331,6 +332,7 @@ node 'slave-01.test.local' {
     fuelweb_iso       => true,
     ldap              => true,
     check_tasks_graph => true,
+    fuel_web_selenium => true,
   }
 }
 
