@@ -211,7 +211,20 @@ gerrit::email: 'review@test.local'
 gerrit::nginx_log_format: 'proxy'
 
 jenkins::master::service_fqdn: 'jenkins-product.test.local'
-
+jenkins::master::security_model: 'ldap'
+jenkins::master::security_opt_params: ''
+jenkins::master::ldap_access_group: 'fuel-core-team'
+jenkins::master::ldap_uri: 'ldap://ldap'
+jenkins::master::ldap_root_dn: 'dc=company,dc=net'
+jenkins::master::ldap_manager_passwd: ''
+jenkins::master::ldap_manager: ''
+jenkins::master::jenkins_cli_file: '/var/cache/jenkins/war/WEB-INF/jenkins-cli.jar'
+jenkins::master::ldap_user_search_base: ''
+jenkins::master::ldap_group_search_base: ''
+jenkins::master::ldap_user_search: 'uid={0}'
+jenkins::master::ldap_inhibit_root_dn: 'no'
+jenkins::master::jenkins_libdir: '/var/lib/jenkins'
+jenkins::master::install_groovy: true
 jenkins::master::ssl_key_file: '/etc/ssl/jenkins.key'
 jenkins::master::ssl_key_file_contents: |
     -----BEGIN PRIVATE KEY-----

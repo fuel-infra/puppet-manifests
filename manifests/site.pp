@@ -480,6 +480,14 @@ node /spacewalk([0-9]{2})-sndbx\.vm\.mirantis\.net/ {
   class { '::fuel_project::common' :}
 }
 
+node 'jenkins-sandbox.vm.mirantis.net' {
+  class { '::fuel_project::jenkins::master' : }
+}
+
+node /slave([0-1])([1-2])-sandbox\.vm.mirantis\.net/ {
+  class { '::fuel_project::jenkins::slave': }
+}
+
 # Default
 
 node default {

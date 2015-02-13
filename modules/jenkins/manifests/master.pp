@@ -29,7 +29,21 @@ class jenkins::master (
   $nginx_log_format = undef,
   $install_zabbix_item = false,
   $install_label_dumper = false,
-  $label_dumper_destpath = '/var/www/labels',
+  $abel_dumper_destpath = '/var/www/labels',
+  # Jenkins auth
+  $security_model = 'unsecured',
+  $install_groovy = 'yes',
+  $ldap_access_group = '',
+  $ldap_uri = 'ldap://ldap',
+  $ldap_root_dn = 'dc=company,dc=net',
+  $ldap_manager_passwd = '',
+  $ldap_manager = '',
+  $jenkins_cli_file = '/var/cache/jenkins/war/WEB-INF/jenkins-cli.jar',
+  $ldap_user_search_base  = '',
+  $ldap_group_search_base = '',
+  $ldap_user_search = 'uid={0}',
+  $ldap_inhibit_root_dn = 'no',
+  $jenkins_libdir = '/var/lib/jenkins',
 ) inherits ::jenkins::params{
 
   # Install base packages
@@ -41,6 +55,12 @@ class jenkins::master (
   package { 'openjdk-6-jre-headless':
     ensure  => purged,
     require => Package['openjdk-7-jre-headless'],
+  }
+
+  if($install_groovy) {
+    package { 'groovy' :
+      ensure => present,
+    }
   }
 
   package { 'jenkins' :
@@ -231,5 +251,46 @@ class jenkins::master (
       action  => 'accept',
       require => Class['firewall_defaults::pre'],
     })
+  }
+
+  # Prepare groovy script
+  file { "${jenkins_libdir}/jenkins_cli.groovy":
+    ensure  => present,
+    source  => ('puppet:///modules/jenkins/jenkins_cli.groovy'),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => Package['groovy'],
+  }
+
+  if $security_model == 'ldap' {
+    $security_opt_params = join([
+      $ldap_access_group,
+      $ldap_uri,
+      $ldap_root_dn,
+      $ldap_user_search,
+      $ldap_inhibit_root_dn,
+      $ldap_user_search_base,
+      $ldap_group_search_base,
+      $ldap_manager,
+      $ldap_manager_passwd,
+    ], ' ')
+  }
+
+  # Execute groovy script to setup auth
+  exec { 'jenkins_cli.groovy':
+    require => [
+      File["${jenkins_libdir}/jenkins_cli.groovy"],
+      Package['groovy'],
+    ],
+    command => join([
+        '/usr/bin/java',
+        "-jar ${jenkins_cli_file}",
+        "-s ${jenkins_api_url}",
+        "groovy ${jenkins_libdir}/jenkins_cli.groovy",
+        'set_security',
+        $security_model,
+        $security_opt_params,
+    ], ' '),
   }
 }
