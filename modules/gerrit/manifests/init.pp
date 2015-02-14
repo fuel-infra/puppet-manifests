@@ -70,7 +70,6 @@ class gerrit (
 ) {
   include jeepyb
   include pip
-  include virtual::users
 
   if (!defined(Class['::nginx'])) {
     class { '::nginx' :}
@@ -105,9 +104,6 @@ class gerrit (
       'X-Forwarded-For $remote_addr',
       'Host $host',
     ],
-    access_log         => $nginx_access_log,
-    error_log          => $nginx_error_log,
-    format_log         => $nginx_log_format,
   }
 
   ::nginx::resource::location { 'gerrit-static' :
