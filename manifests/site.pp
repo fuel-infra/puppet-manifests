@@ -17,7 +17,17 @@ stage { 'pre' :
   before => Stage['main'],
 }
 
-notify { 'Revision: $Id$' :}
+$gitrevision = '$Id$'
+
+notify { "Revision : ${gitrevision}" :}
+
+file { '/var/lib/puppet/gitrevision.txt' :
+  ensure  => 'present',
+  owner   => 'root',
+  group   => 'root',
+  mode    => '0400',
+  content => $gitrevision,
+}
 
 # Class: pxe_deployment
 #
