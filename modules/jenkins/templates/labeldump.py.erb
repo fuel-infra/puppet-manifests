@@ -5,8 +5,6 @@ import json
 import urllib2
 import xml.etree.ElementTree as ET
 
-from jenkinsapi.jenkins import Jenkins
-
 jenkins_api_url = '<%= @jenkins_api_url || 'http://localhost:8080' %>'
 jenkins_username = '<%= @jenkins_api_username %>'
 jenkins_token = '<%= @jenkins_api_token %>'

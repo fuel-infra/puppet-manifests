@@ -115,82 +115,6 @@ class fuel_project::jenkins::slave (
   }
   # /FIXME
 
-  # python-devops installation
-  ensure_packages(['pkg-config', 'libvirt-dev'])
-
-  if (!defined(Class['postgresql::server'])) {
-    class { 'postgresql::server' : }
-  }
-
-  ::postgresql::server::db { 'devops' :
-    user     => 'devops',
-    password => 'devops',
-  }
-
-  ::postgresql::server::db { 'fuel_devops' :
-    user     => 'fuel_devops',
-    password => 'fuel_devops',
-  }
-
-  ::venv::venv { 'venv-nailgun-tests' :
-    path         => '/home/jenkins/venv-nailgun-tests',
-    requirements => 'https://raw.githubusercontent.com/stackforge/fuel-main/master/fuelweb_test/requirements.txt',
-    user         => 'jenkins',
-    packages     => [
-      'libffi-dev',
-      'libvirt-dev',
-      'postgresql-server-dev-all',
-    ],
-    require      => [
-      Package['pkg-config'],
-      ::Postgresql::Server::Db['devops'],
-    ]
-  }
-
-  ::venv::exec { 'devops-syncdb' :
-    venv    => '/home/jenkins/venv-nailgun-tests',
-    command => 'django-admin.py syncdb --settings=devops.settings',
-    user    => 'jenkins',
-    require => ::Venv::Venv['venv-nailgun-tests'],
-  }
-
-  ::venv::exec { 'devops-migrate' :
-    venv    => '/home/jenkins/venv-nailgun-tests',
-    command => 'django-admin.py migrate --all --settings=devops.settings',
-    user    => 'jenkins',
-    require => ::Venv::Exec['devops-syncdb'],
-  }
-
-  ::venv::venv { 'venv-nailgun-tests-2.9' :
-    path         => '/home/jenkins/venv-nailgun-tests-2.9',
-    requirements => 'https://raw.githubusercontent.com/stackforge/fuel-qa/master/fuelweb_test/requirements.txt',
-    user         => 'jenkins',
-    packages     => [
-      'libffi-dev',
-      'libvirt-dev',
-      'postgresql-server-dev-all',
-    ],
-    require      => [
-      Package['pkg-config'],
-      ::Postgresql::Server::Db['fuel_devops'],
-    ]
-  }
-
-  ::venv::exec { 'devops-syncdb-2.9' :
-    venv    => '/home/jenkins/venv-nailgun-tests-2.9',
-    command => 'django-admin.py syncdb --settings=devops.settings',
-    user    => 'jenkins',
-    require => Venv::Venv['venv-nailgun-tests-2.9'],
-  }
-
-  ::venv::exec { 'devops-migrate-2.9' :
-    venv    => '/home/jenkins/venv-nailgun-tests-2.9',
-    command => 'django-admin.py migrate --all --settings=devops.settings',
-    user    => 'jenkins',
-    require => Venv::Exec['devops-syncdb-2.9'],
-  }
-  # /python-devops installation
-
   # Run system tests
   if ($run_tests == true) {
     class { '::libvirt' :
@@ -217,23 +141,31 @@ class fuel_project::jenkins::slave (
       require   => Class['libvirt'],
     }
 
+    # python-devops installation
+    if (!defined(Class['::postgresql::server'])) {
+      class { '::postgresql::server' : }
+    }
+
+    ::postgresql::server::db { 'devops' :
+      user     => 'devops',
+      password => 'devops',
+    }
+
+    ::postgresql::server::db { 'fuel_devops' :
+      user     => 'fuel_devops',
+      password => 'fuel_devops',
+    }
+    # /python-devops installation
+
     $system_tests_packages = [
       # dependencies
       'libevent-dev',
-      'python-anyjson',
-      'python-cinderclient',
-      'python-glanceclient',
-      'python-ipaddr',
-      'python-keystoneclient',
-      'python-novaclient',
-      'python-paramiko',
-      'python-proboscis',
       'python-seed-cleaner',
       'python-seed-client',
-      'python-xmlbuilder',
-      'python-yaml',
-      'python-jenkinsapi',
-      'python-psutil',
+      'pkg-config',
+      'libffi-dev',
+      'libvirt-dev',
+      'postgresql-server-dev-all',
 
       # diagnostic utilities
       'htop',
@@ -249,13 +181,10 @@ class fuel_project::jenkins::slave (
 
     ensure_packages($system_tests_packages)
 
-    exec { 'workspace-create' :
-      command   => "mkdir -p ${workspace}",
-      provider  => 'shell',
-      user      => 'jenkins',
-      cwd       => '/tmp',
-      logoutput => on_failure,
-      require   => User['jenkins'],
+    file { $workspace :
+      ensure  => 'directory',
+      user    => 'jenkins',
+      require => User['jenkins'],
     }
 
     file { '/etc/sudoers.d/systest' :
