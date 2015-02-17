@@ -154,12 +154,18 @@ node /irc-bouncer([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
-node 'monitor-product.vm.mirantis.net' {
-  class { 'fuel_project::zabbix::server' :}
+node /zbxproxy0([0-9]+)-([a-z]+)\.vm\.mirantis\.net/ {
+  class { '::fuel_project::zabbix::proxy' :}
 }
 
-node /zbxproxy0([0-9]+)-([a-z]+)\.vm\.mirantis\.net/ {
-  class { 'fuel_project::zabbix::proxy' :}
+# FIXME: Could be removed after zbxserver launch
+node 'monitor-product.vm.mirantis.net' {
+  class { '::fuel_project::zabbix::server' :}
+}
+# /FIXME
+
+node /zbxserver0([0-1]+)-([a-z]+)\.vm\.mirantis\.net/ {
+  class { '::fuel_project::zabbix::server' :}
 }
 
 node /fuel-puppet(-tst)?\.vm\.mirantis\.net/ {
