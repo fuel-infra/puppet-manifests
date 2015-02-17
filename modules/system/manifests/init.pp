@@ -1,14 +1,15 @@
 # Class: system
 #
 class system (
+  $install_tools = false,
+  $mta_aliases = '/etc/aliases',
+  $mta_newaliasescmd = '/usr/bin/newaliases',
+  $mta_local_only = false,
+  $mta_packages = ['postfix'],
   $root_password = undef,
   $root_shell = '/bin/bash',
-  $timezone = undef,
   $root_email = undef,
-  $mta_packages = ['postfix'],
-  $aliases = '/etc/aliases',
-  $newaliasescmd = '/usr/bin/newaliases',
-  $install_tools = false,
+  $timezone = undef,
   $tools_packages = ['atop', 'curl', 'htop', 'sysstat']
 ) {
   if($root_password) {
@@ -44,7 +45,7 @@ class system (
       ensure => 'present',
     }
 
-    file { $aliases :
+    file { $mta_aliases :
       mode    => '0644',
       owner   => 'root',
       group   => 'root',
@@ -52,10 +53,30 @@ class system (
       require => Package[$mta_packages],
     }
 
-    exec { $newaliasescmd :
-      command   => $newaliasescmd,
+    exec { $mta_newaliasescmd :
+      command   => $mta_newaliasescmd,
       logoutput => on_failure,
-      require   => File[$aliases],
+      require   => File[$mta_aliases],
+    }
+
+    if($::osfamily == 'Debian') {
+      file { '/etc/postfix/main.cf' :
+        ensure  => 'present',
+        mode    => '0644',
+        owner   => 'root',
+        group   => 'root',
+        content => template('system/main.cf.erb'),
+        require => Package[$mta_packages],
+        notify  => Service['postfix'],
+      }
+    }
+
+    service { 'postfix' :
+      ensure     => running,
+      enable     => true,
+      hasstatus  => true,
+      hasrestart => true,
+      require    => Package[$mta_packages],
     }
   }
 

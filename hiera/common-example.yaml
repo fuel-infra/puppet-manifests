@@ -404,7 +404,8 @@ ssh::authorized_keys::keys:
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCxqifp4TDIqlNdWChktsA6Pe2XQFYn+7/Wp/GRHqzz+OO5jXrKirzkeGMqjmcRFBVkEeBXX4fulm1lI3+IQripe9B8iFX8FNPMTr/U4Vj5+lXsssvWqTeTPTB3ee0uZgXwBXnO89R6/HurzlqMpZxqZhn+BVByP3eaaAZ19fwmliKTNUZ5OEyx5ozcw2ErDwTTq4jDPiVGvL7jS0VeXNGmoy4ZqWGzTmC/hkGO5GxuzmDCrMNpDgHg59wAG5yus/QGYN/ZKGd3Lj3hs2cSFEHwnU2P5xPjHwZsbFSBk1NhUHVHd+3YZbNFgb7xwRUOSXrbuSN/IzM87fUm+frXlH/j'
 
-system::root_email: 'root@test.com'
+system::root_email: 'root@example.com'
+system::mta_local_only: true
 system::timezone: 'UTC'
 system::root_password: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
 system::install_tools: true
