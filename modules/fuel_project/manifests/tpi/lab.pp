@@ -109,6 +109,25 @@ class fuel_project::tpi::lab (
     notify  => Service['autofs'],
   }
 
+  file { '/etc/auto.master.d/direct.autofs':
+    ensure  => 'present',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+    content => template('fuel_project/tpi/direct.autofs.erb'),
+    require => File['/etc/auto.master.d']
+  }
+
+  file { '/etc/auto.direct':
+    ensure  => 'present',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+    content => template('fuel_project/tpi/auto.direct.erb'),
+    require => File['/etc/auto.master.d/direct.autofs'],
+    notify  => Service['autofs'],
+  }
+
   service{ 'autofs':
     ensure => 'running',
     enable => true
