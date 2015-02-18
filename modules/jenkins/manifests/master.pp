@@ -146,7 +146,7 @@ class jenkins::master (
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
     location_cfg_append => {
-      rewrite => '^ https://$server_name$request_uri? permanent',
+      return => "301 https://${service_fqdn}\$request_uri",
     },
   }
   ::nginx::resource::vhost { 'jenkins' :
