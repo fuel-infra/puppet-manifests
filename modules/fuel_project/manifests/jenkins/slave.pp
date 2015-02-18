@@ -166,6 +166,7 @@ class fuel_project::jenkins::slave (
       'libffi-dev',
       'libvirt-dev',
       'postgresql-server-dev-all',
+      'mock',
 
       # diagnostic utilities
       'htop',
