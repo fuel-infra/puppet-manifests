@@ -2,8 +2,12 @@
 class fuel_project::tpi::lab (
   $btsync_secret = $fuel_project::tpi::params::btsync_secret,
   $sudo_commands = [ '/sbin/ebtables', '/sbin/iptables' ],
-  $nfs_servers = [ 'tpi-s1', 'tpi-s2' ],
+  $local_home_basenames = [ 'jenkins' ],
 ) {
+
+  class { '::fuel_project::tpi::nfs_client' :
+    local_home_basenames => $local_home_basenames,
+  }
 
   class { '::fuel_project::jenkins::slave' :
     run_tests     => true,
@@ -19,7 +23,6 @@ class fuel_project::tpi::lab (
     'linux-headers-3.13.0-39-generic',
     'btsync',
     'sudo-ldap',
-    'autofs',
   ]
 
   ensure_packages($tpi_packages)
@@ -63,74 +66,6 @@ class fuel_project::tpi::lab (
     ensure  => 'running',
     enable  => true,
     require => File['/etc/init.d/disable-hugepage-defrag'],
-  }
-
-  #automount
-  file { '/usr/local/jenkins':
-    ensure => 'directory',
-    mode   => '0755',
-    owner  => 'jenkins',
-    group  => 'jenkins',
-  }
-
-  mount { '/usr/local/jenkins':
-    ensure  => 'mounted',
-    device  => '/home/jenkins',
-    fstype  => 'none',
-    options => 'rw,bind',
-    atboot  => true,
-    require => File['/usr/local/jenkins'],
-  }
-
-  file { '/etc/auto.master.d':
-    ensure  => directory,
-    mode    => '0755',
-    owner   => 'root',
-    group   => 'root',
-    require => Mount['/usr/local/jenkins'],
-  }
-
-  file { '/etc/auto.master.d/home.autofs':
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('fuel_project/tpi/home.autofs.erb'),
-    require => File['/etc/auto.master.d']
-  }
-
-  file { '/etc/auto.home':
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('fuel_project/tpi/auto.home.erb'),
-    require => File['/etc/auto.master.d/home.autofs'],
-    notify  => Service['autofs'],
-  }
-
-  file { '/etc/auto.master.d/direct.autofs':
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('fuel_project/tpi/direct.autofs.erb'),
-    require => File['/etc/auto.master.d']
-  }
-
-  file { '/etc/auto.direct':
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('fuel_project/tpi/auto.direct.erb'),
-    require => File['/etc/auto.master.d/direct.autofs'],
-    notify  => Service['autofs'],
-  }
-
-  service{ 'autofs':
-    ensure => 'running',
-    enable => true
   }
 
 }
