@@ -486,6 +486,12 @@ node /slave([0-1])([1-2])-sandbox\.vm.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave': }
 }
 
+# Jenkins master testing
+
+node 'devops-jenkins-test.vm.mirantis.net' {
+  class { '::fuel_project::jenkins::master' :}
+}
+
 # Default
 
 node default {
