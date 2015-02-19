@@ -184,7 +184,8 @@ class fuel_project::jenkins::slave (
 
     file { $workspace :
       ensure  => 'directory',
-      user    => 'jenkins',
+      owner   => 'jenkins',
+      group   => 'jenkins',
       require => User['jenkins'],
     }
 
