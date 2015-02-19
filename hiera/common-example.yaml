@@ -428,6 +428,12 @@ fuel_project::jenkins::slave::seed_cleanup_dirs:
     ttl: 1
     pattern: 'fuel-*'
 
+
+fuel_project::jenkins::master::install_plugins: true
+fuel_project::jenkins::master::install_zabbix_item: true
+fuel_project::jenkins::master::install_label_dumper: true
+fuel_project::jenkins::master::service_fqdn: 'devops-jenkins-test.vm.mirantis.net'
+
 fuel_project::glusterfs::owner_uid: 165
 fuel_project::glusterfs::owner_gid: 165
 fuel_project::glusterfs::gfs_volume_name: 'data'
