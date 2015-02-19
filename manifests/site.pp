@@ -186,7 +186,7 @@ node 'review-solr-tst01.vm.mirantis.net' {
 }
 
 node 'devops-tools.vm.mirantis.net' {
-  class { '::fuel_project::common' :}
+  class { '::fuel_project::devops_tools' :}
 }
 
 node /(osci|review)-(gerrit|tst)([0-9]{0,2})?\.vm\.mirantis\.net/ {
@@ -470,6 +470,10 @@ node 'slave-20.test.local' {
   class {'::fuel_project::mongo_common':
     primary => true,
   }
+}
+
+node 'slave-21.test.local' {
+  class { '::fuel_project::devops_tools' :}
 }
 
 # Sandbox
