@@ -214,7 +214,7 @@ node /tpi-s\d.bud.mirantis.net/ {
 }
 
 node 'tpi-puppet.vm.mirantis.net' {
-  class { '::fuel_project::puppet::master' :}
+  class { '::fuel_project::tpi::puppetmaster' :}
 }
 
 node 'demo.fuel-infra.org' {
