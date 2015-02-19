@@ -29,7 +29,7 @@ class jenkins::master (
   $nginx_log_format = undef,
   $install_zabbix_item = false,
   $install_label_dumper = false,
-  $abel_dumper_destpath = '/var/www/labels',
+  $label_dumper_destpath = '/var/www/labels',
   # Jenkins auth
   $security_model = 'unsecured',
   $install_groovy = 'yes',
