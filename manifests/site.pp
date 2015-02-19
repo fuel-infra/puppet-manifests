@@ -160,6 +160,10 @@ node /zbxserver0([0-1]+)-([a-z]+)\.vm\.mirantis\.net/ {
   class { '::fuel_project::zabbix::server' :}
 }
 
+node /zabbix-tst01\.vm\.mirantis\.net/ {
+  class { '::fuel_project::zabbix::server' :}
+}
+
 node /fuel-puppet(-tst)?\.vm\.mirantis\.net/ {
   class { '::fuel_project::puppet::master' :
     apply_firewall_rules => true,
