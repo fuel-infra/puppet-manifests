@@ -210,6 +210,8 @@ gerrit::commentlinks:
 gerrit::email: 'review@test.local'
 gerrit::nginx_log_format: 'proxy'
 
+hideci::ciRegex: '/^(openstack-ci-.*|mos-infra-ci|ci-build-.*|VM Check Install .*)$/'
+
 jenkins::master::service_fqdn: 'jenkins-product.test.local'
 jenkins::master::security_model: 'ldap'
 jenkins::master::security_opt_params: ''

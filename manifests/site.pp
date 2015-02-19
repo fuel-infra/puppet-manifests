@@ -235,6 +235,8 @@ node /(osci|review)-(gerrit|tst)([0-9]{0,2})?\.vm\.mirantis\.net/ {
     database_user     => $gerrit['mysql_user'],
     database_password => $gerrit['mysql_password'],
   }
+
+  class { '::hideci' :}
 }
 
 node 'osci-jenkins2.vm.mirantis.net' {
