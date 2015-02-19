@@ -112,6 +112,10 @@ node /(seed-(cz|us)1\.fuel-infra\.org)/ {
   class { '::fuel_project::updates' :
     apply_firewall_rules => true,
   }
+
+  class { '::fuel_project::partnershare' :
+    apply_firewall_rules => true,
+  }
 }
 
 node /osci-mirror-(msk|srt|kha)\.(msk|srt|kha)\.mirantis\.net/ {
@@ -381,6 +385,10 @@ node 'slave-04.test.local' {
   }
 
   class { '::fuel_project::updates' :
+    apply_firewall_rules => true,
+  }
+
+  class { '::fuel_project::partnershare' :
     apply_firewall_rules => true,
   }
 }
