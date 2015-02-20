@@ -74,12 +74,6 @@ class fuel_project::common (
   zabbix::item { 'software-zabbix-check' :
     template => 'fuel_project/common/zabbix/software.conf.erb',
   }
-  # FIXME: to make changes compatible in https://review.fuel-infra.org/415
-  file { '/etc/zabbix/zabbix_agentd.conf.d/sofware-zabbix-check.conf' :
-    ensure => 'absent',
-    before => Service['zabbix-agent'],
-  }
-  # /FIXME
 
   ::zabbix::item { 'hardware-zabbix-check' :
     content => 'puppet:///modules/fuel_project/common/zabbix/hardware.conf',

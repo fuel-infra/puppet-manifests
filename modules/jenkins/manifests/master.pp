@@ -10,8 +10,6 @@ class jenkins::master (
   $ssl_cert_file_contents = $::jenkins::params::ssl_cert_file_contents,
   $ssl_key_file = '/etc/ssl/jenkins.key',
   $ssl_key_file_contents = '',
-  # FIXME: chain certificates are not used in nginx conf right now
-  $ssl_chain_file_contents = '',
   # Jenkins user keys
   $jenkins_ssh_private_key_contents = '',
   $jenkins_ssh_public_key_contents = '',
@@ -85,42 +83,36 @@ class jenkins::master (
     require => Package['jenkins'],
   }
 
-  # Setup user
-  #
-  # FIXME: use virtual::user['jenkins']
-  # Currently user and group jenkins created by jenkins package
+  ensure_resource('user', 'jenkins', {
+    ensure     => 'present',
+    home       => $jenkins_libdir,
+    managehome => true,
+  })
 
-  file { '/var/lib/jenkins':
-    ensure  => directory,
-    owner   => 'jenkins',
-    group   => 'jenkins',
-    require => Package['jenkins'],
-  }
-
-  file { '/var/lib/jenkins/.ssh/':
+  file { "${jenkins_libdir}/.ssh/" :
     ensure  => directory,
     owner   => 'jenkins',
     group   => 'jenkins',
     mode    => '0700',
-    require => File['/var/lib/jenkins'],
+    require => User['jenkins'],
   }
 
-  file { '/var/lib/jenkins/.ssh/id_rsa':
+  file { "${jenkins_libdir}/.ssh/id_rsa" :
     owner   => 'jenkins',
     group   => 'jenkins',
     mode    => '0600',
     content => $jenkins_ssh_private_key_contents,
     replace => true,
-    require => File['/var/lib/jenkins/.ssh/'],
+    require => File["${jenkins_libdir}/.ssh/"],
   }
 
-  file { '/var/lib/jenkins/.ssh/id_rsa.pub':
+  file { "${jenkins_libdir}/.ssh/id_rsa.pub" :
     owner   => 'jenkins',
     group   => 'jenkins',
     mode    => '0644',
     content => "ssh_rsa ${jenkins_ssh_public_key_contents} jenkins@${::fqdn}",
     replace => true,
-    require => File['/var/lib/jenkins/.ssh/'],
+    require => File["${jenkins_libdir}/.ssh"],
   }
 
   # Add Jenkins Job Builder
