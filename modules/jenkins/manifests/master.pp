@@ -238,6 +238,8 @@ class jenkins::master (
 
     ::nginx::resource::location { 'labels' :
       ensure   => 'present',
+      ssl      => true,
+      ssl_only => true,
       vhost    => 'jenkins',
       location => basename($label_dumper_destpath),
       www_root => dirname($label_dumper_destpath),
