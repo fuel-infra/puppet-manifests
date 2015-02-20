@@ -160,14 +160,17 @@ class fuel_project::jenkins::slave (
     $system_tests_packages = [
       # dependencies
       'libevent-dev',
+      'libffi-dev',
+      'libvirt-dev',
+      'mock',
+      'python-dev',
+      'python-psycopg2',
       'python-seed-cleaner',
       'python-seed-client',
       'python-virtualenv',
+      'python-yaml',
       'pkg-config',
-      'libffi-dev',
-      'libvirt-dev',
       'postgresql-server-dev-all',
-      'mock',
 
       # diagnostic utilities
       'htop',
