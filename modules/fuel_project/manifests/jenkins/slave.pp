@@ -162,6 +162,7 @@ class fuel_project::jenkins::slave (
       'libevent-dev',
       'python-seed-cleaner',
       'python-seed-client',
+      'python-virtualenv',
       'pkg-config',
       'libffi-dev',
       'libvirt-dev',
