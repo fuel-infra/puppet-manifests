@@ -269,15 +269,15 @@ class jenkins::master (
 
   if $security_model == 'ldap' {
     $security_opt_params = join([
-      $ldap_access_group,
-      $ldap_uri,
-      $ldap_root_dn,
-      $ldap_user_search,
-      $ldap_inhibit_root_dn,
-      $ldap_user_search_base,
-      $ldap_group_search_base,
-      $ldap_manager,
-      $ldap_manager_passwd,
+      "'${ldap_access_group}'",
+      "'${ldap_uri}'",
+      "'${ldap_root_dn}'",
+      "'${ldap_user_search}'",
+      "'${ldap_inhibit_root_dn}'",
+      "'${ldap_user_search_base}'",
+      "'${ldap_group_search_base}'",
+      "'${ldap_manager}'",
+      "'${ldap_manager_passwd}'",
     ], ' ')
   }
 
