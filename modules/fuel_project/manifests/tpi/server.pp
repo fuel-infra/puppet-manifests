@@ -27,6 +27,8 @@ class fuel_project::tpi::server (
     path            => '/storage',
     read_only       => 'yes',
     write_only      => 'no',
+    incoming_chmod  => false,
+    outgoing_chmod  => false,
   }
 
 }
