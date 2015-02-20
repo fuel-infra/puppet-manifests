@@ -241,7 +241,9 @@ class jenkins::master (
       ssl      => true,
       ssl_only => true,
       vhost    => 'jenkins',
-      location => basename($label_dumper_destpath),
+      # FIXME: change to basename function when next puppetlabs-stdlib is released
+      location => inline_template('<%= File.basename(label_dumper_destpath) %>'),
+      # /FIXME
       www_root => dirname($label_dumper_destpath),
     }
   }
