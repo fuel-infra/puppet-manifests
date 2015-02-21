@@ -14,6 +14,20 @@ class fuel_project::nginx {
     },
   }
 
+  ::nginx::resource::vhost { 'logshare' :
+    ensure                 => 'present',
+    listen_port            => 4637,
+    gzip_types             => 'application/octet-stream',
+    ssl_port               => 4637,
+    ssl                    => true,
+    ssl_cert               => "/var/lib/puppet/ssl/certs/${::fqdn}.pem",
+    ssl_key                => "/var/lib/puppet/ssl/private_keys/${::fqdn}.pem",
+    ssl_client_certificate => '/var/lib/puppet/ssl/certs/ca.pem',
+    ssl_crl                => '/var/lib/puppet/ssl/crl.pem',
+    ssl_verify_client      => 'on',
+    www_root               => '/var/log',
+  }
+
   zabbix::item { 'nginx' :
     content => 'puppet:///modules/fuel_project/zabbix/nginx_items.conf',
   }
