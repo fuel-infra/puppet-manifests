@@ -1,27 +1,40 @@
 # Class: landing_page::params
 #
 class landing_page::params {
-  $apply_firewall_rules = false
-  $config = '/etc/landing_page/settings.py'
-  $config_template = 'landing_page/landing_page.py.erb'
+  # Landing page webapp
+  $app_user               = 'release'
+  $apply_firewall_rules   = false
+  $config                 = '/etc/landing_page/settings.py'
+  $config_template        = 'landing_page/landing_page.py.erb'
+  $database_engine        = 'django.db.backends.mysql'
+  $database_host          = 'localhost'
+  $database_name          = 'release'
+  $database_password      = 'release'
+  $database_port          = ''
+  $database_user          = 'release'
   $firewall_allow_sources = {}
-  $mysql_database = 'release'
-  $mysql_user = 'release'
-  $mysql_password = 'pass'
-  $mysql_host = '127.0.0.1'
-  $mysql_port = 3306
-  $nginx_server_name = $::fqdn
-  $app_user = 'release'
-  $package = [
+  $nginx_server_name      = $::fqdn
+  $nginx_access_log       = '/var/log/nginx/access.log'
+  $nginx_error_log        = '/var/log/nginx/error.log'
+  $nginx_log_format       = undef
+  $package                = [
     'landing-page-all',
     'python-mysqldb',
   ]
-  $package_updater = ['landing-page-release-status-app-cli']
-  $ssl_cert_file = '/etc/ssl/release.crt'
-  $ssl_key_file = '/etc/ssl/release.pem'
-  $timezone = 'UTC'
-  $updater_user = 'jenkins'
-  $updater_app = 'release'
-  $updater_config = '/etc/release-updater.yaml'
-  $updater_token = 'b3ccf1131c697f26be216753ddac28ca19f05035fbe914968ee7b7c32e274c94c58b3b266e83967093fc52e0527db86e7e92b9b51683b082c08b90c1af552029'
+  $package_updater        = [
+    'landing-page-release-status-app-cli',
+  ]
+  $ssl                    = true
+  $ssl_cert_file          = '/etc/ssl/release.crt'
+  $ssl_cert_file_contents = undef
+  $ssl_key_file           = '/etc/ssl/release.pem'
+  $ssl_key_file_contents  = undef
+  $timezone               = 'UTC'
+  $uwsgi_socket             = '127.0.0.1:7939'
+
+  # Updater app
+  $updater_user           = 'jenkins'
+  $updater_app            = 'release'
+  $updater_config         = '/etc/release-updater.yaml'
+  $updater_token          = '<SECRET_TOKEN>'
 }

@@ -15,12 +15,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': '<%= @mysql_database %>',
-        'USER': '<%= @mysql_user %>',
-        'PASSWORD': '<%= @mysql_password %>',
-        'HOST': '<%= @mysql_host %>',
-        'PORT': '<%= @mysql_port %>',
+        'ENGINE': '<%= @database_engine %>',
+        'NAME': '<%= @database_name %>',
+        'USER': '<%= @database_user %>',
+        'PASSWORD': '<%= @database_password %>',
+        'HOST': '<%= @database_host %>',
+        'PORT': '<%= @database_port %>',
     }
 }
 

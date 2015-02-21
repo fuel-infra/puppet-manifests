@@ -316,9 +316,9 @@ puppet:
   master: 'pxetool.test.local'
 
 landing_page::config_template: 'fuel_project/landing_page/landing_page.py.erb'
-landing_page::mysql_database: 'release'
-landing_page::mysql_user: 'release'
-landing_page::mysql_password: 'Ab5eP1RMDG2k'
+landing_page::database_name: 'release'
+landing_page::database_user: 'release'
+landing_page::database_password: 'Ab5eP1RMDG2k'
 landing_page::ssl_key_file_contents: |
   -----BEGIN PRIVATE KEY-----
   MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDShAI03KCVyXwo

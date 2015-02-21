@@ -286,7 +286,7 @@ node /fuel-stats(\-testing)?\.vm\.mirantis\.net/ {
   class { '::fuel_project::statistics::analytic' : }
 }
 
-node /(web01\.fuel-infra\.org|web01-tst\.vm\.mirantis\.net)/ {
+node /web([0-9]{2,})(-tst)?\.(fuel-infra\.org|vm\.mirantis\.net)/ {
   class { '::fuel_project::web' :}
 }
 
