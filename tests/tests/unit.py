@@ -204,6 +204,11 @@ def allocate_hostnames():
     global hosts_file
     hosts_file = ""
     floating_ips = nova_client.floating_ips.findall(fixed_ip=None)
+    if len(slave_hosts) + 1 > len(floating_ips):
+        print "WARNING: Not enough floating ips, skipping hosts"
+        for hostname in slave_hosts[len(floating_ips) - 1: len(slave_hosts)]:
+            print "WARNING: skipping {}".format(hostname)
+            slave_hosts.remove(hostname)
     hostnames = ["pxetool"] + slave_hosts
     for i in range(len(hostnames)):
         hostname = hostnames[i]
