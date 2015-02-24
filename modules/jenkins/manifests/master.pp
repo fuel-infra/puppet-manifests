@@ -24,6 +24,7 @@ class jenkins::master (
   $jenkins_api_token = '',
   $nginx_access_log = '/var/log/nginx/access.log',
   $nginx_error_log = '/var/log/nginx/error.log',
+  $www_root = '/var/www',
   $nginx_log_format = undef,
   $install_zabbix_item = false,
   $install_label_dumper = false,
@@ -123,6 +124,8 @@ class jenkins::master (
     password => $jenkins_api_password,
   }
 
+  ensure_resource('file', $www_root, {'ensure' => 'directory' })
+
   # Setup nginx
 
   if (!defined(Class['::nginx'])) {
@@ -133,7 +136,7 @@ class jenkins::master (
     ensure              => 'present',
     listen_port         => 80,
     server_name         => [$service_fqdn, $::fqdn],
-    www_root            => '/var/www',
+    www_root            => $www_root,
     access_log          => $nginx_access_log,
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
