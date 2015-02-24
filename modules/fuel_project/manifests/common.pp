@@ -75,6 +75,7 @@ class fuel_project::common (
     template => 'fuel_project/common/zabbix/software.conf.erb',
   }
 
+  ensure_packages(['smartmontools'])
   ::zabbix::item { 'hardware-zabbix-check' :
     content => 'puppet:///modules/fuel_project/common/zabbix/hardware.conf',
   }

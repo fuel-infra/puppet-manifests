@@ -19,6 +19,7 @@ class zabbix::agent (
   $server_active = $::zabbix::params::agent_server_active,
   $service = $::zabbix::params::agent_service,
   $start_agents = $::zabbix::params::agent_start_agents,
+  $sudoers_template = $::zabbix::params::agent_sudoers_template,
   $timeout = $::zabbix::params::agent_timeout,
   $unsafe_user_parameters = $::zabbix::params::agent_unsafe_user_parameters,
   $zabbix_server = $::zabbix::params::agent_zabbix_server,
@@ -45,7 +46,7 @@ class zabbix::agent (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template('zabbix/sudoers.erb')
+    content => template($sudoers_template)
   }~>
   Service[$service]
 

@@ -25,6 +25,7 @@ class zabbix::params {
   $agent_server_active = undef
   $agent_service = 'zabbix-agent'
   $agent_start_agents = 2
+  $agent_sudoers_template = 'zabbix/sudoers.erb'
   $agent_timeout = 5
   $agent_unsafe_user_parameters = false
   $agent_zabbix_server = '127.0.0.1'
