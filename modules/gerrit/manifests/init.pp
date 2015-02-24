@@ -188,15 +188,6 @@ class gerrit (
     ],
   }
 
-  if $external_host {
-    firewall { '1000 allow gerrit connections' :
-      dport   => ['80', '443', '29418'],
-      proto   => 'tcp',
-      action  => 'accept',
-      require => Class['firewall_defaults::pre'],
-    }
-  }
-
   file { '/var/lib/gerrit/review_site/bin/' :
     ensure  => 'directory',
     recurse => true,

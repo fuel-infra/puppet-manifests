@@ -1,14 +1,17 @@
 # Class: fuel_project::gerrit
 #
 class fuel_project::gerrit (
-  $external_host = true,
   $dmz = true,
+  $firewall_enable = false,
   $replication = [],
   $replication_mode = '',
+  $firewall_allow_sources_mysql = {},
+  $firewall_allow_sources_bacula = {},
+
 ) {
 
   class { '::fuel_project::common' :
-    external_host => $external_host
+    external_host => $firewall_enable
   }
 
   $gerrit = hiera_hash('gerrit')
@@ -48,6 +51,15 @@ class fuel_project::gerrit (
 
   class { '::gerrit::hideci' :}
 
+  if $firewall_enable {
+    firewall { '1000 allow gerrit connections' :
+      dport   => ['80', '443', '29418'],
+      proto   => 'tcp',
+      action  => 'accept',
+      require => Class['firewall_defaults::pre'],
+    }
+  }
+
   if ($replication_mode == 'master') {
     class { '::fuel_project::gerrit::master_config' :}
 
@@ -61,10 +73,32 @@ class fuel_project::gerrit (
       require => File['/var/lib/gerrit/review_site/etc'],
     }
 
+    if $firewall_enable {
+      include ::firewall_defaults::pre
+      create_resources(firewall, $firewall_allow_sources_mysql, {
+        ensure  => present,
+        dport   => 3306,
+        proto   => 'tcp',
+        action  => 'accept',
+        require => Class['::firewall_defaults::pre'],
+      })
+    }
   }
 
   if ($replication_mode == 'slave') {
     class { '::fuel_project::gerrit::slave_config' :}
     class { '::fuel_project::apps::bacula' :}
+
+    if $firewall_enable {
+      include ::firewall_defaults::pre
+      create_resources(firewall, $firewall_allow_sources_bacula, {
+        ensure  => present,
+        dport   => 9102,
+        proto   => 'tcp',
+        action  => 'accept',
+        require => Class['::firewall_defaults::pre'],
+      })
+    }
   }
+
 }

@@ -450,6 +450,15 @@ system::timezone: 'UTC'
 system::root_password: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
 system::install_tools: true
 
+fuel_project::gerrit::firewall_allow_sources_bacula:
+  '1000 - allow bacula connections from 172.18.0.0/16':
+    source: '172.18.0.0/16'
+  '1000 - allow bacula connections from 192.168.0.0/16':
+    source: '192.168.0.0/16'
+fuel_project::gerrit::firewall_allow_sources_mysql:
+  '1000 - allow mysql connections from 172.18.0.0/16':
+    source: '172.18.0.0/16'
+
 fuel_project::gerrit::master_config::host: 'slave-22.test.local'
 fuel_project::gerrit::master_config::user: 'gerrit-replicator'
 fuel_project::gerrit::master_config::identity_file: '~/.ssh/id_rsa'

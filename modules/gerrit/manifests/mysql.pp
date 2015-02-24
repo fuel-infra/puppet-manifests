@@ -8,10 +8,9 @@ class gerrit::mysql (
 
   class { '::mysql::server' :}
   class { '::mysql::client' :}
+  class { '::mysql::server::account_security' :}
 
-  include mysql::server::account_security
-
-  mysql::db { $database_name:
+  ::mysql::db { $database_name :
     user     => $database_user,
     password => $database_password,
     host     => 'localhost',
@@ -19,7 +18,7 @@ class gerrit::mysql (
     charset  => 'utf8',
     require  => [
       Class['::mysql::server'],
-      Class['mysql::server::account_security'],
+      Class['::mysql::server::account_security'],
     ],
   }
 }
