@@ -488,6 +488,115 @@ jenkins::swarm_slave::user: 'jenkins-robotson'
 jenkins::swarm_slave::password: 'BTRfeHyibQlM2M'
 jenkins::swarm_slave::labels: '14_04'
 
+fuel_project::jenkins::slave::osc_apiurl: 'https://osci-obs.vm.mirantis.net:444'
+fuel_project::jenkins::slave::osc_user_primary: 'Admin'
+fuel_project::jenkins::slave::osc_user_secondary: 'Admin'
+fuel_project::jenkins::slave::osc_url_primary: 'https://osci-obs.vm.mirantis.net:444'
+fuel_project::jenkins::slave::osc_url_secondary: 'https://obs-1.mirantis.com'
+fuel_project::jenkins::slave::osc_pass_primary: 'opensuse'
+fuel_project::jenkins::slave::osc_pass_secondary: 'qazmirantisqaz'
+fuel_project::jenkins::slave::osci_dhcp_start: '192.168.122.2'
+fuel_project::jenkins::slave::osci_dhcp_end: '192.168.122.254'
+fuel_project::jenkins::slave::osci_ip_address: '192.168.122.1'
+fuel_project::jenkins::slave::osci_ip_netmask: '255.255.255.0'
+fuel_project::jenkins::slave::osci_libvirt_dev: 'virbr0'
+fuel_project::jenkins::slave::osci_rsync_source_server: 'twin0d-srt.srt.mirantis.net'
+fuel_project::jenkins::slave::osci_ubuntu_image_name: 'ubuntu-deb-test.qcow2'
+fuel_project::jenkins::slave::osci_centos_image_name: 'centos6.4-x86_64-gold-master.img'
+fuel_project::jenkins::slave::osci_ubuntu_job_dir: '/home/jenkins/vm-ubuntu-test-deb'
+fuel_project::jenkins::slave::osci_centos_job_dir: '/home/jenkins/vm-centos-test-rpm'
+fuel_project::jenkins::slave::osci_ubuntu_remote_dir: 'vm-ubuntu-test-deb'
+fuel_project::jenkins::slave::osci_centos_remote_dir: 'vm-centos-test-rpm'
+fuel_project::jenkins::slave::osci_obs_jenkins_key: '/home/jenkins/.ssh/oct'
+fuel_project::jenkins::slave::osci_obs_jenkins_key_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEowIBAAKCAQEAtsfzK4iyUkb7fazvzYVfl+7lpFg5Equaaifctlq7WHy4dopg
+  4PNZM2Qtle3B0+UxH6mxRCUWfBHJ8BB7tqq/ujLE2y7+w60yEfVA9LiCybG8zger
+  ByONg730XF2od8Ru7JfheMLMZ/kzm/DxmJPnbQIE9bYFX9Yfg4gysznWsNp/vAcM
+  0JZNh9Qp91ey0Bg5IeUcNDdhdO0xjpZ5FrJHzx1kw/ndqNCJpQtTxcKT2Q5VDnj+
+  e49zJtybwPoaULuDb0jwtl5TU4Efz6MmtTjkunj72d7mBKheVdeSgA7192E3iPFQ
+  LVmgGvPucLlA4eqI2AucqKCezXbWy/h3OxicuQIDAQABAoIBAE8vQIHTrq1GYx2H
+  FjyLU2aW8JXKQq97+GGU82Fs3Uzwe1mfiWjrA/HnrHgPkLEj0axN76X+C0ekzT9b
+  ZL02K+mWpQHv0h8joVV2UrWyWbbXcVwwpj9pf51bZcm+KYX5a7TD98JBYhyJMXqV
+  X5UiPlhTT6LDQIDMWsq47n4GyKPEyVliRAHzhfw3dI1c1NBSkGohNJ828hc9TP3Q
+  6LR1rMSGcoV+XSVIlsfRnFPML416FBgp5Zri5fIRwBQ3HWiUciqHoFp1xqPdRI9a
+  YpfwhWUCsZSg/l8gkj/AI5niHhnurafwU2nuLXui7JbMLZuD0Ui9sUaXxIRIiO0e
+  g1YgKoECgYEA5hBEqJ42tb66yj0hz/L/qC1+lID509JveLex/PfkC1duwtUzrFIp
+  iz9p882Y2oFIbetjfICJKHKog9MyLNsvk9w5ErhndYYqExfklqnWnHR2HpmIlBPb
+  EFN4qGEwckG19Qmu0pF0Z9pmVOcH4Mo4dTJlSOOEEdplNd9AgKeeDxUCgYEAy2MW
+  vQbPLugRN0oadL4DItZg6jrj88qaP6C9VHiNvP0ZZeHtMWCzANiI4mjCCeaCccGm
+  g+KRI+x4T9mpwudInGoTA9fSpU6jpq4WjCDZ+ZlAeoHiA79UCWhq2791M1ElBiJe
+  4X4piPPfQJUVPWY8T/s1a8Bp2V+6TPunuqnz4BUCgYBinJiBWgeDUXSJGTj0BGlW
+  8eEu0DXFeI61RK+zCaIixmBAfNhARZtvB0hn6zlYd0/PZbTn+cRQpQzcLFt2ZKD5
+  FM0V3BrkghRoyLX/al8GAtladl7XccdVMSInsjjs0IOou3TG5vfpR/DS9ZAn5yXZ
+  /jbxziue52i4dbAVNUOHnQKBgQCzqiu6/ZnlwMD8i2yFdhjFHIVuRGl7wZyy2maF
+  iR0ENrzJ4GMsfFSEScPZ5VqLbmIK5VsYI/u8tTauqwOolbDx40461dtRhf9QzXZD
+  gP2s3LE1xyiF0O0GhoPm7OE2XNcM7S3NmipMvcmYflnN7FMZADt3nPikOkkTmjbX
+  0SwK5QKBgDKy5EICWP9bknOLB70HvIEhl89KIg5inKZgaD9YuhJqvpyyR0WYgWoN
+  D1KkJTl90W08nAz3wc6dC6NzzR0fIEilSnnaRtuP4Xxp/aIJiic4jVFrL8gKPKb8
+  1nyJ/A8dGSbIJCuAwWOph4A7/6vkB0sMJpr/y2co71alY9w9iHJs
+  -----END RSA PRIVATE KEY-----
+
+fuel_project::jenkins::slave::osci_vm_ubuntu_jenkins_key: '/home/jenkins/vm-ubuntu-test-deb/precise64.key'
+fuel_project::jenkins::slave::osci_vm_ubuntu_jenkins_key_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpAIBAAKCAQEA5Kq/3aHmb22knNwC41siVG4X+hcVtIya80ovqmkmsGHQQm/8
+  ZqVRV1Qn2EpOT/q+DlAAx0l+uEfC5I5HVA0l69NMbYh0zrrkIhVWBvoMGcXRVCrj
+  SDHrWmNx5zg6hsmudyNYYiQC52OmwD6gsnCQFN9DCTDYeaDfvucwjdusOotY14h/
+  ab7AFr+DgTBSJyg2TH1oy1i4g6RRQiWvKzhHOu3btB8A8z72jk3UipAKkViCmdbT
+  TDyxwAOXbnujlNg8GTVqA0vnZxvIPjmWMecRu3WTBxKbyiXdGfhkIVV9nEgcd4yY
+  KlkiB7XlC8TbHCZY8mgqNQU1mPM1AZcle/xO4wIDAQABAoIBAQCARVRJpFcabJvp
+  rfUkymuQhw2GKcrwM+t7zEK+yit8x/HGQwGIJvZhEYEkcFJLxTE14CT/pbei8gZe
+  pX1XpeR+zFHUI7a6fNYaVHOkiEGfd3s8Rq6mQfJvCtfLR5x1Hc9zX21l6COE3z6c
+  GsWUM1ZvjuoQzsiwOdEpSpDPEsojMBZNahpn/T+RCqvj8eTurNwKmVpih8fN8vZc
+  uKoawS9Gx/9oFgafmuOrQvIzDuVZt5R/tOsVifpUGvlTlu6WGv56HIz3KMvIUc+N
+  UCxK/zjjpFvwjg8j+pKT0LWkMZsDAooeg6P/oF0By4JBSteQ5ZNS0UrpUlsr/rYu
+  7DjukXPBAoGBAPciEccT7r1CyxXtyiAmCiX4Jss2G7NowqGM2RQfwALDbpOHc0/C
+  TTO/Meb372+RyS8w3mRHCDPlZ3JUxy9i+2E8cojAklEI6ra49g8iO9dBMvkYUMyV
+  KbeZ7lsTME/hBwe93IWyOMia4zhVbRD+uoQ2m1EneWTYQaD7OIs+NbuhAoGBAOzf
+  EWbsjCBy4bJWFj2y+WcennVVqQWYJmg+Z2N5FKIVqi0JfOnJS7T26IbsZoNN2erm
+  ROiWGgKgefGthlcYDUZ0e3fs6kUPoATm3AZG0P4OWD8xCvhlXM9r3Sb8MtGZijtb
+  zN6lFJHQiXlH9NwW7+unn2DA92fIONfqMTqs5ZwDAoGBAI2FixywA3WKfHYwWCGU
+  5xbbRov0jmRtR5fv6pglnnV2qSn+1UAFiuRpRxB3RzxjBgzqNVDDhKUDZ/wHJJG0
+  YzRJw2UgsimJq6+7t9zuw8n+4kvXat3dRaiIlAC/uljkCnyac2B0sSPf3uLxuKWU
+  2gbApq0Qp+niFaM0eirzEx5BAoGAGb28FGVMbRJO+KRmUloqxEwNiE7AyXzZX6a4
+  cZTs6xhToAVR784STh4u8sqp8Ub6kY5omqYFOZfa6Kqk2L4iYy+xYzz50Ht8Nkwo
+  SP5VI+bHLEbWHFxXk6rzI5Nwqlp3LTAyuVdTPu1cozNwpqJPfFqA9XDC8iJOGxi2
+  NNwpL6UCgYByDi41XcgajLes6beXxYR2+WCgHjPGCMXWlS0N2ZYOf4I4/lDSeTuB
+  +p0Hzdh2p2iC34QTXnmX5PZiFDi0yU4Y7tHE3XoSnlerIwebJjLMS70C8o5a/Oog
+  3AbkVdQG14ZNVBJo113bbvHYrj68Tas6SMdN6qxleoZxMjhp3cAjZQ==
+  -----END RSA PRIVATE KEY-----
+
+fuel_project::jenkins::slave::osci_vm_centos_jenkins_key: '/home/jenkins/vm-centos-test-rpm/centos6.4-x86_64-gold-master.key'
+fuel_project::jenkins::slave::osci_vm_centos_jenkins_key_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpAIBAAKCAQEA5Kq/3aHmb22knNwC41siVG4X+hcVtIya80ovqmkmsGHQQm/8
+  ZqVRV1Qn2EpOT/q+DlAAx0l+uEfC5I5HVA0l69NMbYh0zrrkIhVWBvoMGcXRVCrj
+  SDHrWmNx5zg6hsmudyNYYiQC52OmwD6gsnCQFN9DCTDYeaDfvucwjdusOotY14h/
+  ab7AFr+DgTBSJyg2TH1oy1i4g6RRQiWvKzhHOu3btB8A8z72jk3UipAKkViCmdbT
+  TDyxwAOXbnujlNg8GTVqA0vnZxvIPjmWMecRu3WTBxKbyiXdGfhkIVV9nEgcd4yY
+  KlkiB7XlC8TbHCZY8mgqNQU1mPM1AZcle/xO4wIDAQABAoIBAQCARVRJpFcabJvp
+  rfUkymuQhw2GKcrwM+t7zEK+yit8x/HGQwGIJvZhEYEkcFJLxTE14CT/pbei8gZe
+  pX1XpeR+zFHUI7a6fNYaVHOkiEGfd3s8Rq6mQfJvCtfLR5x1Hc9zX21l6COE3z6c
+  GsWUM1ZvjuoQzsiwOdEpSpDPEsojMBZNahpn/T+RCqvj8eTurNwKmVpih8fN8vZc
+  uKoawS9Gx/9oFgafmuOrQvIzDuVZt5R/tOsVifpUGvlTlu6WGv56HIz3KMvIUc+N
+  UCxK/zjjpFvwjg8j+pKT0LWkMZsDAooeg6P/oF0By4JBSteQ5ZNS0UrpUlsr/rYu
+  7DjukXPBAoGBAPciEccT7r1CyxXtyiAmCiX4Jss2G7NowqGM2RQfwALDbpOHc0/C
+  TTO/Meb372+RyS8w3mRHCDPlZ3JUxy9i+2E8cojAklEI6ra49g8iO9dBMvkYUMyV
+  KbeZ7lsTME/hBwe93IWyOMia4zhVbRD+uoQ2m1EneWTYQaD7OIs+NbuhAoGBAOzf
+  EWbsjCBy4bJWFj2y+WcennVVqQWYJmg+Z2N5FKIVqi0JfOnJS7T26IbsZoNN2erm
+  ROiWGgKgefGthlcYDUZ0e3fs6kUPoATm3AZG0P4OWD8xCvhlXM9r3Sb8MtGZijtb
+  zN6lFJHQiXlH9NwW7+unn2DA92fIONfqMTqs5ZwDAoGBAI2FixywA3WKfHYwWCGU
+  5xbbRov0jmRtR5fv6pglnnV2qSn+1UAFiuRpRxB3RzxjBgzqNVDDhKUDZ/wHJJG0
+  YzRJw2UgsimJq6+7t9zuw8n+4kvXat3dRaiIlAC/uljkCnyac2B0sSPf3uLxuKWU
+  2gbApq0Qp+niFaM0eirzEx5BAoGAGb28FGVMbRJO+KRmUloqxEwNiE7AyXzZX6a4
+  cZTs6xhToAVR784STh4u8sqp8Ub6kY5omqYFOZfa6Kqk2L4iYy+xYzz50Ht8Nkwo
+  SP5VI+bHLEbWHFxXk6rzI5Nwqlp3LTAyuVdTPu1cozNwpqJPfFqA9XDC8iJOGxi2
+  NNwpL6UCgYByDi41XcgajLes6beXxYR2+WCgHjPGCMXWlS0N2ZYOf4I4/lDSeTuB
+  +p0Hzdh2p2iC34QTXnmX5PZiFDi0yU4Y7tHE3XoSnlerIwebJjLMS70C8o5a/Oog
+  3AbkVdQG14ZNVBJo113bbvHYrj68Tas6SMdN6qxleoZxMjhp3cAjZQ==
+  -----END RSA PRIVATE KEY-----
+
 mysql::client::package_name: 'percona-server-client-5.6'
 mysql::server::package_name: 'percona-server-server-5.6'
 mysql::server::root_password: 'WpUrXaC92cZQ4XHMLpfraTRsl16ZtoTu'

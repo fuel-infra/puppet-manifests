@@ -1,31 +1,57 @@
 # Class: fuel_project::jenkins::slave
 #
 class fuel_project::jenkins::slave (
-  $external_host           = false,
-  $build_fuel_iso          = false,
-  $run_tests               = false,
-  $simple_syntax_check     = false,
-  $verify_fuel_web         = false,
-  $verify_fuel_astute      = false,
-  $verify_fuel_docs        = false,
-  $fuel_web_selenium       = false,
-  $build_fuel_plugins      = false,
-  $install_docker          = false,
-  $verify_fuel_stats       = false,
-  $ldap                    = false,
-  $fuelweb_iso             = false,
-  $check_tasks_graph       = false,
-  $ldap_uri                = '',
-  $ldap_base               = '',
-  $nailgun_db              = ['nailgun'],
-  $ostf_db                 = ['ostf'],
-  $tls_cacertdir           = '',
-  $pam_password            = '',
-  $pam_filter              = '',
-  $sudoers_base            = '',
-  $bind_policy             = '',
-  $ldap_ignore_users       = '',
-  $seed_cleanup_dirs       = [
+  $external_host                        = false,
+  $build_fuel_iso                       = false,
+  $run_tests                            = false,
+  $simple_syntax_check                  = false,
+  $verify_fuel_web                      = false,
+  $verify_fuel_astute                   = false,
+  $verify_fuel_docs                     = false,
+  $fuel_web_selenium                    = false,
+  $build_fuel_plugins                   = false,
+  $install_docker                       = false,
+  $verify_fuel_stats                    = false,
+  $ldap                                 = false,
+  $fuelweb_iso                          = false,
+  $check_tasks_graph                    = false,
+  $osci_test                            = false,
+  $osci_rsync_source_server             = '',
+  $osci_ubuntu_image_name               = '',
+  $osci_centos_image_name               = '',
+  $osci_ubuntu_job_dir                  = '',
+  $osci_centos_job_dir                  = '',
+  $osci_ubuntu_remote_dir               = '',
+  $osci_centos_remote_dir               = '',
+  $osci_obs_jenkins_key                 = '',
+  $osci_obs_jenkins_key_contents        = '',
+  $osci_vm_ubuntu_jenkins_key           = '',
+  $osci_vm_ubuntu_jenkins_key_contents  = '',
+  $osci_vm_centos_jenkins_key           = '',
+  $osci_vm_centos_jenkins_key_contents  = '',
+  $osci_dhcp_start                      = '',
+  $osci_dhcp_end                        = '',
+  $osci_ip_address                      = '',
+  $osci_ip_netmask                      = '',
+  $osci_libvirt_dev                     = '',
+  $osc_apiurl                           = '',
+  $osc_url_primary                      = '',
+  $osc_user_primary                     = '',
+  $osc_pass_primary                     = '',
+  $osc_url_secondary                    = '',
+  $osc_user_secondary                   = '',
+  $osc_pass_secondary                   = '',
+  $ldap_uri                             = '',
+  $ldap_base                            = '',
+  $nailgun_db                           = ['nailgun'],
+  $ostf_db                              = ['ostf'],
+  $tls_cacertdir                        = '',
+  $pam_password                         = '',
+  $pam_filter                           = '',
+  $sudoers_base                         = '',
+  $bind_policy                          = '',
+  $ldap_ignore_users                    = '',
+  $seed_cleanup_dirs                    = [
     {
       'dir'     => '/var/www/fuelweb-iso', # directory to poll
       'ttl'     => 10, # time to live in days
@@ -309,6 +335,106 @@ class fuel_project::jenkins::slave (
 
     Package[$build_fuel_iso_packages]->
       Exec['install-grunt-cli']
+  }
+
+  # osci_tests - for deploying osci jenkins slaves
+  if ($osci_test == true) {
+
+    file { 'jenkins-sudo-for-osci-vm' :
+      path    => '/etc/sudoers.d/jenkins_sudo',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('fuel_project/jenkins/slave/build_iso.sudoers.d.erb'),
+      require => User['jenkins'],
+    }
+
+    file { 'oscrc' :
+      path    => '/home/jenkins/.oscrc',
+      owner   => 'jenkins',
+      group   => 'jenkins',
+      mode    => '0644',
+      content => template('fuel_project/jenkins/slave/oscrc.erb'),
+      require => [ Package[$osci_test_packages], User['jenkins'] ],
+    }
+
+    # osci kvm settings
+    if (!defined(Class['::libvirt'])) {
+      class { '::libvirt' :
+        mdns_adv           => false,
+        unix_sock_rw_perms => '0777',
+        qemu               => true,
+        defaultnetwork     => true,
+      }
+    }
+
+    $dhcp = {
+      'start' => $osci_dhcp_start,
+      'end'   => $osci_dhcp_end,
+    }
+
+    $ip = {
+      'address' => $osci_ip_address,
+      'netmask' => $osci_ip_netmask,
+      'dhcp'    => $dhcp,
+    }
+
+    libvirt::network { 'osci_testjob_network' :
+      forward_dev => $osci_libvirt_dev,
+      ip          => [ $ip ],
+    }
+
+    # osci needed packages
+    $osci_test_packages = [
+      'osc',
+    ]
+
+    ensure_packages($osci_test_packages)
+
+    # osci needed directories
+    file { [$osci_ubuntu_job_dir, $osci_centos_job_dir] :
+      ensure  => 'directory',
+      owner   => 'jenkins',
+      group   => 'jenkins',
+      require => User['jenkins'],
+    }
+
+    file { '/home/jenkins/.ssh' :
+      ensure  => 'directory',
+      owner   => 'jenkins',
+      group   => 'jenkins',
+      mode    => '0750',
+      require => User['jenkins'],
+    }
+
+    # rsync of vm images from existing osci node
+    class { 'rsync': package_ensure => 'present' }
+
+    rsync::get { $osci_ubuntu_image_name :
+      source  => "rsync://${osci_rsync_source_server}/${osci_ubuntu_remote_dir}/${osci_ubuntu_image_name}",
+      path    => $osci_ubuntu_job_dir,
+      timeout => 7200,
+      require => [ File[$osci_ubuntu_job_dir], User['jenkins'] ],
+    }
+
+    rsync::get { $osci_centos_image_name :
+      source  => "rsync://${osci_rsync_source_server}/${osci_centos_remote_dir}/${osci_centos_image_name}",
+      path    => $osci_centos_job_dir,
+      timeout => 7200,
+      require => [ File[$osci_centos_job_dir], User['jenkins'] ],
+    }
+
+    # osci needed ssh keys
+    file { [$osci_obs_jenkins_key, $osci_vm_ubuntu_jenkins_key, $osci_vm_centos_jenkins_key]:
+      owner   => 'jenkins',
+      group   => 'nogroup',
+      mode    => '0600',
+      content => [$osci_obs_jenkins_key_contents, $osci_vm_ubuntu_jenkins_key_contents, $osci_vm_centos_jenkins_key_contents],
+      require => [
+        File[$osci_ubuntu_job_dir, $osci_centos_job_dir, '/home/jenkins/.ssh'],
+        User['jenkins']
+      ],
+    }
   }
 
   # *** Custom tests ***
