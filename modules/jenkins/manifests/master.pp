@@ -217,7 +217,7 @@ class jenkins::master (
     }
 
     cron { 'labeldump-cronjob' :
-      command => '/bin/test -f /tmp/jenkins.is.fine && /usr/local/bin/labeldump.py 2>&1 | logger -t labeldump',
+      command => '/usr/bin/test -f /tmp/jenkins.is.fine && /usr/local/bin/labeldump.py 2>&1 | logger -t labeldump',
       user    => 'root',
       hour    => '*',
       minute  => '*/30',
