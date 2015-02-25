@@ -502,6 +502,10 @@ node 'devops-jenkins-test.vm.mirantis.net' {
   class { '::fuel_project::jenkins::master' :}
 }
 
+node 'slave01-tst.vm.mirantis.net' {
+  class { '::fuel_project::jenkins::slave' :}
+}
+
 # Default
 
 node default {
