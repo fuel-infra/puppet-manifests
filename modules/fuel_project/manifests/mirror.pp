@@ -4,6 +4,10 @@ class fuel_project::mirror (
   $apply_firewall_rules = false,
   $firewall_allow_sources = {},
   $dir = '/var/www/mirror',
+  $dir_owner = 'www-data',
+  $dir_group = 'www-data',
+  $rsync_writable_share = true,
+  $lock_file = '/var/run/rsync_mirror_sync.lock',
   $firewall_allow_sources = {},
   $port = 80,
   $service_fqdn = "mirror.${::fqdn}",
@@ -26,12 +30,24 @@ class fuel_project::mirror (
     }
   }
 
+  ensure_resource('user', $dir_owner, {
+    ensure     => 'present',
+  })
+
+  ensure_resource('group', $dir_group, {
+    ensure     => 'present',
+  })
+
   file { $dir :
     ensure  => 'directory',
-    owner   => 'www-data',
-    group   => 'www-data',
+    owner   => $dir_owner,
+    group   => $dir_group,
     mode    => '0755',
-    require => Class['nginx'],
+    require => [
+        Class['nginx'],
+        User[$dir_owner],
+        Group[$dir_group],
+      ],
   }
 
   if (!defined(Class['::rsync::server'])) {
@@ -56,21 +72,27 @@ class fuel_project::mirror (
     require         => File[$dir],
   }
 
-  ::rsync::server::module{ 'mirror-sync':
-    comment         => 'Fuel mirror sync',
-    uid             => 'www-data',
-    gid             => 'www-data',
-    hosts_allow     => $sync_hosts_allow,
-    hosts_deny      => ['*'],
-    incoming_chmod  => '0755',
-    outgoing_chmod  => '0644',
-    list            => 'yes',
-    lock_file       => '/var/run/rsync_mirror_sync.lock',
-    max_connections => 100,
-    path            => $dir,
-    read_only       => 'no',
-    write_only      => 'no',
-    require         => File[$dir],
+  if ($rsync_writable_share) {
+    ::rsync::server::module{ 'mirror-sync':
+      comment         => 'Fuel mirror sync',
+      uid             => $dir_owner,
+      gid             => $dir_group,
+      hosts_allow     => $sync_hosts_allow,
+      hosts_deny      => ['*'],
+      incoming_chmod  => '0755',
+      outgoing_chmod  => '0644',
+      list            => 'yes',
+      lock_file       => $lock_file,
+      max_connections => 100,
+      path            => $dir,
+      read_only       => 'no',
+      write_only      => 'no',
+      require         => [
+          File[$dir],
+          User[$dir_owner],
+          Group[$dir_group],
+        ],
+    }
   }
 
   if (!defined(Class['::fuel_project::nginx'])) {
