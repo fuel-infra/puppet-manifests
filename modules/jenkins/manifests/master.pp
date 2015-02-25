@@ -32,6 +32,7 @@ class jenkins::master (
   # Jenkins auth
   $security_model = 'unsecured',
   $install_groovy = 'yes',
+  $ldap_overwrite_permissions = '',
   $ldap_access_group = '',
   $ldap_uri = 'ldap://ldap',
   $ldap_root_dn = 'dc=company,dc=net',
@@ -264,6 +265,7 @@ class jenkins::master (
 
   if $security_model == 'ldap' {
     $security_opt_params = join([
+      "'${ldap_overwrite_permissions}'",
       "'${ldap_access_group}'",
       "'${ldap_uri}'",
       "'${ldap_root_dn}'",
