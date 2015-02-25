@@ -133,6 +133,11 @@ node /mirror(\d+)\.fuel-infra\.org/ {
   include nginx::share
 }
 
+node /mirror-pkgs\.vm\.mirantis\.net/ {
+  class { '::fuel_project::jenkins::slave' : }
+  class { '::fuel_project::mirror' : }
+}
+
 node /build(\d+)\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::slave' :
     external_host  => true,

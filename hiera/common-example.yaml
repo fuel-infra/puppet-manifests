@@ -465,6 +465,10 @@ fuel_project::mirror::sync_hosts_allow:
 fuel_project::mirror::service_fqdn: 'mirror.test.local'
 fuel_project::mirror::service_aliases:
   - repo.test.local
+fuel_project::mirror::rsync_writable_share: false
+fuel_project::mirror::dir_owner: 'jenkins'
+fuel_project::mirror::dir_group: 'jenkins'
+
 fuel_project::seed::service_fqdn: 'seed.test.local'
 
 fuel_project::plugins::service_fqdn: 'plugins.test.local'
@@ -478,6 +482,7 @@ fuel_project::updates::sync_hosts_allow:
   - 192.168.1.1/24
 
 fuel_project::jenkins::slave::docker_package: 'lxc-docker-1.3.2'
+fuel_project::jenkins::slave::jenkins_swarm_slave: true
 
 jenkins::slave::authorized_keys:
   'jenkins@mytestserver':
