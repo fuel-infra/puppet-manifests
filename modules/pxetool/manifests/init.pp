@@ -54,10 +54,11 @@ class pxetool (
   }
 
   file { '/usr/share/pxetool/pxetool' :
-    ensure => 'directory',
-    owner  => 'www-data',
-    group  => 'www-data',
-    mode   => '0755',
+    ensure  => 'directory',
+    owner   => 'www-data',
+    group   => 'www-data',
+    mode    => '0755',
+    require => Package[$package],
   }
 
   exec { 'pxetool-syncdb' :
