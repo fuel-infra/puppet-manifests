@@ -1,6 +1,8 @@
 #!/bin/bash
 
+<%- if ! @seed_cleanup_dirs.nil? and @seed_cleanup_dirs.is_a?(Array) -%>
 <%- @seed_cleanup_dirs.each { |dir| -%>
 /usr/bin/find <%= dir['dir'] %> -type f -mtime +<%= dir['ttl'] %> -name '<%= dir['pattern'] %>' -delete 2>&1 | /usr/bin/logger -t seed-downloads-cleanup
 <%- } -%>
+<%- end -%>
 /usr/bin/seedcleaner.py 2>&1 | /usr/bin/logger -t seed-downloads-cleanup
