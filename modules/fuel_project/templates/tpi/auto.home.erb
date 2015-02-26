@@ -1,2 +1,4 @@
-jenkins -fstype=bind :/usr/local/jenkins
+<% @local_home_basenames.each do |home| -%>
+<%= home %> -fstype=bind :<%= local_home_base %>/<%= home %>
+<% end -%>
 * -fstype=nfs4,rw,nosuid,soft <% @nfs_servers.each do |server| -%> <%= server %>:/home/& <% end -%>
