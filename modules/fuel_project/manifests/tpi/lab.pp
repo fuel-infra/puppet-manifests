@@ -68,4 +68,12 @@ class fuel_project::tpi::lab (
     require => File['/etc/init.d/disable-hugepage-defrag'],
   }
 
+  file { '/etc/sudoers.d/tpi' :
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
+    content => template('fuel_project/tpi/tpi.sudoers.d.erb'),
+  }
+
 }
