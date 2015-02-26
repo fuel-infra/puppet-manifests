@@ -288,7 +288,10 @@ class fuel_project::jenkins::slave (
       owner   => 'jenkins',
       group   => 'jenkins',
       mode    => '0755',
-      require => [ User['jenkins'],  File['/var/www'] ],
+      require => [
+        User['jenkins'],
+        File['/var/www'],
+      ],
     })
 
     if (!defined(Package['multistrap'])) {
@@ -339,6 +342,12 @@ class fuel_project::jenkins::slave (
 
   # osci_tests - for deploying osci jenkins slaves
   if ($osci_test == true) {
+    # osci needed packages
+    $osci_test_packages = [
+      'osc',
+    ]
+
+    ensure_packages($osci_test_packages)
 
     file { 'jenkins-sudo-for-osci-vm' :
       path    => '/etc/sudoers.d/jenkins_sudo',
@@ -355,7 +364,10 @@ class fuel_project::jenkins::slave (
       group   => 'jenkins',
       mode    => '0644',
       content => template('fuel_project/jenkins/slave/oscrc.erb'),
-      require => [ Package[$osci_test_packages], User['jenkins'] ],
+      require => [
+        Package[$osci_test_packages],
+        User['jenkins'],
+      ],
     }
 
     # osci kvm settings
@@ -384,13 +396,6 @@ class fuel_project::jenkins::slave (
       ip          => [ $ip ],
     }
 
-    # osci needed packages
-    $osci_test_packages = [
-      'osc',
-    ]
-
-    ensure_packages($osci_test_packages)
-
     # osci needed directories
     file { [$osci_ubuntu_job_dir, $osci_centos_job_dir] :
       ensure  => 'directory',
@@ -414,14 +419,20 @@ class fuel_project::jenkins::slave (
       source  => "rsync://${osci_rsync_source_server}/${osci_ubuntu_remote_dir}/${osci_ubuntu_image_name}",
       path    => $osci_ubuntu_job_dir,
       timeout => 7200,
-      require => [ File[$osci_ubuntu_job_dir], User['jenkins'] ],
+      require => [
+        File[$osci_ubuntu_job_dir],
+        User['jenkins'],
+      ],
     }
 
     rsync::get { $osci_centos_image_name :
       source  => "rsync://${osci_rsync_source_server}/${osci_centos_remote_dir}/${osci_centos_image_name}",
       path    => $osci_centos_job_dir,
       timeout => 7200,
-      require => [ File[$osci_centos_job_dir], User['jenkins'] ],
+      require => [
+        File[$osci_centos_job_dir],
+        User['jenkins'],
+      ],
     }
 
     # osci needed ssh keys
@@ -432,7 +443,7 @@ class fuel_project::jenkins::slave (
       content => [$osci_obs_jenkins_key_contents, $osci_vm_ubuntu_jenkins_key_contents, $osci_vm_centos_jenkins_key_contents],
       require => [
         File[$osci_ubuntu_job_dir, $osci_centos_job_dir, '/home/jenkins/.ssh'],
-        User['jenkins']
+        User['jenkins'],
       ],
     }
   }
@@ -584,7 +595,10 @@ class fuel_project::jenkins::slave (
       owner   => 'jenkins',
       group   => 'jenkins',
       mode    => '0755',
-      require => [ User['jenkins'],  File['/var/www'] ],
+      require => [
+        User['jenkins'],
+        File['/var/www'],
+      ],
     })
   }
 
