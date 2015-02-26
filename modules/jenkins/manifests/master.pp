@@ -28,7 +28,8 @@ class jenkins::master (
   $nginx_log_format = undef,
   $install_zabbix_item = false,
   $install_label_dumper = false,
-  $label_dumper_destpath = '/var/www/labels',
+  $label_dumper_nginx_location = '/labels',
+  $label_dumper_destpath = "${www_root}${label_dumper_nginx_location}",
   # Jenkins auth
   $security_model = 'unsecured',
   $install_groovy = 'yes',
@@ -236,11 +237,9 @@ class jenkins::master (
       ensure   => 'present',
       ssl      => true,
       ssl_only => true,
+      location => $label_dumper_nginx_location,
       vhost    => 'jenkins',
-      # FIXME: change to basename function when next puppetlabs-stdlib is released
-      location => inline_template('<%= File.basename(label_dumper_destpath) %>'),
-      # /FIXME
-      www_root => dirname($label_dumper_destpath),
+      www_root => $www_root,
     }
   }
 
