@@ -28,26 +28,29 @@ class Actions {
     def instance = Jenkins.getInstance()
     def strategy
     def realm
+    List users = item_perms.split(' ')
 
     if (security_model == 'ldap') {
       if (!(instance.getAuthorizationStrategy() instanceof hudson.security.GlobalMatrixAuthorizationStrategy)) {
         overwrite_permissions = 'true'
       }
       strategy = new hudson.security.GlobalMatrixAuthorizationStrategy()
-      for (Permission p : Item.PERMISSIONS.getPermissions()) {
-        strategy.add(p,item_perms)
-      }
-      for (Permission p : Computer.PERMISSIONS.getPermissions()) {
-        strategy.add(p,item_perms)
-      }
-      for (Permission p : Hudson.PERMISSIONS.getPermissions()) {
-        strategy.add(p,item_perms)
-      }
-      for (Permission p : Run.PERMISSIONS.getPermissions()) {
-        strategy.add(p,item_perms)
-      }
-      for (Permission p : View.PERMISSIONS.getPermissions()) {
-        strategy.add(p,item_perms)
+      for (String user : users) {
+        for (Permission p : Item.PERMISSIONS.getPermissions()) {
+          strategy.add(p,user)
+        }
+        for (Permission p : Computer.PERMISSIONS.getPermissions()) {
+          strategy.add(p,user)
+        }
+        for (Permission p : Hudson.PERMISSIONS.getPermissions()) {
+          strategy.add(p,user)
+        }
+        for (Permission p : Run.PERMISSIONS.getPermissions()) {
+          strategy.add(p,user)
+        }
+        for (Permission p : View.PERMISSIONS.getPermissions()) {
+          strategy.add(p,user)
+        }
       }
       realm = new hudson.security.LDAPSecurityRealm(server, rootDN, userSearchBase, userSearch, groupSearchBase, managerDN, managerPassword, inhibitInferRootDN.toBoolean())
     } else if (security_model == 'unsecured') {
