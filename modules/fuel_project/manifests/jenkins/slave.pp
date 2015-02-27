@@ -189,6 +189,7 @@ class fuel_project::jenkins::slave (
       'libffi-dev',
       'libvirt-dev',
       'mock',
+      'pigz',
       'python-dev',
       'python-psycopg2',
       'python-seed-cleaner',
