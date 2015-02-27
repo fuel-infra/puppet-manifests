@@ -20,7 +20,7 @@ import paramiko
 import yaml
 from helpers.helpers import wait, tcp_ping, TimeoutError, merge_dict
 import re
-import time
+from time import sleep
 import os
 import sys
 
@@ -153,33 +153,51 @@ def ssh_run(ssh, command):
     return buf, ssh_stdout.channel.recv_exit_status()
 
 
+def create_nova_server(hostname):
+    server = nova_client.servers.create(
+        hostname,
+        flavor=flavor,
+        image=image,
+        key_name=keypair)
+    while getattr(server, 'OS-EXT-STS:vm_state') != 'active':
+        print ("Create server [{0}]: current status {1}".format(
+            hostname, getattr(server, 'OS-EXT-STS:vm_state')))
+        try:
+            server = nova_client.servers.find(name=hostname)
+        except exceptions.NotFound:
+            print "{1} not found".format(hostname)
+            pass
+        sleep(1)
+    server.add_floating_ip(hosts[server.name]['ip'])
+    return server
+
+
+def check_server(hostname, tries=10):
+    ip = hosts[hostname]['ip']
+    while tries:
+        try:
+            wait(lambda: tcp_ping(ip, '22'), 5, test_config['ssh_timeout'])
+            break
+        except TimeoutError:
+            nova_client.servers.find(name=hostname).delete()
+            sleep(10)
+            create_nova_server(hostname)
+        tries -= 1
+
+
 def create_server(hostnames=["slave-01"]):
     servers = []
     for hostname in hostnames:
-        server = nova_client.servers.create(
-            hostname,
-            flavor=flavor,
-            image=image,
-            key_name=keypair)
-        while getattr(server, 'OS-EXT-STS:vm_state') != 'active':
-            print ("Create server [{0}]: current status {1}".format(
-                hostname, getattr(server, 'OS-EXT-STS:vm_state')))
-            try:
-                server = nova_client.servers.find(name=hostname)
-            except exceptions.NotFound:
-                print "{1} not found".format(hostname)
-                pass
-            time.sleep(1)
-        server.add_floating_ip(hosts[server.name]['ip'])
+        server = create_nova_server(hostname)
         servers.append(server)
 
     for i in range(len(servers)):
-        ip = hosts[hostnames[i]]['ip']
+        hostname = hostnames[i]
+        ip = hosts[hostname]['ip']
         print ('Wating for ssh on {0} for {1} seconds'.format(
             ip, test_config['ssh_timeout']))
-        wait(lambda: tcp_ping(ip, '22'), 5, test_config['ssh_timeout'])
+        check_server(hostname)
         ssh = connect(ip)
-        hostname = hostnames[i]
         ssh_run(ssh, "echo 127.0.0.1 {0}.{1} {0} | sudo tee -a /etc/hosts".
                 format(hostname, test_config['domain']))
         ssh_run(ssh, "echo -e '{hosts_file}' | sudo tee -a /etc/hosts".
