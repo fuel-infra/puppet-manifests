@@ -51,6 +51,7 @@ class fuel_project::jenkins::slave (
   $sudoers_base                         = '',
   $bind_policy                          = '',
   $ldap_ignore_users                    = '',
+  $ldap_sudo_group                      = undef,
   $seed_cleanup_dirs                    = [
     {
       'dir'     => '/var/www/fuelweb-iso', # directory to poll
@@ -666,4 +667,13 @@ class fuel_project::jenkins::slave (
     }
   }
 
+  if($ldap_sudo_group) {
+    file { '/etc/sudoers.d/sandbox':
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0600',
+      content => template('fuel_project/jenkins/slave/sandbox.sudoers.d.erb'),
+    }
+  }
 }
