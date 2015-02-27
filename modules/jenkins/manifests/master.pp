@@ -40,6 +40,8 @@ class jenkins::master (
   $ldap_manager_passwd = '',
   $ldap_manager = '',
   $jenkins_cli_file = '/var/cache/jenkins/war/WEB-INF/jenkins-cli.jar',
+  $jenkins_cli_tries = '6',
+  $jenkins_cli_try_sleep = '30',
   $ldap_user_search_base  = '',
   $ldap_group_search_base = '',
   $ldap_user_search = 'uid={0}',
@@ -278,12 +280,12 @@ class jenkins::master (
   }
 
   # Execute groovy script to setup auth
-  exec { 'jenkins_cli.groovy':
-    require => [
+  exec { 'jenkins_auth_config':
+    require   => [
       File["${jenkins_libdir}/jenkins_cli.groovy"],
       Package['groovy'],
     ],
-    command => join([
+    command   => join([
         '/usr/bin/java',
         "-jar ${jenkins_cli_file}",
         "-s ${jenkins_api_url}",
@@ -292,5 +294,7 @@ class jenkins::master (
         $security_model,
         $security_opt_params,
     ], ' '),
+    tries     => $jenkins_cli_tries,
+    try_sleep => $jenkins_cli_try_sleep,
   }
 }
