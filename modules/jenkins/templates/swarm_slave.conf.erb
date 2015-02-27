@@ -38,5 +38,8 @@ else
   JENKINS_LABELS="<%= @labels.downcase %>"
 fi
 
+JENKINS_MASTER_URL="<%= @master %>"
+
 # Arguments to pass to jenkins slave on startup
-JENKINS_ARGS="-name $JENKINS_SLAVE_NAME -master <%= @master %> -username <%= @user %> -password <%= @password %> -mode exclusive -fsroot $JENKINS_HOME"
+JENKINS_ARGS="-name $JENKINS_SLAVE_NAME -master $JENKINS_MASTER_URL -username <%= @user %> -password <%= @password %> -mode exclusive -fsroot $JENKINS_HOME"
+
