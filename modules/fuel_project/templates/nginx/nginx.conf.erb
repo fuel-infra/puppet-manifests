@@ -50,6 +50,7 @@ http {
 <% if @gzip == 'on' -%>
   gzip         on;
   gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+  gzip_types   application/json application/x-javascript application/yaml text/css;
 
 <% end -%>
 <% if @proxy_cache_path -%>
