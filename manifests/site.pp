@@ -293,6 +293,10 @@ node 'mongo-secondary-2.vm.mirantis.net' {
   }
 }
 
+node /ns([0-9]{2})-(bud|kha|mnv|msk|poz|srt)\.devops\.mirantis\.net/ {
+  class { '::fuel_project::roles::ns' :}
+}
+
 node 'mongo-primary.vm.mirantis.net' {
   class {'::fuel_project::mongo_common':
     primary => true,
