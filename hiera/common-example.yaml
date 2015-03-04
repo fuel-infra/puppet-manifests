@@ -996,3 +996,34 @@ fuel_project::devops_tools::lpupdatebug::cachedir: '/var/tmp/launchpadlib/'
 fuel_project::devops_tools::lpupdatebug::logfile: '/var/log/lpupdatebug.log'
 fuel_project::devops_tools::lpupdatebug::host: 'localhost'
 fuel_project::devops_tools::lpupdatebug::port: '29418'
+fuel_project::devops_tools::lpupdatebug::env: 'production'
+fuel_project::devops_tools::lpupdatebug::username: 'lpupdatebug'
+fuel_project::devops_tools::lpupdatebug::sshprivkey: '/etc/lpupdatebug/lpupdatebug.key'
+fuel_project::devops_tools::lpupdatebug::sshprivkey_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEogIBAAKCAQEAsmKmRE5hT2VoRl2u74B1HUq2PNxgMO+WTGs+X5SSQ6+WLzcI
+  qxhZCCzrTogBoZvC6UxvHV2nwklhE0psLxsC8Cwa20NDz5ET+9a7IxC1fxHkIHMN
+  Y4TrSEfzikwgdjumWEvCewEbtD5dPXQuufd4HSEZNirxaqLoiypvvbY86ENYs4fM
+  W7anqFUelr6oFE12n7ctSm1BkwFVEw6fPXs2DZf/51o41qAgZn7D7Eytke+7B+if
+  VyGN31CZECr/2rW+oMwxrCEpmzMaQfINVaBbcpl/9XaVBZ4iyx5rXRggd2f/xQEZ
+  5BX+9DJl+AdPFY6gnN//0gAmiTFpj7+L80v3TwIDAQABAoIBAF9LN8sRnAZQA+5j
+  KYqkMuwc91F34KMDumTEfaONuL0T1cUPP0A3V4h4hpODMGvmy67ZuBoV6AJwNL2b
+  akOXyHAI/6fWPSlrNSO5yGqpCGwDYLy8+ZAKd647Uay1kjnXD7vnbNNM+kHFdwXX
+  RQbvXmkhP1iihCkVMej2GI9eBReFzUCHT1LKiot67JG+L3KEFxPVFaCDU6YnzvU3
+  oiQWTNLik7G1TXPG7WJ4rBdp+4LMY3LgeCXoHnMF10ip1Qj8AB0XnUPJ0D3rhK0Z
+  5Dwz55hs92qvK0fs1PxASVxBQsFBsSgLUolS6EqOfktstIb7Dt/3UujsfPmPSc/W
+  kukxieECgYEA61vfkjkQp/3riZf4lnlM8W7CT8IfOopWTm6rUOGZzn6nQn/5ZZZL
+  a4AMGUqgKKqpIA3zzTQ7P+ZVaRzfSWwPAeN56yqQo1sapGkVX3WJcLIs4tmNkmQP
+  7V0TfvfPNyeYBI1RlTTat78qjDE/+ahcbTC2IwfWNrp7CH4JQ2J6L3cCgYEAwgek
+  mfBiqIEO+8kCSIeR0QxscDfR3X1f6+p2s+Xqum0W3IW+7LgWVvjcD3dSNO54w+ab
+  3ieiz3aWhn5sj6vvQGjaVpFsk9Lh4LP5o+4ZQiUFeBFn1VETntHnQeLJbFPypxmV
+  yizFe0JggxzotPhSK7y6VJdGe/tflocZZvE4XOkCgYAEi+fLuVJ7DEqqg8cHkRxN
+  ZahXRha4WMfGCBlDHLiN5qBwhmxY7AhU8UpKisiBQJq3xc0535Jtb5Oizi36Cx5X
+  GP/X7SCSJ0Zieq0xBOI8zRRU5YL4mvo7yZqAz2SvWhJztA8pZLX86rJ1ttXXissO
+  SOybzKD0ubF6voSLSrG1jQKBgHskEKImPucEaXcAvnM7nx6WjOe3dXjljhAS0N0h
+  qRRCEcVJGL/xoTP3Yupp5wFy67Ag1oFqlFiowaV/7PRNwV0WbqOMTeWPbA2JC4Gv
+  pdYl2s+19Dkc6J/eRa+59+3JZXIJudgDDB5LJSdxHHtmMfhSIct36qLbCXJmMYf0
+  xbmpAoGAKuvUVJw7PiZZfs4IyDYhgsTbsiMHbvgMhQpUzqvgZr1NRAi8IyOMWY85
+  wX/HpI1thBdTJjwWS7voQJv7a5b5I4vPcQQbGfaw/rC3DmMWkFkuTDZEUDUuxhHb
+  sXndbjImodALprC7F7T1qoOLiv6XSzJ3D9IgVLFXUrc7LT63zjQ=
+  -----END RSA PRIVATE KEY-----

@@ -12,10 +12,24 @@ class fuel_project::devops_tools::lpupdatebug (
   $logfile = '/var/log/lpupdatebug.log',
   $host = 'localhost',
   $port = '29418',
+  $env = 'production',
+  $username = 'lpupdatebug',
+  $sshprivkey = '/etc/lpupdatebug/lpupdatebug.key',
+  $sshprivkey_contents = undef,
   $package_name = 'python-lpupdatebug',
 ) {
 
   ensure_packages([$package_name])
+
+  if ($sshprivkey_contents)
+  {
+    file { $sshprivkey :
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0400',
+      content => $sshprivkey_contents,
+    }
+  }
 
   file { '/etc/lpupdatebug/credentials.conf':
     ensure  => 'present',

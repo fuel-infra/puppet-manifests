@@ -17,3 +17,12 @@ host = <%= @host %>
 <% if @port != nil -%>
 port = <%= @port %>
 <% end -%>
+<% if @sshprivkey != nil -%>
+sshkey = <%= @sshprivkey %>
+<% end -%>
+<% if @username != nil -%>
+username = <%= @username %>
+<% end -%>
+<% if @env != nil -%>
+env = <%= @env %>
+<% end -%>
