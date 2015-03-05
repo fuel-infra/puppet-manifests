@@ -57,7 +57,11 @@ class fuel_stats::analytic (
   }
 
   if (!defined(Class['::nginx'])) {
-    class { '::nginx' : }
+    class { '::nginx' :
+      http_cfg_append => {
+        'limit_conn_zone' => '$binary_remote_addr zone=addr:10m'
+      }
+    }
   }
 
   if $development {
@@ -65,6 +69,8 @@ class fuel_stats::analytic (
   } else {
     $www_root = '/usr/share/fuel-stats-static/static'
   }
+
+  $limit_conn = { 'limit_conn' => 'addr 1' }
 
   if $ssl {
     ::nginx::resource::vhost { 'analytics' :
@@ -76,7 +82,7 @@ class fuel_stats::analytic (
       ssl_key             => $ssl_key_file,
       server_name         => [$::fqdn],
       www_root            => $www_root,
-      location_cfg_append => $firewall_rules,
+      location_cfg_append => merge( $firewall_rules, $limit_conn),
     }
     ::nginx::resource::vhost { 'analytics-redirect' :
       ensure              => 'present',
@@ -84,7 +90,8 @@ class fuel_stats::analytic (
       www_root            => $www_root,
       server_name         => [$::fqdn],
       location_cfg_append => {
-        'rewrite' => "^ https://\$server_name:${https_port}\$request_uri? permanent"
+        'rewrite'    => "^ https://\$server_name:${https_port}\$request_uri? permanent",
+        'limit_conn' => 'addr 1',
       },
     }
   } else {
@@ -93,7 +100,7 @@ class fuel_stats::analytic (
       listen_port         => $http_port,
       server_name         => [$::fqdn],
       www_root            => $www_root,
-      location_cfg_append => $firewall_rules,
+      location_cfg_append => merge( $firewall_rules, $limit_conn),
     }
   }
 
@@ -104,7 +111,7 @@ class fuel_stats::analytic (
     ssl                 => $ssl,
     ssl_only            => $ssl,
     uwsgi               => '127.0.0.1:7935',
-    location_cfg_append => $firewall_rules,
+    location_cfg_append => merge( $firewall_rules, $limit_conn),
   }
 
   ::nginx::resource::location { 'analytics-elastic' :
@@ -114,7 +121,7 @@ class fuel_stats::analytic (
     ssl                 => $ssl,
     ssl_only            => $ssl,
     proxy               => 'http://127.0.0.1:9200',
-    location_cfg_append => $firewall_rules,
+    location_cfg_append => merge( $firewall_rules, $limit_conn),
   }
 
   class { 'elasticsearch':
