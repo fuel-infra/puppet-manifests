@@ -212,7 +212,10 @@ class fuel_project::jenkins::slave (
 
       # usefull utils
       'screen',
-      'mc',
+
+      # repo building utilities
+      'reprepro',
+      'createrepo',
     ]
 
     ensure_packages($system_tests_packages)
