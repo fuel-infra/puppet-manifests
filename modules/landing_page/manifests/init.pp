@@ -17,6 +17,7 @@ class landing_page (
   $nginx_log_format       = $::landing_page::params::nginx_log_format,
   $nginx_server_name      = $::landing_page::params::nginx_server_name,
   $package                = $::landing_page::params::package,
+  $plugins_repository     = $::landing_page::params::plugins_repository,
   $ssl                    = $::landing_page::params::ssl,
   $ssl_cert_file          = $::landing_page::params::ssl_cert_file,
   $ssl_cert_file_contents = $::landing_page::params::ssl_cert_file_contents,

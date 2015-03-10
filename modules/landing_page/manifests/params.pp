@@ -24,13 +24,14 @@ class landing_page::params {
   $package_updater        = [
     'landing-page-release-status-app-cli',
   ]
+  $plugins_repository     = 'http://127.0.0.1'
   $ssl                    = true
   $ssl_cert_file          = '/etc/ssl/release.crt'
   $ssl_cert_file_contents = undef
   $ssl_key_file           = '/etc/ssl/release.pem'
   $ssl_key_file_contents  = undef
   $timezone               = 'UTC'
-  $uwsgi_socket             = '127.0.0.1:7939'
+  $uwsgi_socket           = '127.0.0.1:7939'
 
   # Updater app
   $updater_user           = 'jenkins'
