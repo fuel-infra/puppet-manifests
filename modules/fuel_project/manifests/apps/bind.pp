@@ -79,6 +79,6 @@ class fuel_project::apps::bind (
 
   if ($firewall_rules) {
     include firewall_defaults::pre
-    ensure_resources('firewall', $firewall_rules, {})
+    ensure_resource('firewall', $firewall_rules, {})
   }
 }
