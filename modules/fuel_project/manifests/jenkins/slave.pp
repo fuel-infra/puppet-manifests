@@ -248,6 +248,7 @@ class fuel_project::jenkins::slave (
       'bc',
       'build-essential',
       'createrepo',
+      'debmirror',
       'debootstrap',
       'extlinux',
       'genisoimage',
