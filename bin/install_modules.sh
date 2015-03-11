@@ -72,7 +72,6 @@ SOURCE_MODULES["https://github.com/SergK/puppet-znc"]="0.0.9"
 SOURCE_MODULES["https://github.com/teran/puppet-nginx"]="0.1.1+uwsgi+proxy+crl+ignore_headers"
 SOURCE_MODULES["https://github.com/SergK/puppet-glusterfs"]="0.0.4"
 SOURCE_MODULES["https://github.com/iberezovskiy/puppet-mongodb"]="0.1"
-SOURCE_MODULES["https://github.com/teran/puppet-spacewalk"]="master"
 SOURCE_MODULES["https://github.com/teran/puppet-bind"]="0.5.1-hiera-debian-support"
 
 MODULE_LIST=`puppet module list`

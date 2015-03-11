@@ -479,10 +479,6 @@ node 'slave-21.test.local' {
 
 # Sandbox
 
-node /spacewalk([0-9]{2})-sndbx\.vm\.mirantis\.net/ {
-  class { '::fuel_project::common' :}
-}
-
 node 'jenkins-sandbox.vm.mirantis.net' {
   class { '::fuel_project::jenkins::master' : }
 }
