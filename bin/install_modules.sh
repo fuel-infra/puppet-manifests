@@ -60,7 +60,6 @@ MODULES["puppetlabs-postgresql"]="3.4.2"
 MODULES["puppetlabs-rsync"]="0.3.1"
 MODULES["puppetlabs-stdlib"]="4.5.1"
 MODULES["maestrodev-rvm"]="1.6.4"
-MODULES["thias-bind"]="0.5.1"
 MODULES["thias-sysctl"]="1.0.0"
 MODULES["thias-php"]="1.0.0"
 MODULES["darin-zypprepo"]="1.0.1"
@@ -74,6 +73,7 @@ SOURCE_MODULES["https://github.com/teran/puppet-nginx"]="0.1.1+uwsgi+proxy+crl+i
 SOURCE_MODULES["https://github.com/SergK/puppet-glusterfs"]="0.0.4"
 SOURCE_MODULES["https://github.com/iberezovskiy/puppet-mongodb"]="0.1"
 SOURCE_MODULES["https://github.com/teran/puppet-spacewalk"]="master"
+SOURCE_MODULES["https://github.com/teran/puppet-bind"]="0.5.1-hiera-debian-support"
 
 MODULE_LIST=`puppet module list`
 
