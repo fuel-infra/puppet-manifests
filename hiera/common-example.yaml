@@ -173,6 +173,7 @@ gerrit:
   service_url: 'https://review.test.local'
   start_timeout: 600
 
+gerrit::allow_remote_admin: true
 gerrit::commentlinks:
   -
     name: 'bugheader'
@@ -208,6 +209,7 @@ gerrit::commentlinks:
     html: '$1<a href=\"#q,$2,n,z\">$2</a>$3'
 
 gerrit::email: 'review@test.local'
+gerrit::cache_web_session_age: '1w'
 gerrit::nginx_log_format: 'proxy'
 
 hideci::ciRegex: '/^(openstack-ci-.*|mos-infra-ci|ci-build-.*|VM Check Install .*)$/'

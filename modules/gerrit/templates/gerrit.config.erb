@@ -75,8 +75,10 @@
 <% end -%>
 [cache]
 	directory = cache
+<% if @cache_web_session_age -%>
 [cache "web_sessions"]
-	maxAge = 1d
+	maxAge = <%= @cache_web_session_age %>
+<% end -%>
 [user]
 	email = <%= @email %>
 <% commentlinks.each do |commentlink| -%>
@@ -101,6 +103,10 @@
 [melody]
 	monitoring = <%= enable_melody %>
 	session = <%= melody_session %>
+<% if @allow_remote_admin -%>
+[plugins]
+	allowRemoteAdmin = <%= @allow_remote_admin %>
+<% end -%>
 [plugin "javamelody"]
         allowTopMenu = <%= @enable_javamelody_top_menu %>
 <% if @gitweb or @cgit -%>

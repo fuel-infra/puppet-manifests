@@ -1,6 +1,8 @@
 # Class: gerrit
 #
 class gerrit (
+  $allow_remote_admin = false,
+  $cache_web_session_age = '1d',
   $gerrit_listen = '127.0.0.1:8081',
   $gerrit_start_timeout = 90,
   $mysql_host = 'localhost',
