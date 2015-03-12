@@ -72,6 +72,8 @@ class fuel_project::jenkins::slave (
   $gerrit_host                          =  'review.openstack.org',
   $gerrit_port                          = 29418,
   $overwrite_known_hosts                = true,
+  $local_ssh_private_key                = undef,
+  $local_ssh_public_key                 = undef,
 ) {
   class { '::fuel_project::common' :
     external_host     => $external_host,
@@ -146,6 +148,43 @@ class fuel_project::jenkins::slave (
     uninstall_options => ['purge']
   }
   # /FIXME
+
+  file { '/home/jenkins/.ssh' :
+    ensure  => 'directory',
+    mode    => '0700',
+    owner   => 'jenkins',
+    group   => 'jenkins',
+    require => User['jenkins'],
+  }
+
+
+  if ($local_ssh_private_key) {
+    file { '/home/jenkins/.ssh/id_rsa' :
+      ensure  => 'present',
+      mode    => '0600',
+      owner   => 'jenkins',
+      group   => 'jenkins',
+      content => $local_ssh_private_key,
+      require => [
+        User['jenkins'],
+        File['/home/jenkins/.ssh'],
+      ]
+    }
+  }
+
+  if ($local_ssh_public_key) {
+    file { '/home/jenkins/.ssh/id_rsa' :
+      ensure  => 'present',
+      mode    => '0600',
+      owner   => 'jenkins',
+      group   => 'jenkins',
+      content => $local_ssh_public_key,
+      require => [
+        User['jenkins'],
+        File['/home/jenkins/.ssh'],
+      ]
+    }
+  }
 
   # Run system tests
   if ($run_tests == true) {
