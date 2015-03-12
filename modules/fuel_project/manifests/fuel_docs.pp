@@ -52,10 +52,10 @@ class fuel_project::fuel_docs(
 
   if $firewall_enable {
     include firewall_defaults::pre
-    create_resources(firewall, '1000 - allow http traffic', {
+    firewall { '1000 - allow http traffic' :
       dport   => 80,
       action  => 'accept',
       require => Class['firewall_defaults::pre'],
-    })
+    }
   }
 }
