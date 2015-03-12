@@ -35,5 +35,5 @@ export TARGETPATH=${TARGETPATH:-<%= @target_path %>}
   mv "${TMPDIR}/zones" "${TARGETPATH}/"
 
   echo "Reloading DNS configuration..."
-  rndc reload
+  /usr/sbin/rndc reload
 ) 9>/var/lock/ns-update.lock
