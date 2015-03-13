@@ -173,7 +173,7 @@ class fuel_project::jenkins::slave (
   }
 
   if ($local_ssh_public_key) {
-    file { '/home/jenkins/.ssh/id_rsa' :
+    file { '/home/jenkins/.ssh/id_rsa.pub' :
       ensure  => 'present',
       mode    => '0600',
       owner   => 'jenkins',
