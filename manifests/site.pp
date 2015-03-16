@@ -312,7 +312,7 @@ node /ns([0-9]{2})-(bud|kha|mnv|msk|poz|srt)\.devops\.mirantis\.net/ {
 }
 
 node /storage([0-9]{2})-(msk|srt)\.devops\.mirantis\.net/ {
-  class { '::fuel_project::common' :}
+  class { '::fuel_project::roles::storage' :}
 }
 
 node 'mongo-primary.vm.mirantis.net' {
