@@ -87,10 +87,8 @@ node /cacher01-(cz|kha|mnv|poz)\.vm\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :}
 }
 
-node 'ctorrent-msk.msk.mirantis.net' {
-  class { '::fuel_project::common' :
-    external_host => false,
-  }
+node /(tracker([0-9]{2})-(msk|mnv|bud|srt|kha|poz)\.devops|ctorrent-msk\.msk)\.mirantis\.net/ {
+  class { '::fuel_project::common' :}
   class { '::opentracker' :}
 }
 
