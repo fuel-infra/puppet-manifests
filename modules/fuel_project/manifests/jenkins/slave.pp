@@ -672,10 +672,19 @@ class fuel_project::jenkins::slave (
     ensure_packages($build_fuel_plugins_packages)
 
     # we also need fpm gem
-    package { 'fpm' :
-      ensure   => 'present',
-      provider => 'gem',
-      require  => Package['make'],
+    if (!defined(Class['::rvm'])) {
+      rvm::system_user { 'jenkins': }
+      rvm_system_ruby { 'ruby-2.1.2' :
+        ensure      => 'present',
+        default_use => true,
+        require     => Class['rvm'],
+      }
+    }
+    rvm_gem { 'fpm' :
+      ensure       => 'present',
+      ruby_version => 'ruby-2.1.2',
+      require      => [ Rvm_system_ruby['ruby-2.1.2'],
+                      Package['make'] ],
     }
   }
 
