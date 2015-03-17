@@ -183,7 +183,7 @@ node 'monitor-product.vm.mirantis.net' {
 }
 # /FIXME
 
-node /zbxserver0([0-1]+)-([a-z]+)\.vm\.mirantis\.net/ {
+node /zbxserver0([0-1]+)-([a-z]+)\.devops\.mirantis\.net/ {
   class { '::fuel_project::zabbix::server' :}
 }
 
