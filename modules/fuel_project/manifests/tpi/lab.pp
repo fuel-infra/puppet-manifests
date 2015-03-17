@@ -15,6 +15,8 @@ class fuel_project::tpi::lab (
     ldap          => true,
   }
 
+  class { '::tpi::vmware_lab' : }
+
   # these packages will be installed from tpi apt repo defined in hiera
   $tpi_packages = [
     'linux-image-3.13.0-39-generic',
