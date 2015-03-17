@@ -1,5 +1,5 @@
 # Used for TPI nfs clients
-class fuel_project::tpi::nfs_client (
+class tpi::nfs_client (
   $nfs_servers = [ 'tpi-s1', 'tpi-s2' ],
   $local_home_base = '/usr/local/home',
   $local_home_basenames = [],
@@ -32,7 +32,7 @@ class fuel_project::tpi::nfs_client (
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    content => template('fuel_project/tpi/home.autofs.erb'),
+    content => template('tpi/home.autofs.erb'),
     require => File['/etc/auto.master.d']
   }
 
@@ -41,7 +41,7 @@ class fuel_project::tpi::nfs_client (
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    content => template('fuel_project/tpi/auto.home.erb'),
+    content => template('tpi/auto.home.erb'),
     require => File['/etc/auto.master.d/home.autofs'],
     notify  => Service['autofs'],
   }
@@ -51,7 +51,7 @@ class fuel_project::tpi::nfs_client (
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    content => template('fuel_project/tpi/direct.autofs.erb'),
+    content => template('tpi/direct.autofs.erb'),
     require => File['/etc/auto.master.d']
   }
 
@@ -60,7 +60,7 @@ class fuel_project::tpi::nfs_client (
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    content => template('fuel_project/tpi/auto.direct.erb'),
+    content => template('tpi/auto.direct.erb'),
     require => File['/etc/auto.master.d/direct.autofs'],
     notify  => Service['autofs'],
   }

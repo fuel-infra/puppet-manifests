@@ -1,5 +1,5 @@
 #local home that should remain visible on top of autofs
-define fuel_project::tpi::localhome($local_home_base='/usr/local/home') {
+define tpi::localhome($local_home_base='/usr/local/home') {
 
   validate_string($local_home_base, $name)
   validate_absolute_path("${local_home_base}/${name}")

@@ -5,7 +5,7 @@ class fuel_project::tpi::lab (
   $local_home_basenames = [ 'jenkins' ],
 ) {
 
-  class { '::fuel_project::tpi::nfs_client' :
+  class { '::tpi::nfs_client' :
     local_home_basenames => $local_home_basenames,
   }
 
