@@ -27,9 +27,12 @@ def __main__():
         exit(0)
 
     # Ok, we need to update local repos
+    stashed = False    # if we have some local changes, lets try to save them
+    migration = False  # if found new migration files
     git = repo.git
-    git.stash()
-    migration = False
+    if repo.is_dirty():
+        git.stash()
+        stashed = True
     for diff in repo.head.commit.diff(remote_fetch.commit):
         if diff.b_blob:
             print "Changed file {0}".format(diff.b_blob.abspath)
@@ -41,7 +44,8 @@ def __main__():
     repo.remotes.origin.pull()
 
     # TODO: Add checking that git stash apply worked ok
-    git.stash("apply")
+    if stashed:
+        git.stash("apply")
     if migration:
         os.system(
             "python {0} --mode=test db upgrade -d {1}".format(
