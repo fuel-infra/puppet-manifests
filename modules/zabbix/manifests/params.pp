@@ -144,6 +144,7 @@ class zabbix::params {
   $server_db_port = 3306
   $server_db_socket = undef
   $server_db_user = 'zabbix'
+  $server_enable_service = true
   $server_debug_level = 3
   $server_firewall_allow_sources = {}
   $server_fping6_location = '/usr/bin/fping6'
