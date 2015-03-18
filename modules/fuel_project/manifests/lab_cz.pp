@@ -1,4 +1,4 @@
-# Used for deploy lab-cz.bud.mirantis.net
+# Used for deploy lab-cz.vm.mirantis.net
 class fuel_project::lab_cz (
   $external_host = true,
 ) {

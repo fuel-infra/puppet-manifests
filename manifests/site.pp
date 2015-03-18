@@ -206,7 +206,7 @@ node 'twin1a-srt.srt.mirantis.net' {
   }
 }
 
-node 'lab-cz.bud.mirantis.net' {
+node 'lab-cz.vm.mirantis.net' {
   class { '::fuel_project::lab_cz' :
     external_host => false,
   }
