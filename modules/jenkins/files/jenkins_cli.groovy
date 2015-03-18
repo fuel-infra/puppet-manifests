@@ -187,7 +187,7 @@ class Actions {
   //
   // Sets up security for the Jenkins Master instance.
   //
-  void set_security(String security_model, String overwrite_permissions=null, String item_perms=null, String server=null, String rootDN=null,  String userSearch=null, String inhibitInferRootDN=null, String userSearchBase=null, String groupSearchBase=null, String managerDN=null, String managerPassword=null) {
+  void set_security_ldap(String overwrite_permissions=null, String item_perms=null, String server=null, String rootDN=null,  String userSearch=null, String inhibitInferRootDN=null, String userSearchBase=null, String groupSearchBase=null, String managerDN=null, String managerPassword=null, String ldapuser, String email=null, String password, String name=null, String pub_keys=null) {
 
     if (inhibitInferRootDN==null) {
       inhibitInferRootDN = false
@@ -197,36 +197,29 @@ class Actions {
     def realm
     List users = item_perms.split(' ')
 
-    if (security_model == 'ldap') {
-      if (!(instance.getAuthorizationStrategy() instanceof hudson.security.GlobalMatrixAuthorizationStrategy)) {
-        overwrite_permissions = 'true'
-      }
-      strategy = new hudson.security.GlobalMatrixAuthorizationStrategy()
-      for (String user : users) {
-        for (Permission p : Item.PERMISSIONS.getPermissions()) {
-          strategy.add(p,user)
-        }
-        for (Permission p : Computer.PERMISSIONS.getPermissions()) {
-          strategy.add(p,user)
-        }
-        for (Permission p : Hudson.PERMISSIONS.getPermissions()) {
-          strategy.add(p,user)
-        }
-        for (Permission p : Run.PERMISSIONS.getPermissions()) {
-          strategy.add(p,user)
-        }
-        for (Permission p : View.PERMISSIONS.getPermissions()) {
-          strategy.add(p,user)
-        }
-      }
-      realm = new hudson.security.LDAPSecurityRealm(server, rootDN, userSearchBase, userSearch, groupSearchBase, managerDN, managerPassword, inhibitInferRootDN.toBoolean())
-    } else if (security_model == 'unsecured') {
-        strategy = new hudson.security.AuthorizationStrategy.Unsecured()
-        realm = new hudson.security.HudsonPrivateSecurityRealm(false, false, null)
-        overwrite_permissions = 'true'
-    } else {
-        throw new InvalidAuthenticationStrategy()
+    if (!(instance.getAuthorizationStrategy() instanceof hudson.security.GlobalMatrixAuthorizationStrategy)) {
+      overwrite_permissions = 'true'
     }
+    create_update_user(ldapuser, email, password, name, pub_keys)
+    strategy = new hudson.security.GlobalMatrixAuthorizationStrategy()
+    for (String user : users) {
+      for (Permission p : Item.PERMISSIONS.getPermissions()) {
+        strategy.add(p,user)
+      }
+      for (Permission p : Computer.PERMISSIONS.getPermissions()) {
+        strategy.add(p,user)
+      }
+      for (Permission p : Hudson.PERMISSIONS.getPermissions()) {
+        strategy.add(p,user)
+      }
+      for (Permission p : Run.PERMISSIONS.getPermissions()) {
+        strategy.add(p,user)
+      }
+      for (Permission p : View.PERMISSIONS.getPermissions()) {
+        strategy.add(p,user)
+      }
+    }
+    realm = new hudson.security.LDAPSecurityRealm(server, rootDN, userSearchBase, userSearch, groupSearchBase, managerDN, managerPassword, inhibitInferRootDN.toBoolean())
     // apply new strategy&realm
     if (overwrite_permissions == 'true') {
       instance.setAuthorizationStrategy(strategy)
@@ -236,6 +229,51 @@ class Actions {
     instance.save()
   }
 
+  void set_unsecured() {
+    def instance = Jenkins.getInstance()
+    def strategy
+    def realm
+    strategy = new hudson.security.AuthorizationStrategy.Unsecured()
+    realm = new hudson.security.HudsonPrivateSecurityRealm(false, false, null)
+    instance.setAuthorizationStrategy(strategy)
+    instance.setSecurityRealm(realm)
+    instance.save()
+  }
+
+  void set_security_password(String user, String email, String password, String name=null, String pub_keys=null) {
+    def instance = Jenkins.getInstance()
+    def overwrite_permissions
+    def strategy
+    def realm
+    strategy = new hudson.security.GlobalMatrixAuthorizationStrategy()
+    if (!(instance.getAuthorizationStrategy() instanceof hudson.security.GlobalMatrixAuthorizationStrategy)) {
+      overwrite_permissions = 'true'
+    }
+    create_update_user(user, email, password, name, pub_keys)
+    for (Permission p : Item.PERMISSIONS.getPermissions()) {
+      strategy.add(p,user)
+    }
+    for (Permission p : Computer.PERMISSIONS.getPermissions()) {
+      strategy.add(p,user)
+    }
+    for (Permission p : Hudson.PERMISSIONS.getPermissions()) {
+      strategy.add(p,user)
+    }
+    for (Permission p : Run.PERMISSIONS.getPermissions()) {
+      strategy.add(p,user)
+    }
+    for (Permission p : View.PERMISSIONS.getPermissions()) {
+      strategy.add(p,user)
+    }
+    realm = new hudson.security.HudsonPrivateSecurityRealm(false)
+    // apply new strategy&realm
+    if (overwrite_permissions == 'true') {
+      instance.setAuthorizationStrategy(strategy)
+      instance.setSecurityRealm(realm)
+    }
+    // commit new settings permanently (in config.xml)
+    instance.save()
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

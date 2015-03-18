@@ -248,7 +248,7 @@ gerrit::nginx_log_format: 'proxy'
 jenkins::master::service_fqdn: 'jenkins-product.test.local'
 jenkins::master::security_model: 'ldap'
 jenkins::master::security_opt_params: ''
-jenkins::master::ldap_access_group: '%fuel-core-team,%mos-linux-all'
+jenkins::master::ldap_access_group: 'jenkins-manager fuel-core-team mos-linux-all'
 jenkins::master::ldap_uri: 'ldap://ldap'
 jenkins::master::ldap_root_dn: 'dc=company,dc=net'
 jenkins::master::ldap_manager_passwd: ''
@@ -256,6 +256,10 @@ jenkins::master::ldap_manager: ''
 jenkins::master::jenkins_cli_file: '/var/cache/jenkins/war/WEB-INF/jenkins-cli.jar'
 jenkins::master::jenkins_cli_tries: '6'
 jenkins::master::jenkins_cli_try_sleep: '30'
+jenkins::master::jenkins_management_login: 'jenkins-manager'
+jenkins::master::jenkins_management_password: 'jenkins_password'
+jenkins::master::jenkins_management_email: 'jenkin@example.com'
+jenkins::master::jenkins_management_name: 'Jenkins Master'
 jenkins::master::ldap_user_search_base: ''
 jenkins::master::ldap_group_search_base: ''
 jenkins::master::ldap_user_search: 'uid={0}'
@@ -323,8 +327,7 @@ jenkins::master::jenkins_ssh_private_key_contents: |
     -----END RSA PRIVATE KEY-----
 
 
-jenkins::master::jenkins_ssh_public_key_contents: |
-    'AAAAB3NzaC1yc2EAAAADAQABAAABAQCwjGe9ZfzdgeEkQQiGBDhOpgMEMJm6bfsJwKTXNTDtHDuMZJzWzHLm/64/71ht4pPnKsivQZzBLMTChdkOfqX4kQtl1CX3bo8lukV+3hv2y42HTwOKM1Ay9Tj+cQ5JqWOIT3lINJQ1maNeNH3khXLYq6T60w8k4wo+rezsTX1bkzg3OSThSASBsSfGgLG184LE7aj+24EJl4M6wQueRamXCmVsB+RyDSBFKJOeqqZwlOiWrgHnGv5qxfrGcc+6UCStI9L5JK8IFuK8z0oA8paEOzYgSz7MemmYUJu5r80DJ+7N5chMfg0cCSioNhtgSIjAziIEl26jNt+t3r/zQ04x'
+jenkins::master::jenkins_ssh_public_key_contents: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNWgMf6IisSY0HK0mpHkgVhRxHsDom81PJ6W3jAgcSBWY1Kz/2vL98SK91ppgYmnDa2uLbchY2Xk9ciefMpm7Qq5EO6oSPKJJhADyCYAX/7YomZIy4Xu7HxEh0Z6VCLt0DymwN4tBS9JuTISvEm17BLgtis/AemA2eRIl0JAdPf9rmQps4KP5AhG60ucdtTKD0y8TFK95ateplgcq9JLRInhrdg/vnJLbKnV7lP1g5dfY1rm6bum7P+Jwf2tdTOa0b5ucK/+iWVbyPO4Z2afPpblh4Vynfe2wMzzpGAp3n5MwtH2EZmSXm/B6/CkgOFROsmWH8MzQEvNBGHhw+ONR9'
 jenkins::master::jenkins_address: '127.0.0.1'
 jenkins::master::jenkins_java_args: '-Xmx1500m -Xms1024m -Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/Moscow'
 jenkins::master::jjb_username: 'jjb_user'
@@ -463,7 +466,7 @@ fuel_project::gerrit::slave_config::authorized_keys:
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC3akX5/wbiznAhb8/fN1jy9QznDwkNln0p0tbDci/64aGtDWsckmEnBaow9mv8kY8qgHY/BfAVacOqs1cGpQXMGn1rfB6Lmc4CKYDb8lFQvS+EbJZIFOCide/7eSuluCsvkw+vt99mKRy/j5EM+srj6uY23tfDoH3Ghmxmki+rSQah9dMxACkHKC4T3copN069oM5HVUHwd1zMMOcuAQKrrFjkW9tKBM7VD/VDkVtpCG9QIX/KUGdNZ3weq6L46o/KfgH6LK2GJU2vLztlntD+ggRKVyqeS3QEYvUJDtVuHBMTA44Q/5IiEu4QH53zyie6rPR+kKWNjb19C7kS/7ar'
 
-fuel_project::jenkins::slave::ldap_sudo_group: 'fuel-core-team'
+fuel_project::jenkins::slave::ldap_sudo_group: '%fuel-core-team'
 fuel_project::jenkins::slave::nailgun_db:
   - 'nailgun'
   - 'nailgun0'

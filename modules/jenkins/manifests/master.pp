@@ -17,11 +17,6 @@ class jenkins::master (
   $jenkins_java_args = '',
   $jenkins_port = '8080',
   $jenkins_address = '0.0.0.0',
-  # Jenkins Job Builder
-  $jenkins_api_url = 'http://localhost:8080/',
-  $jenkins_api_username = '',
-  $jenkins_api_password = '',
-  $jenkins_api_token = '',
   $nginx_access_log = '/var/log/nginx/access.log',
   $nginx_error_log = '/var/log/nginx/error.log',
   $www_root = '/var/www',
@@ -29,10 +24,14 @@ class jenkins::master (
   $install_zabbix_item = false,
   $install_label_dumper = false,
   $label_dumper_nginx_location = '/labels',
-  $label_dumper_destpath = "${www_root}${label_dumper_nginx_location}",
   # Jenkins auth
   $security_model = 'unsecured',
   $install_groovy = 'yes',
+  $jenkins_api_url = 'http://localhost:8080/',
+  $jenkins_management_login = '',
+  $jenkins_management_password = '',
+  $jenkins_management_email = '',
+  $jenkins_management_name = '',
   $ldap_overwrite_permissions = '',
   $ldap_access_group = '',
   $ldap_uri = 'ldap://ldap',
@@ -115,17 +114,9 @@ class jenkins::master (
     owner   => 'jenkins',
     group   => 'jenkins',
     mode    => '0644',
-    content => "ssh_rsa ${jenkins_ssh_public_key_contents} jenkins@${::fqdn}",
+    content => "${jenkins_ssh_public_key_contents} jenkins@${::fqdn}",
     replace => true,
     require => File["${jenkins_libdir}/.ssh"],
-  }
-
-  # Add Jenkins Job Builder
-
-  class { '::jenkins::job_builder' :
-    url      => $jenkins_api_url,
-    username => $jenkins_api_username,
-    password => $jenkins_api_password,
   }
 
   ensure_resource('file', $www_root, {'ensure' => 'directory' })
@@ -228,7 +219,7 @@ class jenkins::master (
       require => File['/usr/local/bin/labeldump.py'],
     }
 
-    file { $label_dumper_destpath :
+    file { "${www_root}${label_dumper_nginx_location}" :
       ensure => 'directory',
       owner  => 'root',
       group  => 'root',
@@ -264,8 +255,13 @@ class jenkins::master (
     require => Package['groovy'],
   }
 
+  if $security_model == 'unsecured' {
+    $security_opt_params = 'set_unsecured'
+  }
+
   if $security_model == 'ldap' {
     $security_opt_params = join([
+      'set_security_ldap',
       "'${ldap_overwrite_permissions}'",
       "'${ldap_access_group}'",
       "'${ldap_uri}'",
@@ -276,8 +272,25 @@ class jenkins::master (
       "'${ldap_group_search_base}'",
       "'${ldap_manager}'",
       "'${ldap_manager_passwd}'",
+      "'${jenkins_management_login}'",
+      "'${jenkins_management_email}'",
+      "'${jenkins_management_password}'",
+      "'${jenkins_management_name}'",
+      "'${jenkins_ssh_public_key_contents}'",
     ], ' ')
   }
+
+  if $security_model == 'password' {
+    $security_opt_params = join([
+      'set_security_password',
+      "'${jenkins_management_login}'",
+      "'${jenkins_management_email}'",
+      "'${jenkins_management_password}'",
+      "'${jenkins_management_name}'",
+      "'${jenkins_ssh_public_key_contents}'",
+    ], ' ')
+  }
+
 
   # Execute groovy script to setup auth
   exec { 'jenkins_auth_config':
@@ -290,11 +303,10 @@ class jenkins::master (
         "-jar ${jenkins_cli_file}",
         "-s ${jenkins_api_url}",
         "groovy ${jenkins_libdir}/jenkins_cli.groovy",
-        'set_security',
-        $security_model,
         $security_opt_params,
     ], ' '),
     tries     => $jenkins_cli_tries,
     try_sleep => $jenkins_cli_try_sleep,
+    user      => 'jenkins',
   }
 }

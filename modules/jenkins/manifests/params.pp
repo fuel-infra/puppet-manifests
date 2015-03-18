@@ -1,11 +1,6 @@
 # Class: jenkins::params
 #
 class jenkins::params {
-  $job_builder_packages = [
-    'python-jenkins',
-    'python-yaml',
-  ]
-
   $slave_authorized_keys = {}
   $slave_java_package = 'openjdk-7-jre-headless'
 
