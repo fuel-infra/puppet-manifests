@@ -134,6 +134,10 @@ node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
+node /jenkins(\d+)\.fuel-infra\.org/ {
+  class { '::fuel_project::jenkins::master' :}
+}
+
 node /packtest([0-9]{2})\.bud\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
     run_tests => true,
