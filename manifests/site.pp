@@ -225,7 +225,9 @@ node 'devops-tools.vm.mirantis.net' {
 }
 
 node /(osci|review)-(gerrit|tst)([0-9]{0,2})?\.vm\.mirantis\.net/ {
-  class { '::fuel_project::gerrit' : }
+  class { '::fuel_project::gerrit' :
+    external_host => true,
+  }
 }
 
 node 'docs.fuel-infra.org' {
@@ -388,7 +390,9 @@ node 'slave-05.test.local' {
 }
 
 node 'slave-06.test.local' {
-  class { '::fuel_project::gerrit' : }
+  class { '::fuel_project::gerrit' :
+    external_host  => true,
+  }
 }
 
 node 'slave-07.test.local' {
@@ -484,7 +488,9 @@ node 'slave-21.test.local' {
 }
 
 node 'slave-22.test.local' {
-  class { '::fuel_project::gerrit' : }
+  class { '::fuel_project::gerrit' :
+    external_host  => true,
+  }
 }
 
 # Sandbox
