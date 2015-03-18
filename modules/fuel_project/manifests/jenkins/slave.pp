@@ -298,11 +298,9 @@ class fuel_project::jenkins::slave (
       'libparse-debian-packages-perl',
       'libyaml-dev',
       'lrzip',
-      'mock',
       'nodejs',
       'nodejs-legacy',
       'npm',
-      'pigz',
       'python-daemon',
       'python-ipaddr',
       'python-jinja2',
@@ -713,14 +711,9 @@ class fuel_project::jenkins::slave (
       require => Package[$docker_package],
     }
 
-    group { 'mock' :
-      ensure  => 'present',
-      require => Package['mock'],
-    }
-
     User <| title == 'jenkins' |> {
-      groups  => ['www-data', 'docker', 'mock'],
-      require => Group['docker', 'mock'],
+      groups  => ['www-data', 'docker'],
+      require => Group['docker'],
     }
 
     if $external_host {
