@@ -8,7 +8,7 @@
 #
 # Instructions on how to set up the database can be found in
 # /usr/share/doc/zabbix-server-mysql/README.Debian
-START=<%= @enable_service ? yes : no %>
+START=<%= @enable_service ? 'yes' : 'no' %>
 
 # Absolute path to the configuration file
 CONFIG_FILE="/etc/zabbix/zabbix_server.conf"
