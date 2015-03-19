@@ -452,14 +452,6 @@ class fuel_project::jenkins::slave (
       require => User['jenkins'],
     }
 
-    file { '/home/jenkins/.ssh' :
-      ensure  => 'directory',
-      owner   => 'jenkins',
-      group   => 'jenkins',
-      mode    => '0750',
-      require => User['jenkins'],
-    }
-
     # rsync of vm images from existing osci node
     class { 'rsync': package_ensure => 'present' }
 
