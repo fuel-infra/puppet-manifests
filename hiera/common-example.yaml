@@ -55,6 +55,14 @@ apt::sources:
     include_src: false
     include_deb: true
 
+bacula::client::client_conf: '/etc/bacula/bacula-fd.conf'
+bacula::client::client_package: 'bacula-client'
+bacula::client::client_service: 'bacula-fd'
+bacula::client::director_password: 'xxxxx'
+bacula::client::director_server: 'bacula.test.local'
+bacula::client::pid_dir: '/var/run/bacula'
+bacula::client::working_dir: '/var/lib/bacula'
+
 yum::default:
   'enabled': true
 yum::purge: true
