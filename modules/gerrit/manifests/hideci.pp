@@ -1,7 +1,7 @@
 # Class: gerrit::hideci
 #
 class gerrit::hideci (
-  $ciRegex = '//',
+  $ci_regex = '//',
 ) {
 
   package { 'hideci':
