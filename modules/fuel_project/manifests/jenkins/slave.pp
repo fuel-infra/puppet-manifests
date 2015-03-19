@@ -4,13 +4,14 @@ class fuel_project::jenkins::slave (
   $docker_package,
   $external_host                        = false,
   $build_fuel_iso                       = false,
+  $build_fuel_plugins                   = false,
+  $build_fuel_packages                  = false,
   $run_tests                            = false,
   $simple_syntax_check                  = false,
   $verify_fuel_web                      = false,
   $verify_fuel_astute                   = false,
   $verify_fuel_docs                     = false,
   $fuel_web_selenium                    = false,
-  $build_fuel_plugins                   = false,
   $install_docker                       = false,
   $verify_fuel_stats                    = false,
   $ldap                                 = false,
@@ -374,6 +375,7 @@ class fuel_project::jenkins::slave (
     exec { 'install-grunt-cli' :
       command   => '/usr/bin/npm install -g grunt-cli',
       logoutput => on_failure,
+      require   => Package[$build_fuel_iso_packages],
     }
 
     file { 'jenkins-sudo-for-build_iso' :
@@ -384,8 +386,28 @@ class fuel_project::jenkins::slave (
       content => template('fuel_project/jenkins/slave/build_iso.sudoers.d.erb')
     }
 
-    Package[$build_fuel_iso_packages]->
-      Exec['install-grunt-cli']
+  }
+
+  # provide env for building packages, actaully for "make sources" from fuel-main
+  if ($build_fuel_packages == true) {
+    $build_fuel_packages_list = [
+      'make',
+      'nodejs',
+      'nodejs-legacy',
+      'npm',
+      'python2.7',
+      'python-setuptools',
+      'python-pbr',
+      'ruby',
+    ]
+
+    ensure_packages($build_fuel_packages_list)
+
+    exec { 'install-grunt-cli' :
+      command   => '/usr/bin/npm install -g grunt-cli',
+      logoutput => on_failure,
+      require   => Package[$build_fuel_packages_list],
+    }
   }
 
   # osci_tests - for deploying osci jenkins slaves
