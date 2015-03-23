@@ -48,7 +48,7 @@ while (<>) {
 	# ++ Incoming Requests ++
 	# ++ Socket I/O Statistics ++
 	if (m/^\+\+ ([^+]+) \+\+$/) {
-		($prefix = lc $1) =~ s/\s/_/g;
+		($prefix = lc $1) =~ s/[\s\>\<\/\(\)]/_/g;
 		$view = $item = $cnt = "";
 	}
 	# [View: custom_view_name]
@@ -63,8 +63,8 @@ while (<>) {
 	#                 3379 EDNS(0) query failures
 	#                  134 queries with RTT < 10ms
 	if (m/^\s+(\d+) ([^\n]+)/) {
-		($cnt = lc $1) =~ s/\s/_/g;
-		($item = lc $2) =~ s/\s/_/g;
+		($cnt = lc $1) =~ s/[\s\>\<\/\(\)]/_/g;
+		($item = lc $2) =~ s/[\s\>\<\/\(\)]/_/g;
 
 		if ($view) {
 			print "$prefix\+$view:$item=$cnt\n";
