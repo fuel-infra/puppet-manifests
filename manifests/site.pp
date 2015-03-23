@@ -332,6 +332,10 @@ node 'obs-1.mirantis.com' {
   class { '::obs_server' :}
 }
 
+node /racktables.(vm\.mirantis\.net|test\.local)/ {
+  class { '::fuel_project::racktables' : }
+}
+
 # Test nodes definitions
 
 node 'pxetool.test.local' {
