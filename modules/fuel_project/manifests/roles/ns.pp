@@ -52,11 +52,20 @@ class fuel_project::roles::ns (
     ],
   }
 
+  file { '/var/lib/bind/statistics.txt' :
+    ensure => 'present',
+    owner  => 'bind',
+    group  => 'bind',
+  }
+
   cron { 'rndc-stats' :
     command => '>/var/lib/bind/statistics.txt ; /usr/sbin/rndc stats',
     user    => 'root',
     minute  => '*/5',
-    require => File['/usr/local/bin/bind96-stats-parse.pl'],
+    require => [
+      File['/var/lib/bind/statistics.txt'],
+      File['/usr/local/bin/bind96-stats-parse.pl'],
+    ],
   }
 
   ::zabbix::item { 'bind' :
