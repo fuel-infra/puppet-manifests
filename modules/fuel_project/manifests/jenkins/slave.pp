@@ -283,6 +283,32 @@ class fuel_project::jenkins::slave (
 
   }
 
+  # provide env for building packages, actaully for "make sources"
+  # from fuel-main and remove duplicate packages from build ISO
+  if ($build_fuel_packages or $build_fuel_iso) {
+    $build_fuel_packages_list = [
+      'make',
+      'nodejs',
+      'nodejs-legacy',
+      'npm',
+      'python-setuptools',
+      'python-pbr',
+      'ruby',
+    ]
+
+    $build_fuel_npm_packages = [
+      'grunt-cli',
+      'gulp',
+    ]
+
+    ensure_packages($build_fuel_packages_list)
+
+    ensure_packages($build_fuel_npm_packages, {
+      provider => npm,
+      require  => Package['npm'],
+    })
+  }
+
   # Build ISO
   if ($build_fuel_iso == true) {
     $build_fuel_iso_packages = [
@@ -300,17 +326,12 @@ class fuel_project::jenkins::slave (
       'libparse-debian-packages-perl',
       'libyaml-dev',
       'lrzip',
-      'nodejs',
-      'nodejs-legacy',
-      'npm',
       'python-daemon',
       'python-ipaddr',
       'python-jinja2',
       'python-nose',
       'python-paramiko',
-      'python-pbr',
       'python-pip',
-      'python-setuptools',
       'python-xmlbuilder',
       'python-yaml',
       'realpath',
@@ -373,12 +394,6 @@ class fuel_project::jenkins::slave (
     }
     # /LP
 
-    exec { 'install-grunt-cli' :
-      command   => '/usr/bin/npm install -g grunt-cli',
-      logoutput => on_failure,
-      require   => Package[$build_fuel_iso_packages],
-    }
-
     file { 'jenkins-sudo-for-build_iso' :
       path    => '/etc/sudoers.d/build_fuel_iso',
       owner   => 'root',
@@ -387,28 +402,6 @@ class fuel_project::jenkins::slave (
       content => template('fuel_project/jenkins/slave/build_iso.sudoers.d.erb')
     }
 
-  }
-
-  # provide env for building packages, actaully for "make sources" from fuel-main
-  if ($build_fuel_packages == true) {
-    $build_fuel_packages_list = [
-      'make',
-      'nodejs',
-      'nodejs-legacy',
-      'npm',
-      'python2.7',
-      'python-setuptools',
-      'python-pbr',
-      'ruby',
-    ]
-
-    ensure_packages($build_fuel_packages_list)
-
-    exec { 'install-grunt-cli' :
-      command   => '/usr/bin/npm install -g grunt-cli',
-      logoutput => on_failure,
-      require   => Package[$build_fuel_packages_list],
-    }
   }
 
   # osci_tests - for deploying osci jenkins slaves
@@ -543,7 +536,19 @@ class fuel_project::jenkins::slave (
       'rst2pdf',
     ]
 
+    $verify_fuel_web_npm_packages = [
+      'casperjs',
+      'grunt-cli',
+      'gulp',
+      'phantomjs',
+    ]
+
     ensure_packages($verify_fuel_web_packages)
+
+    ensure_packages($verify_fuel_web_npm_packages, {
+      provider => npm,
+      require  => Package['npm'],
+    })
 
     if ($fuel_web_selenium) {
       $selenium_packages = [
@@ -565,10 +570,6 @@ class fuel_project::jenkins::slave (
     postgresql::server::db { $ostf_db:
       user     => 'ostf',
       password => 'ostf',
-    }
-    exec { 'install_global_npm' :
-      command => '/usr/bin/npm -g install grunt-cli casperjs phantomjs',
-      require => Package['npm'],
     }
     file { '/var/log/nailgun' :
       ensure  => directory,

@@ -40,11 +40,20 @@ class fuel_project::nailgun_demo (
   }
 
   # install grunt
-  exec { 'init-grunt' :
-    command => '/usr/bin/npm install -g grunt-cli',
-    user    => 'root',
-    require => Package[$packages],
-    unless  => 'test -f /usr/local/bin/grunt',
+  if (!defined(Package['grunt-cli'])) {
+    package { 'grunt-cli' :
+      ensure   => 'present',
+      provider => 'npm',
+      require  => Package[$packages],
+    }
+  }
+  # install gulp
+  if (!defined(Package['gulp'])) {
+    package { 'gulp' :
+      ensure   => 'present',
+      provider => 'npm',
+      require  => Package[$packages],
+    }
   }
 
   # create log directory
