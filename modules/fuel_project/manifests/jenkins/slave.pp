@@ -43,6 +43,7 @@ class fuel_project::jenkins::slave (
   $osc_url_secondary                    = '',
   $osc_user_secondary                   = '',
   $osc_pass_secondary                   = '',
+  $obs_known_hosts                      = 'osci-obs.vm.mirantis.net',
   $ldap_uri                             = '',
   $ldap_base                            = '',
   $nailgun_db                           = ['nailgun'],
@@ -480,7 +481,7 @@ class fuel_project::jenkins::slave (
     rsync::get { $osci_ubuntu_image_name :
       source  => "rsync://${osci_rsync_source_server}/${osci_ubuntu_remote_dir}/${osci_ubuntu_image_name}",
       path    => $osci_ubuntu_job_dir,
-      timeout => 7200,
+      timeout => 14400,
       require => [
         File[$osci_ubuntu_job_dir],
         User['jenkins'],
@@ -490,7 +491,7 @@ class fuel_project::jenkins::slave (
     rsync::get { $osci_centos_image_name :
       source  => "rsync://${osci_rsync_source_server}/${osci_centos_remote_dir}/${osci_centos_image_name}",
       path    => $osci_centos_job_dir,
-      timeout => 7200,
+      timeout => 14400,
       require => [
         File[$osci_centos_job_dir],
         User['jenkins'],
@@ -507,6 +508,14 @@ class fuel_project::jenkins::slave (
         File[$osci_ubuntu_job_dir, $osci_centos_job_dir, '/home/jenkins/.ssh'],
         User['jenkins'],
       ],
+    }
+
+    # obs host key
+    ssh::known_host { 'obs-known-hosts' :
+      host      => $obs_known_hosts,
+      user      => 'jenkins',
+      overwrite => $overwrite_known_hosts,
+      require   => Class['::jenkins::slave'],
     }
   }
 
