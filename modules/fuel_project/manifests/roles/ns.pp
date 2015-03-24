@@ -2,13 +2,17 @@
 #
 class fuel_project::roles::ns (
   $dns_repo,
+  $firewall_enable                  = false,
+  $firewall_rules                   = {},
   $role                             = 'master',
   $dns_branch                       = 'master',
   $dns_tmpdir                       = '/tmp/ns-update',
   $target_path                      = '/var/cache/bind',
   $dns_checkout_private_key_content = undef,
 ) {
-  class { '::fuel_project::common' :}
+  class { '::fuel_project::common' :
+    external_host => $firewall_enable,
+  }
   class { '::bind' :}
   ::bind::server::conf { '/etc/bind/named.conf' :
     require => Class['::bind'],
@@ -88,5 +92,13 @@ class fuel_project::roles::ns (
       group   => 'root',
       require => File['/root/.ssh'],
     }
+  }
+
+  if ($firewall_enable) {
+    include firewall_defaults::pre
+    create_resources(firewall, $firewall_rules, {
+      action  => 'accept',
+      require => Class['firewall_defaults::pre'],
+    })
   }
 }
