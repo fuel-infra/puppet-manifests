@@ -13,9 +13,10 @@ class tpi::vmware_lab (
 
   ensure_packages($vmware_packages)
 
-  $vmware_shared_home='/var/lib/vmware/Shared VMs'
+  $vmware_home='/var/lib/vmware'
+  $vmware_shared_home="${vmware_home}/Shared VMs"
 
-  file { [ '/var/lib/vmware', $vmware_shared_home ]:
+  file { [ $vmware_home, $vmware_shared_home ]:
     ensure => directory,
     mode   => '0755',
     owner  => 'root',
@@ -82,6 +83,16 @@ class tpi::vmware_lab (
     hasstatus => false,
     pattern   => 'vmware-usbarbitrator',
     require   => Exec['install_vmware_workstation'],
+  }
+
+  user { 'vmware' :
+    ensure   => 'present',
+    home     => $vmware_home,
+    password => $vmware_password,
+    comment  => 'VMWare Workstation user',
+    name     => 'vmware',
+    shell    => '/bin/false',
+    require  => Exec['install_vmware_workstation'],
   }
 
 }
