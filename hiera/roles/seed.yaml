@@ -1,0 +1,6 @@
+---
+fuel_project::seed::seed_cleanup_dirs:
+  -
+    dir: '/var/www/seed/fuelweb-iso'
+    ttl: 10
+    pattern: 'fuel-*'

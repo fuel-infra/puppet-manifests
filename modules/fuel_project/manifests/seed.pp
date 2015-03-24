@@ -5,17 +5,17 @@ class fuel_project::seed (
   $client_max_body_size = '5G',
   $external_host = false,
   $firewall_allow_sources = {},
-  # FIXME: Make one list for hosts on L3 and L7
-  $vhost_acl_allow = [],
+  $nginx_access_log = '/var/log/nginx/access.log',
+  $nginx_error_log = '/var/log/nginx/error.log',
+  $nginx_log_format = 'proxy',
+  $seed_cleanup_dirs = undef,
   $seed_dir = '/var/www/seed',
-  $pattern_to_clean = 'fuel-\*',  # to use in seed-downloads-cleanup.sh
   $seed_port = 17333,
   $service_fqdn = "seed.${::fqdn}",
   $tracker_apply_firewall_rules = false,
   $tracker_firewall_allow_sources = {},
-  $nginx_access_log = '/var/log/nginx/access.log',
-  $nginx_error_log = '/var/log/nginx/error.log',
-  $nginx_log_format = 'proxy',
+  # FIXME: Make one list for hosts on L3 and L7
+  $vhost_acl_allow = [],
 ) {
   class { '::opentracker' :
     apply_firewall_rules   => $tracker_apply_firewall_rules,
@@ -67,10 +67,6 @@ class fuel_project::seed (
     group   => 'www-data',
     require => Class['nginx'],
   }
-
-  $storage_dirs = [
-    "${seed_dir}/fuelweb-iso",
-  ]
 
   ensure_packages('python-seed-cleaner')
 
