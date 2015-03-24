@@ -47,19 +47,17 @@ class fuel_project::tpi::lab (
     owner   => 'btsync',
     group   => 'btsync',
     content => template('fuel_project/tpi/btsync.erb'),
+    require => File['/etc/btsync/tpi.conf'],
   }
 
   file { '/etc/btsync/tpi.conf':
+    notify  => Service['btsync'],
     mode    => '0600',
     owner   => 'btsync',
     group   => 'btsync',
     content => template('fuel_project/tpi/tpi.conf.erb'),
+    require => Package['btsync'],
   }
-
-  File['/etc/btsync/tpi.conf']->
-    File['/etc/default/btsync']~>
-    Service['btsync']
-
 
   # transparent hugepage defragmentation leads to slowdowns
   # in our environments (kvm+vmware workstation), disable it
