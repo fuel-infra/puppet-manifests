@@ -54,7 +54,11 @@ class zabbix::params {
   $frontend_nginx_log_format = undef
   $frontend_package = 'zabbix-frontend-php'
   $frontend_ping_handler_template = 'zabbix/frontend/ping.php.erb'
-  $frontend_service_fqdn = undef
+  $frontend_service_fqdn = $::fqdn
+  $frontend_ssl_certificate = undef
+  $frontend_ssl_certificate_content = undef
+  $frontend_ssl_key = undef
+  $frontend_ssl_key_content = undef
   $frontend_zabbix_server = '127.0.0.1'
   $frontend_zabbix_server_name = $::fqdn
   $frontend_zabbix_server_port = '10051'
