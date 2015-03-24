@@ -25,6 +25,8 @@ class fuel_project::tpi::lab (
     'linux-headers-3.13.0-39-generic',
     'btsync',
     'sudo-ldap',
+    'zsh',
+    'most',
   ]
 
   ensure_packages($tpi_packages)
