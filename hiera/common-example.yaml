@@ -177,6 +177,7 @@ gerrit:
   start_timeout: 600
 
 gerrit::allow_remote_admin: true
+gerrit::default_max_clause_count: 131072
 gerrit::hideci::ci_regex: '/^(openstack-ci-.*|mos-infra-ci|ci-build-.*|VM Check Install .*)$/'
 gerrit::ssh_replication_rsa_key_contents: |
     -----BEGIN RSA PRIVATE KEY-----

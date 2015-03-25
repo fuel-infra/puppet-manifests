@@ -128,6 +128,9 @@
 <% if @secondary_index == true -%>
 [index]
 	type = <%= @secondary_index_type %>
+<% if @default_max_clause_count -%>
+	defaultMaxClauseCount = <%= @default_max_clause_count %>
+<% end -%>
 <% end -%>
 [mimetype "image/*"]
 	safe = true
