@@ -9,6 +9,8 @@ class tpi::vmware_lab (
   $vmware_packages=[
     'libxtst6',
     'libxcursor1',
+    'libxinerama1',
+    'libxi6',
   ]
 
   ensure_packages($vmware_packages)
