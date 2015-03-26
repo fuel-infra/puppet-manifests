@@ -23,37 +23,34 @@ class fuel_project::nailgun_demo (
     class { 'postgresql::server': }
   }
 
-  # required packages (documented + found)
-  $packages = [ 'git',
-                'npm',
-                'nodejs-legacy', ]
+  # required packages
+  # http://docs.mirantis.com/fuel-dev/develop/nailgun/development/env.html
+  $packages = [
+    'git',
+    'npm',
+    'nodejs-legacy',
+    'postgresql-server-dev-all',
+  ]
+
+  $npm_packages = [
+    'grunt-cli',
+    'gulp',
+  ]
 
   package { $packages:
     ensure => 'present',
   }
+
+  ensure_packages($npm_packages, {
+    provider => npm,
+    require  => Package['npm'],
+  })
 
   # create main user
   user { 'nailgun':
     ensure     => 'present',
     home       => '/home/nailgun',
     managehome => true,
-  }
-
-  # install grunt
-  if (!defined(Package['grunt-cli'])) {
-    package { 'grunt-cli' :
-      ensure   => 'present',
-      provider => 'npm',
-      require  => Package[$packages],
-    }
-  }
-  # install gulp
-  if (!defined(Package['gulp'])) {
-    package { 'gulp' :
-      ensure   => 'present',
-      provider => 'npm',
-      require  => Package[$packages],
-    }
   }
 
   # create log directory
@@ -99,7 +96,10 @@ class fuel_project::nailgun_demo (
     requirements => '/usr/share/fuel-web/nailgun/requirements.txt',
     options      => '',
     user         => 'nailgun',
-    require      => Vcsrepo['/usr/share/fuel-web'],
+    require      => [
+      Vcsrepo['/usr/share/fuel-web'],
+      Package[$packages],
+    ]
   }
 
   venv::exec { 'venv-syncdb' :
@@ -135,12 +135,15 @@ class fuel_project::nailgun_demo (
     cwd     => '/usr/share/fuel-web/nailgun',
     venv    => '/home/nailgun/python',
     user    => 'nailgun',
-    require => Venv::Exec['venv-loaddata'],
+    require => [
+      Venv::Exec['venv-loaddata'],
+      Package[$npm_packages],
+    ],
     onlyif  => "test ! -f ${lock_file}",
   }
 
-  venv::exec { 'venv-bower' :
-    command => '/usr/local/bin/grunt bower',
+  venv::exec { 'venv-gulp' :
+    command => '/usr/local/bin/gulp bower',
     cwd     => '/usr/share/fuel-web/nailgun',
     venv    => '/home/nailgun/python',
     user    => 'nailgun',
@@ -201,7 +204,7 @@ class fuel_project::nailgun_demo (
     workers        => '8',
     enable_threads => true,
     require        => [File_line['fake_mode'],
-                Venv::Exec['venv-bower'],
+                Venv::Exec['venv-gulp'],
                 User['nailgun'],],
   }
 
