@@ -15,6 +15,10 @@ class fuel_project::tpi::lab (
     ldap          => true,
   }
 
+  File<| title == 'jenkins-sudo-for-build_iso' |> {
+    content => template('fuel_project/tpi/jenkins-sudo-for-build_iso'),
+  }
+
   class { '::tpi::vmware_lab' : }
 
   # these packages will be installed from tpi apt repo defined in hiera
