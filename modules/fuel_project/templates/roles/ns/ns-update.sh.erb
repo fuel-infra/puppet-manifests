@@ -30,10 +30,25 @@ export TARGETPATH=${TARGETPATH:-<%= @target_path %>}
   fi
 
   echo "Linking..."
-  rm -rf "${TARGETPATH}/zones"
+  mkdir -p "${TARGETPATH}/zones/"
+  for file in `ls -1 ${TMPDIR}/zones/*` ; do
+    zone=$(basename "${file}" | sed 's~\.zone$~~')
+    echo "Working on ${zone}"
+    mv "${file}" "${TARGETPATH}/zones/"
+    echo "${zone} OK"
+  done
 
-  mv "${TMPDIR}/zones" "${TARGETPATH}/"
+  if [ -d "${TMPDIR}/dynamic" ] ; then
+    for file in `ls -1 ${TMPDIR}/dynamic/*` ; do
+      zone=$(basename "${file}" | sed 's~\.zone$~~')
+      if ![ -f "${TARGETPATH}/zones/${zone}.zone" ] ; then
+        echo "Working on ${zone}"
+        mv "${file}" "${TARGETPATH}/zones/"
+        echo "${zone} OK"
+      fi
+    done
+  fi
 
-  echo "Reloading DNS configuration..."
+  echo "Reloading configuration"
   /usr/sbin/rndc reload
 ) 9>/var/lock/ns-update.lock
