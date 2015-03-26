@@ -31,6 +31,7 @@ export TARGETPATH=${TARGETPATH:-<%= @target_path %>}
 
   echo "Linking..."
   mkdir -p "${TARGETPATH}/zones/"
+  chown bind:bind "${TARGETPATH}/zones"
   for file in `ls -1 ${TMPDIR}/zones/*` ; do
     zone=$(basename "${file}" | sed 's~\.zone$~~')
     echo "Working on ${zone}"
