@@ -41,7 +41,7 @@ export TARGETPATH=${TARGETPATH:-<%= @target_path %>}
   if [ -d "${TMPDIR}/dynamic" ] ; then
     for file in `ls -1 ${TMPDIR}/dynamic/*` ; do
       zone=$(basename "${file}" | sed 's~\.zone$~~')
-      if ![ -f "${TARGETPATH}/zones/${zone}.zone" ] ; then
+      if ! [ -f "${TARGETPATH}/zones/${zone}.zone" ] ; then
         echo "Working on ${zone}"
         chown bind:bind "${file}"
         mv "${file}" "${TARGETPATH}/zones/"
