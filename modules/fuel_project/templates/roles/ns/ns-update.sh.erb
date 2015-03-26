@@ -43,6 +43,7 @@ export TARGETPATH=${TARGETPATH:-<%= @target_path %>}
       zone=$(basename "${file}" | sed 's~\.zone$~~')
       if ![ -f "${TARGETPATH}/zones/${zone}.zone" ] ; then
         echo "Working on ${zone}"
+        chown bind:bind "${file}"
         mv "${file}" "${TARGETPATH}/zones/"
         echo "${zone} OK"
       fi
