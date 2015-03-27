@@ -235,11 +235,7 @@ node 'docs.fuel-infra.org' {
 }
 
 node 'osci-jenkins2.vm.mirantis.net' {
-  class { '::fuel_project::common' :
-    external_host => true,
-  }
-
-  class { '::jenkins::master' :}
+  class { '::fuel_project::jenkins::master' :}
 }
 
 node /tpi\d\d\.bud\.mirantis\.net/ {
