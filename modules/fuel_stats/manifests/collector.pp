@@ -6,7 +6,7 @@ class fuel_stats::collector (
   $psql_user              = $fuel_stats::params::psql_user,
   $psql_pass              = $fuel_stats::params::psql_pass,
   $psql_db                = $fuel_stats::params::psql_db,
-  $migration_ip           = '127.0.0.1',
+  $analytics_ip           = $fuel_stats::params::analytics_ip,
   $http_port              = $fuel_stats::params::http_port,
   $https_port             = $fuel_stats::params::https_port,
   $ssl                    = false,
@@ -22,6 +22,18 @@ class fuel_stats::collector (
       }
     }
   }
+
+  if ( ! defined(Class['::fuel_stats::db']) ) {
+    class { '::fuel_stats::db' :
+      install_psql => true,
+      psql_host    => $psql_host,
+      psql_user    => $psql_user,
+      psql_pass    => $psql_pass,
+      psql_db      => $psql_db,
+      analytics_ip => $analytics_ip,
+    }
+  }
+
   $limit_conn = { 'limit_conn' => 'addr 1' }
 
   if $ssl {
@@ -64,24 +76,6 @@ class fuel_stats::collector (
     shell      => '/usr/sbin/nologin',
   }
 
-  # Postgresql configuration
-  if ! defined(Class['postgresql::server']) {
-    class { 'postgresql::server':
-      listen_addresses           => '*',
-      ip_mask_deny_postgres_user => '0.0.0.0/0',
-      ip_mask_allow_all_users    => "${migration_ip}/32",
-      ipv4acls                   => [
-        "hostssl ${psql_db} ${psql_user} ${migration_ip}/32 cert",
-        "host ${psql_db} ${psql_user} 127.0.0.1/32 md5",
-        "local ${psql_db} ${psql_user} md5",
-      ],
-    }
-  }
-  postgresql::server::db { $psql_db:
-    user     => $psql_user,
-    password => postgresql_password($psql_user, $psql_pass),
-  }
-
   file { '/etc/collector.py':
     ensure  => 'file',
     content => template('fuel_stats/collect.py.erb'),
@@ -119,7 +113,7 @@ class fuel_stats::collector (
       require     => [
         Fuel_stats::Dev['collector'],
         File['/etc/collector.py'],
-        Postgresql::Server::Db[$psql_db],
+        Class['::fuel_stats::db'],
       ]
     }
   } else {
@@ -128,7 +122,7 @@ class fuel_stats::collector (
       ensure  => 'installed',
       require => [
         File['/etc/collector.py'],
-        Postgresql::Server::Db[$psql_db],
+        Class['::fuel_stats::db'],
       ],
       notify  => Service['uwsgi'],
     }

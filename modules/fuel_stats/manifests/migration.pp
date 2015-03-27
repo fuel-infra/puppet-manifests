@@ -6,6 +6,16 @@ class fuel_stats::migration (
   $psql_pass              = $fuel_stats::params::psql_pass,
   $psql_db                = $fuel_stats::params::psql_db,
 ) inherits fuel_stats::params {
+  if ( ! defined(Class['::fuel_stats::db']) ) {
+    class { '::fuel_stats::db' :
+      install_psql => false,
+      psql_host    => $psql_host,
+      psql_user    => $psql_user,
+      psql_pass    => $psql_pass,
+      psql_db      => $psql_db,
+    }
+  }
+
   file { '/etc/migration.yaml':
     ensure  => 'file',
     content => template('fuel_stats/migration.yaml.erb'),
