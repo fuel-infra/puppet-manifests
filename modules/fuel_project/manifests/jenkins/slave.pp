@@ -15,7 +15,7 @@ class fuel_project::jenkins::slave (
   $install_docker                       = false,
   $verify_fuel_stats                    = false,
   $ldap                                 = false,
-  $fuelweb_iso                          = false,
+  $http_share_iso                       = false,
   $check_tasks_graph                    = false,
   $osci_test                            = false,
   $osci_rsync_source_server             = '',
@@ -351,6 +351,26 @@ class fuel_project::jenkins::slave (
       ],
     })
 
+    if ($http_share_iso) {
+      class { '::fuel_project::nginx' :}
+      ::nginx::resource::vhost { 'share':
+        server_name => ['_'],
+        autoindex   => 'on',
+        www_root    => '/var/www',
+      }
+
+      ensure_resource('file', '/var/www/fuelweb-iso', {
+        ensure  => 'directory',
+        owner   => 'jenkins',
+        group   => 'jenkins',
+        mode    => '0755',
+        require => [
+          User['jenkins'],
+          File['/var/www'],
+        ],
+      })
+    }
+
     if (!defined(Package['multistrap'])) {
       package { 'multistrap' :
         ensure => '2.1.6ubuntu3'
@@ -638,26 +658,6 @@ class fuel_project::jenkins::slave (
     ]
 
     ensure_packages($verify_fuel_docs_packages)
-  }
-
-  if ($fuelweb_iso) {
-    class { '::fuel_project::nginx' :}
-    ::nginx::resource::vhost { 'share':
-      server_name => ['_'],
-      autoindex   => 'on',
-      www_root    => '/var/www',
-    }
-
-    ensure_resource('file', '/var/www/fuelweb-iso', {
-      ensure  => 'directory',
-      owner   => 'jenkins',
-      group   => 'jenkins',
-      mode    => '0755',
-      require => [
-        User['jenkins'],
-        File['/var/www'],
-      ],
-    })
   }
 
   # Verify and Build fuel-plugins project
