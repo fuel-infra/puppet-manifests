@@ -14,6 +14,7 @@ class fuel_project::jenkins::slave (
   $fuel_web_selenium                    = false,
   $install_docker                       = false,
   $verify_fuel_stats                    = false,
+  $verify_fuel_pkgs_requirements        = false,
   $ldap                                 = false,
   $http_share_iso                       = false,
   $check_tasks_graph                    = false,
@@ -694,6 +695,17 @@ class fuel_project::jenkins::slave (
       require      => [ Rvm_system_ruby['ruby-2.1.2'],
                       Package['make'] ],
     }
+  }
+
+  # verify requirements-{deb|rpm}.txt files from fuel-main project
+  # test-requirements-{deb|rpm} jobs on fuel-ci
+  if ($verify_fuel_pkgs_requirements==true){
+    $verify_fuel_requirements_packages = [
+      'devscripts',
+      'yum-utils',
+    ]
+
+    ensure_packages($verify_fuel_requirements_packages)
   }
 
   if $install_docker or $build_fuel_iso {
