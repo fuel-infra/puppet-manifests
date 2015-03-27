@@ -68,23 +68,8 @@ class fuel_project::seed (
     require => Class['nginx'],
   }
 
-  ensure_packages('python-seed-cleaner')
-
-  file { '/usr/local/bin/seed-downloads-cleanup.sh' :
-    ensure  => 'present',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    content => template('fuel_project/common/seed-downloads-cleanup.sh.erb'),
-    require => Package['python-seed-cleaner'],
-  }
-
-  cron { 'seed-downloads-cleanup' :
-    command => '/usr/local/bin/seed-downloads-cleanup.sh | logger -t seed-downloads-cleanup',
-    user    => root,
-    hour    => '*/4',
-    minute  => 0,
-    require => File['/usr/local/bin/seed-downloads-cleanup.sh'],
+  class {'::devopslib::downloads_cleaner' :
+    cleanup_dirs => $seed_cleanup_dirs,
   }
 
   if ($apply_firewall_rules) {

@@ -106,24 +106,12 @@ class fuel_project::jenkins::slave (
     }
   }
 
-  ensure_packages(['git', 'python-seed-cleaner', 'python-seed-client'])
-
-  file { '/usr/local/bin/seed-downloads-cleanup.sh' :
-    ensure  => 'present',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    content => template('fuel_project/common/seed-downloads-cleanup.sh.erb'),
-    require => Package['python-seed-cleaner'],
+  class {'::devopslib::downloads_cleaner' :
+    cleanup_dirs => $seed_cleanup_dirs,
+    clean_seeds  => true,
   }
 
-  cron { 'seed-downloads-cleanup' :
-    command => '/usr/local/bin/seed-downloads-cleanup.sh 2>&1 | logger -t seed-downloads-cleanup',
-    user    => root,
-    hour    => '*/4',
-    minute  => 0,
-    require => File['/usr/local/bin/seed-downloads-cleanup.sh'],
-  }
+  ensure_packages(['git', 'python-seed-client'])
 
   # release status reports
   if ($build_fuel_iso == true or $run_tests == true) {
@@ -237,8 +225,6 @@ class fuel_project::jenkins::slave (
       'libvirt-dev',
       'python-dev',
       'python-psycopg2',
-      'python-seed-cleaner',
-      'python-seed-client',
       'python-virtualenv',
       'python-yaml',
       'pkg-config',
