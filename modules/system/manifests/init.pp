@@ -53,6 +53,14 @@ class system (
       require => Package[$mta_packages],
     }
 
+    file { '/etc/mailname' :
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => "${::fqdn}\n",
+    }
+
     exec { $mta_newaliasescmd :
       command   => $mta_newaliasescmd,
       logoutput => on_failure,
@@ -76,7 +84,10 @@ class system (
       enable     => true,
       hasstatus  => true,
       hasrestart => true,
-      require    => Package[$mta_packages],
+      require    => [
+        Package[$mta_packages],
+        File['/etc/mailname'],
+      ]
     }
   }
 
