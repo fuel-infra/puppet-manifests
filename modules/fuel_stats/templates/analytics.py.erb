@@ -9,3 +9,5 @@ ELASTIC_PORT = '<%= @elastic_http_port %>'
 ELASTIC_USE_SSL = False
 ELASTIC_INDEX_FUEL = 'fuel'
 ELASTIC_DOC_TYPE_STRUCTURE = 'structure'
+SQLALCHEMY_DATABASE_URI = \
+  'postgresql://<%= @psql_user %>:<%= @psql_pass %>@<%= @psql_host %>/<%= @psql_db %>'

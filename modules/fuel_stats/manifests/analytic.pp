@@ -2,8 +2,8 @@
 #
 # you should already have cert and key on FS if you want to use ssl
 class fuel_stats::analytic (
-  $development            = false,
-  $auto_update            = false,
+  $development            = $fuel_stats::params::development,
+  $auto_update            = $fuel_stats::params::auto_update,
   $fuel_stats_repo        = 'https://github.com/stackforge/fuel-stats/',
   $elastic_listen_ip      = '127.0.0.1',
   $elastic_http_port      = '9200',
@@ -13,8 +13,22 @@ class fuel_stats::analytic (
   $ssl                    = false,
   $ssl_key_file           = '',
   $ssl_cert_file          = '',
-  $firewall_enable        = false,
-) {
+  $firewall_enable        = $fuel_stats::params::firewall_enable,
+  $psql_host              = $fuel_stats::params::psql_host,
+  $psql_user              = $fuel_stats::params::psql_user,
+  $psql_pass              = $fuel_stats::params::psql_pass,
+  $psql_db                = $fuel_stats::params::psql_db,
+) inherits fuel_stats::params {
+  if ( ! defined(Class['::fuel_stats::db']) ) {
+    class { '::fuel_stats::db' :
+      install_psql => false,
+      psql_host    => $psql_host,
+      psql_user    => $psql_user,
+      psql_pass    => $psql_pass,
+      psql_db      => $psql_db,
+    }
+  }
+
   if $firewall_enable {
     $firewall_rules = hiera_hash('fuel_stats::analytic::firewall_rules', {})
   } else {

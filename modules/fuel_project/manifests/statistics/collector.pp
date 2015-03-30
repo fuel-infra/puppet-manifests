@@ -10,7 +10,7 @@ class fuel_project::statistics::collector (
   $ssl_key_file_contents  = '',
   $http_port              = $fuel_project::statistics::params::http_port,
   $https_port             = $fuel_project::statistics::params::https_port,
-  $migration_ip           = '127.0.0.1',
+  $analytics_ip           = '127.0.0.1',
 ) inherits fuel_project::statistics::params {
   if ! defined (Class['fuel_project::common']) {
     class { '::fuel_project::common':
@@ -44,14 +44,14 @@ class fuel_project::statistics::collector (
     https_port    => $https_port,
     ssl_cert_file => $ssl_cert_file,
     ssl_key_file  => $ssl_key_file,
-    migration_ip  => $migration_ip,
+    analytics_ip  => $analytics_ip,
   }
 
   if ($firewall_enable) {
     include firewall_defaults::pre
     firewall { '1000 Allow analytic psql connection' :
       ensure  => present,
-      source  => "${migration_ip}/32",
+      source  => "${analytics_ip}/32",
       dport   => $psql_port,
       action  => 'accept',
       require => Class['firewall_defaults::pre'],
