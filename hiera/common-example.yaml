@@ -178,7 +178,7 @@ gerrit:
 
 gerrit::allow_remote_admin: true
 gerrit::default_max_clause_count: 131072
-gerrit::hideci::ci_regex: '/^(openstack-ci-.*|mos-infra-ci|ci-build-.*|VM Check Install .*)$/'
+gerrit::hideci::ci_regex: '/^(openstack-ci-.*|mos-infra-ci|ci-build-.*|VM Check Install .*|Pkgs Jenkins)$/'
 gerrit::ssh_replication_rsa_key_contents: |
     -----BEGIN RSA PRIVATE KEY-----
     MIIEowIBAAKCAQEAt2pF+f8G4s5wIW/P3zdY8vUM5w8JDZZ9KdLWw3Iv+uGhrQ1r
