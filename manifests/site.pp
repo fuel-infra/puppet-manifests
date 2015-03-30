@@ -164,6 +164,10 @@ node /mirror-pkgs\.vm\.mirantis\.net/ {
   class { '::fuel_project::mirror' : }
 }
 
+node /osci-mirror-poz\.infra\.mirantis\.net/ {
+  class { '::fuel_project::mirror' : }
+}
+
 node /build(\d+)\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::slave' :
     external_host  => true,
