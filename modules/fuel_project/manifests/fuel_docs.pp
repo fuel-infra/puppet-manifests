@@ -1,15 +1,95 @@
 #
 class fuel_project::fuel_docs(
-  $firewall_enable   = false,
-  $nginx_server_name = 'fuel-docs.test.local',
-  $fuel_version      = '6.0',
-  $ssh_auth_key      = undef,
+  $community_hostname           = 'docs.fuel-infra.org',
+  $community_ssl_cert_content   = '',
+  $community_ssl_cert_filename  = '/etc/ssl/community-docs.crt',
+  $community_ssl_key_content    = '',
+  $community_ssl_key_filename   = '/etc/ssl/community-docs.key',
+  $firewall_enable              = false,
+  $fuel_version                 = '6.0',
+  $hostname                     = 'docs.mirantis.com',
+  $redirect_root_to             = 'http://www.mirantis.com/openstack-documentation/',
+  $ssh_auth_key                 = undef,
+  $ssl_cert_content             = '',
+  $ssl_cert_filename            = '/etc/ssl/docs.crt',
+  $ssl_key_content              = '',
+  $ssl_key_filename             = '/etc/ssl/docs.key',
+  $www_root                     = '/var/www'
 ) {
   class { '::fuel_project::common' :
     external_host => $firewall_enable,
   }
 
-  if $ssh_auth_key {
+  if ($ssl_cert_content and $ssl_key_content) {
+    file { $ssl_cert_filename :
+      ensure  => 'present',
+      mode    => '0600',
+      user    => 'root',
+      owner   => 'root',
+      content => $ssl_cert_content,
+    }
+    file { $ssl_key_filename :
+      ensure  => 'present',
+      mode    => '0600',
+      user    => 'root',
+      owner   => 'root',
+      content => $ssl_key_content,
+    }
+    Nginx::Resource::Vhost <| title == $hostname |> {
+      ssl         => true,
+      ssl_cert    => $ssl_cert_filename,
+      ssl_key     => $ssl_key_filename,
+      listen_port => 443,
+      ssl_port    => 443,
+    }
+    ::nginx::resource::vhost { "${hostname}-redirect" :
+      ensure              => 'present',
+      server_name         => [$hostname],
+      listen_port         => 80,
+      www_root            => $www_root,
+      location_cfg_append => {
+        return => "301 https://${hostname}\$request_uri",
+      },
+    }
+  }
+
+  if ($community_ssl_cert_content and $community_ssl_key_content) {
+    file { $community_ssl_cert_filename :
+      ensure  => 'present',
+      mode    => '0600',
+      user    => 'root',
+      owner   => 'root',
+      content => $community_ssl_cert_content,
+    }
+    file { $community_ssl_key_filename :
+      ensure  => 'present',
+      mode    => '0600',
+      user    => 'root',
+      owner   => 'root',
+      content => $community_ssl_key_content,
+    }
+    Nginx::Resource::Vhost <| title == $community_hostname |> {
+      ssl         => true,
+      ssl_cert    => $community_ssl_cert_filename,
+      ssl_key     => $community_ssl_key_filename,
+      listen_port => 443,
+      ssl_port    => 443,
+    }
+    ::nginx::resource::vhost { "${community_hostname}-redirect" :
+      ensure              => 'present',
+      server_name         => [$community_hostname],
+      listen_port         => 80,
+      www_root            => $www_root,
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
+      location_cfg_append => {
+        return => "301 https://${community_hostname}\$request_uri",
+      },
+    }
+  }
+
+  if ($ssh_auth_key) {
     ssh_authorized_key { 'fuel_docs@jenkins' :
       user => 'root',
       type => 'ssh-rsa',
@@ -19,20 +99,51 @@ class fuel_project::fuel_docs(
 
   class { '::fuel_project::nginx' : }
 
-  ::nginx::resource::vhost { 'fuel-docs' :
+  ::nginx::resource::vhost { $community_hostname :
     ensure              => 'present',
-    server_name         => $server_name,
+    server_name         => [$community_hostname],
     listen_port         => 80,
-    www_root            => '/var/www',
+    www_root            => $www_root,
     location_cfg_append => {
       'rewrite' => {
-        "^/fuel/\$"           => "/fuel/fuel-${fuel_version}",
-        "^/openstack/fuel/\$" => "/openstack/fuel/fuel-${fuel_version}",
+        '^/$'                => '/fuel-dev',
+        '^/fuel/$'           => "/openstack/fuel/fuel-${fuel_version}",
+        '^/(fuel/.+)'        => '/openstack/$1',
+        '^/openstack/fuel/$' => "/openstack/fuel/fuel-${fuel_version}",
+      },
+
+    }
+  }
+
+  ::nginx::resource::location { "${community_hostname}/fuel-dev" :
+    vhost          => $community_hostname,
+    location       => '/fuel-dev',
+    location_alias => '/var/www/fuel-dev-docs/fuel-dev-master',
+  }
+
+  ::nginx::resource::vhost { $hostname :
+    ensure              => 'present',
+    server_name         => [$hostname],
+    listen_port         => 80,
+    www_root            => $www_root,
+    location_cfg_append => {
+      'rewrite' => {
+        '^/$'                => $redirect_root_to,
+        '^/fuel/$'           => "/openstack/fuel/fuel-${fuel_version}",
+        '^/(fuel/.+)'        => '/openstack/$1',
+        '^/openstack/fuel/$' => "/openstack/fuel/fuel-${fuel_version}",
       },
     }
   }
 
-  if ! defined(File['/var/www']) {
+  ::nginx::resource::location { "${hostname}/fuel-dev" :
+    vhost          => $hostname,
+    location       => '/fuel-dev',
+    location_alias => '/var/www/fuel-dev-docs/fuel-dev-master',
+  }
+
+
+  if (! defined(File['/var/www'])) {
     file { '/var/www' :
       ensure => 'directory',
       mode   => '0755',
@@ -50,7 +161,7 @@ class fuel_project::fuel_docs(
     require => File['/var/www'],
   }
 
-  if $firewall_enable {
+  if ($firewall_enable) {
     include firewall_defaults::pre
     firewall { '1000 - allow http traffic' :
       dport   => 80,
