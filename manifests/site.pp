@@ -165,6 +165,7 @@ node /mirror-pkgs\.vm\.mirantis\.net/ {
 }
 
 node /osci-mirror-poz\.infra\.mirantis\.net/ {
+  class { '::fuel_project::common' : }
   class { '::fuel_project::mirror' : }
 }
 
