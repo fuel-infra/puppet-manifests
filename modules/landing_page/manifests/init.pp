@@ -2,6 +2,7 @@
 #
 class landing_page (
   $app_user               = $::landing_page::params::app_user,
+  $apps                   = $::landing_page::params::apps,
   $apply_firewall_rules   = $::landing_page::params::apply_firewall_rules,
   $config                 = $::landing_page::params::config,
   $config_template        = $::landing_page::params::config_template,
@@ -11,6 +12,7 @@ class landing_page (
   $database_password      = $::landing_page::params::database_password,
   $database_port          = $::landing_page::params::database_port,
   $database_user          = $::landing_page::params::database_user,
+  $debug                  = $::landing_page::params::debug,
   $firewall_allow_sources = $::landing_page::params::firewall_allow_sources,
   $nginx_access_log       = $::landing_page::params::nginx_access_log,
   $nginx_error_log        = $::landing_page::params::nginx_error_log,

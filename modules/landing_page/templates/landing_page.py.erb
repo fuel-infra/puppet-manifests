@@ -4,7 +4,7 @@ import os
 
 PROJECT_ROOT = os.path.dirname(__file__)
 
-DEBUG = False
+DEBUG = <%= @debug ? 'True' : 'False' %>
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -91,9 +91,9 @@ INSTALLED_APPS = (
 
     'south',
 
-    'landing_page',
-    'security',
-    'sheet',
+    <% @apps.each {|app| -%>
+    '<%= app -%>',
+    <% } -%>
 )
 
 LOGGING = {
