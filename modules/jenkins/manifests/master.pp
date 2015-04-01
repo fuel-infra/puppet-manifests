@@ -15,6 +15,7 @@ class jenkins::master (
   $jenkins_ssh_public_key_contents = '',
   # Jenkins config parameters
   $jenkins_java_args = '',
+  $jenkins_proto = 'http',
   $jenkins_port = '8080',
   $jenkins_address = '0.0.0.0',
   $nginx_access_log = '/var/log/nginx/access.log',
@@ -27,7 +28,6 @@ class jenkins::master (
   # Jenkins auth
   $security_model = 'unsecured',
   $install_groovy = 'yes',
-  $jenkins_api_url = 'http://localhost:8080/',
   $jenkins_management_login = '',
   $jenkins_management_password = '',
   $jenkins_management_email = '',
@@ -291,7 +291,6 @@ class jenkins::master (
     ], ' ')
   }
 
-
   # Execute groovy script to setup auth
   exec { 'jenkins_auth_config':
     require   => [
@@ -301,7 +300,7 @@ class jenkins::master (
     command   => join([
         '/usr/bin/java',
         "-jar ${jenkins_cli_file}",
-        "-s ${jenkins_api_url}",
+        "-s ${jenkins_proto}://${jenkins_address}:${jenkins_port}",
         "groovy ${jenkins_libdir}/jenkins_cli.groovy",
         $security_opt_params,
     ], ' '),

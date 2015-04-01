@@ -187,7 +187,23 @@ class Actions {
   //
   // Sets up security for the Jenkins Master instance.
   //
-  void set_security_ldap(String overwrite_permissions=null, String item_perms=null, String server=null, String rootDN=null,  String userSearch=null, String inhibitInferRootDN=null, String userSearchBase=null, String groupSearchBase=null, String managerDN=null, String managerPassword=null, String ldapuser, String email=null, String password, String name=null, String pub_keys=null) {
+  void set_security_ldap(
+    String overwrite_permissions=null,
+    String item_perms=null,
+    String server=null,
+    String rootDN=null,
+    String userSearch=null,
+    String inhibitInferRootDN=null,
+    String userSearchBase=null,
+    String groupSearchBase=null,
+    String managerDN=null,
+    String managerPassword=null,
+    String ldapuser,
+    String email=null,
+    String password,
+    String name=null,
+    String pub_keys=null
+  ) {
 
     if (inhibitInferRootDN==null) {
       inhibitInferRootDN = false
@@ -219,7 +235,9 @@ class Actions {
         strategy.add(p,user)
       }
     }
-    realm = new hudson.security.LDAPSecurityRealm(server, rootDN, userSearchBase, userSearch, groupSearchBase, managerDN, managerPassword, inhibitInferRootDN.toBoolean())
+    realm = new hudson.security.LDAPSecurityRealm(
+      server, rootDN, userSearchBase, userSearch, groupSearchBase, managerDN, managerPassword, inhibitInferRootDN.toBoolean()
+    )
     // apply new strategy&realm
     if (overwrite_permissions == 'true') {
       instance.setAuthorizationStrategy(strategy)

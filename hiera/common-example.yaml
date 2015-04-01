@@ -330,6 +330,8 @@ jenkins::master::jenkins_ssh_private_key_contents: |
 
 jenkins::master::jenkins_ssh_public_key_contents: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNWgMf6IisSY0HK0mpHkgVhRxHsDom81PJ6W3jAgcSBWY1Kz/2vL98SK91ppgYmnDa2uLbchY2Xk9ciefMpm7Qq5EO6oSPKJJhADyCYAX/7YomZIy4Xu7HxEh0Z6VCLt0DymwN4tBS9JuTISvEm17BLgtis/AemA2eRIl0JAdPf9rmQps4KP5AhG60ucdtTKD0y8TFK95ateplgcq9JLRInhrdg/vnJLbKnV7lP1g5dfY1rm6bum7P+Jwf2tdTOa0b5ucK/+iWVbyPO4Z2afPpblh4Vynfe2wMzzpGAp3n5MwtH2EZmSXm/B6/CkgOFROsmWH8MzQEvNBGHhw+ONR9'
 jenkins::master::jenkins_address: '127.0.0.1'
+jenkins::master::jenkins_proto: 'http'
+jenkins::master::jenkins_port: '8080'
 jenkins::master::jenkins_java_args: '-Xmx1500m -Xms1024m -Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/Moscow'
 jenkins::master::jjb_username: 'jjb_user'
 jenkins::master::jjb_password: 'jjb_pass'
