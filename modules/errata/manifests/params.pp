@@ -1,0 +1,25 @@
+# Class: errata::params
+#
+class errata::params (
+  $config                = '/etc/errata_base/settings.py',
+  $config_template       = 'errata/settings.py.erb',
+  $database_engine       = 'django.db.backends.mysql',
+  $database_host         = 'localhost',
+  $database_name         = 'errata',
+  $database_password     = 'errata',
+  $database_port         = '3306',
+  $database_user         = 'erratabase',
+  $debug                 = false,
+  $group                 = 'erratum',
+  $nginx_access_log      = '/var/log/nginx/access.log',
+  $nginx_error_log       = '/var/log/nginx/error.log',
+  $nginx_log_format      = undef,
+  $nginx_server_name     = $::fqdn,
+  $package               = ['python-django-errata-base'],
+  $ssl_cert_file         = '/etc/ssl/certs/errata.crt',
+  $ssl_cert_file_content = '',
+  $ssl_key_file          = '/etc/ssl/private/errata.key',
+  $ssl_key_file_content  = '',
+  $user                  = 'erratum',
+  $uwsgi_socket          = '127.0.0.1:7940',
+) { }
