@@ -52,15 +52,13 @@ class fuel_project::seed (
     }
   }
 
-  if (!defined(File['/var/www'])) {
-    ensure_resource('file', '/var/www', {
-      ensure => 'directory',
-      owner => 'root',
-      group => 'root',
-      mode => '0755',
-      before => File[$seed_dir],
-    })
-  }
+  ensure_resource('file', '/var/www', {
+    ensure => 'directory',
+    owner => 'root',
+    group => 'root',
+    mode => '0755',
+    before => File[$seed_dir],
+  })
 
   file { $seed_dir :
     ensure  => 'directory',
