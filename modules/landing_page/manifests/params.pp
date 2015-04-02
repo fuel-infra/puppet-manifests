@@ -3,6 +3,12 @@
 class landing_page::params {
   # Landing page webapp
   $app_user               = 'release'
+  $apps                   = [
+    'landing_page',
+    'plugins_catalog',
+    'security',
+    'sheet'
+  ]
   $apply_firewall_rules   = false
   $config                 = '/etc/landing_page/settings.py'
   $config_template        = 'landing_page/landing_page.py.erb'
@@ -12,6 +18,7 @@ class landing_page::params {
   $database_password      = 'release'
   $database_port          = ''
   $database_user          = 'release'
+  $debug                  = false
   $firewall_allow_sources = {}
   $nginx_server_name      = $::fqdn
   $nginx_access_log       = '/var/log/nginx/access.log'
