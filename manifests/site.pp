@@ -118,7 +118,7 @@ node /(seed-(cz|us)1\.fuel-infra\.org)/ {
   }
 }
 
-node /osci-mirror-(msk|srt|kha)\.(msk|srt|kha)\.mirantis\.net/ {
+node /osci-mirror-(msk|srt|kha|poz)\.(msk|srt|kha|infra)\.mirantis\.net/ {
   class { '::fuel_project::common' :}
   class { '::fuel_project::mirror' :}
 }
@@ -165,11 +165,6 @@ node /mirror(\d+)\.fuel-infra\.org/ {
 
 node /mirror-pkgs\.vm\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' : }
-  class { '::fuel_project::mirror' : }
-}
-
-node /osci-mirror-poz\.infra\.mirantis\.net/ {
-  class { '::fuel_project::common' : }
   class { '::fuel_project::mirror' : }
 }
 
@@ -504,11 +499,11 @@ node 'slave-22.test.local' {
 
 # Sandbox
 
-node 'jenkins-sandbox.vm.mirantis.net' {
+node 'jenkins-sandbox.infra.mirantis.net' {
   class { '::fuel_project::jenkins::master' : }
 }
 
-node /slave([0-1])([1-2])-sandbox\.vm.mirantis\.net/ {
+node /slave([0-1])([1-2])-sandbox\.infra.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave': }
 }
 
