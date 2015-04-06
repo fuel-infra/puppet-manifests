@@ -87,9 +87,8 @@ node /cacher01-(cz|kha|mnv|poz)\.vm\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :}
 }
 
-node /(tracker([0-9]{2})-(msk|mnv|bud|srt|kha|poz)\.devops|ctorrent-msk\.msk)\.mirantis\.net/ {
-  class { '::fuel_project::common' :}
-  class { '::opentracker' :}
+node /(tracker([0-9]{2})-(msk|mnv|bud|srt|kha|poz)\.infra|ctorrent-msk\.msk)\.mirantis\.net/ {
+  class { '::fuel_project::roles::tracker' :}
 }
 
 node /(seed-(cz|us)1\.fuel-infra\.org)/ {
