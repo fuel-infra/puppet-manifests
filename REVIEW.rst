@@ -12,7 +12,7 @@ Requirements
   ::
 
     class zabbix::proxy
-    class zabbix::daabase
+    class zabbix::database
     class zabbix::proxy
     class zabbix::server
 
