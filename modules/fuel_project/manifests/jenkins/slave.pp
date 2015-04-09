@@ -255,6 +255,11 @@ class fuel_project::jenkins::slave (
       require => User['jenkins'],
     }
 
+    augeas { 'sysctl-net.bridge.bridge-nf-call-iptables' :
+      context => '/files/etc/modules',
+      changes => 'clear bridge',
+    }
+
     file { '/etc/sudoers.d/systest' :
       ensure  => 'present',
       owner   => 'root',
@@ -267,7 +272,6 @@ class fuel_project::jenkins::slave (
       value   => '0',
       require => Package[$system_tests_packages],
     }
-
   }
 
   # provide env for building packages, actaully for "make sources"
