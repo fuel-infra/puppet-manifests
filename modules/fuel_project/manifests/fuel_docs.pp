@@ -22,9 +22,8 @@ class fuel_project::fuel_docs(
   }
 
   user { $docs_user :
-    ensure  => 'present',
-    shell   => '/bin/bash',
-    options => 'command=/usr/bin/rsync',
+    ensure => 'present',
+    shell  => '/bin/bash',
   }
 
   if ($ssl_cert_content and $ssl_key_content) {
