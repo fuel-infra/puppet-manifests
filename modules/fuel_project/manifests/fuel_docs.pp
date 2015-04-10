@@ -134,6 +134,7 @@ class fuel_project::fuel_docs(
     location       => '/fuel-dev',
     location_alias => "${www_root}/fuel-dev-docs/fuel-dev-master",
     ssl            => $community_ssl,
+    ssl_only       => $community_ssl,
   }
 
   ::nginx::resource::vhost { $hostname :
@@ -156,6 +157,7 @@ class fuel_project::fuel_docs(
     location       => '/fuel-dev',
     location_alias => "${www_root}/fuel-dev-docs/fuel-dev-master",
     ssl            => $ssl,
+    ssl_only       => $community_ssl,
   }
 
 
@@ -186,8 +188,8 @@ class fuel_project::fuel_docs(
 
   if ($firewall_enable) {
     include firewall_defaults::pre
-    firewall { '1000 - allow http traffic' :
-      dport   => 80,
+    firewall { '1000 - allow http/https traffic' :
+      dport   => [80, 443],
       action  => 'accept',
       require => Class['firewall_defaults::pre'],
     }
