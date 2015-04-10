@@ -22,8 +22,9 @@ class fuel_project::fuel_docs(
   }
 
   user { $docs_user :
-    ensure => 'present',
-    shell  => '/bin/bash',
+    ensure     => 'present',
+    shell      => '/bin/bash',
+    managehome => true,
   }
 
   if ($ssl_cert_content and $ssl_key_content) {
@@ -57,6 +58,9 @@ class fuel_project::fuel_docs(
         return => "301 https://${hostname}\$request_uri",
       },
     }
+    $ssl = true
+  } else {
+    $ssl = false
   }
 
   if ($community_ssl_cert_content and $community_ssl_key_content) {
@@ -93,6 +97,9 @@ class fuel_project::fuel_docs(
         return => "301 https://${community_hostname}\$request_uri",
       },
     }
+    $community_ssl = true
+  } else {
+    $community_ssl = false
   }
 
   if ($ssh_auth_key) {
@@ -126,6 +133,7 @@ class fuel_project::fuel_docs(
     vhost          => $community_hostname,
     location       => '/fuel-dev',
     location_alias => "${www_root}/fuel-dev-docs/fuel-dev-master",
+    ssl            => $community_ssl,
   }
 
   ::nginx::resource::vhost { $hostname :
@@ -147,6 +155,7 @@ class fuel_project::fuel_docs(
     vhost          => $hostname,
     location       => '/fuel-dev',
     location_alias => "${www_root}/fuel-dev-docs/fuel-dev-master",
+    ssl            => $ssl,
   }
 
 
