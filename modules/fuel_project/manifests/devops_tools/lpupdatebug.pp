@@ -49,7 +49,7 @@ class fuel_project::devops_tools::lpupdatebug (
     require => Package['python-lpupdatebug'],
   }
 
-  service { 'lpupdatebug' :
+  service { 'python-lpupdatebug' :
     ensure     => running,
     enable     => true,
     hasrestart => false,
