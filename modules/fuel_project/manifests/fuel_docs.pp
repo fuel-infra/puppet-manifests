@@ -5,6 +5,7 @@ class fuel_project::fuel_docs(
   $community_ssl_cert_filename  = '/etc/ssl/community-docs.crt',
   $community_ssl_key_content    = '',
   $community_ssl_key_filename   = '/etc/ssl/community-docs.key',
+  $docs_user                    = 'docs',
   $firewall_enable              = false,
   $fuel_version                 = '6.0',
   $hostname                     = 'docs.mirantis.com',
@@ -18,6 +19,12 @@ class fuel_project::fuel_docs(
 ) {
   class { '::fuel_project::common' :
     external_host => $firewall_enable,
+  }
+
+  user { $docs_user :
+    ensure  => 'present',
+    shell   => '/bin/bash',
+    options => 'command=/usr/bin/rsync',
   }
 
   if ($ssl_cert_content and $ssl_key_content) {
@@ -91,9 +98,10 @@ class fuel_project::fuel_docs(
 
   if ($ssh_auth_key) {
     ssh_authorized_key { 'fuel_docs@jenkins' :
-      user => 'root',
-      type => 'ssh-rsa',
-      key  => $ssh_auth_key,
+      user    => $docs_user,
+      type    => 'ssh-rsa',
+      key     => $ssh_auth_key,
+      require => User[$docs_user],
     }
   }
 
@@ -118,7 +126,7 @@ class fuel_project::fuel_docs(
   ::nginx::resource::location { "${community_hostname}/fuel-dev" :
     vhost          => $community_hostname,
     location       => '/fuel-dev',
-    location_alias => '/var/www/fuel-dev-docs/fuel-dev-master',
+    location_alias => "${www_root}/fuel-dev-docs/fuel-dev-master",
   }
 
   ::nginx::resource::vhost { $hostname :
@@ -139,26 +147,33 @@ class fuel_project::fuel_docs(
   ::nginx::resource::location { "${hostname}/fuel-dev" :
     vhost          => $hostname,
     location       => '/fuel-dev',
-    location_alias => '/var/www/fuel-dev-docs/fuel-dev-master',
+    location_alias => "${www_root}/fuel-dev-docs/fuel-dev-master",
   }
 
 
-  if (! defined(File['/var/www'])) {
-    file { '/var/www' :
-      ensure => 'directory',
-      mode   => '0755',
-      owner  => 'root',
-      group  => 'root',
+  if (! defined(File[$www_root])) {
+    file { $www_root :
+      ensure  => 'directory',
+      mode    => '0755',
+      owner   => $docs_user,
+      group   => $docs_user,
+      require => User[$docs_user],
+    }
+  } else {
+    File <| title == $www_root |> {
+      owner   => $docs_user,
+      group   => $docs_user,
+      require => User[$docs_user],
     }
   }
 
-  file { '/var/www/robots.txt' :
+  file { "${www_root}/robots.txt" :
     ensure  => 'present',
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
     content => template('fuel_project/fuel_docs/robots.txt.erb'),
-    require => File['/var/www'],
+    require => File[$www_root],
   }
 
   if ($firewall_enable) {
