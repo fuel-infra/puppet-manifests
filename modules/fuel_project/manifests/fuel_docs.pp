@@ -157,7 +157,7 @@ class fuel_project::fuel_docs(
     location       => '/fuel-dev',
     location_alias => "${www_root}/fuel-dev-docs/fuel-dev-master",
     ssl            => $ssl,
-    ssl_only       => $community_ssl,
+    ssl_only       => $ssl,
   }
 
 
