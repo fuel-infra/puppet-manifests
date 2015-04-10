@@ -296,6 +296,7 @@ class jenkins::master (
     require   => [
       File["${jenkins_libdir}/jenkins_cli.groovy"],
       Package['groovy'],
+      Service['jenkins'],
     ],
     command   => join([
         '/usr/bin/java',
