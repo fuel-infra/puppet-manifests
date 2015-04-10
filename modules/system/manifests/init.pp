@@ -67,13 +67,17 @@ class system (
       require   => File[$mta_aliases],
     }
 
-    if($::osfamily == 'Debian') {
-      file { '/etc/postfix/main.cf' :
-        ensure  => 'present',
-        mode    => '0644',
-        owner   => 'root',
-        group   => 'root',
-        content => template('system/main.cf.erb'),
+    if ($mta_local_only) {
+      augeas { 'use_mta_locally_only' :
+        context => '/files/etc/postfix/main.cf',
+        changes => 'set default_transport "error: This server sends mail only locally"',
+        require => Package[$mta_packages],
+        notify  => Service['postfix'],
+      }
+    } else {
+      augeas { 'use_mta_locally_only' :
+        context => '/files/etc/postfix/main.cf',
+        changes => 'rm default_transport',
         require => Package[$mta_packages],
         notify  => Service['postfix'],
       }
