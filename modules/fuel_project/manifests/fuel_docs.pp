@@ -30,14 +30,14 @@ class fuel_project::fuel_docs(
     file { $ssl_cert_filename :
       ensure  => 'present',
       mode    => '0600',
-      user    => 'root',
+      group   => 'root',
       owner   => 'root',
       content => $ssl_cert_content,
     }
     file { $ssl_key_filename :
       ensure  => 'present',
       mode    => '0600',
-      user    => 'root',
+      group   => 'root',
       owner   => 'root',
       content => $ssl_key_content,
     }
@@ -63,14 +63,14 @@ class fuel_project::fuel_docs(
     file { $community_ssl_cert_filename :
       ensure  => 'present',
       mode    => '0600',
-      user    => 'root',
+      group   => 'root',
       owner   => 'root',
       content => $community_ssl_cert_content,
     }
     file { $community_ssl_key_filename :
       ensure  => 'present',
       mode    => '0600',
-      user    => 'root',
+      group   => 'root',
       owner   => 'root',
       content => $community_ssl_key_content,
     }
