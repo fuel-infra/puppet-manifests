@@ -71,7 +71,6 @@ class gerrit (
   $nginx_log_format = undef,
 ) {
   include jeepyb
-  include pip
 
   if (!defined(Class['::nginx'])) {
     class { '::nginx' :}
