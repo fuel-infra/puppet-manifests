@@ -8,13 +8,14 @@ class racktables (
   $nginx_access_log      = '/var/log/nginx/access.log',
   $nginx_error_log       = '/var/log/nginx/error.log',
   $nginx_log_format      = undef,
-  $require_local_account = 'TRUE',
+  $require_local_account = true,
   $service_fqdn          = 'racktables.test.local',
   $ssl_cert_content      = '',
   $ssl_cert_filename     = '/etc/ssl/racktables.crt',
   $ssl_key_content       = '',
   $ssl_key_filename      = '/etc/ssl/racktables.key',
   $user_auth_src         = 'database',
+  $ldap_options          = undef
 ) {
   $php_modules = [ 'mysql', 'ldap', 'gd', 'cli' ]
   $www_root = '/usr/share/racktables/wwwroot'
@@ -35,17 +36,16 @@ class racktables (
   }
 
   if ($ssl_cert_content and $ssl_key_content) {
+    $ssl = true
     file { $ssl_cert_filename :
       ensure  => 'present',
       mode    => '0600',
-      user    => 'root',
       owner   => 'root',
       content => $ssl_cert_content,
     }
     file { $ssl_key_filename :
       ensure  => 'present',
       mode    => '0600',
-      user    => 'root',
       owner   => 'root',
       content => $ssl_key_content,
     }
