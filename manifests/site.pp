@@ -122,7 +122,7 @@ node /osci-mirror-(msk|srt|kha|poz)\.(msk|srt|kha|infra)\.mirantis\.net/ {
   class { '::fuel_project::mirror' :}
 }
 
-node /(pkgs)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
+node /(infra-)?ci-slave([0-9]{2})\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::slave' :
     external_host       => true,
     run_tests           => true,
