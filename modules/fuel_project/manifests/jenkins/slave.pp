@@ -20,18 +20,23 @@ class fuel_project::jenkins::slave (
   $check_tasks_graph                    = false,
   $osci_test                            = false,
   $osci_rsync_source_server             = '',
-  $osci_ubuntu_image_name               = '',
-  $osci_centos_image_name               = '',
-  $osci_ubuntu_job_dir                  = '',
-  $osci_centos_job_dir                  = '',
-  $osci_ubuntu_remote_dir               = '',
-  $osci_centos_remote_dir               = '',
+  $osci_ubuntu_image_name               = 'ubuntu-deb-test.qcow2',
+  $osci_centos_image_name               = 'centos6.4-x86_64-gold-master.img',
+  $osci_trusty_image_name               = 'trusty.qcow2',
+  $osci_ubuntu_job_dir                  = '/home/jenkins/vm-ubuntu-test-deb',
+  $osci_centos_job_dir                  = '/home/jenkins/vm-centos-test-rpm',
+  $osci_trusty_job_dir                  = '/home/jenkins/vm-trusty-test-deb',
+  $osci_ubuntu_remote_dir               = 'vm-ubuntu-test-deb',
+  $osci_centos_remote_dir               = 'vm-centos-test-rpm',
+  $osci_trusty_remote_dir               = 'vm-trusty-test-deb',
   $osci_obs_jenkins_key                 = '',
   $osci_obs_jenkins_key_contents        = '',
   $osci_vm_ubuntu_jenkins_key           = '',
   $osci_vm_ubuntu_jenkins_key_contents  = '',
   $osci_vm_centos_jenkins_key           = '',
   $osci_vm_centos_jenkins_key_contents  = '',
+  $osci_vm_trusty_jenkins_key           = '',
+  $osci_vm_trusty_jenkins_key_contents  = '',
   $osci_dhcp_start                      = '',
   $osci_dhcp_end                        = '',
   $osci_ip_address                      = '',
@@ -417,6 +422,7 @@ class fuel_project::jenkins::slave (
 
   # osci_tests - for deploying osci jenkins slaves
   if ($osci_test == true) {
+
     # osci needed packages
     $osci_test_packages = [
       'osc',
@@ -424,6 +430,7 @@ class fuel_project::jenkins::slave (
 
     ensure_packages($osci_test_packages)
 
+    # sudo for user 'jenkins'
     file { 'jenkins-sudo-for-osci-vm' :
       path    => '/etc/sudoers.d/jenkins_sudo',
       owner   => 'root',
@@ -433,6 +440,7 @@ class fuel_project::jenkins::slave (
       require => User['jenkins'],
     }
 
+    # obs client settings
     file { 'oscrc' :
       path    => '/home/jenkins/.oscrc',
       owner   => 'jenkins',
@@ -472,14 +480,19 @@ class fuel_project::jenkins::slave (
     }
 
     # osci needed directories
-    file { [$osci_ubuntu_job_dir, $osci_centos_job_dir] :
+    file {
+          [
+            $osci_ubuntu_job_dir,
+            $osci_centos_job_dir,
+            $osci_trusty_job_dir
+          ] :
       ensure  => 'directory',
       owner   => 'jenkins',
       group   => 'jenkins',
       require => User['jenkins'],
     }
 
-    # rsync of vm images from existing osci node
+    # rsync of vm images from existing rsync share
     class { 'rsync': package_ensure => 'present' }
 
     rsync::get { $osci_ubuntu_image_name :
@@ -502,14 +515,40 @@ class fuel_project::jenkins::slave (
       ],
     }
 
+    rsync::get { $osci_trusty_image_name :
+      source  => "rsync://${osci_rsync_source_server}/${osci_trusty_remote_dir}/${osci_trusty_image_name}",
+      path    => $osci_trusty_job_dir,
+      timeout => 14400,
+      require => [
+        File[$osci_trusty_job_dir],
+        User['jenkins'],
+      ],
+    }
+
     # osci needed ssh keys
-    file { [$osci_obs_jenkins_key, $osci_vm_ubuntu_jenkins_key, $osci_vm_centos_jenkins_key]:
+    file {
+        [
+          $osci_obs_jenkins_key,
+          $osci_vm_ubuntu_jenkins_key,
+          $osci_vm_centos_jenkins_key,
+          $osci_vm_trusty_jenkins_key
+        ]:
       owner   => 'jenkins',
       group   => 'nogroup',
       mode    => '0600',
-      content => [$osci_obs_jenkins_key_contents, $osci_vm_ubuntu_jenkins_key_contents, $osci_vm_centos_jenkins_key_contents],
+      content => [
+        $osci_obs_jenkins_key_contents,
+        $osci_vm_ubuntu_jenkins_key_contents,
+        $osci_vm_centos_jenkins_key_contents,
+        $osci_vm_trusty_jenkins_key_contents
+      ],
       require => [
-        File[$osci_ubuntu_job_dir, $osci_centos_job_dir, '/home/jenkins/.ssh'],
+        File[
+          '/home/jenkins/.ssh',
+          $osci_ubuntu_job_dir,
+          $osci_centos_job_dir,
+          $osci_trusty_job_dir
+        ],
         User['jenkins'],
       ],
     }

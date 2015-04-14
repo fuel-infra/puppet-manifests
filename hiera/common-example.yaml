@@ -577,10 +577,13 @@ fuel_project::jenkins::slave::osci_libvirt_dev: 'virbr0'
 fuel_project::jenkins::slave::osci_rsync_source_server: 'twin0d-srt.srt.mirantis.net'
 fuel_project::jenkins::slave::osci_ubuntu_image_name: 'ubuntu-deb-test.qcow2'
 fuel_project::jenkins::slave::osci_centos_image_name: 'centos6.4-x86_64-gold-master.img'
+fuel_project::jenkins::slave::osci_trusty_image_name: 'trusty.qcow2'
 fuel_project::jenkins::slave::osci_ubuntu_job_dir: '/home/jenkins/vm-ubuntu-test-deb'
 fuel_project::jenkins::slave::osci_centos_job_dir: '/home/jenkins/vm-centos-test-rpm'
+fuel_project::jenkins::slave::osci_trusty_job_dir: '/home/jenkins/vm-trusty-test-deb'
 fuel_project::jenkins::slave::osci_ubuntu_remote_dir: 'vm-ubuntu-test-deb'
 fuel_project::jenkins::slave::osci_centos_remote_dir: 'vm-centos-test-rpm'
+fuel_project::jenkins::slave::osci_trusty_remote_dir: 'vm-trusty-test-deb'
 fuel_project::jenkins::slave::osci_obs_jenkins_key: '/home/jenkins/.ssh/oct'
 fuel_project::jenkins::slave::osci_obs_jenkins_key_contents: |
   -----BEGIN RSA PRIVATE KEY-----
@@ -669,6 +672,36 @@ fuel_project::jenkins::slave::osci_vm_centos_jenkins_key_contents: |
   NNwpL6UCgYByDi41XcgajLes6beXxYR2+WCgHjPGCMXWlS0N2ZYOf4I4/lDSeTuB
   +p0Hzdh2p2iC34QTXnmX5PZiFDi0yU4Y7tHE3XoSnlerIwebJjLMS70C8o5a/Oog
   3AbkVdQG14ZNVBJo113bbvHYrj68Tas6SMdN6qxleoZxMjhp3cAjZQ==
+  -----END RSA PRIVATE KEY-----
+
+fuel_project::jenkins::slave::osci_vm_trusty_jenkins_key: '/home/jenkins/vm-trusty-test-deb/trusty.key'
+fuel_project::jenkins::slave::osci_vm_trusty_jenkins_key_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEogIBAAKCAQEAvms/8zr7LuBWTUgs0JOpA90Wwsq6VlX/Sz358MjT1CmIBJJ9
+  XX3re/6X8Q9vbMm8Fchm0+BNPqpdcEqvGakBmOstPpbGeFUn0H65T4MrkT3DWDON
+  zPE6v1zF0wwrnmeRY2LYaPuonQuCpNHyGeB5b3lZGBhb395L1stuQFmQw+XnzDUq
+  JF3RYWEmWTkjJ21s3WkqHVbG5GFOs8x2YP2VVvPEkVUHMAaoph9HvqYEsxm5Vjfd
+  gmNjwXkd819dUF6oyKPQiReN1/8uPwh28WaY061f6aio0z6Y9w9QmbDvAI3gLRP/
+  3XwSLGxuRGfnGiVGDKUWW/GDGAbLYE5fUyMRkQIDAQABAoIBAA1luFshpDiZGhlX
+  4adPLE4USRytbMzUQiEGHEa/qn+76FECCYYBbQcNU51nS5yo2O3jarCvkF+/VtGm
+  v4kbpfwfV9CWhSJEQ4fc0qbwgKk4Yj0ba3em5U4/db+ylIMRoF4Qv08rnaJnA+sa
+  xmDhtUmNjSIv3I70sftL1tb6NkBCFoFWCXVDVCjgRDRaGErO5034/bcMWK6i7wp6
+  IgmzyydsOwZ4hSWFkX18uxN4OiWI7iS5ptXGiGDiehaiuXFTTLSxL4w9cH9YES+j
+  NQSNgTCg9lIFx8lT+A8R5fE9M+CLNQWob+5TeLtPCAfaN9+q9/qT3pVpIBTypyxe
+  37kjh8ECgYEA9Ghu6Gm/2jI0pU2n/GKLhGdlJ4pvMVRseRdYypdl7jFbZCfJm04t
+  E+4rxgqTL9Ya0ujYfmLBRBGfK7zfnrI2bpDuzGk+hvrTzx/lAagQ/9lu93BJwoGY
+  FrwScuwlMW/mMQtexkF1ZpXVmLZ05ZMwHIUMeqFRga/R1BEvkj8LlXkCgYEAx3NK
+  LqtON1p0kFWOyKtG8nYcO94hSKs83GrOzinC6ReHB5kJ+K1YKh5C3j4+miMOkw5j
+  5J/AbceQ8IqCoJQ7xL0uiOc3+sXR5n6N9qj3HilCoWHhYYKwCVzNLJA5O3EPTrOy
+  zhTelQEIdq2jEr6YzCvUuhUjSBRGubyaGr/aztkCgYANDIJXYEYA9UtARBwi6nP+
+  drK84LQ9Ev/Tmz5/WoPzqqjxePpXk13uwXmO0kO3exvlhM8COG2PH826vRPHWkZz
+  ssM9IKVY+Y1TcqV8aCe4MTiud01I2DhxhksJ3bfCovHMTooZ1abZ+kf0JlGpbClW
+  bHgVGAXNAcEXLG+4xCrvKQKBgBKFjFAFLIBLcCOvLlFIRpBhk4GjwSeEb2Rwrr/K
+  dQU8YBe+iISFZHiU0tTcpueddc8GORSUGUSYkccktbi/y0Ub5GRmRHaPREzJV9me
+  G0S7xCpEcq+heUOFULBgvE/e0fMXEPW+TmU78VNEEK6+8GWVdG3LZLle2KqK7yyo
+  wGMRAoGANE8idF32CBt8xSmlDC67Gzh6nhfqb5tZjaUxEEKcLnmZNw+3fDqnusbS
+  AEx/BJR1NQ48aOZUDsAlBQEL5zxBxWNskJ5U18cQgnfqXLv6Zo1BwD02Uu3T5PXa
+  E/1C7GI2OKg8pZGBDZFJ/fMyunxpLCTVAyzbWOqmANIkvoWCrnA=
   -----END RSA PRIVATE KEY-----
 
 mysql::client::package_name: 'percona-server-client-5.6'
