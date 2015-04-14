@@ -98,7 +98,7 @@ class fuel_project::jenkins::slave (
 
   class { 'transmission::daemon' :}
 
-  if $jenkins_swarm_slave == true {
+  if ($jenkins_swarm_slave == true) {
     class { '::jenkins::swarm_slave' :}
   } else {
     class { '::jenkins::slave' :}
@@ -566,12 +566,12 @@ class fuel_project::jenkins::slave (
   # *** Custom tests ***
 
   # anonymous statistics tests
-  if $verify_fuel_stats {
+  if ($verify_fuel_stats) {
     class { '::fuel_stats::tests' : }
   }
 
   # Web tests by verify-fuel-web, stackforge-verify-fuel-web, verify-fuel-ostf
-  if $verify_fuel_web {
+  if ($verify_fuel_web) {
     $verify_fuel_web_packages = [
       'inkscape',
       'libxslt1-dev',
@@ -629,8 +629,8 @@ class fuel_project::jenkins::slave (
     }
   }
 
-  # Astute tests require only rvm package
-  if $verify_fuel_astute {
+  # For the below roles we need to have rvm base class
+  if ($verify_fuel_astute or $simple_syntax_check or $build_fuel_plugins) {
     class { 'rvm' : }
     rvm::system_user { 'jenkins': }
     rvm_system_ruby { 'ruby-2.1.2' :
@@ -638,6 +638,11 @@ class fuel_project::jenkins::slave (
       default_use => true,
       require     => Class['rvm'],
     }
+  }
+
+
+  # Astute tests require only rvm package
+  if ($verify_fuel_astute) {
     rvm_gem { 'bundler' :
       ensure       => 'present',
       ruby_version => 'ruby-2.1.2',
@@ -654,14 +659,6 @@ class fuel_project::jenkins::slave (
       source       => $raemon_file,
       require      => [ Rvm_system_ruby['ruby-2.1.2'], File[$raemon_file] ],
     }
-
-    if ($simple_syntax_check) {
-      rvm_gem { 'puppet-lint' :
-        ensure       => 'installed',
-        ruby_version => 'ruby-2.1.2',
-        require      => Rvm_system_ruby['ruby-2.1.2'],
-      }
-    }
   }
 
   # Simple syntax check by:
@@ -676,6 +673,12 @@ class fuel_project::jenkins::slave (
     ]
 
     ensure_packages($syntax_check_packages)
+
+    rvm_gem { 'puppet-lint' :
+      ensure       => 'installed',
+      ruby_version => 'ruby-2.1.2',
+      require      => Rvm_system_ruby['ruby-2.1.2'],
+    }
   }
 
   # Check tasks graph
@@ -725,19 +728,13 @@ class fuel_project::jenkins::slave (
     ensure_packages($build_fuel_plugins_packages)
 
     # we also need fpm gem
-    if (!defined(Class['::rvm'])) {
-      rvm::system_user { 'jenkins': }
-      rvm_system_ruby { 'ruby-2.1.2' :
-        ensure      => 'present',
-        default_use => true,
-        require     => Class['rvm'],
-      }
-    }
     rvm_gem { 'fpm' :
       ensure       => 'present',
       ruby_version => 'ruby-2.1.2',
-      require      => [ Rvm_system_ruby['ruby-2.1.2'],
-                      Package['make'] ],
+      require      => [
+        Rvm_system_ruby['ruby-2.1.2'],
+        Package['make'],
+      ],
     }
   }
 
@@ -752,8 +749,8 @@ class fuel_project::jenkins::slave (
     ensure_packages($verify_fuel_requirements_packages)
   }
 
-  if $install_docker or $build_fuel_iso {
-    if !$docker_package {
+  if ($install_docker or $build_fuel_iso) {
+    if (!$docker_package) {
       fail('You must define docker package explicitly')
     }
 
@@ -765,7 +762,7 @@ class fuel_project::jenkins::slave (
     }
 
     #actually docker have api, and in some cases it will not be automatically started and enabled
-    if $docker_service and (!defined(Service[$docker_service])) {
+    if ($docker_service and (!defined(Service[$docker_service]))) {
       service { $docker_service :
         ensure    => 'running',
         enable    => true,
@@ -791,7 +788,7 @@ class fuel_project::jenkins::slave (
       require => Group['docker'],
     }
 
-    if $external_host {
+    if ($external_host) {
       firewall { '010 accept all to docker0 interface':
         proto   => 'all',
         iniface => 'docker0',
