@@ -260,11 +260,6 @@ class fuel_project::jenkins::slave (
       require => User['jenkins'],
     }
 
-    augeas { 'sysctl-net.bridge.bridge-nf-call-iptables' :
-      context => '/files/etc/modules',
-      changes => 'clear bridge',
-    }
-
     file { '/etc/sudoers.d/systest' :
       ensure  => 'present',
       owner   => 'root',
@@ -273,9 +268,23 @@ class fuel_project::jenkins::slave (
       content => template('fuel_project/jenkins/slave/system_tests.sudoers.d.erb'),
     }
 
+    # Working with bridging
+    # we need to load module to be sure /proc/sys/net/bridge branch will be created
+    exec { 'load_bridge_module' :
+      command   => '/sbin/modprobe bridge',
+      user      => 'root',
+      logoutput => 'on_failure',
+    }
+
+    # ensure bridge module will be loaded on system start
+    augeas { 'sysctl-net.bridge.bridge-nf-call-iptables' :
+      context => '/files/etc/modules',
+      changes => 'clear bridge',
+    }
+
     sysctl { 'net.bridge.bridge-nf-call-iptables' :
       value   => '0',
-      require => Package[$system_tests_packages],
+      require => Exec['load_bridge_module'],
     }
   }
 
