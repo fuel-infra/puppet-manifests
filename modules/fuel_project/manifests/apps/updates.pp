@@ -1,8 +1,8 @@
-# Class: fuel_project::plugins
+# Class: fuel_project::apps::update
 #
-class fuel_project::plugins (
-  $service_fqdn = "plugins.${::fqdn}",
-  $plugins_dir = '/var/www/plugins',
+class fuel_project::apps::updates (
+  $service_fqdn = "updates.${::fqdn}",
+  $updates_dir = '/var/www/updates',
   $apply_firewall_rules = false,
   $firewall_allow_sources = {},
   $sync_hosts_allow = [],
@@ -13,26 +13,17 @@ class fuel_project::plugins (
   if (!defined(Class['::fuel_project::nginx'])) {
     class { '::fuel_project::nginx' :}
   }
-  ::nginx::resource::vhost { 'plugins' :
+  ::nginx::resource::vhost { 'updates' :
     ensure      => 'present',
     autoindex   => 'on',
     access_log  => $nginx_access_log,
     error_log   => $nginx_error_log,
     format_log  => $nginx_log_format,
-    www_root    => $plugins_dir,
-    server_name => [$service_fqdn, "plugins.${::fqdn}"]
+    www_root    => $updates_dir,
+    server_name => [$service_fqdn, "updates.${::fqdn}"]
   }
 
-  if (!defined(File['/var/www'])) {
-    file { '/var/www' :
-      ensure => 'directory',
-      owner  => 'root',
-      group  => 'root',
-      before => File[$plugins_dir],
-    }
-  }
-
-  file { $plugins_dir :
+  file { $updates_dir :
     ensure  => 'directory',
     owner   => 'www-data',
     group   => 'www-data',
@@ -48,8 +39,8 @@ class fuel_project::plugins (
     }
   }
 
-  ::rsync::server::module{ 'plugins':
-    comment         => 'Fuel plugins sync',
+  ::rsync::server::module{ 'updates':
+    comment         => 'Fuel updates sync',
     uid             => 'www-data',
     gid             => 'www-data',
     hosts_allow     => $sync_hosts_allow,
@@ -57,11 +48,11 @@ class fuel_project::plugins (
     incoming_chmod  => '0755',
     outgoing_chmod  => '0644',
     list            => 'yes',
-    lock_file       => '/var/run/rsync_plugins_sync.lock',
+    lock_file       => '/var/run/rsync_updates_sync.lock',
     max_connections => 100,
-    path            => $plugins_dir,
+    path            => $updates_dir,
     read_only       => 'no',
     write_only      => 'no',
-    require         => File[$plugins_dir],
+    require         => File[$updates_dir],
   }
 }

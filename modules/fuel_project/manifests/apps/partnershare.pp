@@ -1,7 +1,6 @@
-# Class: fuel_project::partnershare
+# Class: fuel_project::apps::partnershare
 #
-class fuel_project::partnershare (
-  $apply_firewall_rules = false,
+class fuel_project::apps::partnershare (
   $authorized_key = undef,
   $htpasswd_content = undef,
 ) {
@@ -18,13 +17,6 @@ class fuel_project::partnershare (
   if (!defined(Class['::fuel_project::nginx'])) {
     class { '::fuel_project::nginx': }
   }
-
-  ensure_resource('file', '/var/www', {
-    ensure => 'directory',
-    owner => 'root',
-    group => 'root',
-    mode => '0755',
-  })
 
   user { 'partnershare':
     ensure     => 'present',
@@ -75,17 +67,4 @@ class fuel_project::partnershare (
       deny => 'all',
     }
   }
-
-  #TODO: this may interrupt with seeds somehow
-  if $apply_firewall_rules {
-    include ::firewall_defaults::pre
-    ensure_resource('firewall',  '1000 Allow http connection', {
-      ensure  => present,
-      dport   => [80],
-      proto   => 'tcp',
-      action  => 'accept',
-      require => Class['firewall_defaults::pre'],
-    })
-  }
-
 }

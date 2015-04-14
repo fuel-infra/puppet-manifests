@@ -1,8 +1,6 @@
-# Class: fuel_project::mirror
+# Class: fuel_project::apps::mirror
 #
-class fuel_project::mirror (
-  $apply_firewall_rules = false,
-  $firewall_allow_sources = {},
+class fuel_project::apps::mirror (
   $dir = '/var/www/mirror',
   $dir_owner = 'www-data',
   $dir_group = 'www-data',
@@ -17,16 +15,9 @@ class fuel_project::mirror (
   $nginx_error_log = '/var/log/nginx/error.log',
   $nginx_log_format = 'proxy',
 ) {
-  class { 'rsync':
-    package_ensure => 'present',
-  }
-
-  if (!defined(File['/var/www'])) {
-    file { '/var/www' :
-      ensure => 'directory',
-      owner  => 'root',
-      group  => 'root',
-      before => File[$dir]
+  if(!defined(Class['rsync'])) {
+    class { 'rsync' :
+      package_ensure => 'present',
     }
   }
 
@@ -112,14 +103,5 @@ class fuel_project::mirror (
     location_cfg_append => {
         autoindex => 'on',
     },
-  }
-
-  if ($apply_firewall_rules) {
-    include firewall_defaults::pre
-    create_resources(firewall, $firewall_allow_sources, {
-      dport   => [$port, 873],
-      action  => 'accept',
-      require => Class['firewall_defaults::pre'],
-    })
   }
 }

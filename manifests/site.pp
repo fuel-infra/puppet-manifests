@@ -92,34 +92,13 @@ node /(tracker([0-9]{2})-(msk|mnv|bud|srt|kha|poz)\.infra|ctorrent-msk\.msk)\.mi
 }
 
 node /(seed-(cz|us)1\.fuel-infra\.org)/ {
-  class { '::fuel_project::common' :
-    external_host => true,
-  }
-  class { '::fuel_project::seed' :
-    external_host                => true,
-    apply_firewall_rules         => true,
-    tracker_apply_firewall_rules => true,
-  }
-  class { '::fuel_project::mirror' :
-    apply_firewall_rules => true,
-  }
-
-  class { '::fuel_project::plugins' :
-    apply_firewall_rules => true,
-  }
-
-  class { '::fuel_project::updates' :
-    apply_firewall_rules => true,
-  }
-
-  class { '::fuel_project::partnershare' :
-    apply_firewall_rules => true,
-  }
+#  class { '::fuel_project::roles::seed' :}
+  hiera_include('classes')
 }
 
 node /osci-mirror-(msk|srt|kha|poz)\.(msk|srt|kha|infra)\.mirantis\.net/ {
   class { '::fuel_project::common' :}
-  class { '::fuel_project::mirror' :}
+  class { '::fuel_project::apps::mirror' :}
 }
 
 node /ci-slave([0-9]{2})\.fuel-infra\.org/ {
@@ -170,7 +149,7 @@ node /mirror(\d+)\.fuel-infra\.org/ {
 
 node /mirror-pkgs\.vm\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' : }
-  class { '::fuel_project::mirror' : }
+  class { '::fuel_project::apps::mirror' : }
 }
 
 node /build(\d+)\.fuel-infra\.org/ {
@@ -376,29 +355,7 @@ node 'slave-03.test.local' {
 }
 
 node 'slave-04.test.local' {
-  class { '::fuel_project::common' :
-    external_host => true,
-  }
-  class { '::fuel_project::seed' :
-    external_host                => true,
-    apply_firewall_rules         => true,
-    tracker_apply_firewall_rules => true,
-  }
-  class { '::fuel_project::mirror' :
-    apply_firewall_rules => true,
-  }
-
-  class { '::fuel_project::plugins' :
-    apply_firewall_rules => true,
-  }
-
-  class { '::fuel_project::updates' :
-    apply_firewall_rules => true,
-  }
-
-  class { '::fuel_project::partnershare' :
-    apply_firewall_rules => true,
-  }
+  hiera_include('classes')
 }
 
 node 'slave-05.test.local' {

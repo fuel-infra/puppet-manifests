@@ -18,6 +18,7 @@ class fuel_project::common (
     'role'     => $::role,
   },
 ) {
+  class { '::fuel_project::apps::firewall' :}
   class { '::ntp' :}
   class { '::puppet::agent' :}
   class { '::ssh::authorized_keys' :}
