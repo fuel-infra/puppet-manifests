@@ -143,7 +143,7 @@ node /infra-ci-slave([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
-node /jenkins(\d+)\.fuel-infra\.org/ {
+node /(infra|fuel)-jenkins(\d+)\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::master' :}
 }
 
