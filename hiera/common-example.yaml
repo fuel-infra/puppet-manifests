@@ -1027,6 +1027,7 @@ fuel_project::partnershare::authorized_key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDYssG
 fuel_project::partnershare::htpasswd_content: |
     generic_partner:$apr1$rL.LZemY$eS32g9twHzR2VlB2A3vXp.
 
+fuel_project::devops_tools::lpbugmanage: false
 fuel_project::devops_tools::lpbugmanage::id: '1'
 fuel_project::devops_tools::lpbugmanage::consumer_key: 'System-wide: Ubuntu (devops-tools.vm.mirantis.net)'
 fuel_project::devops_tools::lpbugmanage::consumer_secret: ''
@@ -1043,6 +1044,7 @@ fuel_project::devops_tools::lpbugmanage::series: 'https://api.staging.launchpad.
 fuel_project::devops_tools::lpbugmanage::milestone: 'https://api.staging.launchpad.net/1.0/fuel/+milestone'
 fuel_project::devops_tools::lpbugmanage::distr: 'fuel'
 
+fuel_project::devops_tools::lpupdatebug: false
 fuel_project::devops_tools::lpupdatebug::id: '1'
 fuel_project::devops_tools::lpupdatebug::consumer_key: 'System-wide: Ubuntu (devops-tools.vm.mirantis.net)'
 fuel_project::devops_tools::lpupdatebug::consumer_secret: ''
