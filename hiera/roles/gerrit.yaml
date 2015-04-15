@@ -1,5 +1,228 @@
 ---
 classes:
-  - '::fuel_project::gerrit'
   - '::bacula'
-fuel_project::gerrit::firewall_enable: true
+  - '::fuel_project::apps::firewall'
+  - '::fuel_project::common'
+  - '::fuel_project::gerrit'
+
+bacula::director_name_suffix: ''
+bacula::director_password: 'xxxxx'
+bacula::director_server: 'bacula.test.local'
+
+gerrit:
+  mysql_database: 'gerrit'
+  mysql_host: '127.0.0.1'
+  mysql_user: 'gerrit'
+  mysql_password: 'r2jz5YSBe2wTu5'
+  ssl_cert_file: '/etc/ssl/gerrit.crt'
+  ssl_cert_file_contents: |
+    -----BEGIN CERTIFICATE-----
+    MIIDPjCCAiYCCQCiiKl1cghBuDANBgkqhkiG9w0BAQUFADBhMQswCQYDVQQGEwJB
+    VTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0
+    cyBQdHkgTHRkMRowGAYDVQQDDBFzZXJ2ZXIudGVzdC5sb2NhbDAeFw0xNDA4MTEy
+    MDAzNTVaFw0xNTA4MTEyMDAzNTVaMGExCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApT
+    b21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQxGjAY
+    BgNVBAMMEXNlcnZlci50ZXN0LmxvY2FsMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+    MIIBCgKCAQEAtjgfpwJsZBz4bY/QgV69S1P5+54d+1lAxmoWDe++US3EdzVGWR8+
+    oaHO4crxDztTyOTJtstC/MkRCZngxUZdcpJz9T3v70pT/tfu95fVJaX1fLjcCdw3
+    wD1IMcGIzjtMzDLujYoeM7mdjR9ixzN5WiQFnngQkwqeEsQltV3jJSqn3U+P093l
+    6eVnSdfhLT+q8mvWYr8fhx4el3SHyk8qRomYj4gnsEJ3dGtjDNF9CI7XL2pZXVeD
+    PZZQKI5Fc3tYnSAUbvXO7fdeAn2QLG0kntkPLPGGAJspr8Vq3Ic/glbPBj6BsdYj
+    0jOMwWRYpCV2lk/CFZN03BUx6JPQMxbWHQIDAQABMA0GCSqGSIb3DQEBBQUAA4IB
+    AQBlKH2m2AdkmASM1Q7J/LA0NnanqUvy4n+zhYb8NarOLEHG+OzLBLyW/y51X3cb
+    0IOzHHupA3cu38TuXnIGnoT/M3QsKKKz8smthHLvb7RPiVkJNYMLm8ZJlX2uCQSu
+    rN4ikYHut6bElAf2yZDOiLhDhhFhIwQTj1vm+4gmYFnexcHylLvRY3ulkN/MccXr
+    NyObrYJYR4jB5C+S9rCTN7gU7jX6fCD2NoY5DGdpBkSNvnSIWDPftRExLkMC4vvs
+    hrL5z+KEJjQEQJMMQFgdt1kDeLcnFmZl3sqhRFs0/2alyRmxTxkrUtLn3z68RsZy
+    gDKsvK5qpm7hWt35IVL3nZsZ
+    -----END CERTIFICATE-----
+
+  ssl_key_file: '/etc/ssl/gerrit.key'
+  ssl_key_file_contents: |
+    -----BEGIN PRIVATE KEY-----
+    MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC2OB+nAmxkHPht
+    j9CBXr1LU/n7nh37WUDGahYN775RLcR3NUZZHz6hoc7hyvEPO1PI5Mm2y0L8yREJ
+    meDFRl1yknP1Pe/vSlP+1+73l9UlpfV8uNwJ3DfAPUgxwYjOO0zMMu6Nih4zuZ2N
+    H2LHM3laJAWeeBCTCp4SxCW1XeMlKqfdT4/T3eXp5WdJ1+EtP6rya9Zivx+HHh6X
+    dIfKTypGiZiPiCewQnd0a2MM0X0IjtcvalldV4M9llAojkVze1idIBRu9c7t914C
+    fZAsbSSe2Q8s8YYAmymvxWrchz+CVs8GPoGx1iPSM4zBZFikJXaWT8IVk3TcFTHo
+    k9AzFtYdAgMBAAECggEBAJdwr4W6suDFXwaXhp9uYH4xbcpbz+ksdXQxiODORmrr
+    UaQNR8kb+Y6Vjv4DDzMsiGanFqnv5l12sc078R2jbFijNPI2JqnGKWbciYOG0aO3
+    eP3OGTmspz0C8XRAt3VGvX3cOnyxtIYilrlJw2tw8UMkOvNIL+Y05ckM8ZX5UKV6
+    lVJ30HO2jR6T5yM/Gc3s3gL/X5bHcaQDLWjhqZP411zULQPsWP8+bbXv8f+jZqcg
+    jg4oK1mC2MtGjy83DU5CqxZKPiISXm48RDDe8HAUrnkEMQAnHPdQymMv+d9kDv2y
+    6sp1ov3BQCfZm0mHkSW+wdnzwjNnPHZZ2FdvRz7V3GECgYEA5eFYdA9vuTbFhtod
+    foxHzmqZXBQM6ToXYEKFgdNYvHDISXNdsB4DyUT4V46bxpTMLynMqvM59/u16jaP
+    lo4DkkRLG/GxvGeFM/0odPMnoGTL0HBMJiYr7U3tgtEu2t2RqmVc2tpDPzQ0Mwaj
+    dqHPFId1p1AHeeX1MxeuTLPkA5UCgYEAyuxvfgoBfsDad5E3EbFrilrRJRbb3yxQ
+    hgilaISaSDn0MWZ3zE+pTCwuA9HYmjwr4GCeO8kSCpnhI4BKASMa4p0SLsTr0i/9
+    OUulLi3ZieWA2mqekqUo/CaccMhMfGr4AVQ3WeK3cjKXj/j/WnKTfHSB5uL2bvFg
+    XoqfXcOUZmkCgYBjkkdBBkqrXBkU/zcVUGft9eh1pM2u3BWyAT5Y7JWcEfH/NrRX
+    C7kyHei/7Cp3So5iw2U+itoKGwJB794kJWFQorox4W/OHrzotvgmKAh7Bg3uPCYP
+    xCr0v/Nn3XnBHYXx27Prq+zC3Lbbfz2grhfHWaFRlm2WlE+wEMrTuHvEPQKBgEM9
+    XSRShHRPyxRblffS5mON/Edh77Ffqb8AFm8voT/VlEjaP1AABYUsDoNNgYx568AJ
+    w+Tjl4rTunpdBCikTUBR87hzoAChzjKyEiXfI3pCBhRZx/mnqJEE6kmk1VNUzqEC
+    GuU57rd0dCxMwbBizuQqZvDuu+G/McOiA3S6Xe4hAoGAYs01BdHeksEyZK+q0TIR
+    cHJOyX0ae4ClfXyJ6moQbPr9uoDs0g+3p8IZtiEwVatpmQB2DIoE6jF81rsKBK68
+    tHQtn8ywdYDgJbqhx2Y4XP+9CeNhsRAya8SxFmQMirdtWNltMNvTXHFEoVWbf9Yz
+    Sb2NcH2bS0mjAlLmBCPYqsA=
+    -----END PRIVATE KEY-----
+
+  service_fqdn: 'review.test.local'
+  service_url: 'https://review.test.local'
+  start_timeout: 600
+
+gerrit::allow_remote_admin: true
+gerrit::cache_web_session_age: '1w'
+gerrit::commentlinks:
+  -
+    name: 'bugheader'
+    match: '([Cc]loses|[Pp]artial|[Rr]elated)-[Bb]ug:\\s*#?(\\d+)'
+    link: 'https://launchpad.net/bugs/$2'
+  -
+    name: 'bug'
+    match: '\\bbug:? #?(\\d+)'
+    link: 'https://launchpad.net/bugs/$1'
+  -
+    name: 'story'
+    match: '\\bstory:? #?(\\d+)'
+    link: 'https://storyboard.openstack.org/#!/story/$1'
+  -
+    name: 'blueprint'
+    match: '(\\b[Bb]lue[Pp]rint\\b|\\b[Bb][Pp]\\b)[ \\t#:]*([A-Za-z0-9\\-]+)'
+    link: 'https://blueprints.launchpad.net/openstack/?searchtext=$2'
+  -
+    name: 'testresult'
+    match: '<li>([^ ]+) <a href=\"[^\"]+\" target=\"_blank\">([^<]+)</a> : ([^ ]+)([^<]*)</li>'
+    html: '<li class=\"comment_test\"><span class=\"comment_test_name\"><a href=\"$2\">$1</a></span> <span class=\"comment_test_result\"><span class=\"result_$3\">$3</span>    $4</span></li>'
+  -
+    name: 'launchpadbug'
+    match: '<a href=\"(https://bugs\\.launchpad\\.net/[a-zA-Z0-9\\-]+/\\+bug/(\\d+))[^\"]*\">[^<]+</a>'
+    html: '<a href=\"$1\">$1</a>'
+  -
+    name: 'changeid'
+    match: '(I[0-9a-f]{8,40})'
+    link: '#q,$1,n,z'
+  -
+    name: 'gitsha'
+    match: '(<p>|[\\s(])([0-9a-f]{40})(</p>|[\\s.,;:)])'
+    html: '$1<a href=\"#q,$2,n,z\">$2</a>$3'
+
+gerrit::default_max_clause_count: 131072
+gerrit::email: 'review@test.local'
+gerrit::hideci::ci_regex: '/^(openstack-ci-.*|mos-infra-ci|ci-build-.*|VM Check Install .*|Pkgs Jenkins)$/'
+gerrit::nginx_log_format: 'proxy'
+gerrit::secondary_index: true
+gerrit::ssh_replication_rsa_key_contents: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEowIBAAKCAQEAt2pF+f8G4s5wIW/P3zdY8vUM5w8JDZZ9KdLWw3Iv+uGhrQ1r
+    HJJhJwWqMPZr/JGPKoB2PwXwFWnDqrNXBqUFzBp9a3wei5nOAimA2/JRUL0vhGyW
+    SBTgonXv+3krpbgrL5MPr7ffZikcv4+RDPrK4+rmNt7Xw6B9xoZsZpIvq0kGofXT
+    MQApByguE93KKTdOvaDOR1VB8HdczDDnLgECq6xY5FvbSgTO1Q/1Q5FbaQhvUCF/
+    ylBnTWd8Hqui+OqPyn4B+iythiVNry87ZZ7Q/oIESlcqnkt0BGL1CQ7VbhwTEwOO
+    EP+SIhLuEB+d88onuqz0fpCljY29fQu5Ev+2qwIDAQABAoIBAGhSjhKvt57xhF3A
+    Vx/DP1iRgRE7QA72daKARZ9NJ3UvOOJRK4dIyvGDC1ZmEu3JbQDjqF4YZoIHcj95
+    Whpxama4+nVUV5tXlBEuwhhYL2AY+xn7GU9OcKZ3JlSGiwjrQ8T/hICRuQNGhw99
+    /SbAzv3r8Z1sCpU+h8uPUcDVjT+ChcV2q8FPTDQDfvzKYs1ImDO3E6XrdgXaQVT+
+    r+/N+SFXI9yGCQMF6q/e92NUUalzuB0anC6FKlnsAKXue+AfO1wTgkekRxnzvSUO
+    GV3bL9fM2huMGriKT9OnaFLJooSfcpVmqStsPIPP4Jgzdr8oWmmpjtkC0JNSJm5u
+    qypfW4ECgYEA8bupamzttVcYmDbtg5LBiQvimRM5VIQjKq+W1M/w93FzJpnajZBF
+    4LpyR5mCQvhikKziBL9a4xqtVmciIQb/qYx2bNFUXN9r552MFnnJqtQOBJvJS160
+    a0ycEy77vaXSjQPRNaAETrjZfhYlmexEhmHzAt8UgUzXd1AXjXnhTjsCgYEAwj18
+    1PIlpMFXkM5zueKA1S+JW8QBzZpeM2FqfGo4Fv1Yq3B776+WyJgXS+hWUgGvHded
+    sk5j+Gfd7JCB1LJNKnT6maurrwaF0JhU5BAlKORz7kM8+4nyPAUOsOJGXzDa2XRq
+    +PdU0YRV1uGjGwEgoxA7MLSnSYsckC2F6080glECgYBoihWsFst+HtpeCXMR8YeM
+    8vzd4jhq2nIy5Zi/E+ZLvF5mFSc1DW2K0FbXrAVvXOeTVZCxKOfvSvwnX5ac3d/2
+    vO4CBU0MlPqfQbzxg125aNdfGtgkpiI0PP9KNIld7LZvkXUKUddLDBnSs1Uzib/g
+    tb9YQI0nlcmgqZxl7I2JPQKBgBXKQA7De2WYKvKbtm/L8Rf5VTduLaWbA6ZP71o1
+    sEUj9qaE3+JrmEa4iSSC0+wvNC3s2kv+b0iWnlbDf00VE4MHzHUgxQnFeY2FCUDs
+    br6/oiHAeT7eosYI6zT8rVhQaryqSrXTSTiX1+lbNqj432hrkbhNC9c8O+AQu01C
+    fWmBAoGBALyrrBS1NoFeE6srZP+9BlC/BUA2rd0WBoJY0ZQsQE6Gks6vUEHlTPLp
+    Fqex0kUWDy8LaScrBsQU9/tSfhEvxwxmHG0C4rNgleCzuFLnAQKSdSZKYUVffPLM
+    mCchIgIWJkTGVvJE5s3ZgvOcyun3wOvPhJDO0kmod1EzvRiRvUT5
+    -----END RSA PRIVATE KEY-----
+
+# use development mode on test environment
+fuel_project::gerrit::gerrit_auth_type: 'DEVELOPMENT_BECOME_ANY_ACCOUNT'
+
+# define replication
+fuel_project::gerrit::replication_mode: 'master'
+fuel_project::gerrit::replica_points:
+  'github':
+    auth_group: 'Github Publisher Group'
+    host: 'github.com'
+    path: 'SergK/GerritDemo'
+    private_key: |
+        -----BEGIN RSA PRIVATE KEY-----
+        MIIEowIBAAKCAQEAt2pF+f8G4s5wIW/P3zdY8vUM5w8JDZZ9KdLWw3Iv+uGhrQ1r
+        HJJhJwWqMPZr/JGPKoB2PwXwFWnDqrNXBqUFzBp9a3wei5nOAimA2/JRUL0vhGyW
+        SBTgonXv+3krpbgrL5MPr7ffZikcv4+RDPrK4+rmNt7Xw6B9xoZsZpIvq0kGofXT
+        MQApByguE93KKTdOvaDOR1VB8HdczDDnLgECq6xY5FvbSgTO1Q/1Q5FbaQhvUCF/
+        ylBnTWd8Hqui+OqPyn4B+iythiVNry87ZZ7Q/oIESlcqnkt0BGL1CQ7VbhwTEwOO
+        EP+SIhLuEB+d88onuqz0fpCljY29fQu5Ev+2qwIDAQABAoIBAGhSjhKvt57xhF3A
+        Vx/DP1iRgRE7QA72daKARZ9NJ3UvOOJRK4dIyvGDC1ZmEu3JbQDjqF4YZoIHcj95
+        Whpxama4+nVUV5tXlBEuwhhYL2AY+xn7GU9OcKZ3JlSGiwjrQ8T/hICRuQNGhw99
+        /SbAzv3r8Z1sCpU+h8uPUcDVjT+ChcV2q8FPTDQDfvzKYs1ImDO3E6XrdgXaQVT+
+        r+/N+SFXI9yGCQMF6q/e92NUUalzuB0anC6FKlnsAKXue+AfO1wTgkekRxnzvSUO
+        GV3bL9fM2huMGriKT9OnaFLJooSfcpVmqStsPIPP4Jgzdr8oWmmpjtkC0JNSJm5u
+        qypfW4ECgYEA8bupamzttVcYmDbtg5LBiQvimRM5VIQjKq+W1M/w93FzJpnajZBF
+        4LpyR5mCQvhikKziBL9a4xqtVmciIQb/qYx2bNFUXN9r552MFnnJqtQOBJvJS160
+        a0ycEy77vaXSjQPRNaAETrjZfhYlmexEhmHzAt8UgUzXd1AXjXnhTjsCgYEAwj18
+        1PIlpMFXkM5zueKA1S+JW8QBzZpeM2FqfGo4Fv1Yq3B776+WyJgXS+hWUgGvHded
+        sk5j+Gfd7JCB1LJNKnT6maurrwaF0JhU5BAlKORz7kM8+4nyPAUOsOJGXzDa2XRq
+        +PdU0YRV1uGjGwEgoxA7MLSnSYsckC2F6080glECgYBoihWsFst+HtpeCXMR8YeM
+        8vzd4jhq2nIy5Zi/E+ZLvF5mFSc1DW2K0FbXrAVvXOeTVZCxKOfvSvwnX5ac3d/2
+        vO4CBU0MlPqfQbzxg125aNdfGtgkpiI0PP9KNIld7LZvkXUKUddLDBnSs1Uzib/g
+        tb9YQI0nlcmgqZxl7I2JPQKBgBXKQA7De2WYKvKbtm/L8Rf5VTduLaWbA6ZP71o1
+        sEUj9qaE3+JrmEa4iSSC0+wvNC3s2kv+b0iWnlbDf00VE4MHzHUgxQnFeY2FCUDs
+        br6/oiHAeT7eosYI6zT8rVhQaryqSrXTSTiX1+lbNqj432hrkbhNC9c8O+AQu01C
+        fWmBAoGBALyrrBS1NoFeE6srZP+9BlC/BUA2rd0WBoJY0ZQsQE6Gks6vUEHlTPLp
+        Fqex0kUWDy8LaScrBsQU9/tSfhEvxwxmHG0C4rNgleCzuFLnAQKSdSZKYUVffPLM
+        mCchIgIWJkTGVvJE5s3ZgvOcyun3wOvPhJDO0kmod1EzvRiRvUT5
+        -----END RSA PRIVATE KEY-----
+    public_key: |
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC3akX5/wbiznAhb8/fN1jy9QznDwkNln0p0tbDci/64aGtDWsckmEnBaow9mv8kY8qgHY/BfAVacOqs1cGpQXMGn1rfB6Lmc4CKYDb8lFQvS+EbJZIFOCide/7eSuluCsvkw+vt99mKRy/j5EM+srj6uY23tfDoH3Ghmxmki+rSQah9dMxACkHKC4T3copN069oM5HVUHwd1zMMOcuAQKrrFjkW9tKBM7VD/VDkVtpCG9QIX/KUGdNZ3weq6L46o/KfgH6LK2GJU2vLztlntD+ggRKVyqeS3QEYvUJDtVuHBMTA44Q/5IiEu4QH53zyie6rPR+kKWNjb19C7kS/7ar
+    user: 'git'
+  'slave-22':
+    host: 'slave-22.test.local'
+    path: '/var/lib/gerrit/review_site/git/'
+    replication_delay: 0
+    replicate_permissions: 'true'
+    threads: 3
+    user: 'gerrit-replicator'
+# slave replication client
+fuel_project::gerrit::replication_slave::authorized_keys:
+  'gerrit@slave-06':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC3akX5/wbiznAhb8/fN1jy9QznDwkNln0p0tbDci/64aGtDWsckmEnBaow9mv8kY8qgHY/BfAVacOqs1cGpQXMGn1rfB6Lmc4CKYDb8lFQvS+EbJZIFOCide/7eSuluCsvkw+vt99mKRy/j5EM+srj6uY23tfDoH3Ghmxmki+rSQah9dMxACkHKC4T3copN069oM5HVUHwd1zMMOcuAQKrrFjkW9tKBM7VD/VDkVtpCG9QIX/KUGdNZ3weq6L46o/KfgH6LK2GJU2vLztlntD+ggRKVyqeS3QEYvUJDtVuHBMTA44Q/5IiEu4QH53zyie6rPR+kKWNjb19C7kS/7ar'
+
+# firewall configuration
+fuel_project::apps::firewall::rules:
+  '1000 - allow ssh connections from 0.0.0.0/0':
+    source: 0.0.0.0/0
+    dport: 22
+    proto: tcp
+    action: accept
+  '1000 - allow gerrit connections from 0.0.0.0/0':
+    source: 0.0.0.0/0
+    dport:
+        - 80
+        - 443
+        - 29418
+    proto: tcp
+    action: accept
+  '1000 - allow mysql connections from 172.18.0.0/16':
+    source: 172.18.0.0/16
+    dport: 3306
+    proto: tcp
+    action: accept
+  '1000 - allow bacula connections from 172.18.0.0/16':
+    source: 172.18.0.0/16
+    dport: 9102
+    proto: tcp
+    action: accept
+  '1000 - allow zabbix-agent connections from 172.18.0.0/16':
+    source: 172.18.0.0/16
+    dport: 10050
+    proto: tcp
+    action: accept

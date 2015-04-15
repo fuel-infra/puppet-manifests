@@ -159,12 +159,6 @@ node /tools([0-9]{2})-(msk|bud|srt|kha|poz)\.infra\.mirantis\.net/ {
   class { '::fuel_project::devops_tools' :}
 }
 
-node /(osci|review)-(gerrit|tst)([0-9]{0,2})?\.vm\.mirantis\.net/ {
-  class { '::fuel_project::gerrit' :
-    firewall_enable => true,
-  }
-}
-
 node /gerrit([0-9]{2})-(msk|bud|srt|kha|poz).fuel-infra.org/ {
   class { '::fuel_project::gerrit' :}
 }

@@ -1,6 +1,6 @@
-# Class fuel_project::gerrit::slave_config
+# Class fuel_project::gerrit::replication_slave
 #
-class fuel_project::gerrit::slave_config (
+class fuel_project::gerrit::replication_slave (
   $authorized_keys = {}
 ) {
 
@@ -28,7 +28,11 @@ class fuel_project::gerrit::slave_config (
     ensure  => 'directory',
     owner   => 'gerrit-replicator',
     group   => 'gerrit-replicator',
-    require => User['gerrit-replicator'],
+    recurse => true,
+    require => [
+      User['gerrit-replicator'],
+      Package['gerrit'],
+    ],
   }
 
   create_resources(ssh_authorized_key, $authorized_keys, {

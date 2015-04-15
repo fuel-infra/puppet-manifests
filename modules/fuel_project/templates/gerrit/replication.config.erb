@@ -1,22 +1,18 @@
-# This file is managed by puppet.
-# https://git.openstack.org/cgit/openstack-infra/config
 
-<% replication.each do |replication| -%>
-[remote "<%= replication['name'] %>"]
-	url = <%= replication['uri'] %>${name}.git
-<% if replication['replication_delay'] != nil -%>
-	replicationDelay = <%= replication['replication_delay'] %>
+[remote "<%= @title %>"]
+	url = <%= @user %>@<%= @host %>:<%= @path %>${name}.git
+<% if @replication_delay != nil -%>
+	replicationDelay = <%= @replication_delay %>
 <% end -%>
-<% if replication['threads'] != nil -%>
-	threads = <%= replication['threads'] %>
+<% if @threads != nil -%>
+	threads = <%= @threads %>
 <% end -%>
-<% if replication['auth_group'] != nil -%>
-	authGroup = <%= replication['auth_group'] %>
+<% if @auth_group != nil -%>
+	authGroup = <%= @auth_group %>
 <% end -%>
-<% if replication['replicate_permissions'] != nil -%>
-	replicatePermissions = <%= replication['replicate_permissions'] %>
+<% if @replicate_permissions != nil -%>
+	replicatePermissions = <%= @replicate_permissions %>
 <% end -%>
-<% if replication['mirror'] != nil -%>
-	mirror = <%= replication['mirror'] %>
-<% end -%>
+<% if @mirror != nil -%>
+	mirror = <%= @mirror %>
 <% end -%>
