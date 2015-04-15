@@ -2,11 +2,12 @@
 #
 class fuel_project::gerrit (
   $dmz = true,
+  $firewall_allow_sources_bacula = {},
+  $firewall_allow_sources_mysql = {},
   $firewall_enable = false,
+  $gerrit_auth_type = undef,
   $replication = [],
   $replication_mode = '',
-  $firewall_allow_sources_mysql = {},
-  $firewall_allow_sources_bacula = {},
 
 ) {
 
@@ -17,6 +18,7 @@ class fuel_project::gerrit (
   $gerrit = hiera_hash('gerrit')
   class { '::gerrit' :
     gitweb                              => true,
+    gerrit_auth_type                    => $gerrit_auth_type,
     gerrit_start_timeout                => $gerrit['start_timeout'],
     mysql_host                          => $gerrit['mysql_host'],
     mysql_database                      => $gerrit['mysql_database'],

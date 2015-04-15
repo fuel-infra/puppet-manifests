@@ -466,6 +466,8 @@ fuel_project::gerrit::master_config::user: 'gerrit-replicator'
 fuel_project::gerrit::master_config::identity_file: '~/.ssh/id_rsa'
 fuel_project::gerrit::master_config::strict_host_key_checking: 'no'
 fuel_project::gerrit::master_config::preferred_authentications: 'publickey'
+# use development mode on test environment
+fuel_project::gerrit::gerrit_auth_type: 'DEVELOPMENT_BECOME_ANY_ACCOUNT'
 fuel_project::gerrit::replication:
   -
     name: 'slave-22'
