@@ -534,9 +534,6 @@ fuel_project::mirror::sync_hosts_allow:
 fuel_project::mirror::service_fqdn: 'mirror.test.local'
 fuel_project::mirror::service_aliases:
   - repo.test.local
-fuel_project::mirror::rsync_writable_share: false
-fuel_project::mirror::dir_owner: 'jenkins'
-fuel_project::mirror::dir_group: 'jenkins'
 
 fuel_project::seed::service_fqdn: 'seed.test.local'
 
