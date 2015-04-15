@@ -337,6 +337,7 @@ class fuel_project::jenkins::slave (
       'rubygems-integration',
       'syslinux',
       'unzip',
+      'xorriso',
       'yum',
       'yum-utils',
     ]
