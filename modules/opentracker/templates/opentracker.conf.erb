@@ -16,7 +16,7 @@
 #
 # listen.udp.workers 4
 <% if @listen_udp_workers -%>
-listen.udp.workers <%= @listen_udp_workers -%>
+listen.udp.workers <%= @listen_udp_workers %>
 <% end -%>
 #
 # listen.tcp_udp 0.0.0.0
@@ -30,11 +30,11 @@ listen.tcp_udp <%= @listen_tcp_udp %>
 #
 # listen.tcp 0.0.0.0
 <% if @listen_tcp -%>
-listen.tcp <%= @listen_tcp -%>
+listen.tcp <%= @listen_tcp %>
 <% end -%>
 # listen.udp 192.168.0.1:6969
 <% if @listen_udp -%>
-listen.udp <%= @listen_udp -%>
+listen.udp <%= @listen_udp %>
 <% end -%>
 #
 #      Note, that using 0.0.0.0 for udp sockets may yield surprising results.
@@ -48,14 +48,14 @@ listen.udp <%= @listen_udp -%>
 #
 # access.whitelist /path/to/whitelist
 <% if @access_whitelist -%>
-access.whitelist <%= @access_whitelist -%>
+access.whitelist <%= @access_whitelist %>
 <% end -%>
 #
 #      or, if opentracker was compiled to allow blacklisting (shell option -b)
 #
 # access.blacklist ./blacklist
 <% if @access_blacklist -%>
-access.blacklist <%= @access_blacklist -%>
+access.blacklist <%= @access_blacklist %>
 <% end -%>
 #
 #      It is pointless and hence not possible to compile black AND white
@@ -68,7 +68,7 @@ access.blacklist <%= @access_blacklist -%>
 #
 # access.stats 192.168.0.23
 <% if @access_stats -%>
-access.stats <%= @access_stats -%>
+access.stats <%= @access_stats %>
 <% end -%>
 #
 #      There is another way of hiding your stats. You can obfuscate the path
@@ -77,7 +77,7 @@ access.stats <%= @access_stats -%>
 #
 # access.stats_path stats
 <% if @access_stats_path -%>
-access.stats_path <%= @access_stats_path -%>
+access.stats_path <%= @access_stats_path %>
 <% end -%>
 
 # III) Live sync uses udp multicast packets to keep a cluster of opentrackers
@@ -88,7 +88,7 @@ access.stats_path <%= @access_stats_path -%>
 #
 # livesync.cluster.listen 192.168.0.1:9696
 <% if @livesync_cluster_listen -%>
-livesync.cluster.listen <%= @livesync_cluster_listen -%>
+livesync.cluster.listen <%= @livesync_cluster_listen %>
 <% end -%>
 #
 #      Note that two udp sockets will be opened. One on ip address 0.0.0.0
@@ -109,7 +109,7 @@ livesync.cluster.listen <%= @livesync_cluster_listen -%>
 # livesync.cluster.node_ip 192.168.0.5
 # livesync.cluster.node_ip 192.168.0.6
 <% if @livesync_cluster_node_ip -%>
-livesync.cluster.node_ip <%= @livesync_cluster_node_ip -%>
+livesync.cluster.node_ip <%= @livesync_cluster_node_ip %>
 <% end -%>
 #
 #      This is the admin ip address for old style (HTTP based) asynchronus
@@ -128,7 +128,7 @@ batchsync.cluster.admin_ip <%= @batchsync_cluster_admin_ip %>
 #
 # tracker.rootdir /usr/local/etc/opentracker
 <% if @tracker_rootdir -%>
-tracker.rootdir <%= tracker_rootdir -%>
+tracker.rootdir <%= tracker_rootdir %>
 <% end -%>
 #
 #      Tell opentracker which user to setuid to.
@@ -143,5 +143,5 @@ tracker.user <%= @tracker_user %>
 #
 # tracker.redirect_url https://your.tracker.local/
 <% if @tracker_redirect_url -%>
-tracker.redirect_url <%= @tracker_redirect_url -%>
+tracker.redirect_url <%= @tracker_redirect_url %>
 <% end -%>
