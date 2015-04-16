@@ -1,6 +1,6 @@
-# Class: fuel_project::zabbix::server
+# Class: fuel_project::roles::zabbix::server
 #
-class fuel_project::zabbix::server (
+class fuel_project::roles::zabbix::server (
   $slack_web_hook_url = '',
   $slack_post_username = '',
   $slack_emoji_ok = ':smile:',
