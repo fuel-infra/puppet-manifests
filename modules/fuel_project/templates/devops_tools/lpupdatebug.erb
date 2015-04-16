@@ -26,3 +26,6 @@ username = <%= @username %>
 <% if @env != nil -%>
 env = <%= @env %>
 <% end -%>
+<% if @projects.any? -%>
+projects = <%= @projects.join(', ') %>
+<% end -%>

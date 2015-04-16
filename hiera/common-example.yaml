@@ -1045,19 +1045,21 @@ fuel_project::devops_tools::lpbugmanage::milestone: 'https://api.staging.launchp
 fuel_project::devops_tools::lpbugmanage::distr: 'fuel'
 
 fuel_project::devops_tools::lpupdatebug: false
-fuel_project::devops_tools::lpupdatebug::id: '1'
-fuel_project::devops_tools::lpupdatebug::consumer_key: 'System-wide: Ubuntu (devops-tools.vm.mirantis.net)'
-fuel_project::devops_tools::lpupdatebug::consumer_secret: ''
 fuel_project::devops_tools::lpupdatebug::access_token: 'BP1hX604zJLndTJ6clzG'
 fuel_project::devops_tools::lpupdatebug::access_secret: 'SdnpscxhRcwnkQKc2wBhxH7zbTtB2hB17Bcw6JcTTSNS96b8ws2PpkgsDgSGRx9cvHsZHrdzqqPF45wr'
 fuel_project::devops_tools::lpupdatebug::appname: 'lpupdatebug'
-fuel_project::devops_tools::lpupdatebug::credfile: '/etc/lpupdatebug/credentials.conf'
 fuel_project::devops_tools::lpupdatebug::cachedir: '/var/tmp/launchpadlib/'
-fuel_project::devops_tools::lpupdatebug::logfile: '/var/log/lpupdatebug.log'
-fuel_project::devops_tools::lpupdatebug::host: 'localhost'
-fuel_project::devops_tools::lpupdatebug::port: '29418'
+fuel_project::devops_tools::lpupdatebug::consumer_key: 'System-wide: Ubuntu (devops-tools.vm.mirantis.net)'
+fuel_project::devops_tools::lpupdatebug::consumer_secret: ''
+fuel_project::devops_tools::lpupdatebug::credfile: '/etc/lpupdatebug/credentials.conf'
 fuel_project::devops_tools::lpupdatebug::env: 'production'
-fuel_project::devops_tools::lpupdatebug::username: 'lpupdatebug'
+fuel_project::devops_tools::lpupdatebug::host: 'localhost'
+fuel_project::devops_tools::lpupdatebug::id: '1'
+fuel_project::devops_tools::lpupdatebug::logfile: '/var/log/lpupdatebug.log'
+fuel_project::devops_tools::lpupdatebug::port: '29418'
+fuel_project::devops_tools::lpupdatebug::projects:
+  - fuel
+  - mos
 fuel_project::devops_tools::lpupdatebug::sshprivkey: '/etc/lpupdatebug/lpupdatebug.key'
 fuel_project::devops_tools::lpupdatebug::sshprivkey_contents: |
   -----BEGIN RSA PRIVATE KEY-----
@@ -1087,3 +1089,4 @@ fuel_project::devops_tools::lpupdatebug::sshprivkey_contents: |
   wX/HpI1thBdTJjwWS7voQJv7a5b5I4vPcQQbGfaw/rC3DmMWkFkuTDZEUDUuxhHb
   sXndbjImodALprC7F7T1qoOLiv6XSzJ3D9IgVLFXUrc7LT63zjQ=
   -----END RSA PRIVATE KEY-----
+fuel_project::devops_tools::lpupdatebug::username: 'lpupdatebug'

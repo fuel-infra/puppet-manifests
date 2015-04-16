@@ -1,22 +1,23 @@
 # Class fuel_project::devops_tools::lpupdatebug
 #
 class fuel_project::devops_tools::lpupdatebug (
-  $id = '1',
-  $consumer_key = '',
-  $consumer_secret = '',
   $access_token = '',
   $access_secret = '',
   $appname = 'lpupdatebug',
-  $credfile = '/etc/lpupdatebug/credentials.conf',
   $cachedir = '/var/tmp/launchpadlib/',
-  $logfile = '/var/log/lpupdatebug.log',
-  $host = 'localhost',
-  $port = '29418',
+  $consumer_key = '',
+  $consumer_secret = '',
+  $credfile = '/etc/lpupdatebug/credentials.conf',
   $env = 'production',
-  $username = 'lpupdatebug',
+  $host = 'localhost',
+  $id = '1',
+  $logfile = '/var/log/lpupdatebug.log',
+  $package_name = 'python-lpupdatebug',
+  $port = '29418',
+  $projects = [],
   $sshprivkey = '/etc/lpupdatebug/lpupdatebug.key',
   $sshprivkey_contents = undef,
-  $package_name = 'python-lpupdatebug',
+  $username = 'lpupdatebug',
 ) {
 
   ensure_packages([$package_name])
