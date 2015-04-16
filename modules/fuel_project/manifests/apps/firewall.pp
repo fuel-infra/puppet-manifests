@@ -1,7 +1,7 @@
 # Class: fuel_project::apps::firewall
 #
 class fuel_project::apps::firewall (
-  $rules = {}
+  $rules = undef
 ) {
   if ($rules) {
     case $::osfamily {
