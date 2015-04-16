@@ -15,4 +15,7 @@ class fuel_stats::params(
 
   $http_port              = 80,
   $https_port             = 443,
+  $nginx_access_log       = '/var/log/nginx/access.log',
+  $nginx_error_log        = '/var/log/nginx/error.log',
+  $nginx_log_format       = undef,
 ) { }

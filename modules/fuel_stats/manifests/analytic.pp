@@ -18,6 +18,9 @@ class fuel_stats::analytic (
   $psql_user              = $fuel_stats::params::psql_user,
   $psql_pass              = $fuel_stats::params::psql_pass,
   $psql_db                = $fuel_stats::params::psql_db,
+  $nginx_access_log       = $fuel_stats::params::nginx_access_log,
+  $nginx_error_log        = $fuel_stats::params::nginx_error_log,
+  $nginx_log_format       = $fuel_stats::params::nginx_log_format,
 ) inherits fuel_stats::params {
   if ( ! defined(Class['::fuel_stats::db']) ) {
     class { '::fuel_stats::db' :
@@ -97,6 +100,9 @@ class fuel_stats::analytic (
       server_name         => [$::fqdn],
       www_root            => $www_root,
       location_cfg_append => merge( $firewall_rules, $limit_conn),
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
     }
     ::nginx::resource::vhost { 'analytics-redirect' :
       ensure              => 'present',
@@ -115,6 +121,9 @@ class fuel_stats::analytic (
       server_name         => [$::fqdn],
       www_root            => $www_root,
       location_cfg_append => merge( $firewall_rules, $limit_conn),
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
     }
   }
 

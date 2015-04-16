@@ -14,6 +14,9 @@ class fuel_stats::collector (
   $ssl_key_file           = '',
   $firewall_enable        = $fuel_stats::params::firewall_enable,
   $firewall_rules         = {},
+  $nginx_access_log       = $fuel_stats::params::nginx_access_log,
+  $nginx_error_log        = $fuel_stats::params::nginx_error_log,
+  $nginx_log_format       = $fuel_stats::params::nginx_log_format,
 ) inherits fuel_stats::params {
   if (!defined(Class['::nginx'])) {
     class { '::nginx' :
@@ -47,6 +50,9 @@ class fuel_stats::collector (
       server_name         => [$::fqdn],
       uwsgi               => '127.0.0.1:7932',
       location_cfg_append => merge($firewall_rules, $limit_conn),
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
     }
     ::nginx::resource::vhost { 'collector-redirect' :
       ensure              => 'present',
@@ -57,6 +63,9 @@ class fuel_stats::collector (
         'rewrite'    => "^ https://\$server_name:${https_port}\$request_uri? permanent",
         'limit_conn' => 'addr 1',
       },
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
     }
   } else {
     ::nginx::resource::vhost { 'collector' :
@@ -65,6 +74,9 @@ class fuel_stats::collector (
       server_name         => [$::fqdn],
       uwsgi               => '127.0.0.1:7932',
       location_cfg_append => merge($firewall_rules, $limit_conn),
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
     }
   }
 
