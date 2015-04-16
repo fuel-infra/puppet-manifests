@@ -216,6 +216,10 @@ node /(osci|review)-(gerrit|tst)([0-9]{0,2})?\.vm\.mirantis\.net/ {
   }
 }
 
+node /gerrit([0-9]{2})-(msk|bud|srt|kha|poz).fuel-infra.org/ {
+  class { '::fuel_project::gerrit' :}
+}
+
 node 'docs.fuel-infra.org' {
   class { '::fuel_project::fuel_docs' : }
 }
