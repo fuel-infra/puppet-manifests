@@ -1,8 +1,8 @@
 # Class: fuel_project::apps::partnershare
 #
 class fuel_project::apps::partnershare (
-  $authorized_key = undef,
-  $htpasswd_content = undef,
+  $authorized_key,
+  $htpasswd_content = '',
 ) {
 
   # used to download magnet links
