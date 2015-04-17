@@ -47,6 +47,7 @@ class fuel_project::apps::static (
     ssl_key     => $ssl_key,
     www_root    => $static_dir,
     server_name => [$service_fqdn, "static.${::fqdn}"],
+    gzip_types  => 'text/css application/x-javascript',
     require     => [
       Package[$packages],
       File[$ssl_certificate],
