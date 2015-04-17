@@ -169,7 +169,7 @@ node /irc-bouncer([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
-node /zbx(proxy|server)0([0-1]+)-([a-z]+)\.(devops|infra|vm)\.mirantis\.net/ {
+node /zbx(proxy|server)([0-9]+)-([a-z]+)\.(devops|infra|vm)\.mirantis\.net/ {
   hiera_include('classes')
 }
 
