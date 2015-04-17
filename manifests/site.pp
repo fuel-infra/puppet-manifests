@@ -315,152 +315,6 @@ node /racktables.(vm\.mirantis\.net|test\.local)/ {
   class { '::fuel_project::racktables' : }
 }
 
-# Test nodes definitions
-
-node 'pxetool.test.local' {
-  class { '::fuel_project::puppet::master' :}
-  class { '::pxetool' :}
-}
-
-node 'slave-01.test.local' {
-  class { '::fuel_project::jenkins::slave' :
-    run_tests         => true,
-    build_fuel_iso    => true,
-    http_share_iso    => true,
-    ldap              => true,
-    check_tasks_graph => true,
-    fuel_web_selenium => true,
-  }
-}
-
-node 'slave-02.test.local' {
-  class { '::fuel_project::common' :  }
-  class { '::jenkins::master' :}
-}
-
-node 'slave-03.test.local' {
-  class { '::fuel_project::jenkins::slave' :
-    run_tests           => true,
-    ldap                => true,
-    build_fuel_plugins  => true,
-    jenkins_swarm_slave => true,
-    install_docker      => true,
-  }
-}
-
-node 'slave-04.test.local' {
-  hiera_include('classes')
-}
-
-node 'slave-05.test.local' {
-  class { '::fuel_project::common' :}
-  class { '::fuel_project::mirror' :}
-}
-
-node 'slave-06.test.local' {
-  class { '::fuel_project::gerrit' :
-    firewall_enable => true,
-  }
-}
-
-node 'slave-07.test.local' {
-  class { '::fuel_project::jenkins::slave' :
-    external_host  => true,
-    build_fuel_iso => true,
-  }
-}
-
-node 'slave-08.test.local' {
-  class { '::fuel_project::common' :}
-  class { '::zabbix::server' :}
-}
-
-node 'slave-09.test.local' {
-  class { '::fuel_project::lab_cz' :
-    external_host => false,
-  }
-}
-
-node 'slave-10.test.local' {
-  class {'::fuel_project::statistics::collector':
-    development => true,
-  }
-  class {'::fuel_project::statistics::analytic':
-    development => true,
-  }
-}
-
-node 'slave-11.test.local' {
-  class {'::fuel_project::statistics::collector':
-    development => false,
-  }
-  class {'::fuel_project::statistics::analytic':
-    development => false,
-  }
-}
-
-node 'slave-12.test.local' {
-  class { '::fuel_project::znc' :
-    apply_firewall_rules => false,
-  }
-}
-
-node 'slave-13.test.local' {
-  class { '::fuel_project::glusterfs' :  }
-}
-
-node 'slave-14.test.local' {
-  class { '::fuel_project::glusterfs' :
-    create_pool     => true,
-    gfs_pool        => [ 'slave-13.test.local','slave-14.test.local' ],
-    gfs_volume_name => 'data',
-  }
-}
-
-node 'slave-15.test.local' {
-  class { '::fuel_project::web' :}
-}
-
-node 'slave-16.test.local' {
-  class { '::fuel_project::common' :
-    external_host => false,
-  }
-  class { '::opentracker' :}
-}
-
-node 'slave-17.test.local' {
-  class { '::fuel_project::nailgun_demo' :
-  }
-}
-
-node 'slave-18.test.local' {
-  class {'::fuel_project::mongo_common':
-    primary => false,
-  }
-}
-
-node 'slave-19.test.local' {
-  class {'::fuel_project::mongo_common':
-    primary => false,
-  }
-}
-
-node 'slave-20.test.local' {
-  class {'::fuel_project::mongo_common':
-    primary => true,
-  }
-}
-
-node 'slave-21.test.local' {
-  class { '::fuel_project::devops_tools' :}
-}
-
-node 'slave-22.test.local' {
-  class { '::fuel_project::gerrit' :
-    firewall_enable => true,
-  }
-}
-
 # Sandbox
 
 node 'jenkins-sandbox.infra.mirantis.net' {
@@ -481,8 +335,11 @@ node 'slave01-tst.vm.mirantis.net' {
   class { '::fuel_project::jenkins::slave' :}
 }
 
-# Default
+node /.*\.test\.local/ {
+  hiera_include('classes')
+}
 
+# Default
 node default {
   notify { 'Default node invocation' :}
 }

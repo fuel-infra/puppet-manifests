@@ -1,0 +1,4 @@
+---
+classes:
+  - '::fuel_project::common'
+  - '::opentracker'

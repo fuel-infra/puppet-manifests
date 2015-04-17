@@ -1,0 +1,4 @@
+---
+classes:
+  - '::fuel_project::statistics::analytic'
+  - '::fuel_project::statistics::collector'

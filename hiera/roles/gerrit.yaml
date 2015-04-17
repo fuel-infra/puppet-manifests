@@ -1,0 +1,4 @@
+---
+classes:
+  - '::fuel_project::gerrit'
+fuel_project::gerrit::firewall_enable: true
