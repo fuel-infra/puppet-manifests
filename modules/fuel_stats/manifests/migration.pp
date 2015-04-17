@@ -53,7 +53,7 @@ class fuel_stats::migration (
   }
 
   cron { 'migration':
-    command => "${migrate_cmd} migrate",
+    command => "${migrate_cmd} migrate 2>&1 | logger -t migration",
     user    => 'root',
     hour    => '*',
     minute  => ['0', '15', '30', '45'],
