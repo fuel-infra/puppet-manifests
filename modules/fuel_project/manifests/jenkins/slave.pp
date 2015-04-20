@@ -112,6 +112,11 @@ class fuel_project::jenkins::slave (
     }
   }
 
+  # jenkins should be in www-data group by default
+  User <| title == 'jenkins' |> {
+    groups  +> 'www-data',
+  }
+
   class {'::devopslib::downloads_cleaner' :
     cleanup_dirs => $seed_cleanup_dirs,
     clean_seeds  => true,
@@ -292,19 +297,31 @@ class fuel_project::jenkins::slave (
   # from fuel-main and remove duplicate packages from build ISO
   if ($build_fuel_packages or $build_fuel_iso) {
     $build_fuel_packages_list = [
+      'libparse-debcontrol-perl',
       'make',
+      'mock',
       'nodejs',
       'nodejs-legacy',
       'npm',
+      'pigz',
+      'lzop',
       'python-setuptools',
+      'python-rpm',
       'python-pbr',
+      'reprepro',
       'ruby',
+      'sbuild',
     ]
 
     $build_fuel_npm_packages = [
       'grunt-cli',
       'gulp',
     ]
+
+    User <| title == 'jenkins' |> {
+      groups  +> 'mock',
+      require => Package[$build_fuel_packages_list],
+    }
 
     ensure_packages($build_fuel_packages_list)
 
@@ -758,7 +775,7 @@ class fuel_project::jenkins::slave (
     ensure_packages($verify_fuel_requirements_packages)
   }
 
-  if ($install_docker or $build_fuel_iso) {
+  if ($install_docker or $build_fuel_iso or $build_fuel_packages) {
     if (!$docker_package) {
       fail('You must define docker package explicitly')
     }
@@ -793,7 +810,7 @@ class fuel_project::jenkins::slave (
     }
 
     User <| title == 'jenkins' |> {
-      groups  => ['www-data', 'docker'],
+      groups  +> 'docker',
       require => Group['docker'],
     }
 
