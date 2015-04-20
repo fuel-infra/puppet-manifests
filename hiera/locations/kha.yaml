@@ -1,7 +1,7 @@
 ---
 apt::sources:
   mirror:
-    location: 'http://mirrors.msk.mirantis.net/ubuntu/'
+    location: 'http://mirrors.kha.mirantis.net/ubuntu/'
     release: "%{::lsbdistcodename}"
     key: 'C0B21F32'
     key_server: 'keyserver.ubuntu.com'
@@ -9,7 +9,7 @@ apt::sources:
     include_src: false
     include_deb: true
   mirror_updates:
-    location: 'http://mirrors.msk.mirantis.net/ubuntu/'
+    location: 'http://mirrors.kha.mirantis.net/ubuntu/'
     release: "%{::lsbdistcodename}-updates"
     key: 'C0B21F32'
     key_server: 'keyserver.ubuntu.com'
@@ -17,7 +17,7 @@ apt::sources:
     include_src: false
     include_deb: true
   devops:
-    location: 'http://osci-mirror-msk.msk.mirantis.net/devops/ubuntu/'
+    location: 'http://osci-mirror-kha.kha.mirantis.net/devops/ubuntu/'
     release: '/'
     key: 'C1EC35C7D5A05778'
     key_server: 'keyserver.ubuntu.com'
