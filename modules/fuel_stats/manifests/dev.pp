@@ -82,7 +82,7 @@ define fuel_stats::dev (
     # cronjob
     cron { "github-poller-${title}":
       command     =>
-        'flock -n -x /tmp/github-poller.lock /usr/local/bin/github-poller.py',
+        'flock -n -x /tmp/github-poller.lock /usr/local/bin/github-poller.py 2>&1 | logger -t github-poller',
       environment => "REPO_LOCAL=${dest_dir}",
       user        => 'root',
       hour        => '*',
