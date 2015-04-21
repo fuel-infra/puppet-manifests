@@ -1,8 +1,8 @@
 # Class: fuel_project::apps::firewall
 #
-class fuel_project::apps::firewall (
-  $rules = undef
-) {
+class fuel_project::apps::firewall {
+  $rules = hiera_hash('fuel_project::apps::firewall::rules', undef)
+
   if ($rules) {
     case $::osfamily {
       'Debian': {
