@@ -1,0 +1,4 @@
+---
+classes:
+  - '::pxetool'
+  - '::fuel_project::puppet::master'
