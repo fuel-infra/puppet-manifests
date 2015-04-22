@@ -710,18 +710,24 @@ mysql::server::root_password: 'WpUrXaC92cZQ4XHMLpfraTRsl16ZtoTu'
 puppet::agent::server: 'pxetool.test.local'
 puppet::master::autosign: true
 puppet::master::firewall_allow_sources:
-  '1000 - puppet master connections from 10.108.0.0/16':
-    source: '10.108.0.0/16'
+  '1000 - puppet master connections from 10.0.0.0/8':
+    source: '10.0.0.0/8'
+  '1000 - puppet master connections from 172.16.0.0/12':
+    source: '172.16.0.0/12'
+  '1000 - puppet master connections from 192.168.0.0/16':
+    source: '192.168.0.0/16'
 puppet::master::nginx_log_format: 'proxy'
 
 pxetool::additional_repos:
   - 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /'
 pxetool::apply_firewall_rules: false
 pxetool::firewall_allow_sources:
-  '1000 - pxetool connections from 10.108.0.0/16':
-    source: '10.108.0.0/16'
-  '1000 - pxetool connections from 172.18.0.0/16':
-    source: '172.18.0.0/16'
+  '1000 - puppet master connections from 10.0.0.0/8':
+    source: '10.0.0.0/8'
+  '1000 - puppet master connections from 172.16.0.0/12':
+    source: '172.16.0.0/12'
+  '1000 - puppet master connections from 192.168.0.0/16':
+    source: '192.168.0.0/16'
 pxetool::mirror: 'archive.ubuntu.com'
 pxetool::root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
 pxetool::timezone: 'UTC'
@@ -736,10 +742,12 @@ ssh::ldap::sudoers_base: 'ou=sudoers,dc=company,dc=net'
 ssh::ldap::bind_policy: 'soft'
 ssh::ldap::ldap_ignore_users: 'backup,bin,daemon,games,gnats,irc,landscape,libuuid,list,lp,mail,man,messagebus,mysql,nagios,news,ntp,postfix,proxy,puppet,root,sshd,sync,sys,syslog,uucp,whoopsie,www-data,zabbix'
 ssh::sshd::firewall_allow_sources:
-  '100 - ssh connections from 10.108.0.0/16':
-    source: '10.108.0.0/16'
-  '100 - ssh connections from 172.18.0.0/16':
-    source: '172.18.0.0/16'
+  '1000 - puppet master connections from 10.0.0.0/8':
+    source: '10.0.0.0/8'
+  '1000 - puppet master connections from 172.16.0.0/12':
+    source: '172.16.0.0/12'
+  '1000 - puppet master connections from 192.168.0.0/16':
+    source: '192.168.0.0/16'
 
 sysctl::base::values:
   net.ipv4.ip_forward:
