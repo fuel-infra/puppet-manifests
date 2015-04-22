@@ -339,6 +339,11 @@ node 'slave01-tst.vm.mirantis.net' {
   class { '::fuel_project::jenkins::slave' :}
 }
 
+node 'pxetool.test.local' {
+  class { '::fuel_project::puppet::master' :}
+  class { '::pxetool' :}
+}
+
 node /.*\.test\.local/ {
   hiera_include('classes')
 }
