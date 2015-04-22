@@ -1,26 +1,29 @@
 # Anonymous statistics analytic
-#
-# you should already have cert and key on FS if you want to use ssl
 class fuel_stats::analytic (
-  $development            = $fuel_stats::params::development,
   $auto_update            = $fuel_stats::params::auto_update,
-  $fuel_stats_repo        = 'https://github.com/stackforge/fuel-stats/',
-  $elastic_listen_ip      = '127.0.0.1',
+  $development            = $fuel_stats::params::development,
   $elastic_http_port      = '9200',
+  $elastic_listen_ip      = '127.0.0.1',
   $elastic_tcp_port       = '9300',
+  $firewall_enable        = $fuel_stats::params::firewall_enable,
+  $fuel_stats_repo        = 'https://github.com/stackforge/fuel-stats/',
   $http_port              = $fuel_stats::params::http_port,
   $https_port             = $fuel_stats::params::https_port,
-  $ssl                    = false,
-  $ssl_key_file           = '',
-  $ssl_cert_file          = '',
-  $firewall_enable        = $fuel_stats::params::firewall_enable,
+  $psql_db                = $fuel_stats::params::psql_db,
   $psql_host              = $fuel_stats::params::psql_host,
-  $psql_user              = $fuel_stats::params::psql_user,
   $psql_pass              = $fuel_stats::params::psql_pass,
   $psql_db                = $fuel_stats::params::psql_db,
   $nginx_access_log       = $fuel_stats::params::nginx_access_log,
   $nginx_error_log        = $fuel_stats::params::nginx_error_log,
+  $nginx_limit_conn       = $fuel_stats::params::limit_conn,
   $nginx_log_format       = $fuel_stats::params::nginx_log_format,
+  $psql_user              = $fuel_stats::params::psql_user,
+  $service_hostname       = $::fqdn,
+  $ssl                    = false,
+  $ssl_cert_file          = '/etc/ssl/analytic.crt',
+  $ssl_cert_file_contents = '',
+  $ssl_key_file           = '/etc/ssl/analytic.key',
+  $ssl_key_file_contents  = '',
 ) inherits fuel_stats::params {
   if ( ! defined(Class['::fuel_stats::db']) ) {
     class { '::fuel_stats::db' :
@@ -32,12 +35,33 @@ class fuel_stats::analytic (
     }
   }
 
-  if $firewall_enable {
+  if ( ! defined(File[$ssl_cert_file]) and $ssl_cert_file_contents ) {
+    file { $ssl_cert_file :
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0400',
+      content => $ssl_cert_file_contents,
+    }
+  }
+
+  if ( ! defined(File[$ssl_key_file]) and $ssl_key_file_contents ) {
+    file { $ssl_key_file :
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0400',
+      content => $ssl_key_file_contents,
+    }
+  }
+
+  # Limiting access to analytics only from hosts
+  if ($firewall_enable) {
     $firewall_rules = hiera_hash('fuel_stats::analytic::firewall_rules', {})
   } else {
     $firewall_rules = {}
   }
-  user { 'analytics':
+
+  # application user
+  user { 'analytics' :
     ensure     => present,
     home       => '/var/www/analytics',
     managehome => false,
@@ -45,7 +69,8 @@ class fuel_stats::analytic (
     shell      => '/usr/sbin/nologin',
   }
 
-  file { '/etc/analytics.py':
+  # application settings
+  file { '/etc/analytics.py' :
     ensure  => 'present',
     mode    => '0644',
     owner   => 'root',
@@ -53,77 +78,59 @@ class fuel_stats::analytic (
     content => template('fuel_stats/analytics.py.erb'),
   }
 
-  if ! defined(File['/var/log/fuel-stats']) {
-    file { '/var/log/fuel-stats':
-      ensure => 'directory',
-      mode   => '0755',
-      owner  => 'root',
-      group  => 'root',
-    }
-  }
-
-  file { '/var/log/fuel-stats/analytics.log':
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'analytics',
-    group   => 'analytics',
-    require => [
-      User['analytics'],
-      File['/var/log/fuel-stats'],
-    ],
-  }
-
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :
-      http_cfg_append => {
-        'limit_conn_zone' => '$binary_remote_addr zone=addr:10m'
-      }
-    }
-  }
-
-  if $development {
+  if ($development) {
     $www_root = '/var/www/analytics/analytics/static'
   } else {
     $www_root = '/usr/share/fuel-stats-static/static'
   }
 
-  $limit_conn = { 'limit_conn' => 'addr 1' }
+  # Nginx configuration
+  if ( ! defined(Class['::nginx']) ) {
+    include ::nginx
+  }
 
-  if $ssl {
-    ::nginx::resource::vhost { 'analytics' :
-      ensure              => 'present',
-      ssl                 => $ssl,
-      ssl_port            => $https_port,
-      listen_port         => $https_port,
-      ssl_cert            => $ssl_cert_file,
-      ssl_key             => $ssl_key_file,
-      server_name         => [$::fqdn],
-      www_root            => $www_root,
-      location_cfg_append => merge( $firewall_rules, $limit_conn),
-      access_log          => $nginx_access_log,
-      error_log           => $nginx_error_log,
-      format_log          => $nginx_log_format,
+  # rewrites, acl and limits configuration
+  $_rewrite_to_https = { 'rewrite' => "^ https://${service_hostname}:${https_port}\$request_uri? permanent" }
+  if ($nginx_limit_conn) {
+    $_limit_conn = { 'limit_conn' => $nginx_limit_conn }
+    $rewrite_to_https = merge($_rewrite_to_https, $_limit_conn)
+    $location_cfg_append_firewall_limit = merge($firewall_rules, $_limit_conn)
+  } else {
+    $rewrite_to_https = $_rewrite_to_https
+    $location_cfg_append_firewall_limit = $firewall_rules
+  }
+
+  # vhost configuration
+  ::nginx::resource::vhost { 'analytics' :
+    ensure              => 'present',
+    ssl                 => $ssl,
+    listen_port         => $http_port,
+    server_name         => [$::fqdn],
+    www_root            => $www_root,
+    location_cfg_append => $location_cfg_append_firewall_limit,
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
+  }
+
+  # enable ssl
+  if ($ssl and $ssl_cert_file and $ssl_key_file) {
+    Nginx::Resource::Vhost <| title == 'analytics' |> {
+      listen_port => $https_port,
+      ssl_cert    => $ssl_cert_file,
+      ssl_key     => $ssl_key_file,
+      ssl_port    => $https_port,
+      require     => [
+        File[$ssl_cert_file],
+        File[$ssl_key_file],
+      ],
     }
     ::nginx::resource::vhost { 'analytics-redirect' :
       ensure              => 'present',
       listen_port         => $http_port,
       www_root            => $www_root,
       server_name         => [$::fqdn],
-      location_cfg_append => {
-        'rewrite'    => "^ https://\$server_name:${https_port}\$request_uri? permanent",
-        'limit_conn' => 'addr 1',
-      },
-    }
-  } else {
-    ::nginx::resource::vhost { 'analytics' :
-      ensure              => 'present',
-      listen_port         => $http_port,
-      server_name         => [$::fqdn],
-      www_root            => $www_root,
-      location_cfg_append => merge( $firewall_rules, $limit_conn),
-      access_log          => $nginx_access_log,
-      error_log           => $nginx_error_log,
-      format_log          => $nginx_log_format,
+      location_cfg_append => $rewrite_to_https,
     }
   }
 
@@ -134,7 +141,7 @@ class fuel_stats::analytic (
     ssl                 => $ssl,
     ssl_only            => $ssl,
     uwsgi               => '127.0.0.1:7935',
-    location_cfg_append => merge( $firewall_rules, $limit_conn),
+    location_cfg_append => $location_cfg_append_firewall_limit,
   }
 
   ::nginx::resource::location { 'analytics-elastic' :
@@ -144,29 +151,10 @@ class fuel_stats::analytic (
     ssl                 => $ssl,
     ssl_only            => $ssl,
     proxy               => 'http://127.0.0.1:9200',
-    location_cfg_append => merge( $firewall_rules, $limit_conn),
+    location_cfg_append => $location_cfg_append_firewall_limit,
   }
 
-  class { 'elasticsearch':
-    manage_repo  => false,
-    java_install => true,
-    java_package => 'openjdk-7-jre-headless',
-    config       => {
-      'network.host'       => $elastic_listen_ip,
-      'http.port'          => $elastic_http_port,
-      'transport.tcp.port' => $elastic_tcp_port,
-    },
-    require      => Class['apt'],
-    notify       => Service['elasticsearch']
-  }
-
-  service { 'elasticsearch':
-    ensure  => 'running',
-    enable  => true,
-    require => Class['elasticsearch']
-  }
-
-  if $development {
+  if ($development) {
     # development configuration
     fuel_stats::dev { 'analytics':
       require => User['analytics'],
@@ -211,5 +199,45 @@ class fuel_stats::analytic (
         User['analytics'],
       ],
     }
+  }
+
+  if ( ! defined(File['/var/log/fuel-stats']) ) {
+    file { '/var/log/fuel-stats' :
+      ensure => 'directory',
+      mode   => '0755',
+      owner  => 'root',
+      group  => 'root',
+    }
+  }
+
+  file { '/var/log/fuel-stats/analytics.log' :
+    ensure  => 'present',
+    mode    => '0644',
+    owner   => 'analytics',
+    group   => 'analytics',
+    require => [
+      User['analytics'],
+      File['/var/log/fuel-stats'],
+    ],
+  }
+
+  # To be removed
+  class { '::elasticsearch' :
+    manage_repo  => false,
+    java_install => true,
+    java_package => 'openjdk-7-jre-headless',
+    config       => {
+      'network.host'       => $elastic_listen_ip,
+      'http.port'          => $elastic_http_port,
+      'transport.tcp.port' => $elastic_tcp_port,
+    },
+    require      => Class['::apt'],
+    notify       => Service['elasticsearch']
+  }
+
+  service { 'elasticsearch' :
+    ensure  => 'running',
+    enable  => true,
+    require => Class['elasticsearch']
   }
 }

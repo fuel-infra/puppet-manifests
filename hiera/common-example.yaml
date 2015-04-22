@@ -984,7 +984,10 @@ nginx::config::logdir: /var/log/nginx
 
 nginx::config::mail: false
 
-nginx::config::http_cfg_append: false
+# Used to set conn_limit
+nginx::config::http_cfg_append:
+  'limit_conn_zone': '$binary_remote_addr zone=addr:10m'
+
 nginx::config::nginx_error_log: /var/log/nginx/error.log
 nginx::config::http_access_log: /var/log/nginx/access.log
 

@@ -247,19 +247,19 @@ node 'demo.fuel-infra.org' {
 
 # *** Anonymous Statistics servers ***
 node /(product\-)?stats\.(mirantis\.com|fuel-infra\.org)/ {
-  class { '::fuel_project::statistics::analytic' :  }
+  class { '::fuel_project::roles::stats' :  }
 }
 
 node /collector\.(mirantis\.com|fuel-infra\.org)/ {
-  class { '::fuel_project::statistics::collector' : }
+  class { '::fuel_project::roles::stats_collector' : }
 }
 
 node /fuel-collect(\-testing)?\.vm\.mirantis\.net/ {
-  class { '::fuel_project::statistics::collector' : }
+  class { '::fuel_project::roles::stats_collector' : }
 }
 
 node /fuel-stats(\-testing)?\.vm\.mirantis\.net/ {
-  class { '::fuel_project::statistics::analytic' : }
+  class { '::fuel_project::roles::stats' : }
 }
 
 node /web([0-9]{2,})(-tst)?\.(fuel-infra\.org|vm\.mirantis\.net)/ {

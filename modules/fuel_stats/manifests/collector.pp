@@ -1,31 +1,26 @@
 # Anonymous statistics collector
 class fuel_stats::collector (
-  $development            = $fuel_stats::params::development,
-  $auto_update            = $fuel_stats::params::auto_update,
-  $fuel_stats_repo        = $fuel_stats::params::fuel_stats_repo,
-  $psql_user              = $fuel_stats::params::psql_user,
-  $psql_pass              = $fuel_stats::params::psql_pass,
-  $psql_db                = $fuel_stats::params::psql_db,
   $analytics_ip           = $fuel_stats::params::analytics_ip,
+  $auto_update            = $fuel_stats::params::auto_update,
+  $development            = $fuel_stats::params::development,
+  $firewall_enable        = $fuel_stats::params::firewall_enable,
+  $fuel_stats_repo        = $fuel_stats::params::fuel_stats_repo,
   $http_port              = $fuel_stats::params::http_port,
   $https_port             = $fuel_stats::params::https_port,
-  $ssl                    = false,
-  $ssl_cert_file          = '',
-  $ssl_key_file           = '',
-  $firewall_enable        = $fuel_stats::params::firewall_enable,
-  $firewall_rules         = {},
   $nginx_access_log       = $fuel_stats::params::nginx_access_log,
   $nginx_error_log        = $fuel_stats::params::nginx_error_log,
+  $nginx_limit_conn       = $fuel_stats::params::limit_conn,
   $nginx_log_format       = $fuel_stats::params::nginx_log_format,
+  $psql_db                = $fuel_stats::params::psql_db,
+  $psql_pass              = $fuel_stats::params::psql_pass,
+  $psql_user              = $fuel_stats::params::psql_user,
+  $service_hostname       = $::fqdn,
+  $ssl                    = false,
+  $ssl_cert_file          = '/etc/ssl/analytic.crt',
+  $ssl_cert_file_contents = '',
+  $ssl_key_file           = '/etc/ssl/analytic.key',
+  $ssl_key_file_contents  = '',
 ) inherits fuel_stats::params {
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :
-      http_cfg_append => {
-        'limit_conn_zone' => '$binary_remote_addr zone=addr:10m'
-      }
-    }
-  }
-
   if ( ! defined(Class['::fuel_stats::db']) ) {
     class { '::fuel_stats::db' :
       install_psql => true,
@@ -37,50 +32,33 @@ class fuel_stats::collector (
     }
   }
 
-  $limit_conn = { 'limit_conn' => 'addr 1' }
-
-  if $ssl {
-    ::nginx::resource::vhost { 'collector' :
-      ensure              => 'present',
-      ssl                 => true,
-      ssl_port            => $https_port,
-      listen_port         => $https_port,
-      ssl_cert            => $ssl_cert_file,
-      ssl_key             => $ssl_key_file,
-      server_name         => [$::fqdn],
-      uwsgi               => '127.0.0.1:7932',
-      location_cfg_append => merge($firewall_rules, $limit_conn),
-      access_log          => $nginx_access_log,
-      error_log           => $nginx_error_log,
-      format_log          => $nginx_log_format,
-    }
-    ::nginx::resource::vhost { 'collector-redirect' :
-      ensure              => 'present',
-      listen_port         => $http_port,
-      www_root            => '/var/www',
-      server_name         => [$::fqdn],
-      location_cfg_append => {
-        'rewrite'    => "^ https://\$server_name:${https_port}\$request_uri? permanent",
-        'limit_conn' => 'addr 1',
-      },
-      access_log          => $nginx_access_log,
-      error_log           => $nginx_error_log,
-      format_log          => $nginx_log_format,
-    }
-  } else {
-    ::nginx::resource::vhost { 'collector' :
-      ensure              => 'present',
-      listen_port         => $http_port,
-      server_name         => [$::fqdn],
-      uwsgi               => '127.0.0.1:7932',
-      location_cfg_append => merge($firewall_rules, $limit_conn),
-      access_log          => $nginx_access_log,
-      error_log           => $nginx_error_log,
-      format_log          => $nginx_log_format,
+  if ( ! defined(File[$ssl_cert_file]) and $ssl_cert_file_contents ) {
+    file { $ssl_cert_file :
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0400',
+      content => $ssl_cert_file_contents,
     }
   }
 
-  user { 'collector':
+  if ( ! defined(File[$ssl_key_file]) and $ssl_key_file_contents ) {
+    file { $ssl_key_file :
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0400',
+      content => $ssl_key_file_contents,
+    }
+  }
+
+  # Limiting access to analytics only from hosts
+  if ($firewall_enable) {
+    $firewall_rules = hiera_hash('fuel_stats::collector::firewall_rules', {})
+  } else {
+    $firewall_rules = {}
+  }
+
+  # application user
+  user { 'collector' :
     ensure     => present,
     home       => '/var/www/collector',
     managehome => false,
@@ -88,7 +66,8 @@ class fuel_stats::collector (
     shell      => '/usr/sbin/nologin',
   }
 
-  file { '/etc/collector.py':
+  # application settings
+  file { '/etc/collector.py' :
     ensure  => 'file',
     content => template('fuel_stats/collect.py.erb'),
     mode    => '0644',
@@ -96,7 +75,60 @@ class fuel_stats::collector (
     group   => 'root',
   }
 
-  if $development {
+  # Nginx configuration
+  if ( ! defined(Class['::nginx']) ) {
+    include ::nginx
+  }
+
+  # rewrites, acl and limits configuration
+  $_rewrite_to_https = { 'rewrite' => "^ https://${service_hostname}:${https_port}\$request_uri? permanent" }
+  if ($nginx_limit_conn) {
+    $_limit_conn = { 'limit_conn' => $nginx_limit_conn }
+    $rewrite_to_https = merge($_rewrite_to_https, $_limit_conn)
+    $location_cfg_append_firewall_limit = merge($firewall_rules, $_limit_conn)
+  } else {
+    $rewrite_to_https = $_rewrite_to_https
+    $location_cfg_append_firewall_limit = $firewall_rules
+  }
+
+  # vhost configuration
+  ::nginx::resource::vhost { 'collector' :
+    ensure              => 'present',
+    ssl                 => $ssl,
+    listen_port         => $http_port,
+    server_name         => [$::fqdn],
+    uwsgi               => '127.0.0.1:7932',
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
+    location_cfg_append => $location_cfg_append_firewall_limit,
+  }
+
+  # enable ssl
+  if ($ssl and $ssl_cert_file and $ssl_key_file) {
+    Nginx::Resource::Vhost <| title == 'collector' |>  {
+      listen_port => $https_port,
+      ssl_cert    => $ssl_cert_file,
+      ssl_key     => $ssl_key_file,
+      ssl_port            => $https_port,
+      require     => [
+        File[$ssl_cert_file],
+        File[$ssl_key_file],
+      ],
+    }
+    ::nginx::resource::vhost { 'collector-redirect' :
+      ensure              => 'present',
+      listen_port         => $http_port,
+      www_root            => '/var/www',
+      server_name         => [$::fqdn],
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
+      location_cfg_append => $rewrite_to_https,
+    }
+  }
+
+  if ($development) {
     # development configuration
     fuel_stats::dev { 'collector':
       require => User['collector'],
@@ -118,7 +150,7 @@ class fuel_stats::collector (
       ],
     }
     $src_path = '/var/www/collector/collector'
-    exec { 'upgrade-collector-db':
+    exec { 'upgrade-collector-db' :
       command     => "${src_path}/manage_collector.py --mode prod db upgrade -d .",
       environment => 'COLLECTOR_SETTINGS=/etc/collector.py',
       cwd         => "${src_path}/collector/api/db/migrations",
@@ -155,8 +187,8 @@ class fuel_stats::collector (
     }
   }
 
-  if ! defined(File['/var/log/fuel-stats']) {
-    file { '/var/log/fuel-stats':
+  if ( ! defined(File['/var/log/fuel-stats']) ) {
+    file { '/var/log/fuel-stats' :
       ensure => 'directory',
       mode   => '0755',
       owner  => 'root',
@@ -164,7 +196,7 @@ class fuel_stats::collector (
     }
   }
 
-  file { '/var/log/fuel-stats/collector.log':
+  file { '/var/log/fuel-stats/collector.log' :
     ensure => 'present',
     mode   => '0644',
     owner  => 'collector',
