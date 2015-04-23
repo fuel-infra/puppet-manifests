@@ -291,6 +291,10 @@ class fuel_project::jenkins::slave (
       value   => '0',
       require => Exec['load_bridge_module'],
     }
+
+    sysctl { 'vm.swappiness' :
+      value => '0',
+    }
   }
 
   # provide env for building packages, actaully for "make sources"
