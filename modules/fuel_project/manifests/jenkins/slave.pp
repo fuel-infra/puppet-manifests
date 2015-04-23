@@ -265,6 +265,17 @@ class fuel_project::jenkins::slave (
       require => User['jenkins'],
     }
 
+    ensure_resource('file', "${workspace}/iso", {
+      ensure  => 'directory',
+      owner   => 'jenkins',
+      group   => 'jenkins',
+      mode    => '0755',
+      require => [
+        User['jenkins'],
+        File[$workspace],
+      ],
+    })
+
     file { '/etc/sudoers.d/systest' :
       ensure  => 'present',
       owner   => 'root',
