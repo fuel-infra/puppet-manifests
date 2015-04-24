@@ -81,6 +81,7 @@ class fuel_project::jenkins::slave (
   $verify_fuel_pkgs_requirements        = false,
   $verify_fuel_stats                    = false,
   $verify_fuel_web                      = false,
+  $verify_jenkins_jobs                  = false,
   $workspace                            = '/home/jenkins/workspace',
 ) {
   class { '::fuel_project::common' :
@@ -747,6 +748,16 @@ class fuel_project::jenkins::slave (
     ]
 
     ensure_packages($verify_fuel_docs_packages)
+  }
+
+  # Verify Jenkins jobs
+  if ($verify_jenkins_jobs) {
+    $verify_jenkins_jobs_packages = [
+      'python-tox',
+      'shellcheck',
+    ]
+
+    ensure_packages($verify_jenkins_jobs_packages)
   }
 
   # Verify and Build fuel-plugins project
