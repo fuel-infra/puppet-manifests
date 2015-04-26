@@ -50,17 +50,6 @@ class zabbix::agent (
   }~>
   Service[$service]
 
-  if ($::osfamily == 'Debian') {
-    file { '/etc/logrotate.d/zabbix-agent' :
-      ensure  => 'present',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      content => template('zabbix/agent/logrotate.erb'),
-      require => Package[$package],
-    }
-  }
-
   if ($apply_firewall_rules) {
     include firewall_defaults::pre
     create_resources(firewall, $firewall_allow_sources, {
