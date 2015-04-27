@@ -6,9 +6,9 @@ import urllib2
 import xml.etree.ElementTree as ET
 
 jenkins_api_url = '<%= @jenkins_api_url || 'http://localhost:8080' %>'
-jenkins_username = '<%= @jenkins_api_username %>'
-jenkins_token = '<%= @jenkins_api_token %>'
-destpath = '<%= @label_dumper_destpath %>'
+jenkins_username = '<%= @jenkins_management_login %>'
+jenkins_token = '<%= @jenkins_management_password %>'
+destpath = '<%= @label_dumper_destpath || '/var/www/labels/' %>'
 
 ua = urllib2.urlopen('%s/computer/api/json' % jenkins_api_url)
 data = json.loads(ua.read())
