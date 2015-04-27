@@ -1,6 +1,29 @@
 ---
-fuel_project::seed::seed_cleanup_dirs:
+classes:
+  - '::fuel_project::common'
+  - '::fuel_project::apps::seed'
+  - '::fuel_project::apps::mirror'
+  - '::fuel_project::apps::plugins'
+  - '::fuel_project::apps::updates'
+  - '::fuel_project::apps::partnershare'
+
+fuel_project::common::external_host: true
+
+fuel_project::apps::seed::external_host: true
+fuel_project::apps::seed::apply_firewall_rules: true
+fuel_project::apps::seed::tracker_apply_firewall_rules: true
+fuel_project::apps::seed::seed_cleanup_dirs:
   -
     dir: '/var/www/seed/fuelweb-iso'
     ttl: 10
     pattern: 'fuel-*'
+
+fuel_project::apps::mirror::apply_firewall_rules: true
+fuel_project::apps::plugins::apply_firewall_rules: true
+fuel_project::apps::updates::apply_firewall_rules: true
+
+fuel_project::apps::partnershare::apply_firewall_rules: true
+fuel_project::apps::partnershare::authorized_key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDYssGyYj4WMSYItC0+/4MqyQsu2xm7/JmgYSbuOp9HpvxV/+73+2QOCk9mhAAcVXf7ZMIMHTKvBtfSO7QPjt+Op5w2h/mXJQXx2YiuJh+9HIFX3fDZqId8xbqH87RQa3mqbb38zWHvuOcQXPOiZvH5YyfyTC+YSNDXiTM3rCnmyeEF2MCZni0Rgouc5SNDXF9J3vhUEZFQ4FKe6BtzZcB1nrbX3TFavYjKxgFmiebsB9jwXWAG41OGP4V6rSOJQa6erOxe4jbUpvm9Mu7jJcYFedg1+FDV5cx//nUBex5lqqihbnbhG8UtmHTKiBDgs2IggJ4oe9FG4rQ8bRQKO6k1'
+# generic_partner : ku6Oa2ei
+fuel_project::apps::partnershare::htpasswd_content: |
+    generic_partner:$apr1$rL.LZemY$eS32g9twHzR2VlB2A3vXp.

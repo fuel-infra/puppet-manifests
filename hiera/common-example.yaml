@@ -1032,11 +1032,6 @@ fuel_project::mongodb::password: 'aE1nHkR6qXj2'
 fuel_project::mongodb::admin_password: 'Hy6mi2uINsIQ'
 fuel_project::mongodb::admin_database: 'admin'
 
-fuel_project::partnershare::authorized_key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDYssGyYj4WMSYItC0+/4MqyQsu2xm7/JmgYSbuOp9HpvxV/+73+2QOCk9mhAAcVXf7ZMIMHTKvBtfSO7QPjt+Op5w2h/mXJQXx2YiuJh+9HIFX3fDZqId8xbqH87RQa3mqbb38zWHvuOcQXPOiZvH5YyfyTC+YSNDXiTM3rCnmyeEF2MCZni0Rgouc5SNDXF9J3vhUEZFQ4FKe6BtzZcB1nrbX3TFavYjKxgFmiebsB9jwXWAG41OGP4V6rSOJQa6erOxe4jbUpvm9Mu7jJcYFedg1+FDV5cx//nUBex5lqqihbnbhG8UtmHTKiBDgs2IggJ4oe9FG4rQ8bRQKO6k1'
-# generic_partner : ku6Oa2ei
-fuel_project::partnershare::htpasswd_content: |
-    generic_partner:$apr1$rL.LZemY$eS32g9twHzR2VlB2A3vXp.
-
 fuel_project::devops_tools::lpbugmanage: false
 fuel_project::devops_tools::lpbugmanage::id: '1'
 fuel_project::devops_tools::lpbugmanage::consumer_key: 'System-wide: Ubuntu (devops-tools.vm.mirantis.net)'
