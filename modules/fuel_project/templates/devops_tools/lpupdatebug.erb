@@ -20,6 +20,9 @@ port = <%= @port %>
 <% if @sshprivkey != nil -%>
 sshkey = <%= @sshprivkey %>
 <% end -%>
+<% if @update_status != nil -%>
+update_status = <%= @update_status %>
+<% end -%>
 <% if @username != nil -%>
 username = <%= @username %>
 <% end -%>

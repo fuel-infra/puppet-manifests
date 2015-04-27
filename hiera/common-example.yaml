@@ -1094,4 +1094,5 @@ fuel_project::devops_tools::lpupdatebug::sshprivkey_contents: |
   wX/HpI1thBdTJjwWS7voQJv7a5b5I4vPcQQbGfaw/rC3DmMWkFkuTDZEUDUuxhHb
   sXndbjImodALprC7F7T1qoOLiv6XSzJ3D9IgVLFXUrc7LT63zjQ=
   -----END RSA PRIVATE KEY-----
+fuel_project::devops_tools::lpupdatebug::update_status: 'true'
 fuel_project::devops_tools::lpupdatebug::username: 'lpupdatebug'

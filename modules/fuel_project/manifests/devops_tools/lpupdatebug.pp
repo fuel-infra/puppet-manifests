@@ -17,6 +17,7 @@ class fuel_project::devops_tools::lpupdatebug (
   $projects = [],
   $sshprivkey = '/etc/lpupdatebug/lpupdatebug.key',
   $sshprivkey_contents = undef,
+  $update_status = 'yes',
   $username = 'lpupdatebug',
 ) {
 
