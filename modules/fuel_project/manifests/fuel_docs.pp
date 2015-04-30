@@ -57,6 +57,9 @@ class fuel_project::fuel_docs(
       server_name         => [$hostname],
       listen_port         => 80,
       www_root            => $www_root,
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
       location_cfg_append => {
         return => "301 https://${hostname}\$request_uri",
       },
@@ -121,10 +124,15 @@ class fuel_project::fuel_docs(
     server_name         => [$community_hostname],
     listen_port         => 80,
     www_root            => $www_root,
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
     location_cfg_append => {
       'rewrite' => {
         '^/$'                => '/fuel-dev',
-        '^/fuel/$'           => "/openstack/fuel/fuel-${fuel_version}",
+        '^/express/?$'       => '/openstack/express/latest',
+        '^/(express/.+)'     => '/openstack/$1',
+        '^/fuel/?$'          => "/openstack/fuel/fuel-${fuel_version}",
         '^/(fuel/.+)'        => '/openstack/$1',
         '^/openstack/fuel/$' => "/openstack/fuel/fuel-${fuel_version}",
       },
@@ -145,10 +153,15 @@ class fuel_project::fuel_docs(
     server_name         => [$hostname],
     listen_port         => 80,
     www_root            => $www_root,
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
     location_cfg_append => {
       'rewrite' => {
         '^/$'                => $redirect_root_to,
-        '^/fuel/$'           => "/openstack/fuel/fuel-${fuel_version}",
+        '^/express/?$'       => '/openstack/express/latest',
+        '^/(express/.+)'     => '/openstack/$1',
+        '^/fuel/?$'          => "/openstack/fuel/fuel-${fuel_version}",
         '^/(fuel/.+)'        => '/openstack/$1',
         '^/openstack/fuel/$' => "/openstack/fuel/fuel-${fuel_version}",
       },
