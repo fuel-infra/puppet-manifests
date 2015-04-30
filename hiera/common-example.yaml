@@ -764,6 +764,8 @@ sysctl::base::values:
     value: 1
   net.ipv4.tcp_moderate_rcvbuf:
     value: 1
+  fs.inotify.max_user_instances:
+    value: 256
 
 zabbix::agent::apply_firewall_rules: false
 zabbix::agent::firewall_allow_sources:
