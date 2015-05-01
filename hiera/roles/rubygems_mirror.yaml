@@ -1,0 +1,6 @@
+---
+classes:
+  - '::fuel_project::common'
+  - '::fuel_project::nginx'
+  - '::fuel_project::apps::mirror_rubygems'
+fuel_project::apps::mirror_rubygems::service_fqdn: 'rubygem-mirror.test.local'
