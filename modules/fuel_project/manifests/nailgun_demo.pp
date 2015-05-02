@@ -1,12 +1,12 @@
 # Class: fuel_project::nailgun_demo
 #
 class fuel_project::nailgun_demo (
-  $server_name = '',
-  $lock_file = '',
   $apply_firewall_rules = false,
-  $nginx_access_log = '/var/log/nginx/access.log',
-  $nginx_error_log = '/var/log/nginx/error.log',
-  $nginx_log_format = 'proxy',
+  $lock_file            = '',
+  $nginx_access_log     = '/var/log/nginx/access.log',
+  $nginx_error_log      = '/var/log/nginx/error.log',
+  $nginx_log_format     = 'proxy',
+  $server_name          = '',
 ) {
 
   if (!defined(Class['fuel_project::common'])) {

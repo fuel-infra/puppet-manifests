@@ -20,10 +20,10 @@ class landing_page::params {
   $database_user          = 'release'
   $debug                  = false
   $firewall_allow_sources = {}
-  $nginx_server_name      = $::fqdn
   $nginx_access_log       = '/var/log/nginx/access.log'
   $nginx_error_log        = '/var/log/nginx/error.log'
   $nginx_log_format       = undef
+  $nginx_server_name      = $::fqdn
   $package                = [
     'landing-page-all',
     'python-mysqldb',
@@ -41,8 +41,8 @@ class landing_page::params {
   $uwsgi_socket           = '127.0.0.1:7939'
 
   # Updater app
-  $updater_user           = 'jenkins'
   $updater_app            = 'release'
   $updater_config         = '/etc/release-updater.yaml'
   $updater_token          = '<SECRET_TOKEN>'
+  $updater_user           = 'jenkins'
 }

@@ -1,7 +1,7 @@
 # Class: ssh::sshd
 #
 class ssh::sshd (
-  $apply_firewall_rules = $::ssh::params::apply_firewall_rules,
+  $apply_firewall_rules   = $::ssh::params::apply_firewall_rules,
   $firewall_allow_sources = $::ssh::params::firewall_allow_sources,
 ) {
   include ssh::params

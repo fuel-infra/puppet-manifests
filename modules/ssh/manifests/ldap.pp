@@ -1,14 +1,14 @@
 # Class: ssh::ldap
 #
 class ssh::ldap (
-  $ldap_uri = '',
-  $ldap_base = '',
-  $tls_cacertdir = '',
-  $pam_password = $ssh::params::pam_password,
-  $pam_filter = '',
-  $sudoers_base = '',
-  $bind_policy = $ssh::params::bind_policy,
-  $ldap_ignore_users = $ssh::params::ldap_ignore_users
+  $bind_policy       = $ssh::params::bind_policy,
+  $ldap_base         = '',
+  $ldap_ignore_users = $ssh::params::ldap_ignore_users,
+  $ldap_uri          = '',
+  $pam_filter        = '',
+  $pam_password      = $ssh::params::pam_password,
+  $sudoers_base      = '',
+  $tls_cacertdir     = '',
 ) {
   include ssh::params
 

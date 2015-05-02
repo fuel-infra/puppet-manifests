@@ -1,10 +1,10 @@
 # Define: zabbix::item
 #
 define zabbix::item (
-  $items = [],
+  $content     = undef,
+  $items       = [],
   $raw_content = '',
-  $content = undef,
-  $template = undef,
+  $template    = undef,
 ) {
   include zabbix::agent::service
   include zabbix::params

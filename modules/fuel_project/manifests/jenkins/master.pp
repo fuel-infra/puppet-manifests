@@ -2,9 +2,9 @@
 #
 class fuel_project::jenkins::master (
   $firewall_enable      = false,
+  $install_label_dumper = false,
   $install_plugins      = false,
   $install_zabbix_item  = false,
-  $install_label_dumper = false,
   $service_fqdn         = $::fqdn,
 ) {
   class { '::fuel_project::common':

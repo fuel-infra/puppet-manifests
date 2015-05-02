@@ -1,19 +1,19 @@
 # Class: fuel_project::apps::mirror
 #
 class fuel_project::apps::mirror (
-  $dir = '/var/www/mirror',
-  $dir_owner = 'www-data',
-  $dir_group = 'www-data',
-  $rsync_writable_share = true,
-  $lock_file = '/var/run/rsync_mirror_sync.lock',
+  $dir                    = '/var/www/mirror',
+  $dir_group              = 'www-data',
+  $dir_owner              = 'www-data',
   $firewall_allow_sources = {},
-  $port = 80,
-  $service_fqdn = "mirror.${::fqdn}",
-  $service_aliases = [],
-  $sync_hosts_allow = [],
-  $nginx_access_log = '/var/log/nginx/access.log',
-  $nginx_error_log = '/var/log/nginx/error.log',
-  $nginx_log_format = 'proxy',
+  $lock_file              = '/var/run/rsync_mirror_sync.lock',
+  $nginx_access_log       = '/var/log/nginx/access.log',
+  $nginx_error_log        = '/var/log/nginx/error.log',
+  $nginx_log_format       = 'proxy',
+  $port                   = 80,
+  $rsync_writable_share   = true,
+  $service_aliases        = [],
+  $service_fqdn           = "mirror.${::fqdn}",
+  $sync_hosts_allow       = [],
 ) {
   if(!defined(Class['rsync'])) {
     class { 'rsync' :

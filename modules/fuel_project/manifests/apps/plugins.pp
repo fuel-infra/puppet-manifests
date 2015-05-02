@@ -1,14 +1,14 @@
 # Class: fuel_project::apps::plugins
 #
 class fuel_project::apps::plugins (
-  $service_fqdn = "plugins.${::fqdn}",
-  $plugins_dir = '/var/www/plugins',
-  $apply_firewall_rules = false,
+  $apply_firewall_rules   = false,
   $firewall_allow_sources = {},
-  $sync_hosts_allow = [],
-  $nginx_access_log = '/var/log/nginx/access.log',
-  $nginx_error_log = '/var/log/nginx/error.log',
-  $nginx_log_format = 'proxy',
+  $nginx_access_log       = '/var/log/nginx/access.log',
+  $nginx_error_log        = '/var/log/nginx/error.log',
+  $nginx_log_format       = 'proxy',
+  $plugins_dir            = '/var/www/plugins',
+  $service_fqdn           = "plugins.${::fqdn}",
+  $sync_hosts_allow       = [],
 ) {
   if (!defined(Class['::fuel_project::nginx'])) {
     class { '::fuel_project::nginx' :}

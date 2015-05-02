@@ -1,10 +1,10 @@
 # Define: ssh::known_host
 #
 define ssh::known_host (
-  $host = '',
-  $port = 22,
-  $user = 'root',
+  $host      = '',
   $overwrite = true,
+  $port      = 22,
+  $user      = 'root',
 ) {
   if $overwrite {
     $cmd = "ssh-keyscan -p ${port} -H ${host} > ~${user}/.ssh/known_hosts"

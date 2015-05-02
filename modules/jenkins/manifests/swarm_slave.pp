@@ -1,18 +1,18 @@
 # Class: jenkins::swarm_slave
 #
 class jenkins::swarm_slave (
-  $labels = $::jenkins::params::swarm_labels,
-  $master = $::jenkins::params::swarm_master,
-  $package = $::jenkins::params::swarm_package,
-  $password = $::jenkins::params::swarm_password,
-  $service = $::jenkins::params::swarm_service,
-  $java_package = $::jenkins::params::slave_java_package,
-  $ssl_cert_file = $::jenkins::params::ssl_cert_file,
-  $ssl_cert_file_contents = $::jenkins::params::ssl_cert_file_contents,
-  $swarm_service = $::jenkins::params::swarm_service,
-  $user = $::jenkins::params::swarm_user,
-  $cache_labels = false,
+  $cache_labels            = false,
+  $java_package            = $::jenkins::params::slave_java_package,
   $jenkins_fetchlabels_url = '',
+  $labels                  = $::jenkins::params::swarm_labels,
+  $master                  = $::jenkins::params::swarm_master,
+  $package                 = $::jenkins::params::swarm_package,
+  $password                = $::jenkins::params::swarm_password,
+  $service                 = $::jenkins::params::swarm_service,
+  $ssl_cert_file           = $::jenkins::params::ssl_cert_file,
+  $ssl_cert_file_contents  = $::jenkins::params::ssl_cert_file_contents,
+  $swarm_service           = $::jenkins::params::swarm_service,
+  $user                    = $::jenkins::params::swarm_user,
 ) inherits ::jenkins::params{
 
   if (!defined(User['jenkins'])) {

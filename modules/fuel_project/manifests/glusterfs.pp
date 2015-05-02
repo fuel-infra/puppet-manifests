@@ -22,14 +22,14 @@
 # http://docs.openstack.org/admin-guide-cloud/content/glusterfs_backend.html
 #
 class fuel_project::glusterfs (
-  $apply_firewall_rules = false,
+  $apply_firewall_rules   = false,
+  $create_pool            = false,
   $firewall_allow_sources = {},
-  $create_pool = false,
-  $gfs_pool = [ 'slave-13.test.local','slave-14.test.local' ],
-  $gfs_volume_name = 'data',
-  $gfs_brick_point = '/mnt/brick',
-  $owner_uid = 165,
-  $owner_gid = 165,
+  $gfs_brick_point        = '/mnt/brick',
+  $gfs_pool               = [ 'slave-13.test.local','slave-14.test.local' ],
+  $gfs_volume_name        = 'data',
+  $owner_gid              = 165,
+  $owner_uid              = 165,
 
 ){
   class { '::fuel_project::common' :

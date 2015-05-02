@@ -5,9 +5,9 @@
 define venv::exec (
   $command,
   $venv,
-  $cwd = '/tmp',
-  $user = 'nobody',
+  $cwd    = '/tmp',
   $onlyif = '/bin/true',
+  $user   = 'nobody',
 ) {
 
   ensure_packages(['python-virtualenv'])

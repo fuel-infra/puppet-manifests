@@ -2,13 +2,13 @@
 #
 class fuel_project::roles::ns (
   $dns_repo,
+  $dns_branch                       = 'master',
+  $dns_checkout_private_key_content = undef,
+  $dns_tmpdir                       = '/tmp/ns-update',
   $firewall_enable                  = false,
   $firewall_rules                   = {},
   $role                             = 'master',
-  $dns_branch                       = 'master',
-  $dns_tmpdir                       = '/tmp/ns-update',
   $target_path                      = '/var/cache/bind',
-  $dns_checkout_private_key_content = undef,
 ) {
   class { '::fuel_project::common' :
     external_host => $firewall_enable,

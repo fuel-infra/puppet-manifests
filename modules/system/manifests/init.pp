@@ -1,16 +1,16 @@
 # Class: system
 #
 class system (
-  $install_tools = false,
-  $mta_aliases = '/etc/aliases',
+  $install_tools     = false,
+  $mta_aliases       = '/etc/aliases',
+  $mta_local_only    = false,
   $mta_newaliasescmd = '/usr/bin/newaliases',
-  $mta_local_only = false,
-  $mta_packages = ['postfix'],
-  $root_password = undef,
-  $root_shell = '/bin/bash',
-  $root_email = undef,
-  $timezone = undef,
-  $tools_packages = ['atop', 'curl', 'htop', 'sysstat']
+  $mta_packages      = ['postfix'],
+  $root_email        = undef,
+  $root_password     = undef,
+  $root_shell        = '/bin/bash',
+  $timezone          = undef,
+  $tools_packages    = ['atop', 'curl', 'htop', 'sysstat']
 ) {
   if($root_password) {
     user { 'root' :

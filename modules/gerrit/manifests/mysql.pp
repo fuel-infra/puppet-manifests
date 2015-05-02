@@ -1,9 +1,9 @@
 # == Class: gerrit::mysql
 #
 class gerrit::mysql (
-  $database_name = '',
-  $database_user = '',
+  $database_name     = '',
   $database_password = '',
+  $database_user     = '',
 ) {
 
   class { '::mysql::server' :}

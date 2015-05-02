@@ -1,8 +1,8 @@
 # Class: uwsgi
 #
 class uwsgi (
-  $service = $uwsgi::params::service,
-  $package = $uwsgi::params::package,
+  $package   = $uwsgi::params::package,
+  $service   = $uwsgi::params::service,
   $somaxconn = $uwsgi::params::somaxconn,
 ) inherits ::uwsgi::params {
   package { $package :

@@ -1,14 +1,14 @@
 # Class: fuel_project::apps::update
 #
 class fuel_project::apps::updates (
-  $service_fqdn = "updates.${::fqdn}",
-  $updates_dir = '/var/www/updates',
-  $apply_firewall_rules = false,
+  $apply_firewall_rules   = false,
   $firewall_allow_sources = {},
-  $sync_hosts_allow = [],
-  $nginx_access_log = '/var/log/nginx/access.log',
-  $nginx_error_log = '/var/log/nginx/error.log',
-  $nginx_log_format = 'proxy',
+  $nginx_access_log       = '/var/log/nginx/access.log',
+  $nginx_error_log        = '/var/log/nginx/error.log',
+  $nginx_log_format       = 'proxy',
+  $service_fqdn           = "updates.${::fqdn}",
+  $sync_hosts_allow       = [],
+  $updates_dir            = '/var/www/updates',
 ) {
   if (!defined(Class['::fuel_project::nginx'])) {
     class { '::fuel_project::nginx' :}

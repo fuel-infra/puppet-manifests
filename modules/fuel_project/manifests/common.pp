@@ -1,22 +1,22 @@
 # Class: fuel_project::common
 #
 class fuel_project::common (
-  $external_host      = false,
-  $ldap               = false,
-  $ldap_uri           = '',
-  $ldap_base          = '',
-  $tls_cacertdir      = '',
-  $pam_password       = '',
-  $pam_filter         = '',
-  $sudoers_base       = '',
   $bind_policy        = '',
-  $ldap_ignore_users  = '',
-  $root_password_hash = 'r00tme',
-  $root_shell         = '/bin/bash',
+  $external_host      = false,
   $facts              = {
     'location' => $::location,
     'role'     => $::role,
   },
+  $ldap               = false,
+  $ldap_base          = '',
+  $ldap_ignore_users  = '',
+  $ldap_uri           = '',
+  $pam_filter         = '',
+  $pam_password       = '',
+  $root_password_hash = 'r00tme',
+  $root_shell         = '/bin/bash',
+  $sudoers_base       = '',
+  $tls_cacertdir      = '',
 ) {
   class { '::fuel_project::apps::firewall' :}
   class { '::ntp' :}

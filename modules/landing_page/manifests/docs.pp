@@ -3,12 +3,12 @@
 class landing_page::docs (
   $apply_firewall_rules   = false,
   $firewall_allow_sources = {},
-  $package                = 'landing-page-docs',
-  $nginx_server_name      = $::fqdn,
   $nginx_access_log       = '/var/log/nginx/access.log',
   $nginx_error_log        = '/var/log/nginx/error.log',
   $nginx_log_format       = 'proxy',
+  $nginx_server_name      = $::fqdn,
   $nginx_www_root         = '/var/www/docs_landing',
+  $package                = 'landing-page-docs',
 ) {
   package { $package :
     ensure => 'present',

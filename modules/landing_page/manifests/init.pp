@@ -2,8 +2,8 @@
 #
 class landing_page (
   $app_user               = $::landing_page::params::app_user,
-  $apps                   = $::landing_page::params::apps,
   $apply_firewall_rules   = $::landing_page::params::apply_firewall_rules,
+  $apps                   = $::landing_page::params::apps,
   $config                 = $::landing_page::params::config,
   $config_template        = $::landing_page::params::config_template,
   $database_engine        = $::landing_page::params::database_engine,

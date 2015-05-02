@@ -1,12 +1,12 @@
 # Class: landing_page::updater
 #
 class landing_page::updater (
-  $package      = $::landing_page::params::package_updater,
-  $server_name  = $::landing_page::params::nginx_server_name,
-  $updater_user = $::landing_page::params::updater_user,
   $application  = $::landing_page::params::updater_app,
   $config       = $::landing_page::params::updater_config,
+  $package      = $::landing_page::params::package_updater,
+  $server_name  = $::landing_page::params::nginx_server_name,
   $token        = $::landing_page::params::updater_token,
+  $updater_user = $::landing_page::params::updater_user,
 ) inherits ::landing_page::params {
 
   # installing required $packages

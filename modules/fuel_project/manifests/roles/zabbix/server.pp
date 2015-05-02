@@ -1,15 +1,15 @@
 # Class: fuel_project::roles::zabbix::server
 #
 class fuel_project::roles::zabbix::server (
-  $slack_web_hook_url = '',
-  $slack_post_username = '',
-  $slack_emoji_ok = ':smile:',
-  $slack_emoji_problem = ':frowning:',
-  $slack_emoji_unknown = ':ghost:',
-  $server_role = 'master', # master || slave
-  $mysql_slave_host = undef,
-  $mysql_replication_user = 'repl',
   $mysql_replication_password = '',
+  $mysql_replication_user     = 'repl',
+  $mysql_slave_host           = undef,
+  $server_role                = 'master', # master || slave
+  $slack_emoji_ok             = ':smile:',
+  $slack_emoji_problem        = ':frowning:',
+  $slack_emoji_unknown        = ':ghost:',
+  $slack_post_username        = '',
+  $slack_web_hook_url         = '',
 ) {
   class { '::fuel_project::common' :}
   class { '::zabbix::server' :}

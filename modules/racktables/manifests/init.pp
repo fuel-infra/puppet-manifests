@@ -5,6 +5,7 @@ class racktables (
   $db_name               = 'racktables',
   $db_password           = 'racktables',
   $db_username           = 'racktables',
+  $ldap_options          = undef,
   $nginx_access_log      = '/var/log/nginx/access.log',
   $nginx_error_log       = '/var/log/nginx/error.log',
   $nginx_log_format      = undef,
@@ -15,7 +16,6 @@ class racktables (
   $ssl_key_content       = '',
   $ssl_key_filename      = '/etc/ssl/racktables.key',
   $user_auth_src         = 'database',
-  $ldap_options          = undef
 ) {
   $php_modules = [ 'mysql', 'ldap', 'gd', 'cli' ]
   $www_root = '/usr/share/racktables/wwwroot'

@@ -15,23 +15,23 @@ class uwsgi::params {
     ]
   }
 
-  $somaxconn = 65535
+  $somaxconn      = 65535
 
-  $buffer_size = 65535
-  $callable = undef
-  $chdir = '/'
-  $home = undef
-  $chmod = 644
+  $buffer_size    = 65535
+  $callable       = undef
+  $chdir          = '/'
+  $chmod          = 644
   $enable_threads = true
-  $env = undef
-  $gid = 'www-data'
-  $listen = 1000
-  $master = true
-  $module = undef
-  $plugins = undef
-  $rack = undef
-  $socket = undef
-  $uid = 'www-data'
-  $vacuum = true
-  $workers = $::processorcount
+  $env            = undef
+  $gid            = 'www-data'
+  $home           = undef
+  $listen         = 1000
+  $master         = true
+  $module         = undef
+  $plugins        = undef
+  $rack           = undef
+  $socket         = undef
+  $uid            = 'www-data'
+  $vacuum         = true
+  $workers        = $::processorcount
 }

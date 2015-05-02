@@ -2,11 +2,11 @@
 #
 define venv::venv (
   $path,
-  $user = 'root',
+  $options      = '',
+  $packages     = [],
+  $pip_opts     = '',
   $requirements = '',
-  $options = '',
-  $packages = [],
-  $pip_opts = '',
+  $user         = 'root',
 ) {
 
 
