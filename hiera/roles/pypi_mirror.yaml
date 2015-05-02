@@ -1,0 +1,6 @@
+---
+classes:
+  - '::fuel_project::common'
+  - '::fuel_project::nginx'
+  - '::fuel_project::apps::mirror_pypi'
+fuel_project::apps::mirror_pypi::service_fqdn: 'pypi-mirror.test.local'
