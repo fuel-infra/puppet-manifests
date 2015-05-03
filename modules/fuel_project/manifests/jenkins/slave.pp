@@ -314,6 +314,7 @@ class fuel_project::jenkins::slave (
   # from fuel-main and remove duplicate packages from build ISO
   if ($build_fuel_packages or $build_fuel_iso) {
     $build_fuel_packages_list = [
+      'devscripts',
       'libparse-debcontrol-perl',
       'make',
       'mock',
