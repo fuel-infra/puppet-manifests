@@ -552,6 +552,8 @@ fuel_project::updates::sync_hosts_allow:
 fuel_project::jenkins::slave::docker_package: 'lxc-docker-1.5.0'
 fuel_project::jenkins::slave::jenkins_swarm_slave: true
 
+fuel_project::jenkins::slave::ruby_version: '2.1.5'
+
 jenkins::slave::authorized_keys:
   'jenkins@mytestserver':
     type: ssh-rsa
