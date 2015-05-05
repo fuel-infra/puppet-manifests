@@ -110,7 +110,7 @@ class fuel_project::common (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => $::fqdn,
+    content => "${::fqdn}\n",
     notify  => Exec['/bin/hostname -F /etc/hostname'],
   }
 
