@@ -11,6 +11,7 @@ class fuel_project::common (
   $ldap_base          = '',
   $ldap_ignore_users  = '',
   $ldap_uri           = '',
+  $logrotate_rules    = hiera_hash('logrotate::rules', {}),
   $pam_filter         = '',
   $pam_password       = '',
   $root_password_hash = 'r00tme',
@@ -74,6 +75,9 @@ class fuel_project::common (
     }
     default: { }
   }
+
+  # Logrotate items
+  create_resources('::logrotate::rule', $logrotate_rules)
 
   zabbix::item { 'software-zabbix-check' :
     template => 'fuel_project/common/zabbix/software.conf.erb',

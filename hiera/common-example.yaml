@@ -1103,3 +1103,15 @@ fuel_project::devops_tools::lpupdatebug::sshprivkey_contents: |
   -----END RSA PRIVATE KEY-----
 fuel_project::devops_tools::lpupdatebug::update_status: 'true'
 fuel_project::devops_tools::lpupdatebug::username: 'lpupdatebug'
+
+logrotate::rules:
+  'upstart':
+    path: '/var/log/upstart/*.log'
+    rotate_every: 'day'
+    rotate: '7'
+    missingok: true
+    compress: true
+    ifempty: false
+    create: false
+    delaycompress: true
+
