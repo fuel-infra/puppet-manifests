@@ -12,7 +12,6 @@ class puppet::params {
   $config                 = '/etc/puppet/puppet.conf'
   $config_template        = 'puppet/puppet.conf.erb'
   $environment            = undef
-  $factpath               = "${vardir}/lib/facter"
   $firewall_allow_sources = {}
   $graph                  = undef
   $hiera_backends         = ['yaml']
@@ -39,4 +38,5 @@ class puppet::params {
   $show_diff              = true
   $ssldir                 = '/var/lib/puppet/ssl'
   $vardir                 = '/var/lib/puppet'
+  $factpath               = "${vardir}/lib/facter"
 }
