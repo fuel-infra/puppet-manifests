@@ -25,7 +25,7 @@ file { '/var/lib/puppet/gitrevision.txt' :
   ensure  => 'present',
   owner   => 'root',
   group   => 'root',
-  mode    => '0400',
+  mode    => '0444',
   content => $gitrevision,
 }
 
