@@ -59,6 +59,7 @@ class fuel_project::jenkins::slave (
   $overwrite_known_hosts                = true,
   $pam_filter                           = '',
   $pam_password                         = '',
+  $ruby_version                         = undef,
   $run_tests                            = false,
   $seed_cleanup_dirs                    = [
     {
@@ -675,7 +676,7 @@ class fuel_project::jenkins::slave (
   if ($verify_fuel_astute or $simple_syntax_check or $build_fuel_plugins) {
     class { 'rvm' : }
     rvm::system_user { 'jenkins': }
-    rvm_system_ruby { 'ruby-2.1.2' :
+    rvm_system_ruby { "ruby-${ruby_version}" :
       ensure      => 'present',
       default_use => true,
       require     => Class['rvm'],
@@ -687,8 +688,8 @@ class fuel_project::jenkins::slave (
   if ($verify_fuel_astute) {
     rvm_gem { 'bundler' :
       ensure       => 'present',
-      ruby_version => 'ruby-2.1.2',
-      require      => Rvm_system_ruby['ruby-2.1.2'],
+      ruby_version => "ruby-${ruby_version}",
+      require      => Rvm_system_ruby["ruby-${ruby_version}"],
     }
     # FIXME: remove this hack, create package raemon?
     $raemon_file = '/tmp/raemon-0.3.0.gem'
@@ -697,9 +698,9 @@ class fuel_project::jenkins::slave (
     }
     rvm_gem { 'raemon' :
       ensure       => 'present',
-      ruby_version => 'ruby-2.1.2',
+      ruby_version => "ruby-${ruby_version}",
       source       => $raemon_file,
-      require      => [ Rvm_system_ruby['ruby-2.1.2'], File[$raemon_file] ],
+      require      => [ Rvm_system_ruby["ruby-${ruby_version}"], File[$raemon_file] ],
     }
   }
 
@@ -718,8 +719,8 @@ class fuel_project::jenkins::slave (
 
     rvm_gem { 'puppet-lint' :
       ensure       => 'installed',
-      ruby_version => 'ruby-2.1.2',
-      require      => Rvm_system_ruby['ruby-2.1.2'],
+      ruby_version => "ruby-${ruby_version}",
+      require      => Rvm_system_ruby["ruby-${ruby_version}"],
     }
   }
 
@@ -782,9 +783,9 @@ class fuel_project::jenkins::slave (
     # we also need fpm gem
     rvm_gem { 'fpm' :
       ensure       => 'present',
-      ruby_version => 'ruby-2.1.2',
+      ruby_version => "ruby-${ruby_version}",
       require      => [
-        Rvm_system_ruby['ruby-2.1.2'],
+        Rvm_system_ruby["ruby-${ruby_version}"],
         Package['make'],
       ],
     }
