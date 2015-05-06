@@ -1,12 +1,13 @@
 # Class: fuel_project::jenkins::slave
 #
 class fuel_project::jenkins::slave (
+  $docker_package,
+  $ruby_version,
   $bind_policy                          = '',
   $build_fuel_iso                       = false,
   $build_fuel_packages                  = false,
   $build_fuel_plugins                   = false,
   $check_tasks_graph                    = false,
-  $docker_package,
   $docker_service                       = '',
   $external_host                        = false,
   $fuel_web_selenium                    = false,
@@ -59,7 +60,6 @@ class fuel_project::jenkins::slave (
   $overwrite_known_hosts                = true,
   $pam_filter                           = '',
   $pam_password                         = '',
-  $ruby_version                         = undef,
   $run_tests                            = false,
   $seed_cleanup_dirs                    = [
     {
