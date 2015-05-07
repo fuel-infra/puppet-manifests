@@ -57,4 +57,12 @@ class fuel_project::devops_tools::lpupdatebug (
     hasrestart => false,
     require    => Package[$package_name]
   }
+
+  ensure_packages(['tailnew'])
+
+  zabbix::item { 'lpupdatebug-zabbix-check' :
+    content => 'puppet:///modules/fuel_project/devops_tools/userparams-lpupdatebug.conf',
+    notify  => Service[$::zabbix::params::agent_service],
+    require => Package['tailnew']
+  }
 }
