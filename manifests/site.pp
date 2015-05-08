@@ -95,7 +95,7 @@ node /(tracker([0-9]{2})-(msk|mnv|bud|srt|kha|poz)\.infra|ctorrent-msk\.msk)\.mi
   class { '::fuel_project::roles::tracker' :}
 }
 
-node /(seed-(cz|us)1\.fuel-infra\.org)/ {
+node /(seed-(cz|kha|msk|srt|us)1\.fuel-infra\.org)/ {
   hiera_include('classes')
 }
 
