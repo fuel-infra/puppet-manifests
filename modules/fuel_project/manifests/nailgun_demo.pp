@@ -35,6 +35,7 @@ class fuel_project::nailgun_demo (
   $npm_packages = [
     'grunt-cli',
     'gulp',
+    'inflight',
   ]
 
   package { $packages:
@@ -130,10 +131,9 @@ class fuel_project::nailgun_demo (
     onlyif  => "test ! -f ${lock_file}",
   }
 
-  venv::exec { 'venv-npm' :
+  exec { 'venv-npm' :
     command => 'npm install',
     cwd     => '/usr/share/fuel-web/nailgun',
-    venv    => '/home/nailgun/python',
     user    => 'nailgun',
     require => [
       Venv::Exec['venv-loaddata'],
@@ -142,14 +142,14 @@ class fuel_project::nailgun_demo (
     onlyif  => "test ! -f ${lock_file}",
   }
 
-  venv::exec { 'venv-gulp' :
-    command => '/usr/local/bin/gulp bower',
-    cwd     => '/usr/share/fuel-web/nailgun',
-    venv    => '/home/nailgun/python',
-    user    => 'nailgun',
-    require => Venv::Exec['venv-npm'],
-    onlyif  => "test ! -f ${lock_file}",
-}
+  exec { 'venv-gulp' :
+    command     => '/usr/local/bin/gulp bower',
+    cwd         => '/usr/share/fuel-web/nailgun',
+    environment => 'HOME=/home/nailgun',
+    user        => 'nailgun',
+    require     => Exec['venv-npm'],
+    onlyif      => "test ! -f ${lock_file}",
+  }
 
   file_line { 'fake_mode':
     path    => '/usr/share/fuel-web/nailgun/nailgun/settings.yaml',
@@ -204,7 +204,7 @@ class fuel_project::nailgun_demo (
     workers        => '8',
     enable_threads => true,
     require        => [File_line['fake_mode'],
-                Venv::Exec['venv-gulp'],
+                Exec['venv-gulp'],
                 User['nailgun'],],
   }
 
