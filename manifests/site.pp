@@ -141,6 +141,10 @@ node /patching-jenkins(\d+)\.infra\.mirantis\.net/ {
   hiera_include('classes')
 }
 
+node /patching-slave(\d+)\.infra\.mirantis\.net/ {
+  hiera_include('classes')
+}
+
 node /packtest([0-9]{2})\.bud\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
     run_tests => true,
