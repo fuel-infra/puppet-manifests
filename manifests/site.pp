@@ -275,7 +275,7 @@ node /fuel-stats(\-testing)?\.vm\.mirantis\.net/ {
 }
 
 node /web([0-9]{2,})(-tst)?\.(fuel-infra\.org|vm\.mirantis\.net)/ {
-  class { '::fuel_project::web' :}
+  hiera_include('classes')
 }
 
 node 'gfs01-msk.vm.mirantis.net' {
