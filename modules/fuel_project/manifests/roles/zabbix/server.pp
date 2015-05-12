@@ -18,6 +18,10 @@ class fuel_project::roles::zabbix::server (
     template => 'fuel_project/zabbix/slack.sh.erb',
   }
 
+  ::zabbix::server::alertscript { 'zabbkit.sh' :
+    template => 'fuel_project/zabbix/zabbkit.sh.erb',
+  }
+
   if ($server_role == 'master' and $mysql_slave_host) {
     mysql_user { "${mysql_replication_user}@${mysql_slave_host}" :
       ensure        => 'present',
