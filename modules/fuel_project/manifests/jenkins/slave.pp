@@ -32,6 +32,7 @@ class fuel_project::jenkins::slave (
   $osc_url_secondary                    = '',
   $osc_user_primary                     = '',
   $osc_user_secondary                   = '',
+  $osci_builder                         = false,
   $osci_centos_image_name               = 'centos6.4-x86_64-gold-master.img',
   $osci_centos_job_dir                  = '/home/jenkins/vm-centos-test-rpm',
   $osci_centos_remote_dir               = 'vm-centos-test-rpm',
@@ -465,6 +466,22 @@ class fuel_project::jenkins::slave (
 
   }
 
+  # osci builder - for deploying osci docker builder
+  if ($osci_builder == true){
+
+    # osci builder packages
+    $osci_builder_packages = [
+      'createrepo',
+      'devscripts',
+      'git',
+      'osci-docker-builder',
+      'reprepro',
+      'yum-utils',
+    ]
+
+    ensure_packages($osci_builder_packages)
+  }
+
   # osci_tests - for deploying osci jenkins slaves
   if ($osci_test == true) {
 
@@ -803,7 +820,7 @@ class fuel_project::jenkins::slave (
     ensure_packages($verify_fuel_requirements_packages)
   }
 
-  if ($install_docker or $build_fuel_iso or $build_fuel_packages) {
+  if ($install_docker or $build_fuel_iso or $build_fuel_packages or $osci_builder) {
     if (!$docker_package) {
       fail('You must define docker package explicitly')
     }
