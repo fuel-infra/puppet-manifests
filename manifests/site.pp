@@ -112,6 +112,10 @@ node /osci-mirror-(msk|srt|kha|poz)\.(msk|srt|kha|infra)\.mirantis\.net/ {
   class { '::fuel_project::apps::mirror' :}
 }
 
+node /mailman([0-9]+)(-tst)?\.infra\.mirantis\.net/ {
+  hiera_include('classes')
+}
+
 node /ci-slave([0-9]{2})\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::slave' :
     external_host       => true,
