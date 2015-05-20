@@ -282,6 +282,10 @@ node /fuel-stats(\-testing)?\.vm\.mirantis\.net/ {
   class { '::fuel_project::roles::stats' : }
 }
 
+node /fuel-(collect|stats)-systest\.infra\.mirantis\.net/ {
+  hiera_include('classes')
+}
+
 node /web([0-9]{2,})(-tst)?\.(fuel-infra\.org|vm\.mirantis\.net)/ {
   hiera_include('classes')
 }

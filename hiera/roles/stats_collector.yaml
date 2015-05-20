@@ -1,0 +1,4 @@
+classes:
+  - '::fuel_project::roles::stats_collector'
+fuel_project::roles::stats_collector::analytics_ip: '127.0.0.1'
+fuel_project::roles::stats_collector::firewall_enable: false

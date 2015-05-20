@@ -1,0 +1,3 @@
+classes:
+  - '::fuel_project::roles::stats'
+fuel_project::roles::stats::firewall_enable: false
