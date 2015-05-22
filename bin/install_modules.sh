@@ -69,7 +69,6 @@ MODULES["darin-zypprepo"]="1.0.1"
 MODULES["elasticsearch/elasticsearch"]="0.4.0"
 MODULES["ripienaar-module_data"]="0.0.3"
 MODULES["rodjek-logrotate"]="1.1.1"
-MODULES["thias-mailman"]="0.1.4"
 
 SOURCE_MODULES["https://github.com/monester/puppet-libvirt"]="0.3.2-3"
 SOURCE_MODULES["https://github.com/SergK/puppet-znc"]="0.0.9"
@@ -77,6 +76,7 @@ SOURCE_MODULES["https://github.com/teran/puppet-nginx"]="0.1.1+uwsgi+proxy+crl+i
 SOURCE_MODULES["https://github.com/SergK/puppet-glusterfs"]="0.0.4"
 SOURCE_MODULES["https://github.com/iberezovskiy/puppet-mongodb"]="0.1"
 SOURCE_MODULES["https://github.com/teran/puppet-bind"]="0.5.1-hiera-debian-keys-controls-support"
+SOURCE_MODULES["https://github.com/teran/puppet-mailman"]="0.1.4+user-fix"
 
 MODULE_LIST=`puppet module list`
 
