@@ -35,6 +35,7 @@ class jenkins::master (
   $jenkins_management_login         = '',
   $jenkins_management_name          = '',
   $jenkins_management_password      = '',
+  $jenkins_s2m_acl                  = true,
   $ldap_access_group                = '',
   $ldap_group_search_base           = '',
   $ldap_inhibit_root_dn             = 'no',
@@ -277,6 +278,7 @@ class jenkins::master (
       "'${jenkins_management_password}'",
       "'${jenkins_management_name}'",
       "'${jenkins_ssh_public_key_contents}'",
+      "'${jenkins_s2m_acl}'",
     ], ' ')
   }
 
@@ -288,6 +290,7 @@ class jenkins::master (
       "'${jenkins_management_password}'",
       "'${jenkins_management_name}'",
       "'${jenkins_ssh_public_key_contents}'",
+      "'${jenkins_s2m_acl}'",
     ], ' ')
   }
 

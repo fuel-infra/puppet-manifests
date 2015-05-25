@@ -6,7 +6,10 @@ import hudson.model.View
 import hudson.security.GlobalMatrixAuthorizationStrategy
 import hudson.security.AuthorizationStrategy
 import hudson.security.Permission
+import hudson.tasks.Shell
 import jenkins.model.Jenkins
+import jenkins.model.JenkinsLocationConfiguration
+import jenkins.security.s2m.AdminWhitelistRule
 import com.cloudbees.plugins.credentials.CredentialsMatchers
 import com.cloudbees.plugins.credentials.CredentialsProvider
 import com.cloudbees.plugins.credentials.common.StandardUsernameCredentials
@@ -23,6 +26,49 @@ class InvalidUser extends Exception{}
 class Actions {
   Actions(out) { this.out = out }
   def out
+
+  ///////////////////////////////////////////////////////////////////////////////
+  // this is -> setup_shell
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  // Allows to set specific shell in Jenkins Master instance
+  //
+  void setup_shell(String shell) {
+    def shl = new Shell.DescriptorImpl()
+    shl.setShell(shell)
+    shl.save()
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+  // this is -> setup_email_adm
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  // Allows to set specific admin email in Jenkins Master instance
+  //
+  void setup_email_adm(String email) {
+    def loc = JenkinsLocationConfiguration.get()
+    loc.setAdminAddress(email)
+    loc.save()
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+  // this is -> enable_slave_to_master_acl
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  // Allows to enable/disable SlaveToMasterAccessControl feature
+  //
+  void enable_slave_to_master_acl(String act) {
+    def s2m = new AdminWhitelistRule()
+    if(act == "true") {
+      // for 'enabled' state we need to pass 'false'
+      s2m.setMasterKillSwitch(false)
+    }
+    if(act == "false") {
+      s2m.setMasterKillSwitch(true)
+    }
+    // requires Jenkins restart
+    Hudson.instance.safeRestart()
+  }
 
   ///////////////////////////////////////////////////////////////////////////////
   // this is -> cred_for_user
@@ -202,7 +248,8 @@ class Actions {
     String email=null,
     String password,
     String name=null,
-    String pub_keys=null
+    String pub_keys=null,
+    String s2m_acl=null
   ) {
 
     if (inhibitInferRootDN==null) {
@@ -245,6 +292,10 @@ class Actions {
     instance.setSecurityRealm(realm)
     // commit new settings permanently (in config.xml)
     instance.save()
+    // now setup s2m if requested
+    if(s2m_acl != null) {
+      enable_slave_to_master_acl(s2m_acl)
+    }
   }
 
   void set_unsecured() {
@@ -258,7 +309,7 @@ class Actions {
     instance.save()
   }
 
-  void set_security_password(String user, String email, String password, String name=null, String pub_keys=null) {
+  void set_security_password(String user, String email, String password, String name=null, String pub_keys=null, String s2m_acl=null) {
     def instance = Jenkins.getInstance()
     def overwrite_permissions
     def strategy
@@ -291,6 +342,10 @@ class Actions {
     }
     // commit new settings permanently (in config.xml)
     instance.save()
+    // now setup s2m if requested
+    if(s2m_acl != null) {
+      enable_slave_to_master_acl(s2m_acl)
+    }
   }
 }
 

@@ -261,6 +261,7 @@ jenkins::master::jenkins_management_login: 'jenkins-manager'
 jenkins::master::jenkins_management_password: 'jenkins_password'
 jenkins::master::jenkins_management_email: 'jenkin@example.com'
 jenkins::master::jenkins_management_name: 'Jenkins Master'
+jenkins::master::jenkins_s2m_acl: true
 jenkins::master::ldap_user_search_base: ''
 jenkins::master::ldap_group_search_base: ''
 jenkins::master::ldap_user_search: 'uid={0}'
