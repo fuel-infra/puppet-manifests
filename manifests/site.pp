@@ -145,7 +145,7 @@ node /patching-jenkins(\d+)\.infra\.mirantis\.net/ {
   hiera_include('classes')
 }
 
-node /patching-slave(\d+)\.infra\.mirantis\.net/ {
+node /patching-slave(\d+)-bud\.infra\.mirantis\.net/ {
   hiera_include('classes')
 }
 
