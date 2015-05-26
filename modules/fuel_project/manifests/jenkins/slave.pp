@@ -475,6 +475,7 @@ class fuel_project::jenkins::slave (
       'devscripts',
       'git',
       'osci-docker-builder',
+      'python-setuptools',
       'reprepro',
       'yum-utils',
     ]
