@@ -25,7 +25,7 @@ class system (
 
     file { '/etc/timezone' :
       ensure  => 'present',
-      content => $timezone,
+      content => "${timezone}\n",
       mode    => '0644',
       owner   => 'root',
       group   => 'root',
