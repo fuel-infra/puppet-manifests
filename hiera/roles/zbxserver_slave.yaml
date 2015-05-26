@@ -1,0 +1,30 @@
+---
+classes:
+  - '::fuel_project::roles::zabbix::server'
+  - '::fuel_project::apps::bacula'
+fuel_project::roles::zabbix::server::server_role: slave
+# bacula client configuration
+bacula::client::client_conf: '/etc/bacula/bacula-fd.conf'
+bacula::client::client_package: 'bacula-client'
+bacula::client::client_service: 'bacula-fd'
+bacula::client::director_password: 'passw0rd'
+bacula::client::director_server: 'bacula.test.local'
+bacula::client::pid_dir: '/var/run/bacula'
+bacula::client::working_dir: '/var/lib/bacula'
+# firewall configuration
+fuel_project::apps::firewall::rules:
+  '1000 - allow ssh connections from 0.0.0.0/0':
+    source: 0.0.0.0/0
+    dport: 22
+    proto: tcp
+    action: accept
+  '1000 - allow bacula connections from 172.18.0.0/16':
+    source: 172.18.0.0/16
+    dport: 9102
+    proto: tcp
+    action: accept
+  '1000 - allow zabbix-agent connections from 172.18.0.0/16':
+    source: 172.18.0.0/16
+    dport: 10050
+    proto: tcp
+    action: accept
