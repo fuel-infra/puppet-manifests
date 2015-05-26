@@ -16,10 +16,12 @@ class fuel_project::roles::zabbix::server (
 
   ::zabbix::server::alertscript { 'slack.sh' :
     template => 'fuel_project/zabbix/slack.sh.erb',
+    require  => Class['::zabbix::server'],
   }
 
   ::zabbix::server::alertscript { 'zabbkit.sh' :
     template => 'fuel_project/zabbix/zabbkit.sh.erb',
+    require  => Class['::zabbix::server'],
   }
 
   if ($server_role == 'master' and $mysql_slave_host) {
