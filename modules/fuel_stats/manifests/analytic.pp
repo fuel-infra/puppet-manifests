@@ -19,7 +19,6 @@ class fuel_stats::analytic (
   $nginx_log_format       = $fuel_stats::params::nginx_log_format,
   $psql_user              = $fuel_stats::params::psql_user,
   $service_hostname       = $::fqdn,
-  $ssl                    = false,
   $ssl_cert_file          = '/etc/ssl/analytic.crt',
   $ssl_cert_file_contents = '',
   $ssl_key_file           = '/etc/ssl/analytic.key',
@@ -114,7 +113,7 @@ class fuel_stats::analytic (
   }
 
   # enable ssl
-  if ($ssl and $ssl_cert_file and $ssl_key_file) {
+  if ( defined(File[$ssl_cert_file]) and defined(File[$ssl_key_file]) )  {
     Nginx::Resource::Vhost <| title == 'analytics' |> {
       listen_port => $https_port,
       ssl_cert    => $ssl_cert_file,

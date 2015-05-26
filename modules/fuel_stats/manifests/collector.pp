@@ -3,6 +3,7 @@ class fuel_stats::collector (
   $analytics_ip           = $fuel_stats::params::analytics_ip,
   $auto_update            = $fuel_stats::params::auto_update,
   $development            = $fuel_stats::params::development,
+  $filtering_rules        = {},
   $firewall_enable        = $fuel_stats::params::firewall_enable,
   $fuel_stats_repo        = $fuel_stats::params::fuel_stats_repo,
   $http_port              = $fuel_stats::params::http_port,
@@ -15,7 +16,6 @@ class fuel_stats::collector (
   $psql_pass              = $fuel_stats::params::psql_pass,
   $psql_user              = $fuel_stats::params::psql_user,
   $service_hostname       = $::fqdn,
-  $ssl                    = false,
   $ssl_cert_file          = '/etc/ssl/analytic.crt',
   $ssl_cert_file_contents = '',
   $ssl_key_file           = '/etc/ssl/analytic.key',
@@ -105,7 +105,7 @@ class fuel_stats::collector (
   }
 
   # enable ssl
-  if ($ssl and $ssl_cert_file and $ssl_key_file) {
+  if ( defined(File[$ssl_cert_file]) and defined(File[$ssl_key_file]) ) {
     Nginx::Resource::Vhost <| title == 'collector' |>  {
       listen_port => $https_port,
       ssl_cert    => $ssl_cert_file,

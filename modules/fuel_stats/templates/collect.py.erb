@@ -1,4 +1,5 @@
 import logging
+import json
 
 DEBUG = False
 VALIDATE_RESPONSE = False
@@ -8,3 +9,6 @@ LOG_ROTATION = False
 LOGGER_NAME = 'collector'
 SQLALCHEMY_DATABASE_URI = \
   'postgresql://<%= @psql_user %>:<%= @psql_pass %>@localhost/<%= @psql_db %>'
+<% if @filtering_rules.is_a?(Hash) %>
+FILTERING_RULES = json.loads("<%= require "json";  @filtering_rules.to_json %>")
+<% end %>
