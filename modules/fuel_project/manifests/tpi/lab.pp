@@ -10,9 +10,10 @@ class fuel_project::tpi::lab (
   }
 
   class { '::fuel_project::jenkins::slave' :
-    run_tests     => true,
-    sudo_commands => $sudo_commands,
-    ldap          => true,
+    run_tests          => true,
+    sudo_commands      => $sudo_commands,
+    ldap               => true,
+    build_fuel_plugins => true,
   }
 
   File<| title == 'jenkins-sudo-for-build_iso' |> {
