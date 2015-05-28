@@ -171,8 +171,7 @@ node /mirror(\d+)\.fuel-infra\.org/ {
 }
 
 node /mirror-pkgs\.vm\.mirantis\.net/ {
-  class { '::fuel_project::jenkins::slave' : }
-  class { '::fuel_project::apps::mirror' : }
+  hiera_include('classes')
 }
 
 node /build(\d+)\.fuel-infra\.org/ {

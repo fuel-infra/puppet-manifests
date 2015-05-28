@@ -1,0 +1,4 @@
+---
+classes:
+  - '::fuel_project::jenkins::slave'
+  - '::fuel_project::apps::mirror'
