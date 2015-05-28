@@ -17,6 +17,7 @@ class landing_page (
   $nginx_access_log       = $::landing_page::params::nginx_access_log,
   $nginx_error_log        = $::landing_page::params::nginx_error_log,
   $nginx_log_format       = $::landing_page::params::nginx_log_format,
+  $nginx_server_aliases   = $::landing_page::params::nginx_server_aliases,
   $nginx_server_name      = $::landing_page::params::nginx_server_name,
   $package                = $::landing_page::params::package,
   $plugins_repository     = $::landing_page::params::plugins_repository,
@@ -169,6 +170,41 @@ class landing_page (
         uwsgi_read_timeout    => '3m',
         uwsgi_send_timeout    => '3m',
       }
+    }
+  }
+
+  if($nginx_server_aliases) {
+    ::nginx::resource::vhost { 'landing-aliases' :
+      ensure              => 'present',
+      server_name         => $nginx_server_aliases,
+      listen_port         => 80,
+      www_root            => '/var/www',
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
+      location_cfg_append => {
+        return => "301 https://${nginx_server_name}\$request_uri",
+      },
+    }
+
+    ::nginx::resource::vhost { 'landing-aliases-ssl' :
+      ensure              => 'present',
+      listen_port         => 443,
+      ssl_port            => 443,
+      server_name         => $nginx_server_aliases,
+      ssl                 => true,
+      ssl_cert            => $ssl_cert_file,
+      ssl_key             => $ssl_key_file,
+      ssl_cache           => 'shared:SSL:10m',
+      ssl_session_timeout => '10m',
+      ssl_stapling        => true,
+      ssl_stapling_verify => true,
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
+      location_cfg_append => {
+        return => "301 https://${nginx_server_name}\$request_uri",
+      },
     }
   }
 
