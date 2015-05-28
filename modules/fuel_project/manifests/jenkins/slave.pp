@@ -757,6 +757,7 @@ class fuel_project::jenkins::slave (
   if ($verify_fuel_docs) {
     $verify_fuel_docs_packages =  [
       'inkscape',
+      'libjpeg-dev',
       'make',
       'plantuml',
       'python-cloud-sptheme',
