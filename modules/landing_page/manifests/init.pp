@@ -202,6 +202,7 @@ class landing_page (
       access_log          => $nginx_access_log,
       error_log           => $nginx_error_log,
       format_log          => $nginx_log_format,
+      www_root            => '/var/www',
       location_cfg_append => {
         return => "301 https://${nginx_server_name}\$request_uri",
       },
