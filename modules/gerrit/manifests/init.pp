@@ -22,6 +22,7 @@ class gerrit (
   $gerrit_auth_type                    = 'OPENID_SSO',
   $gerrit_contributor_agreement        = true,
   $gerrit_listen                       = '127.0.0.1:8081',
+  $gerrit_site                         = '/var/lib/gerrit/review_site',
   $gerrit_start_timeout                = 90,
   $gitweb                              = true,
   $ldap_account_base                   = '',
@@ -139,7 +140,7 @@ class gerrit (
     ssl      => true,
     ssl_only => true,
     location => '/static/',
-    www_root => '/var/lib/gerrit/review_site',
+    www_root => $gerrit_site,
   }
 
   user { 'gerrit' :
@@ -156,9 +157,6 @@ class gerrit (
     'trusty'  => '/usr/lib/jvm/java-7-openjdk-amd64/jre',
   }
 
-  $gerrit_war = '/var/lib/gerrit/review_site/bin/gerrit.war'
-  $gerrit_site = '/var/lib/gerrit/review_site'
-
   if ($gitweb) {
     if (!defined(Package['gitweb'])) {
       package { 'gitweb' :
@@ -174,52 +172,52 @@ class gerrit (
     }
   }
 
-  package { 'openjdk-7-jre-headless':
-    ensure => present,
+  package { 'openjdk-7-jre-headless' :
+    ensure => 'present',
   }
 
-  package { 'gerrit':
-    ensure  => present,
+  package { 'gerrit' :
+    ensure  => 'present',
     require => [
-      File['/var/lib/gerrit/review_site/etc/gerrit.config'],
-      File['/var/lib/gerrit/review_site/etc/secure.config'],
-      File['/var/lib/gerrit/review_site/lib/mysql-connector-java.jar'],
-      File['/var/lib/gerrit/review_site/lib/bcprov.jar'],
+      File["${gerrit_site}/etc/gerrit.config"],
+      File["${gerrit_site}/etc/secure.config"],
+      File["${gerrit_site}/lib/mysql-connector-java.jar"],
+      File["${gerrit_site}/lib/bcprov.jar"],
     ],
   }
 
-  file { '/var/lib/gerrit/review_site/bin/' :
+  file { "${gerrit_site}/bin/" :
     ensure  => 'directory',
     recurse => true,
     owner   => 'root',
     group   => 'root',
   }
 
-  file { '/var/lib/gerrit/review_site/bin/gerrit.sh' :
+  file { "${gerrit_site}/bin/gerrit.sh" :
     ensure  => 'present',
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
     content => template('gerrit/gerrit.init.d.erb'),
-    require => File['/var/lib/gerrit/review_site/bin/'],
+    require => File["${gerrit_site}/bin/"],
   }
 
-  package { 'openjdk-6-jre-headless':
-    ensure  => purged,
+  package { 'openjdk-6-jre-headless' :
+    ensure  => 'purged',
     require => Package['openjdk-7-jre-headless'],
   }
 
-  file { '/var/log/gerrit':
+  file { '/var/log/gerrit' :
     ensure  => 'link',
-    target  => '/var/lib/gerrit/review_site/logs',
+    target  => "${gerrit_site}/logs",
     require => Package['gerrit'],
   }
 
   if ((!defined(File['/opt/lib']))
       and ($replicate_path =~ /^\/opt\/lib\/.*$/)) {
     file { '/opt/lib':
-      ensure => directory,
-      owner  => root,
+      ensure => 'directory',
+      owner  => 'root',
     }
   }
 
@@ -227,12 +225,12 @@ class gerrit (
   # by the init command, we can go ahead and create them now and populate them.
   # That way the config files are already in place before init runs.
   file { [
+      $gerrit_site,
+      "${gerrit_site}/etc",
+      "${gerrit_site}/static",
+      "${gerrit_site}/lib",
+      "${gerrit_site}/hooks",
       '/var/lib/gerrit',
-      '/var/lib/gerrit/review_site',
-      '/var/lib/gerrit/review_site/etc',
-      '/var/lib/gerrit/review_site/static',
-      '/var/lib/gerrit/review_site/lib',
-      '/var/lib/gerrit/review_site/hooks',
       '/var/lib/gerrit/.ssh',
     ]:
     ensure => 'directory',
@@ -273,14 +271,14 @@ class gerrit (
   # - $gitweb
   # - $contactstore_appsec
   # - $contactstore_url
-  file { '/var/lib/gerrit/review_site/etc/gerrit.config':
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
+  file { "${gerrit_site}/etc/gerrit.config" :
+    ensure  => 'present',
+    owner   => 'gerrit',
+    group   => 'gerrit',
     mode    => '0644',
     content => template('gerrit/gerrit.config.erb'),
     replace => true,
-    require => File['/var/lib/gerrit/review_site/etc'],
+    require => File["${gerrit_site}/etc"],
     notify  => Service['gerrit'],
   }
 
@@ -290,14 +288,14 @@ class gerrit (
   # these permissions aren't set correctly, gerrit init will write a
   # new secure.config file and lose the mysql password.
   # Template uses $mysql_password, $email_private_key
-  file { '/var/lib/gerrit/review_site/etc/secure.config':
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
+  file { "${gerrit_site}/etc/secure.config" :
+    ensure  => 'present',
+    owner   => 'gerrit',
+    group   => 'gerrit',
+    mode    => '0600',
     content => template('gerrit/secure.config.erb'),
     replace => true,
-    require => File['/var/lib/gerrit/review_site/etc'],
+    require => File["${gerrit_site}/etc"],
     notify  => Service['gerrit'],
   }
 
@@ -341,7 +339,7 @@ class gerrit (
   }
 
   if $robots_txt_source != '' {
-    file { '/var/lib/gerrit/review_site/static/robots.txt':
+    file { "${gerrit_site}/static/robots.txt" :
       owner   => 'root',
       group   => 'root',
       mode    => '0444',
@@ -351,7 +349,7 @@ class gerrit (
   }
 
   if $ssh_dsa_key_contents != '' {
-    file { '/var/lib/gerrit/review_site/etc/ssh_host_dsa_key':
+    file { "${gerrit_site}/etc/ssh_host_dsa_key" :
       owner   => 'gerrit',
       group   => 'gerrit',
       mode    => '0600',
@@ -362,7 +360,7 @@ class gerrit (
   }
 
   if $ssh_dsa_pubkey_contents != '' {
-    file { '/var/lib/gerrit/review_site/etc/ssh_host_dsa_key.pub':
+    file { "${gerrit_site}/etc/ssh_host_dsa_key.pub" :
       owner   => 'gerrit',
       group   => 'gerrit',
       mode    => '0644',
@@ -373,7 +371,7 @@ class gerrit (
   }
 
   if $ssh_rsa_key_contents != '' {
-    file { '/var/lib/gerrit/review_site/etc/ssh_host_rsa_key':
+    file { "${gerrit_site}/etc/ssh_host_rsa_key" :
       owner   => 'gerrit',
       group   => 'gerrit',
       mode    => '0600',
@@ -384,7 +382,7 @@ class gerrit (
   }
 
   if $ssh_rsa_pubkey_contents != '' {
-    file { '/var/lib/gerrit/review_site/etc/ssh_host_rsa_key.pub':
+    file { "${gerrit_site}/etc/ssh_host_rsa_key.pub" :
       owner   => 'gerrit',
       group   => 'gerrit',
       mode    => '0644',
@@ -395,7 +393,7 @@ class gerrit (
   }
 
   if $ssh_project_rsa_key_contents != '' {
-    file { '/var/lib/gerrit/review_site/etc/ssh_project_rsa_key':
+    file { "${gerrit_site}/etc/ssh_project_rsa_key" :
       owner   => 'gerrit',
       group   => 'gerrit',
       mode    => '0600',
@@ -406,7 +404,7 @@ class gerrit (
   }
 
   if $ssh_project_rsa_pubkey_contents != '' {
-    file { '/var/lib/gerrit/review_site/etc/ssh_project_rsa_key.pub':
+    file { "${gerrit_site}/etc/ssh_project_rsa_key.pub" :
       owner   => 'gerrit',
       group   => 'gerrit',
       mode    => '0644',
@@ -417,7 +415,7 @@ class gerrit (
   }
 
   if $ssh_replication_rsa_key_contents != '' {
-    file { '/var/lib/gerrit/.ssh/id_rsa':
+    file { '/var/lib/gerrit/.ssh/id_rsa' :
       owner   => 'gerrit',
       group   => 'gerrit',
       mode    => '0600',
@@ -428,7 +426,7 @@ class gerrit (
   }
 
   if $ssh_replication_rsa_pubkey_contents != '' {
-    file { '/var/lib/gerrit/id_rsa.pub':
+    file { '/var/lib/gerrit/id_rsa.pub' :
       owner   => 'gerrit',
       group   => 'gerrit',
       mode    => '0644',
@@ -439,9 +437,9 @@ class gerrit (
   }
 
   # The init script requires the path to gerrit to be set.
-  file { '/etc/default/gerritcodereview':
-    ensure  => present,
-    source  => 'puppet:///modules/gerrit/gerritcodereview.default',
+  file { '/etc/default/gerritcodereview' :
+    ensure  => 'present',
+    content => template('gerrit/gerritcodereview.default.erb'),
     replace => true,
     owner   => 'root',
     group   => 'root',
@@ -449,73 +447,75 @@ class gerrit (
     notify  => Service['gerrit'],
   }
 
-  package { 'libmysql-java':
-    ensure  => present,
+  package { 'libmysql-java' :
+    ensure  => 'present',
     require => Package['openjdk-7-jre-headless']
   }
 
-  file { '/var/lib/gerrit/review_site/lib/mysql-connector-java.jar':
-    ensure  => link,
+  file { "${gerrit_site}/lib/mysql-connector-java.jar" :
+    ensure  => 'link',
     target  => '/usr/share/java/mysql-connector-java.jar',
     require => [
       Package['libmysql-java'],
-      File['/var/lib/gerrit/review_site/lib'],
+      File["${gerrit_site}/lib"],
     ],
     notify  => Service['gerrit'],
   }
-  file { '/var/lib/gerrit/review_site/lib/mysql-connector-java-5.1.10.jar':
-    ensure  => absent,
-    require => File['/var/lib/gerrit/review_site/lib/mysql-connector-java.jar'],
+  # we can freely remove this custom jar, since out-of-the-box
+  # mysql-connector-java-5.1.28.jar is used
+  file { "${gerrit_site}/lib/mysql-connector-java-5.1.21.jar" :
+    ensure  => 'absent',
+    require => File["${gerrit_site}/lib/mysql-connector-java.jar"],
     notify  => Service['gerrit'],
   }
 
-  package { 'libbcprov-java':
-    ensure  => present,
+  package { 'libbcprov-java' :
+    ensure  => 'present',
     require => Package['openjdk-7-jre-headless'],
   }
-  file { '/var/lib/gerrit/review_site/lib/bcprov.jar':
-    ensure  => link,
+  file { "${gerrit_site}/lib/bcprov.jar" :
+    ensure  => 'link',
     target  => '/usr/share/java/bcprov.jar',
     require => [
       Package['libbcprov-java'],
-      File['/var/lib/gerrit/review_site/lib'],
+      File["${gerrit_site}/lib"],
     ],
     notify  => Service['gerrit'],
   }
-  file { '/var/lib/gerrit/review_site/lib/bcprov-jdk16-144.jar':
-    ensure  => absent,
-    require => File['/var/lib/gerrit/review_site/lib/bcprov.jar'],
+  file { "${gerrit_site}/lib/bcprov-jdk16-144.jar" :
+    ensure  => 'absent',
+    require => File["${gerrit_site}/lib/bcprov.jar"],
     notify  => Service['gerrit'],
   }
 
   # Install Bouncy Castle's OpenPGP plugin and populate the contact store
   # public key file if we're using that feature.
   if ($contactstore == true) {
-    package { 'libbcpg-java':
-      ensure => present,
+    package { 'libbcpg-java' :
+      ensure => 'present',
     }
-    file { '/var/lib/gerrit/review_site/lib/bcpg.jar':
-      ensure  => link,
+    file { "${gerrit_site}/lib/bcpg.jar" :
+      ensure  => 'link',
       target  => '/usr/share/java/bcpg.jar',
       require => [
         Package['libbcpg-java'],
-        File['/var/lib/gerrit/review_site/lib'],
+        File["${gerrit_site}/lib"],
       ],
     }
     # Template uses $contactstore_pubkey
-    file { '/var/lib/gerrit/review_site/etc/contact_information.pub':
-      ensure  => present,
+    file { "${gerrit_site}/etc/contact_information.pub" :
+      ensure  => 'present',
       owner   => 'root',
       group   => 'root',
       mode    => '0444',
       content => template('gerrit/contact_information.pub.erb'),
       replace => true,
-      require => File['/var/lib/gerrit/review_site/etc'],
+      require => File["${gerrit_site}/etc"],
     }
   }
 
   service { 'gerrit' :
-    ensure     => running,
+    ensure     => 'running',
     enable     => true,
     hasstatus  => true,
     hasrestart => false,
