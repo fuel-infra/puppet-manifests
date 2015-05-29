@@ -1,0 +1,5 @@
+---
+classes:
+  - fuel_project::common
+  - fuel_project::nginx
+  - errata::web
