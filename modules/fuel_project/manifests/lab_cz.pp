@@ -81,7 +81,7 @@ class fuel_project::lab_cz (
     source => 'puppet:///modules/fuel_project/lab_cz/sudo_deploy',
     owner  => 'root',
     group  => 'root',
-    mode   => '0644',
+    mode   => '0440',
   }
 
   file { '/etc/network/interfaces' :

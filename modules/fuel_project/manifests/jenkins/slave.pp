@@ -283,7 +283,7 @@ class fuel_project::jenkins::slave (
       ensure  => 'present',
       owner   => 'root',
       group   => 'root',
-      mode    => '0600',
+      mode    => '0440',
       content => template('fuel_project/jenkins/slave/system_tests.sudoers.d.erb'),
     }
 
@@ -460,7 +460,7 @@ class fuel_project::jenkins::slave (
       path    => '/etc/sudoers.d/build_fuel_iso',
       owner   => 'root',
       group   => 'root',
-      mode    => '0644',
+      mode    => '0440',
       content => template('fuel_project/jenkins/slave/build_iso.sudoers.d.erb')
     }
 
@@ -498,7 +498,7 @@ class fuel_project::jenkins::slave (
       path    => '/etc/sudoers.d/jenkins_sudo',
       owner   => 'root',
       group   => 'root',
-      mode    => '0644',
+      mode    => '0440',
       content => template('fuel_project/jenkins/slave/build_iso.sudoers.d.erb'),
       require => User['jenkins'],
     }
@@ -876,7 +876,7 @@ class fuel_project::jenkins::slave (
       ensure  => 'present',
       owner   => 'root',
       group   => 'root',
-      mode    => '0600',
+      mode    => '0440',
       content => template('fuel_project/jenkins/slave/sandbox.sudoers.d.erb'),
     }
   }

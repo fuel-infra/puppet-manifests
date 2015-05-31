@@ -70,6 +70,7 @@ MODULES["darin-zypprepo"]="1.0.1"
 MODULES["elasticsearch/elasticsearch"]="0.4.0"
 MODULES["ripienaar-module_data"]="0.0.3"
 MODULES["rodjek-logrotate"]="1.1.1"
+MODULES["saz-sudo"]="3.0.9"
 
 SOURCE_MODULES["https://github.com/monester/puppet-libvirt"]="0.3.2-3"
 SOURCE_MODULES["https://github.com/SergK/puppet-znc"]="0.0.9"
