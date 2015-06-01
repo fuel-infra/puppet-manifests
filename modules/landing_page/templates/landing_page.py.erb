@@ -26,6 +26,8 @@ DATABASES = {
 
 ALLOWED_HOSTS = ['*']
 
+GOOGLE_COUNTER = '<%= @google_analytics_property_id ? @google_analytics_property_id : '' -%>'
+
 TIME_ZONE = '<%= @timezone %>'
 
 LANGUAGE_CODE = 'en-us'
