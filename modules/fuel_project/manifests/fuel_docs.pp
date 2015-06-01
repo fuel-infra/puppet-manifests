@@ -136,8 +136,17 @@ class fuel_project::fuel_docs(
         '^/(fuel/.+)'        => '/openstack/$1',
         '^/openstack/fuel/$' => "/openstack/fuel/fuel-${fuel_version}",
       },
-
     }
+  }
+
+  # Disable fuel-master docs on community site
+  ::nginx::resource::location { "${community_hostname}/openstack/fuel/fuel-master" :
+    vhost               => $community_hostname,
+    location            => '~ \/openstack\/fuel\/fuel-master\/.*',
+    www_root            => $www_root,
+    location_cfg_append => {
+      return => 404,
+    },
   }
 
   ::nginx::resource::location { "${community_hostname}/fuel-dev" :
@@ -167,15 +176,6 @@ class fuel_project::fuel_docs(
       },
     }
   }
-
-  ::nginx::resource::location { "${hostname}/fuel-dev" :
-    vhost          => $hostname,
-    location       => '/fuel-dev',
-    location_alias => "${www_root}/fuel-dev-docs/fuel-dev-master",
-    ssl            => $ssl,
-    ssl_only       => $ssl,
-  }
-
 
   if (! defined(File[$www_root])) {
     file { $www_root :
