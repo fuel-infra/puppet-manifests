@@ -131,9 +131,13 @@ class landing_page (
       format_log          => $nginx_log_format,
       uwsgi               => $uwsgi_socket,
       location_cfg_append => {
-        uwsgi_connect_timeout => '3m',
-        uwsgi_read_timeout    => '3m',
-        uwsgi_send_timeout    => '3m',
+        uwsgi_connect_timeout    => '3m',
+        uwsgi_read_timeout       => '3m',
+        uwsgi_send_timeout       => '3m',
+        uwsgi_intercept_errors   => 'on',
+        'error_page 403'         => '/fuel-infra/403.html',
+        'error_page 404'         => '/fuel-infra/404.html',
+        'error_page 500 502 504' => '/fuel-infra/5xx.html',
       }
     }
 
@@ -166,9 +170,13 @@ class landing_page (
       format_log          => $nginx_log_format,
       uwsgi               => $uwsgi_socket,
       location_cfg_append => {
-        uwsgi_connect_timeout => '3m',
-        uwsgi_read_timeout    => '3m',
-        uwsgi_send_timeout    => '3m',
+        uwsgi_connect_timeout    => '3m',
+        uwsgi_read_timeout       => '3m',
+        uwsgi_send_timeout       => '3m',
+        uwsgi_intercept_errors   => 'on',
+        'error_page 403'         => '/fuel-infra/403.html',
+        'error_page 404'         => '/fuel-infra/404.html',
+        'error_page 500 502 504' => '/fuel-infra/5xx.html',
       }
     }
   }
@@ -210,12 +218,26 @@ class landing_page (
   }
 
   ::nginx::resource::location { 'release-static' :
+    ensure              => 'present',
+    vhost               => 'release',
+    location            => '/static/',
+    ssl                 => true,
+    ssl_only            => true,
+    www_root            => '/usr/share/landing_page',
+    location_cfg_append => {
+      'error_page 403'         => '/fuel-infra/403.html',
+      'error_page 404'         => '/fuel-infra/404.html',
+      'error_page 500 502 504' => '/fuel-infra/5xx.html',
+    }
+  }
+
+  ::nginx::resource::location { 'release-error-pages' :
     ensure   => 'present',
     vhost    => 'release',
-    location => '/static/',
+    location => '~ \/(mirantis|fuel-infra)\/(403|404|5xx).html',
     ssl      => true,
     ssl_only => true,
-    www_root => '/usr/share/landing_page',
+    www_root => '/usr/share/error_pages',
   }
 
   ::uwsgi::application { 'landing_page' :

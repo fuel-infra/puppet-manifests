@@ -30,6 +30,8 @@ class fuel_project::nginx {
     }
   }
 
+  ensure_packages('error-pages')
+
   zabbix::item { 'nginx' :
     content => 'puppet:///modules/fuel_project/zabbix/nginx_items.conf',
   }

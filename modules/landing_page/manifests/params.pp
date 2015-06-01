@@ -23,7 +23,7 @@ class landing_page::params {
   $nginx_access_log       = '/var/log/nginx/access.log'
   $nginx_error_log        = '/var/log/nginx/error.log'
   $nginx_log_format       = undef
-  $nginx_server_aliases   = []
+  $nginx_server_aliases   = undef
   $nginx_server_name      = $::fqdn
   $package                = [
     'landing-page-all',
