@@ -156,6 +156,10 @@ node /packtest([0-9]{2})\.bud\.mirantis\.net/ {
   }
 }
 
+node /python-jenkins-(master|slave)(\d+)\.infra\.mirantis\.net/ {
+    hiera_include('classes')
+}
+
 node /pxe-product2?-(msk|srt|cz)\.((msk|srt|vm)\.mirantis\.net|fuel-infra\.org)/ {
   include pxe_deployment
 }
