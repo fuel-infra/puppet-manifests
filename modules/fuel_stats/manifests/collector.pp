@@ -66,6 +66,15 @@ class fuel_stats::collector (
     shell      => '/usr/sbin/nologin',
   }
 
+  # filtering json
+  file { '/etc/collector-filter.json' :
+    ensure  => 'file',
+    content => template('fuel_stats/collector-filter.json.erb'),
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+  }
+
   # application settings
   file { '/etc/collector.py' :
     ensure  => 'file',
@@ -73,6 +82,7 @@ class fuel_stats::collector (
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
+    require => File['/etc/collector-filter.json'],
   }
 
   # Nginx configuration
