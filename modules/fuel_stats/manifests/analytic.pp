@@ -102,7 +102,6 @@ class fuel_stats::analytic (
   # vhost configuration
   ::nginx::resource::vhost { 'analytics' :
     ensure              => 'present',
-    ssl                 => $ssl,
     listen_port         => $http_port,
     server_name         => [$::fqdn],
     www_root            => $www_root,
@@ -114,8 +113,10 @@ class fuel_stats::analytic (
 
   # enable ssl
   if ( defined(File[$ssl_cert_file]) and defined(File[$ssl_key_file]) )  {
+    $ssl = true
     Nginx::Resource::Vhost <| title == 'analytics' |> {
       listen_port => $https_port,
+      ssl         => $ssl,
       ssl_cert    => $ssl_cert_file,
       ssl_key     => $ssl_key_file,
       ssl_port    => $https_port,

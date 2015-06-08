@@ -94,7 +94,6 @@ class fuel_stats::collector (
   # vhost configuration
   ::nginx::resource::vhost { 'collector' :
     ensure              => 'present',
-    ssl                 => $ssl,
     listen_port         => $http_port,
     server_name         => [$::fqdn],
     uwsgi               => '127.0.0.1:7932',
@@ -108,9 +107,10 @@ class fuel_stats::collector (
   if ( defined(File[$ssl_cert_file]) and defined(File[$ssl_key_file]) ) {
     Nginx::Resource::Vhost <| title == 'collector' |>  {
       listen_port => $https_port,
+      ssl         => true,
       ssl_cert    => $ssl_cert_file,
       ssl_key     => $ssl_key_file,
-      ssl_port            => $https_port,
+      ssl_port    => $https_port,
       require     => [
         File[$ssl_cert_file],
         File[$ssl_key_file],
