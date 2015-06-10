@@ -1,0 +1,91 @@
+---
+classes:
+  - fuel_project::jenkins::master
+
+fuel_project::jenkins::master::install_plugins: true
+fuel_project::jenkins::master::install_zabbix_item: true
+fuel_project::jenkins::master::install_label_dumper: true
+fuel_project::jenkins::master::service_fqdn: 'slave-23.test.local'
+jenkins::master::ssl_cert_file_contents: |
+  -----BEGIN CERTIFICATE-----
+  MIIDDzCCAfegAwIBAgIJAMlxDHhS0b5NMA0GCSqGSIb3DQEBBQUAMB4xHDAaBgNV
+  BAMME3NsYXZlLTIzLnRlc3QubG9jYWwwHhcNMTUwNjEwMTM1OTU2WhcNMjUwNjA3
+  MTM1OTU2WjAeMRwwGgYDVQQDDBNzbGF2ZS0yMy50ZXN0LmxvY2FsMIIBIjANBgkq
+  hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuTRT1sHZSyW6P0VzS4rvLuSeemhXkXBa
+  4npuyBz2Mb/XFqPhTsv8YAYHx2T2WHtWflfxGSoBw1p9kOUxtSg4Jdw/ChYNn+lF
+  ZTQltfBBbS1/Fyhhr4V4q8smaOtHrjpzFQdoC7QvI0iGmhmFMeLeX6NcNqgSOD2R
+  aXnxJvl7owu2BtVsP+3RAwtPBkindEJifisKwY25KT7bUf0l/Slxz4r7OTOPQufM
+  i0WCW1awtjLSm3t2ovyUQOQyxdVBB7mTdhUhGotLEuAT/Ayo5FfJijZh6UfinMJg
+  m13rTRedUkzWos4p/rXc4HZ5FPz1udc7Dv9om+1VZZnXO1ungAYDUQIDAQABo1Aw
+  TjAdBgNVHQ4EFgQUQxfaS/Yd6XGp/uyyITq01qw5fFMwHwYDVR0jBBgwFoAUQxfa
+  S/Yd6XGp/uyyITq01qw5fFMwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOC
+  AQEAXjXRX66Y9iXSym88M1pB8kQ/ug2/Mht2/1eRmSwEFwzhWhBXjA+8y+jZmNst
+  wO1qifeLr4J2Jfhe1M8dlyw9TxClqCi9xap+LxnPNIykC2svzszTOH2U+DijUcQS
+  esJwx3luz8RlQAwR3miF/HlZyvmiyagpO+v6dQcE3MFbPSr+wM6QHLEhqx8Nb3XG
+  I+DEuZICbbbWP2rbwcnCHL315yXR3FUSBn8LG/QrlWZEqqEmQSVu7EaWCwvYcPyC
+  l5O3rKH6pr+GA2e69Dct/xxjzwv3EtjJUadXIVZi8W+sx0btc2wdF5mGpzYq1+WM
+  RsSSGAH2WAq87qtNr+JqLayLcQ==
+  -----END CERTIFICATE-----
+
+jenkins::master::ssl_key_file_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpQIBAAKCAQEAuTRT1sHZSyW6P0VzS4rvLuSeemhXkXBa4npuyBz2Mb/XFqPh
+  Tsv8YAYHx2T2WHtWflfxGSoBw1p9kOUxtSg4Jdw/ChYNn+lFZTQltfBBbS1/Fyhh
+  r4V4q8smaOtHrjpzFQdoC7QvI0iGmhmFMeLeX6NcNqgSOD2RaXnxJvl7owu2BtVs
+  P+3RAwtPBkindEJifisKwY25KT7bUf0l/Slxz4r7OTOPQufMi0WCW1awtjLSm3t2
+  ovyUQOQyxdVBB7mTdhUhGotLEuAT/Ayo5FfJijZh6UfinMJgm13rTRedUkzWos4p
+  /rXc4HZ5FPz1udc7Dv9om+1VZZnXO1ungAYDUQIDAQABAoIBAF2KtXG51RNkic5d
+  OJ+GG8p2hCjVPK1jrzPGnN+L6Tk1aOCxgyH2W5DwWst2DgqguQ31QvvvwJY3xUYC
+  zPlvx/QvatOgUd9bxcYY8ZcUMyd+nDtJFRW+9zTl1Y+WjkzMjsWnSQDoUAqlHf8F
+  NsX8jU6GxxOADjvDtQcuJQQHbE/rxL7wMvAgjGvaILgL6vtAEVV6zl9exbougPDZ
+  R8TLNwow4CUxmI4P8qfkfuq/COPOqVNIOY6RpQlJiciyq3UY/4ouhIA6FPCuNuWJ
+  4F0wiytSLQUOsuybUB+0PT6fc1cFV/rhiJohxo8bW1DNDfYgdJRy5IbFk4jtzIoJ
+  wRnFGzECgYEA6sSN33UbALSMjuIBVCbUWHQomEnE7G8fKJvCf7gkwQMftLvAQESz
+  f90cDwBkupR2EOXEufYVXOqarYsFBvTINSX+Bv8wHEN7/VVhu/Kpflyp4vujaiCR
+  dgYSan17QdHBInM4luzK32gO2zeSVhuGYUQqb+KhJLlahfSSiAHo2lUCgYEAyfRC
+  odVuPtgfmofHMpQ5wuANUnisMvBOR0kAXqcvVi9YFb4hji5/pzT4b0EhN+roTCuc
+  6izxtNXuTGgrUsUo0MnqDe+IB81ZGBlk6UkRI0+JYleLhW3nm9YgHcmA2x+Wk+Uk
+  NwQSQe6Id47Cg3FBPvnJ3apc1r8vYcwhoPY+OQ0CgYEAvJJOptuoaeOcNzSf/pkF
+  3VrINLKkY4lKTNL34qDlnMdGk2Rvou/MAnt3CzG0tw2C3EXCw+A+/phOz/CnhBPg
+  MJiot7QIT9uA31bSnyXmMOJ7bx/S/e7VCCkOZ80M0SyLZoGIRepDdjleHYVAnLuV
+  L9GSCLbP2vCrHof5nxdxktUCgYEArTG5Yyiy31ph4BjJkGrmDmYvhqbOpvDHcQL+
+  Oi6Ovg7kL+FazaC7AR7AYEkuv9HJXmmYrIvWzgsZzpUXcmh7VHOVMlZWBrroyW4d
+  yKNM+0devuPtV4SluFOuP11sEH/KlxNQN45aSgjTKBVaY3dhSSzXHi7YZ6KWc/yo
+  am5DdpECgYEA4eZFUyc/4v+hmJIvFdpTXT+Z7Ogb+c7ifoAwfLqGP9Uf30/eo7Ry
+  jKNxM3T8U5ME6C9OIUQhN/dG/G8SaW8uuW/mIGCPbpkWANs7bhPqDjiCmgKaYfg6
+  Y6GzkjFEbH2sneVM9Qsa8EQeVpIudP7iQh1DM+Qhug3QMk2hzrHeP1E=
+  -----END RSA PRIVATE KEY-----
+
+jenkins::master::security_model: 'password'
+jenkins::master::jenkins_ssh_private_key_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEowIBAAKCAQEA7GZMQCEMjzkErJmfcL3S+im8SluJJPdHBvxAXwk1G+QbnBS8
+  AtsOEwb9aJHy+T5YtIMuIo2V4Ev+PtxDhbkFkQnnnu2/981mjbG83f6XAsdtE9bV
+  qF89/EAZVxsKFBt3AC+73wmOfMCw4UvcOUewTkpnJPMdUAQ5jKqJQV/MATWca203
+  0Bq0yMt9FiQGd6wjpEOE1E0EV19pMR3G/X/0ldQ/vU3H/S53GAvdFMu/9dlOtsUH
+  RDbNvCiTn6CPsPihYt7iQXrA63xLmpJU6Fnb6d8GQU+8Hfb6MzL2JQIHqDge7B4a
+  pWTW38BoBzqaHSw8jOXNDdlVE1VRVWTANFIBwwIDAQABAoIBAHYM07EGj/YJnCrx
+  ACzVrkCcjNl5AnCCR2bWmvKab3oBHESCGi025L1dtTf+Ah6zIqrqAyTgHWMHr+wG
+  JHXnoj7+ejrkMQP2/2pswor9Mr4BhpfspX9SKGsKO11DNHI8EN33+FJ1vEDSHMI1
+  FsFH6mP+Ramu+glWQsLa+nW59+71t+lgHY9PUGzZ4SnICk/Fmi1/1zG28eUqOj3f
+  U+J+Pryb4O1wa+2JHAGbjcCKE9JUAhUV/d2fkpmijuhpI0e3fxECETGgaXlqdWip
+  v/f2Ske0CPEFluhF2y1q+8RmgPFQJXlbERA4RQaK6zfF01GgIh/2O4kGbZR0XxKX
+  f5A0IWECgYEA+0hHoSpxIXBxsLoyWPphQe0vNvHDy3JSt6PMqBpOgdkybS1k62dY
+  3FjMfpZv4AjXmqNkJNJ8uzjkjaMf7ky3KBufryGvokrpgyjy4IVREsrp0/tW6pmS
+  hpG0bZIJ1J1/nmug4Ne4EaSF0KNrCf4KJX7x65z7FgBH8bed0RSthlECgYEA8NZ8
+  +sTh0+SyJKDlW1tcL1u/Ay1+9GLiwU4pwMNnAW6hm2uciWdGndzPuALYpywEOhAb
+  sGB1qidsScxJGDib8LB8pGawne+yQuCYrvRe0jHgoGUhvMQFTkD5S4alte8Dcu8j
+  lkC29ACV6x8/g8xIpeeE2uJAo2FqkmofPxnbPdMCgYEAvVZACrL1HVIhiB00NJEs
+  WUWDTu4qLpCMvSxh18RCpVpnwZXzteBgN199bmCiGXfwJOe6XHhxXYzHweVI+QC6
+  /TCbSJWkRjAV9SsUnpI1fWiBeaWnXwuqOVVuUyU33QlzkIXeaayBWGHUJloMHDJb
+  qNcXKAZXtsMtcnd9JX5kJZECgYAryhP3VIzrBg4N8uNA9R+RzNCyNzd6H/CyzQ9y
+  aRT1gbQImkxf/1MrqNZr0ripzKsIE521OBSs13YtBOPVb5WK8cv36GP8k3SKDGQ2
+  i2AiP8dj4n973vhH/jBVtymyJr8tyqVh0GpzexfHJGtb/2zGHY5ebfzqt++0p27+
+  /iiK2QKBgFVuCEjMP+er0Apu5sWrfSHxAPwpsonn3GVpM2/JMvEomZiSdpKf/7B3
+  DkzRKwtEVbe4EPgJAZ55r6KjV/6bCiKQmqLjJkUONObOy/k+Z/rU191FRTKEY45y
+  GJ16pxDiYBPOpqOsAgF5WL0qSLM+fm1hx/j0QKx4GPWULrPPhHlr
+  -----END RSA PRIVATE KEY-----
+
+jenkins::master::jenkins_ssh_public_key_contents: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDsZkxAIQyPOQSsmZ9wvdL6KbxKW4kk90cG/EBfCTUb5BucFLwC2w4TBv1okfL5Pli0gy4ijZXgS/4+3EOFuQWRCeee7b/3zWaNsbzd/pcCx20T1tWoXz38QBlXGwoUG3cAL7vfCY58wLDhS9w5R7BOSmck8x1QBDmMqolBX8wBNZxrbTfQGrTIy30WJAZ3rCOkQ4TUTQRXX2kxHcb9f/SV1D+9Tcf9LncYC90Uy7/12U62xQdENs28KJOfoI+w+KFi3uJBesDrfEuaklToWdvp3wZBT7wd9vozMvYlAgeoOB7sHhqlZNbfwGgHOpodLDyM5c0N2VUTVVFVZMA0UgHD'
+jenkins::master::jenkins_management_login: 'fuel-slave-jenkins'
+jenkins::master::jenkins_management_password: 'QVp1u4pywxKmfGmS'
