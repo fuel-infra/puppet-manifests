@@ -639,6 +639,7 @@ class fuel_project::jenkins::slave (
       'libxslt1-dev',
       'nodejs-legacy',
       'npm',
+      'postgresql-server-dev-all',
       'python-all-dev',
       'python-cloud-sptheme',
       'python-sphinx',
