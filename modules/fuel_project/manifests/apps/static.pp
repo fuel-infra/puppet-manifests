@@ -35,20 +35,23 @@ class fuel_project::apps::static (
   }
 
   ::nginx::resource::vhost { 'static' :
-    ensure      => 'present',
-    autoindex   => 'off',
-    access_log  => $nginx_access_log,
-    error_log   => $nginx_error_log,
-    format_log  => $nginx_log_format,
-    ssl         => true,
-    listen_port => 80,
-    ssl_port    => 443,
-    ssl_cert    => $ssl_certificate,
-    ssl_key     => $ssl_key,
-    www_root    => $static_dir,
-    server_name => [$service_fqdn, "static.${::fqdn}"],
-    gzip_types  => 'text/css application/x-javascript',
-    require     => [
+    ensure           => 'present',
+    autoindex        => 'off',
+    access_log       => $nginx_access_log,
+    error_log        => $nginx_error_log,
+    format_log       => $nginx_log_format,
+    ssl              => true,
+    listen_port      => 80,
+    ssl_port         => 443,
+    ssl_cert         => $ssl_certificate,
+    ssl_key          => $ssl_key,
+    www_root         => $static_dir,
+    server_name      => [$service_fqdn, "static.${::fqdn}"],
+    gzip_types       => 'text/css application/x-javascript',
+    vhost_cfg_append => {
+      'add_header' => "'Access-Control-Allow-Origin' '*'",
+    },
+    require          => [
       Package[$packages],
       File[$ssl_certificate],
       File[$ssl_key],
