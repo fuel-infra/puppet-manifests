@@ -117,7 +117,7 @@ class fuel_project::glusterfs (
     ensure  => 'present',
     owner   => 'root',
     group   => 'root',
-    mode    => '0640',
+    mode    => '0440',
     content => template('fuel_project/glusterfs/sudoers_zabbix_glusterfs.erb')
   }
 

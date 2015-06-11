@@ -45,7 +45,7 @@ class zabbix::agent (
     ensure  => 'present',
     owner   => 'root',
     group   => 'root',
-    mode    => '0644',
+    mode    => '0440',
     content => template($sudoers_template)
   }~>
   Service[$service]
