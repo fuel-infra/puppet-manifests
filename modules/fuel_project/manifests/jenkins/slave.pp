@@ -86,6 +86,7 @@ class fuel_project::jenkins::slave (
   $verify_fuel_web                      = false,
   $verify_jenkins_jobs                  = false,
   $workspace                            = '/home/jenkins/workspace',
+  $x11_display_num                      = 99,
 ) {
   class { '::fuel_project::common' :
     external_host     => $external_host,
@@ -670,9 +671,22 @@ class fuel_project::jenkins::slave (
       $selenium_packages = [
         'chromium-browser',
         'chromium-chromedriver',
-        'xvfb',
+        'firefox',
+        'imagemagick',
+        'x11-apps',
+        'xfonts-100dpi',
+        'xfonts-75dpi',
+        'xfonts-cyrillic',
+        'xfonts-scalable',
       ]
       ensure_packages($selenium_packages)
+
+      class { 'display' :
+        display => $x11_display_num,
+        width   => 1366,
+        height  => 768,
+      }
+
     }
 
     if (!defined(Class['postgresql::server'])) {
