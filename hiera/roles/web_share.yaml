@@ -1,0 +1,30 @@
+---
+classes:
+  - fuel_project::common
+  - fuel_project::nginx
+  - fuel_project::apps::web_share
+
+fuel_project::apps::web_share::authorized_keys:
+  'jenkins@test.local':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC7QBh6Tu+qb49KO/0DYiucbswniuB6J0JV8XDyVQTklDUOBPi6ySIjq/PxDsgaom2nS1wsEt2XnelF2ue5z1tK0vTT6XFLZ6wvP6xtK2yaJKkpGskL/18/p+PSWEoG7tKypkUaflYOzb/mTYuYEGnfJ8cM6LtevJfdmr1rTMkix8jDhwDtKivPsvs2Ujh1e7eQwX3bEPY/SYpT7iOniSiV4wxvvOIvqdI1YctAaNCufdkGwdEd7vm8Vyz/HZAn/iAv3IE7SIAx0z8SasNeJlml1S4nGeLcL3fBXYE+3cbnGjXIZo+5OV0nFRII4ILgzlrdzKls8D3yGypumDvww03r'
+
+ssh::sshd::sftp_group: 'jenkins'
+
+# firewall configuration
+fuel_project::apps::firewall::rules:
+  '1000 - allow ssh connections from 0.0.0.0/0':
+    source: 0.0.0.0/0
+    dport: 22
+    proto: tcp
+    action: accept
+  '1000 - allow nginx connections from 0.0.0.0/0':
+    source: 0.0.0.0/0
+    dport: 80
+    proto: tcp
+    action: accept
+  '1000 - allow zabbix-agent connections from 172.18.0.0/16':
+    source: 172.18.0.0/16
+    dport: 10050
+    proto: tcp
+    action: accept

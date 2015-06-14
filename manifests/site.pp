@@ -131,6 +131,10 @@ node /ci-slave([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
+node /ci-logs(\d+)\.fuel-infra\.org/ {
+  hiera_include('classes')
+}
+
 node /infra-ci-slave([0-9]{2})\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::slave' :
     external_host       => true,
