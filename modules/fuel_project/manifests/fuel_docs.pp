@@ -144,6 +144,8 @@ class fuel_project::fuel_docs(
     vhost               => $community_hostname,
     location            => '~ \/openstack\/fuel\/fuel-master\/.*',
     www_root            => $www_root,
+    ssl                 => $community_ssl,
+    ssl_only            => $community_ssl,
     location_cfg_append => {
       return => 404,
     },
@@ -168,6 +170,7 @@ class fuel_project::fuel_docs(
     location_cfg_append => {
       'rewrite' => {
         '^/$'                => $redirect_root_to,
+        '^/fuel-dev/?$'      => "http://${community_hostname}/fuel-dev/",
         '^/express/?$'       => '/openstack/express/latest',
         '^/(express/.+)'     => '/openstack/$1',
         '^/fuel/?$'          => "/openstack/fuel/fuel-${fuel_version}",
