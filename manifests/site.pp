@@ -236,23 +236,6 @@ node 'demo.fuel-infra.org' {
   }
 }
 
-# *** Anonymous Statistics servers ***
-node /(product\-)?stats\.(mirantis\.com|fuel-infra\.org)/ {
-  class { '::fuel_project::roles::stats' :  }
-}
-
-node /collector\.(mirantis\.com|fuel-infra\.org)/ {
-  class { '::fuel_project::roles::stats_collector' : }
-}
-
-node /fuel-collect(\-testing)?\.vm\.mirantis\.net/ {
-  class { '::fuel_project::roles::stats_collector' : }
-}
-
-node /fuel-stats(\-testing)?\.vm\.mirantis\.net/ {
-  class { '::fuel_project::roles::stats' : }
-}
-
 node 'gfs01-msk.vm.mirantis.net' {
   class { '::fuel_project::glusterfs' :  }
 }

@@ -1,3 +1,75 @@
 classes:
-  - '::fuel_project::roles::stats'
-fuel_project::roles::stats::firewall_enable: false
+  - '::fuel_project::common'
+  - '::fuel_project::nginx'
+  - '::fuel_stats::analytic'
+
+fuel_stats::analytic::auto_update: false
+fuel_stats::analytic::development: false
+fuel_stats::analytic::elastic_http_port: 9200
+fuel_stats::analytic::elastic_listen_ip: '127.0.0.1'
+fuel_stats::analytic::elastic_tcp_port: 9300
+fuel_stats::analytic::firewall_enable: false
+fuel_stats::analytic::fuel_stats_repo: 'https://github.com/stackforge/fuel-stats/'
+fuel_stats::analytic::http_port: 80
+fuel_stats::analytic::https_port: 443
+fuel_stats::analytic::psql_db: 'stats'
+fuel_stats::analytic::psql_host: '127.0.0.1'
+fuel_stats::analytic::psql_pass: 'stats'
+fuel_stats::analytic::psql_user: 'stats'
+fuel_stats::analytic::nginx_access_log: '/var/log/nginx/access.log'
+fuel_stats::analytic::nginx_error_log: '/var/log/nginx/error.log'
+fuel_stats::analytic::nginx_limit_conn: 'addr 1'
+fuel_stats::analytic::nginx_log_format: 'proxy'
+fuel_stats::analytic::service_hostname: 'stats.test.local'
+fuel_stats::analytic::ssl_cert_file: '/etc/ssl/analytic.crt'
+fuel_stats::analytic::ssl_cert_file_contents: |
+  -----BEGIN CERTIFICATE-----
+  MIIDPDCCAiQCCQDKRBoE34r0tjANBgkqhkiG9w0BAQsFADBgMQswCQYDVQQGEwJB
+  VTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0
+  cyBQdHkgTHRkMRkwFwYDVQQDDBBzdGF0cy50ZXN0LmxvY2FsMB4XDTE1MDYxNzEw
+  MTczM1oXDTI1MDYxNDEwMTczM1owYDELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNv
+  bWUtU3RhdGUxITAfBgNVBAoMGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDEZMBcG
+  A1UEAwwQc3RhdHMudGVzdC5sb2NhbDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+  AQoCggEBAMK6QC2Bme0E7l2SUQBMdXhdQeJYDsc2r0gafsZ23pqdOM7FqapOc563
+  hfrNetes28zBTHzg3oWKuagbqJNtPQzym8jBVSY+3gCyY7DqHJPKGpRpLx/ThJYG
+  0Lkd4oBJrrA6OE0QR8mye0iy6JgZJp7qs9N/QfSYo9uJA9VG7eAZhgpdf+nVIl6v
+  4LcAkacal5OqxYMeo6bmLjarcItElhmm4ndF8SREDORV3LZNizlkQ04JZCFtxxut
+  P6aauo7d3kgmFH418V+gCkIFPsHayH3FTz869DHxVHghX0sTJDNi97lzNjKrW/pX
+  zgv2unVIwCXyatb4JFsik4DOQ9v8zZECAwEAATANBgkqhkiG9w0BAQsFAAOCAQEA
+  wII1A2dzWiqX4WmW/cTTl2UNRjjS2P3cCJeAloFU11NjBawif1oIm2HeiWwHzgcB
+  OJrvE/KqoPjtP4QfVxi3BjEc7VMoS4eMcIRUY743wnTTi/3kiKzd89ZrmU6Kim5b
+  cUXnP5cCLtz77803HFqtzgfrfcRKvQsUjGxqSA4bzPWK02v9I5fjnfDIZsD4FHaq
+  bun1YhmN1SFq4PrVsaPl9eCA8Un+vngQO/DdWSrBUAAzyH2ODFYK3+lzCB06CZiB
+  mvh5X67aaFq0SNaE8jvzHI2q03lUXP4CssKSEyIWQbTIOdPVk8vr7aiO8RUST0y4
+  5kOC81w8uXJNqi4SMOdaJA==
+  -----END CERTIFICATE-----
+
+fuel_stats::analytic::ssl_key_file: '/etc/ssl/analytic.key'
+fuel_stats::analytic::ssl_key_file_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEowIBAAKCAQEAwrpALYGZ7QTuXZJRAEx1eF1B4lgOxzavSBp+xnbemp04zsWp
+  qk5znreF+s1616zbzMFMfODehYq5qBuok209DPKbyMFVJj7eALJjsOock8oalGkv
+  H9OElgbQuR3igEmusDo4TRBHybJ7SLLomBkmnuqz039B9Jij24kD1Ubt4BmGCl1/
+  6dUiXq/gtwCRpxqXk6rFgx6jpuYuNqtwi0SWGabid0XxJEQM5FXctk2LOWRDTglk
+  IW3HG60/ppq6jt3eSCYUfjXxX6AKQgU+wdrIfcVPPzr0MfFUeCFfSxMkM2L3uXM2
+  Mqtb+lfOC/a6dUjAJfJq1vgkWyKTgM5D2/zNkQIDAQABAoIBACsG3oFvnqRpr4XL
+  e8x2GIrFCHbMAE/yfF6RRCv0PhGp5dCCio/QD+olIRye5KLdVh/zIkSBp4mYcpd7
+  rQ8OVywSO2vrlDYENCexQyfnQvNA+AiNCVWd9jD0RpBw0wiHv2q/IoucqlAd+PHC
+  XnSlMgxxTdTQzLEQPTyYFNm+d3dJqa5qYCtP9AYzJGfj7RJxhJ7VeTR/8sdwRNaw
+  eoKmHtll2l75iNoUKf04HcYi62YoMogM5wk3t8oY+F0BbZgRoU04Sz9cNan3sgCJ
+  H5XjRok2Afqb7o7rupzj4bDr3IgBFl5idyhAjqbXUWSmcJAx+iPvsGou5BASWcoH
+  8ex5rnUCgYEA63jC6af7YE0BDwJlu6joOTRBzq0yIqCvnSjcqVtPA3FEmU9eQt+n
+  Z5pOXzdNTunrDmM6pPmjHjIYWQYqu8dVQNqwLJltWqYXgN1JQPoIwL9p1yUDwl5C
+  FQSbmxjV6nyfRFUn95rohOYDKo0efRTcpbHVyqgOggtqvEy5x2jMCMsCgYEA07Qp
+  +7f+Jt5Fdpc8ONyCU544MGEMtYEhOVWzLbyz+jnYt49lSdOYENZgLrwRO5EMr1XX
+  nqSR121pyv7zFlF0wXDltoq41kHu3ASY6lWM1GouXkx+jyLBMxnQW9Oq//qV1ige
+  qvdMxKtSY61ghK4Jzkv8KX4/YyW5ikvBikjgI5MCgYEAw5JpUOfUQQez+WNkW5jO
+  R7S/c4kmOtx6/20Q2RidZ56L+0mQYLqhr8rZjPvBmelu8WQ5MQymDk5NKqOUmqHU
+  jSkVafWEfeW1X7JrRSxmWLCil66GkMj42bwaAZd/FGKtZXPU3jIrLTZdKtpKmFjb
+  akNp7gfnBNu2qu6O3rCLxkECgYB9xKykZDxSrv2pZFNcnHO4ZWiQJTe9pIcuXqFh
+  7JcncrIy6reL0m6mohTl7sh2EMfuahr8nlweFVwiQq/7dEzelsmBVoxUjTrv7rNB
+  k61ki+gcEWmmc0k/qHhF9UvDYwUdAxylCOHMfNMncFrEt/gPXMjjhaL2rfS6GiNS
+  mdS+jQKBgALvF/xKloTSC9rYoQBnkFmmzxymkLXUeCmXq5bnkFLXdMDFr8HsTP/d
+  G9hZm27CT6m9fBnTM0dsojCS0rzRHbvKQMlKRQ5WOcXGx4SU+yykEeTSpkhSPys+
+  opUp+bF1HgX29zZYyKse9jO5CHjbs2iUk2SpqMJsK3xo09BUy8y+
+  -----END RSA PRIVATE KEY-----
