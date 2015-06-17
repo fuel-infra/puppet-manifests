@@ -61,10 +61,6 @@ node /docs-slave01.vm.mirantis.net/ {
   class { '::fuel_project::jenkins::slave' :}
 }
 
-node /errata(db)?([0-9]+)(\-tst|\-bud)?\.(infra\.mirantis\.net|fuel-infra\.org)/ {
-  hiera_include('classes')
-}
-
 node /srv(22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37)-bud\.bud\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
     run_tests           => true,
@@ -103,17 +99,9 @@ node /(tracker([0-9]{2})-(msk|mnv|bud|srt|kha|poz)\.infra|ctorrent-msk\.msk)\.mi
   class { '::fuel_project::roles::tracker' :}
 }
 
-node /(seed-(cz|kha|msk|srt|us)1\.fuel-infra\.org)/ {
-  hiera_include('classes')
-}
-
 node /osci-mirror-(msk|srt|kha|poz)\.(msk|srt|kha|infra)\.mirantis\.net/ {
   class { '::fuel_project::common' :}
   class { '::fuel_project::apps::mirror' :}
-}
-
-node /mailman([0-9]+)(-tst)?\.infra\.mirantis\.net/ {
-  hiera_include('classes')
 }
 
 node /ci-slave([0-9]{2})\.fuel-infra\.org/ {
@@ -131,10 +119,6 @@ node /ci-slave([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
-node /ci-logs(\d+)\.fuel-infra\.org/ {
-  hiera_include('classes')
-}
-
 node /infra-ci-slave([0-9]{2})\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::slave' :
     external_host       => true,
@@ -145,23 +129,11 @@ node /(infra|fuel)-jenkins(\d+)\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::master' :}
 }
 
-node /patching-jenkins(\d+)\.infra\.mirantis\.net/ {
-  hiera_include('classes')
-}
-
-node /patching-slave(\d+)-bud\.infra\.mirantis\.net/ {
-  hiera_include('classes')
-}
-
 node /packtest([0-9]{2})\.bud\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
     run_tests => true,
     ldap      => true,
   }
-}
-
-node /python-jenkins-(master|slave)(\d+)\.infra\.mirantis\.net/ {
-    hiera_include('classes')
 }
 
 node /pxe-product2?-(msk|srt|cz)\.((msk|srt|vm)\.mirantis\.net|fuel-infra\.org)/ {
@@ -178,10 +150,6 @@ node /mirror(\d+)\.fuel-infra\.org/ {
   include nginx::share
 }
 
-node /mirror-pkgs\.vm\.mirantis\.net/ {
-  hiera_include('classes')
-}
-
 node /build(\d+)\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::slave' :
     external_host  => true,
@@ -193,10 +161,6 @@ node /irc-bouncer([0-9]{2})\.fuel-infra\.org/ {
   class { '::fuel_project::znc' :
     apply_firewall_rules => true,
   }
-}
-
-node /zbx(proxy|server)([0-9]+)-([a-z]+)\.(devops|infra|vm)\.mirantis\.net/ {
-  hiera_include('classes')
 }
 
 node /zabbix-tst01\.vm\.mirantis\.net/ {
@@ -289,14 +253,6 @@ node /fuel-stats(\-testing)?\.vm\.mirantis\.net/ {
   class { '::fuel_project::roles::stats' : }
 }
 
-node /fuel-(collect|stats)-systest\.infra\.mirantis\.net/ {
-  hiera_include('classes')
-}
-
-node /web([0-9]{2,})(-tst)?\.(fuel-infra\.org|vm\.mirantis\.net)/ {
-  hiera_include('classes')
-}
-
 node 'gfs01-msk.vm.mirantis.net' {
   class { '::fuel_project::glusterfs' :  }
 }
@@ -374,11 +330,13 @@ node 'pxetool.test.local' {
   class { '::pxetool' :}
 }
 
-node /.*\.test\.local/ {
-  hiera_include('classes')
-}
-
 # Default
 node default {
-  notify { 'Default node invocation' :}
+  $classes = hiera('classes', '')
+  if ($classes) {
+    validate_array($classes)
+    hiera_include('classes')
+  } else {
+    notify { 'Default node invocation' :}
+  }
 }
