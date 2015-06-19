@@ -42,7 +42,7 @@ UseDNS no
 
 AcceptEnv LANG LC_*
 
-Subsystem sftp /usr/lib/openssh/sftp-server
+Subsystem sftp internal-sftp
 
 UsePAM yes
 <% if @osfamily == 'Debian' %>
@@ -51,7 +51,9 @@ AuthorizedKeysFile /etc/ssh/keys/%u .ssh/authorized_keys
 AuthorizedKeysFile %h/.ssh/authorized_keys
 <% end -%>
 
+<% if @sftp_group != '' -%>
 Match Group <%= @sftp_group %>
     AllowTCPForwarding no
     X11Forwarding no
-    ForceCommand /usr/lib/openssh/sftp-server
+    ForceCommand internal-sftp
+<% end -%>
