@@ -3,6 +3,7 @@
 class ssh::sshd (
   $apply_firewall_rules   = $::ssh::params::apply_firewall_rules,
   $firewall_allow_sources = $::ssh::params::firewall_allow_sources,
+  $sftp_group             = 'sftpusers',
 ) {
   include ssh::params
 
@@ -20,6 +21,7 @@ class ssh::sshd (
     owner   => 'root',
     group   => 'root',
     content => template('ssh/sshd_config.erb'),
+    notify  => Service[$service],
   }
 
   service { $service :
@@ -38,6 +40,4 @@ class ssh::sshd (
     })
   }
 
-  File[$sshd_config]~>
-    Service[$service]
 }

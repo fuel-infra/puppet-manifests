@@ -49,4 +49,9 @@ UsePAM yes
 AuthorizedKeysFile /etc/ssh/keys/%u .ssh/authorized_keys
 <% else %>
 AuthorizedKeysFile %h/.ssh/authorized_keys
-<% end %>
+<% end -%>
+
+Match Group <%= @sftp_group %>
+    AllowTCPForwarding no
+    X11Forwarding no
+    ForceCommand /usr/lib/openssh/sftp-server
