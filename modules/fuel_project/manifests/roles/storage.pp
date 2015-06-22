@@ -4,7 +4,7 @@ class fuel_project::roles::storage (
   $iso_vault_fqdn = "iso.${::fqdn}",
 ) {
   class { '::fuel_project::common' :}
-  class { '::fuel_project::mirror' :}
+  class { '::fuel_project::apps::mirror' :}
 
   if (!defined(Class['::fuel_project::nginx'])) {
     class { '::fuel_project::nginx' :}
