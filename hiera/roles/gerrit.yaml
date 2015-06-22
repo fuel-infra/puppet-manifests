@@ -1,4 +1,5 @@
 ---
 classes:
   - '::fuel_project::gerrit'
+  - '::bacula'
 fuel_project::gerrit::firewall_enable: true

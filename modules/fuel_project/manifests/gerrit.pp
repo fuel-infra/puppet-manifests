@@ -89,7 +89,6 @@ class fuel_project::gerrit (
 
   if ($replication_mode == 'slave') {
     class { '::fuel_project::gerrit::slave_config' :}
-    class { '::fuel_project::apps::bacula' :}
 
     if $firewall_enable {
       include ::firewall_defaults::pre
