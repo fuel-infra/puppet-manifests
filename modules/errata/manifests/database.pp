@@ -6,7 +6,7 @@ class errata::database (
   $database_name     = $::errata::params::database_name,
   $database_password = $::errata::params::database_password,
   $database_port     = $::errata::params::database_port,
-  $database_user     = $::errata::params::databases_user,
+  $database_user     = $::errata::params::database_user,
 ) inherits ::errata::params {
   if($database_engine == 'django.db.backends.mysql') {
     class { '::mysql::server' :}
