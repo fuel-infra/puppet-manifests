@@ -61,7 +61,7 @@ node /docs-slave01.vm.mirantis.net/ {
   class { '::fuel_project::jenkins::slave' :}
 }
 
-node /errata(db)?([0-9]+)(\-tst)?\.(infra\.mirantis\.net|fuel-infra\.org)/ {
+node /errata(db)?([0-9]+)(\-tst|\-bud)?\.(infra\.mirantis\.net|fuel-infra\.org)/ {
   hiera_include('classes')
 }
 
