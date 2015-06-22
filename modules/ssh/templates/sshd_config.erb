@@ -30,7 +30,7 @@ RhostsRSAAuthentication no
 HostbasedAuthentication no
 PermitEmptyPasswords no
 ChallengeResponseAuthentication no
-PasswordAuthentication <%= @external_host ? 'no' : 'yes' %>
+PasswordAuthentication <%= @password_authentication ? 'yes' : 'no' %>
 
 X11Forwarding yes
 X11DisplayOffset 10

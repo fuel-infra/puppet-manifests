@@ -1,9 +1,10 @@
 # Class: ssh::sshd
 #
 class ssh::sshd (
-  $apply_firewall_rules   = $::ssh::params::apply_firewall_rules,
-  $firewall_allow_sources = $::ssh::params::firewall_allow_sources,
-  $sftp_group             = 'sftpusers',
+  $apply_firewall_rules    = $::ssh::params::apply_firewall_rules,
+  $firewall_allow_sources  = $::ssh::params::firewall_allow_sources,
+  $password_authentication = false,
+  $sftp_group              = 'sftpusers',
 ) {
   include ssh::params
 
