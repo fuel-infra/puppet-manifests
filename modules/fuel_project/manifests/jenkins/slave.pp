@@ -11,11 +11,13 @@ class fuel_project::jenkins::slave (
   $docker_service                       = '',
   $external_host                        = false,
   $fuel_web_selenium                    = false,
-  $gerrit_host                          =  'review.openstack.org',
+  $gerrit_host                          = 'review.openstack.org',
   $gerrit_port                          = 29418,
   $http_share_iso                       = false,
   $install_docker                       = false,
   $jenkins_swarm_slave                  = false,
+  $known_hosts                          = {},
+  $known_hosts_overwrite                = false,
   $ldap                                 = false,
   $ldap_base                            = '',
   $ldap_ignore_users                    = '',
@@ -24,7 +26,6 @@ class fuel_project::jenkins::slave (
   $local_ssh_private_key                = undef,
   $local_ssh_public_key                 = undef,
   $nailgun_db                           = ['nailgun'],
-  $obs_known_hosts                      = 'osci-obs.vm.mirantis.net',
   $osc_apiurl                           = '',
   $osc_pass_primary                     = '',
   $osc_pass_secondary                   = '',
@@ -106,6 +107,7 @@ class fuel_project::jenkins::slave (
   } else {
     class { '::jenkins::slave' :}
 
+    # TODO: remove and use common $known_hosts array
     ssh::known_host { 'slave-known-hosts' :
       host      => $gerrit_host,
       port      => $gerrit_port,
@@ -113,6 +115,7 @@ class fuel_project::jenkins::slave (
       overwrite => $overwrite_known_hosts,
       require   => Class['::jenkins::slave'],
     }
+    warning('$gerrit_host and $gerrit_port will be depricated soon. Pass it to $known_hosts hash')
   }
 
   # jenkins should be in www-data group by default
@@ -188,6 +191,14 @@ class fuel_project::jenkins::slave (
         File['/home/jenkins/.ssh'],
       ]
     }
+  }
+
+  # 'known_hosts' manage
+  if ($known_hosts) {
+    create_resources('ssh::known_host', $known_hosts, {
+      user      => 'jenkins',
+      overwrite => $known_hosts_overwrite,
+    })
   }
 
   # Run system tests
@@ -474,7 +485,6 @@ class fuel_project::jenkins::slave (
       'createrepo',
       'devscripts',
       'git',
-      'osci-docker-builder',
       'python-setuptools',
       'reprepro',
       'yum-utils',
@@ -614,14 +624,6 @@ class fuel_project::jenkins::slave (
         ],
         User['jenkins'],
       ],
-    }
-
-    # obs host key
-    ssh::known_host { 'obs-known-hosts' :
-      host      => $obs_known_hosts,
-      user      => 'jenkins',
-      overwrite => $overwrite_known_hosts,
-      require   => Class['::jenkins::slave'],
     }
   }
 

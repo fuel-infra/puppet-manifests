@@ -601,6 +601,14 @@ fuel_project::jenkins::slave::osci_vm_trusty_jenkins_key_contents: |
   E/1C7GI2OKg8pZGBDZFJ/fMyunxpLCTVAyzbWOqmANIkvoWCrnA=
   -----END RSA PRIVATE KEY-----
 
+fuel_project::jenkins::slave::known_hosts:
+  'review.fuel-infra.org':
+    host: 'review.fuel-infra.org'
+    port: 29418
+  'review.openstack.org':
+    host: 'review.fuel-infra.org'
+    port: 29418
+
 mysql::client::package_name: 'percona-server-client-5.6'
 mysql::server::package_name: 'percona-server-server-5.6'
 mysql::server::root_password: 'WpUrXaC92cZQ4XHMLpfraTRsl16ZtoTu'
