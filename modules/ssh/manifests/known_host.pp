@@ -1,7 +1,7 @@
 # Define: ssh::known_host
 #
 define ssh::known_host (
-  $host      = '',
+  $host      = $title,
   $overwrite = true,
   $port      = 22,
   $user      = 'root',
