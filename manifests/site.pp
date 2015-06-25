@@ -136,6 +136,13 @@ node /packtest([0-9]{2})\.bud\.mirantis\.net/ {
   }
 }
 
+node /perestroika-slave([0-9]{2})\.infra\.mirantis\.net/ {
+  class { '::fuel_project::jenkins::slave' :
+    run_tests => true,
+    ldap      => true,
+  }
+}
+
 node /pxe-product2?-(msk|srt|cz)\.((msk|srt|vm)\.mirantis\.net|fuel-infra\.org)/ {
   include pxe_deployment
 }
