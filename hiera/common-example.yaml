@@ -606,7 +606,7 @@ fuel_project::jenkins::slave::known_hosts:
     host: 'review.fuel-infra.org'
     port: 29418
   'review.openstack.org':
-    host: 'review.fuel-infra.org'
+    host: 'review.openstack.org'
     port: 29418
 
 mysql::client::package_name: 'percona-server-client-5.6'

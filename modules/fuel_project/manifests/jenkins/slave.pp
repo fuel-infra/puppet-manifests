@@ -199,6 +199,7 @@ class fuel_project::jenkins::slave (
     create_resources('ssh::known_host', $known_hosts, {
       user      => 'jenkins',
       overwrite => $known_hosts_overwrite,
+      require   => User['jenkins'],
     })
   }
 
