@@ -1,0 +1,75 @@
+classes:
+- '::fuel_project::common'
+- '::fuel_project::nginx'
+- '::fuel_project::roles::docs'
+
+fuel_project::roles::docs::community_hostname: 'docs.fuel-infra.org'
+fuel_project::roles::docs::community_ssl_cert_content: |
+  -----BEGIN CERTIFICATE-----
+  MIIDxDCCAqwCCQD8Lp1courEGTANBgkqhkiG9w0BAQsFADCBozELMAkGA1UEBhMC
+  VVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDU1vdW50YWluIFZpZXcx
+  EzARBgNVBAoMCkZ1ZWwgSW5mcmExDzANBgNVBAsMBkRldk9wczEcMBoGA1UEAwwT
+  ZG9jcy5mdWVsLWluZnJhLm9yZzEjMCEGCSqGSIb3DQEJARYUYWRtaW5AZnVlbC1p
+  bmZyYS5vcmcwHhcNMTUwNjI3MTQ1NDUxWhcNMTYwNjI2MTQ1NDUxWjCBozELMAkG
+  A1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDU1vdW50YWlu
+  IFZpZXcxEzARBgNVBAoMCkZ1ZWwgSW5mcmExDzANBgNVBAsMBkRldk9wczEcMBoG
+  A1UEAwwTZG9jcy5mdWVsLWluZnJhLm9yZzEjMCEGCSqGSIb3DQEJARYUYWRtaW5A
+  ZnVlbC1pbmZyYS5vcmcwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDj
+  QrZgwx+6rc4SwutIylpYbmrHVtrNTh1aOE8XwgqhM0KlWJkPk9HyZq0J5eqmJfT6
+  YN3PKSQNatgewRiJiXzMRqTeALpgA2SLWDO1IqX9UcIyjerSCSdGb35lDa9WXVdp
+  oR/LQtPS98teDbNVefVMv3uW30R247l1uv0jVuFgTNRc7Ki7TafdSPeADoYaHL4d
+  JhROdifR52sy+1wjMQB745oG9bf3ich5UQTkB6NUmzt/QYebn90YrJk0BbwC7q97
+  F8n68/88PRwHGbjw7NDEDrfkYsWRZpVOBVg0f0p1WQUD8is49Fp4MOoVBJ1g8UZB
+  /g0sACaQT9v0F3mte7/TAgMBAAEwDQYJKoZIhvcNAQELBQADggEBANERjgtC2lc/
+  iFx9lOr8RKEmqARf81Pbidt052n7aS2dev9OtjkLO3o+wC+CBMId2HYR2azjtcv8
+  FOnYHVMgP3VFFlZpJ2RMH9GgRLJWlP7aqxDRvL+9ZzOv+HjwQZGnquTsiSyXjN8A
+  IvaHJRYGEfbWSTcb6nW3/8dMrvA5w+3rwYR41I/YxiHK7UplcOMK9ooPypMJpF4X
+  5XZJoYZoZH5BmHt5bpj/VEf2Mn2u6xT70/xS8/QQxS7pNDfn9m3NtanlY4aDlcsO
+  KDY68cDDabExNrRnNoIp3VLoaXONtPHWb9peuK8nBhBuaDIR0c+cjOonoQ0GBgJB
+  jT6Oer3eR3w=
+  -----END CERTIFICATE-----
+
+fuel_project::roles::docs::community_ssl_cert_filename: '/etc/ssl/community-docs.crt'
+fuel_project::roles::docs::community_ssl_key_content: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpAIBAAKCAQEA40K2YMMfuq3OEsLrSMpaWG5qx1bazU4dWjhPF8IKoTNCpViZ
+  D5PR8matCeXqpiX0+mDdzykkDWrYHsEYiYl8zEak3gC6YANki1gztSKl/VHCMo3q
+  0gknRm9+ZQ2vVl1XaaEfy0LT0vfLXg2zVXn1TL97lt9EduO5dbr9I1bhYEzUXOyo
+  u02n3Uj3gA6GGhy+HSYUTnYn0edrMvtcIzEAe+OaBvW394nIeVEE5AejVJs7f0GH
+  m5/dGKyZNAW8Au6vexfJ+vP/PD0cBxm48OzQxA635GLFkWaVTgVYNH9KdVkFA/Ir
+  OPRaeDDqFQSdYPFGQf4NLAAmkE/b9Bd5rXu/0wIDAQABAoIBAEY/fuSWLB6mTwbZ
+  naUYd6jSKMuJe4Tu2n/i2//6CRMfJ0C5DEcWaFVHi8F9gnTtUrZ6btX0X6KOHlQT
+  WCRbjWoPhDLjgrjfE5tHHmSlWy3cseyylZ1rGurY1/cgrcxCehy6o3tPIu8ZjZF7
+  Jq4LTtn0bp2KUj110wQjUtAzsOL1B6jMh7nsz90VqSjfUtzcSsYGalW4+uGdozMP
+  LU5qYHerWnlZSENIGwfvQy2c4jMUgsrfXMioxv+CY1WFvescfHkP06OKBmlnEo5N
+  BIxi2V2wP5J/oLKROzQn/Guvpy4T+l2cCNeYwAJQsfzXqQ0HV9AcyvdZHwKMe/GZ
+  WuXMNRECgYEA8uyPNZEgZDssEn1IATtzIurR/L56DGZd7AyICDd+uzFryo40EgEv
+  BmOgXt1eDgIeeDTi8VoCtLuD8A7rLCry5Ny1HcoAWPXii4kJz+eD/2CDgFRRqMfQ
+  Bhz2d2ZeTMDaYg4CSxLilsH7fWhpRqpEWRJuA2FgtAnR/gvc5Nn3di8CgYEA735Q
+  We+CVsrPWdh8a0pKLSZVZthaUiFz2hO+Nb+sUfPbPIUeVTRysEqVsUMKiV47E9I3
+  EBOYdgb1A+4eiXa/30XyszmzZ1mRiSvADyHU6vWU6AQij8gSlOLR9enAnEb+Q7VU
+  6knJYoUXrFhfhD+hUKvGyxXC4H8eOVJwW6rPy50CgYEA2uPXow/zHP3Il5x1vk6A
+  T61Bq7lCpluzM9iS1rySoEBG/YynVLXmVp58yh4z+vFj3TLib1GI8KuqliwLMpA8
+  r4ZEWORE7eQZz1ubENBvOzUPKRpRPoFVa7y7RRljzUtVPFedL2KD9A40+2qSug8A
+  aTZXFQqwpWnX409zKm9RMRcCgYEA6fbkWHf7RP7sgkFTix0QSfthAw/pbMLxguI2
+  uBuAJK+uRflmIKcUQ9UZWAq+iGReIocC89mw39z8D9LYUkKIP37+EskT0qtV2kO7
+  ZQ0QDFnOFruzZ/N0866Cn1K0r/dK/qpvQlLDQlPzRJMw/OmMllq54jxoHRkSVb2L
+  toGwbqECgYApdYiO3+5HfZR1XomRAxuziEujDZq1WDsVcSGEpFIfCJ+1oAlcVd5J
+  8FIXY2XZ1DdyyADXraJif0qyUaeoq9IdLbEy2SY8JuBg8wUKZCpeuV5M68/39s0v
+  Tjdle9gtaNEqIa1r0kai5calKyDHi2NQYUXopxxMizI4GflZo3ilyQ==
+  -----END RSA PRIVATE KEY-----
+
+fuel_project::roles::docs::community_ssl_key_filename: '/etc/ssl/community-docs.key'
+fuel_project::roles::docs::docs_user: 'docs'
+fuel_project::roles::docs::fuel_version: '6.0'
+fuel_project::roles::docs::hostname: 'docs.mirantis.com'
+fuel_project::roles::docs::nginx_access_log: '/var/log/nginx/access.log'
+fuel_project::roles::docs::nginx_error_log: '/var/log/nginx/error.log'
+fuel_project::roles::docs::redirect_root_to: 'http://www.mirantis.com/openstack-documentation/'
+fuel_project::roles::docs::ssl_cert_content: |
+
+fuel_project::roles::docs::ssl_cert_filename: '/etc/ssl/docs.crt'
+fuel_project::roles::docs::ssl_key_content: |
+
+fuel_project::roles::docs::ssl_key_filename: '/etc/ssl/docs.key'
+fuel_project::roles::docs::www_root: '/var/www'

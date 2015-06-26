@@ -1,12 +1,11 @@
 #
-class fuel_project::fuel_docs(
+class fuel_project::roles::docs (
   $community_hostname          = 'docs.fuel-infra.org',
   $community_ssl_cert_content  = '',
   $community_ssl_cert_filename = '/etc/ssl/community-docs.crt',
   $community_ssl_key_content   = '',
   $community_ssl_key_filename  = '/etc/ssl/community-docs.key',
   $docs_user                   = 'docs',
-  $firewall_enable             = false,
   $fuel_version                = '6.0',
   $hostname                    = 'docs.mirantis.com',
   $nginx_access_log            = '/var/log/nginx/access.log',
@@ -20,10 +19,6 @@ class fuel_project::fuel_docs(
   $ssl_key_filename            = '/etc/ssl/docs.key',
   $www_root                    = '/var/www'
 ) {
-  class { '::fuel_project::common' :
-    external_host => $firewall_enable,
-  }
-
   user { $docs_user :
     ensure     => 'present',
     shell      => '/bin/bash',
@@ -117,8 +112,6 @@ class fuel_project::fuel_docs(
     }
   }
 
-  class { '::fuel_project::nginx' : }
-
   ::nginx::resource::vhost { $community_hostname :
     ensure              => 'present',
     server_name         => [$community_hostname],
@@ -203,14 +196,5 @@ class fuel_project::fuel_docs(
     group   => 'root',
     content => template('fuel_project/fuel_docs/robots.txt.erb'),
     require => File[$www_root],
-  }
-
-  if ($firewall_enable) {
-    include firewall_defaults::pre
-    firewall { '1000 - allow http/https traffic' :
-      dport   => [80, 443],
-      action  => 'accept',
-      require => Class['firewall_defaults::pre'],
-    }
   }
 }

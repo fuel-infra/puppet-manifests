@@ -217,10 +217,6 @@ node /gerrit([0-9]{2})-(msk|bud|srt|kha|poz).fuel-infra.org/ {
   class { '::fuel_project::gerrit' :}
 }
 
-node 'docs.fuel-infra.org' {
-  class { '::fuel_project::fuel_docs' : }
-}
-
 node 'osci-jenkins2.vm.mirantis.net' {
   class { '::fuel_project::jenkins::master' :}
 }
