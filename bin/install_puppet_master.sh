@@ -6,7 +6,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
 apt-get upgrade -y
-apt-get install -y git puppet
+apt-get install -y git puppet apt-transport-https
 
 /etc/puppet/bin/install_modules.sh
 
