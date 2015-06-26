@@ -19,7 +19,6 @@ class fuel_project::common (
   $sudoers_base       = '',
   $tls_cacertdir      = '',
 ) {
-  class { '::fuel_project::apps::firewall' :}
   class { '::ntp' :}
   class { '::puppet::agent' :}
   class { '::ssh::authorized_keys' :}
