@@ -170,7 +170,7 @@ class fuel_project::fuel_docs(
     location_cfg_append => {
       'rewrite' => {
         '^/$'                => $redirect_root_to,
-        '^/fuel-dev/?$'      => "http://${community_hostname}/fuel-dev/",
+        '^/fuel-dev/?(.*)$'  => "http://${community_hostname}/fuel-dev/\$1",
         '^/express/?$'       => '/openstack/express/latest',
         '^/(express/.+)'     => '/openstack/$1',
         '^/fuel/?$'          => "/openstack/fuel/fuel-${fuel_version}",
