@@ -129,7 +129,7 @@ node /(infra|fuel)-jenkins(\d+)\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::master' :}
 }
 
-node /packtest([0-9]{2})\.bud\.mirantis\.net/ {
+node /packtest([0-9]{2})\.(bud|infra)\.mirantis\.net/ {
   class { '::fuel_project::jenkins::slave' :
     run_tests => true,
     ldap      => true,
