@@ -1,0 +1,7 @@
+---
+classes:
+  - '::fuel_project::common'
+  - '::fuel_project::nginx'
+  - '::fuel_project::apps::mirror_npm'
+
+fuel_project::apps::mirror_npm::service_fqdn: 'npm-mirror.test.local'
