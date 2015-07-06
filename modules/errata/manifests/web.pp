@@ -25,21 +25,22 @@ class errata::web (
 ) inherits ::errata::params {
   ensure_packages($package)
 
-  if($database_engine == 'django.db.backends.mysql') {
-    ensure_packages('python-mysqldb')
+  django::application { 'errata_base' :}
+
+  exec { 'errata_base-syncdb' :
+    command     => '/usr/share/errata_base/manage.py syncdb --noinput',
+    user        => $user,
+    require     => Django::Application['errata_base'],
+    refreshonly => true,
   }
 
-  file { $config :
-    ensure  => 'present',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template($config_template),
-    require => Package[$package],
-    notify  => [
+  exec { 'errata_base-migratedb' :
+    command     => '/usr/share/errata_base/manage.py migrate --all',
+    user        => $user,
+    require     => [
       Exec['errata_base-syncdb'],
-      Exec['errata_base-migratedb'],
     ],
+    refreshonly => true,
   }
 
   ::nginx::resource::vhost { 'errata-http' :
@@ -132,46 +133,5 @@ class errata::web (
       mode    => '0400',
       content => $ssl_key_file_content,
     }
-  }
-
-  user { $user :
-    ensure     => 'present',
-    system     => true,
-    managehome => true,
-    home       => "/var/lib/${user}",
-    shell      => '/usr/sbin/nologin',
-  }
-
-  ::uwsgi::application { 'errata_base' :
-    plugins => 'python',
-    uid     => $user,
-    gid     => $group,
-    socket  => $uwsgi_socket,
-    chdir   => '/usr/share/errata_base',
-    module  => 'errata_base.wsgi',
-    require => [
-      User[$user],
-      Package['python-mysqldb'],
-    ]
-  }
-
-  exec { 'errata_base-syncdb' :
-    command     => '/usr/share/errata_base/manage.py syncdb --noinput',
-    user        => $user,
-    require     => [
-      File[$config],
-      User[$user],
-    ],
-    refreshonly => true,
-  }
-
-  exec { 'errata_base-migratedb' :
-    command     => '/usr/share/errata_base/manage.py migrate --all',
-    user        => $user,
-    require     => [
-      Exec['errata_base-syncdb'],
-      User[$user],
-    ],
-    refreshonly => true,
   }
 }

@@ -6,13 +6,10 @@ define django::application (
   $config          = hiera("django::application::${title}::config", "/etc/${title}/settings.py"),
   $config_mode     = hiera("django::application::${title}::config_mode", '0400'),
   $config_template = hiera("django::application::${title}::config_template", 'django/settings.py.erb'),
-  $database_engine = hiera("django::application::${title}::database_engine", undef),
-  $database_host   = hiera("django::application::${title}::database_host", undef),
-  $database_name   = hiera("django::application::${title}::database_name", undef),
-  $database_socket = hiera("django::application::${title}::database_socket", undef),
-  $database_user   = hiera("django::application::${title}::database_user", undef),
+  $database        = hiera_hash("django::application::${title}::database", undef),
   $debug           = hiera("django::application::${title}::debug", false),
   $group           = hiera("django::application::${title}::group", 'nogroup'),
+  $logging         = hiera_hash("django::application::${title}::logging"),
   $packages        = hiera_array("django::application::${title}::packages", []),
   $template_debug  = hiera("django::application::${title}::template_debug", false),
   $user            = hiera("django::application::${title}::user", 'nobody'),
@@ -23,6 +20,17 @@ define django::application (
 ) {
   if ($packages == [] or $packages == '') {
     fatal('$packages could not be empty')
+  }
+
+  if ($database) {
+    file { "/etc/${title}/database.json" :
+      ensure  => 'present',
+      mode    => $config_mode,
+      owner   => $user,
+      group   => $group,
+      content => template('django/database.json.erb'),
+      before  => File[$config],
+    }
   }
 
   ensure_packages($packages)
@@ -47,6 +55,25 @@ define django::application (
     group   => $group,
     content => template($config_template),
     require => Package[$packages],
+  }
+
+  if ($logging) {
+    file { "/etc/${title}/logging.json" :
+      ensure  => 'present',
+      mode    => $config_mode,
+      owner   => $user,
+      group   => $group,
+      content => template('django/logging.json.erb'),
+      before  => File[$config],
+    }
+
+    file { "/var/log/${title}" :
+      ensure => 'directory',
+      mode   => '0700',
+      owner  => $user,
+      group  => $group,
+      before => File[$config],
+    }
   }
 
   if ($uwsgi and $uwsgi_chdir and $uwsgi_module and $uwsgi_socket) {

@@ -15,16 +15,10 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': '<%= @database_engine %>',
-        'NAME': '<%= @database_name %>',
-        'USER': '<%= @database_user %>',
-        'PASSWORD': '<%= @database_password %>',
-        'HOST': '<%= @database_host %>',
-        'PORT': '<%= @database_port %>',
-    }
-}
+<% if @database_engine -%>
+import json
+DATABASES = json.load(open('/etc/<%= @title %>/database.json', 'r'))
+<% end -%>
 
 ALLOWED_HOSTS = ['*']
 
@@ -60,7 +54,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-SECRET_KEY = 'jt#2tqx7cr3e7#5$5jmewsxdg(dlmcbqvts8bz9u82!de6xe6z'
+SECRET_KEY = '<KEY>'
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -75,9 +69,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'release.urls'
+ROOT_URLCONF = '<%= @title %>.urls'
 
-WSGI_APPLICATION = 'release.wsgi.application'
+WSGI_APPLICATION = '<%= @title %>.wsgi.application'
 
 TEMPLATE_DIRS = (
     '%s/../templates' % PROJECT_ROOT,
@@ -91,33 +85,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'south',
-
     <% @apps.each {|app| -%>
     '<%= app -%>',
     <% } -%>
 )
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
+<% if @logging -%>
+import json
+LOGGING = json.load(open('/etc/<%= @title %>/logging.json', 'r'))
+<% end -%>

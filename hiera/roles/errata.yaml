@@ -3,3 +3,37 @@ classes:
   - fuel_project::common
   - fuel_project::nginx
   - errata::web
+django::application::errata_base::apps:
+  - south
+  - security
+  - errata
+django::application::errata_base::database_engine: 'django.db.backends.mysql'
+django::application::errata_base::database_host: 'localhost'
+django::application::errata_base::database_name: 'errata'
+django::application::errata_base::database_port: 3306
+django::application::errata_base::database_user: 'errata'
+django::application::errata_base::database_password: 'Ix3V6rlU5MDFYktM7JysVkGfg0ZY0q0l'
+django::application::errata_base::debug: true
+django::application::errata_base::group: 'errata'
+django::application::errata_base::logging:
+  'version': 1
+  'disable_existing_loggers': false
+  'handlers':
+    'file':
+      'level': 'DEBUG'
+      'class': 'logging.FileHandler'
+      'filename': '/var/log/errata_base/debug.log'
+  'loggers':
+    'django.request':
+      'handlers':
+        - 'file'
+      'level': 'DEBUG'
+      'propagate': true
+django::application::errata_base::packages:
+  - python-django-errata-base
+django::application::errata_base::template_debug: true
+django::application::errata_base::user: 'errata'
+django::application::errata_base::uwsgi: true
+django::application::errata_base::uwsgi_chdir: '/usr/share/errata_base'
+django::application::errata_base::uwsgi_module: 'errata_base.wsgi'
+django::application::errata_base::uwsgi_socket: '127.0.0.1:7940'
