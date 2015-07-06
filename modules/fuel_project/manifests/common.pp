@@ -37,7 +37,7 @@ class fuel_project::common (
     facts => $facts,
   }
 
-  ensure_packages(['tmux', 'screen'])
+  ensure_packages(['tmux', 'screen', 'apparmor'])
 
   if($ldap) {
     class { '::ssh::ldap' :}
