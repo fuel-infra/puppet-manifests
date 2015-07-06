@@ -72,10 +72,28 @@ class errata::web (
     format_log          => $nginx_log_format,
     uwsgi               => $uwsgi_socket,
     location_cfg_append => {
+      uwsgi_connect_timeout    => '3m',
+      uwsgi_read_timeout       => '3m',
+      uwsgi_send_timeout       => '3m',
+      uwsgi_intercept_errors   => 'on',
+      'error_page 403'         => '/mirantis/403.html',
+      'error_page 404'         => '/mirantis/404.html',
+      'error_page 500 502 504' => '/mirantis/5xx.html',
+    }
+  }
+
+  ::nginx::resource::location { 'errata-api' :
+    ensure              => 'present',
+    vhost               => 'errata',
+    location            => '/api/',
+    ssl                 => true,
+    ssl_only            => true,
+    uwsgi               => $uwsgi_socket,
+    location_cfg_append => {
       uwsgi_connect_timeout => '3m',
       uwsgi_read_timeout    => '3m',
       uwsgi_send_timeout    => '3m',
-    }
+    },
   }
 
   ::nginx::resource::location { 'errata-static' :
@@ -85,6 +103,15 @@ class errata::web (
     ssl      => true,
     ssl_only => true,
     www_root => '/usr/share/errata_base',
+  }
+
+  ::nginx::resource::location { 'errata-error-pages' :
+    ensure   => 'present',
+    vhost    => 'errata',
+    location => '~ ^\/(mirantis|fuel-infra)\/(403|404|5xx)\.html$',
+    ssl      => true,
+    ssl_only => true,
+    www_root => '/usr/share/error_pages',
   }
 
   if ($ssl_cert_file and $ssl_cert_file_content != '') {

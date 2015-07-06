@@ -235,7 +235,7 @@ class landing_page (
   ::nginx::resource::location { 'release-error-pages' :
     ensure   => 'present',
     vhost    => 'release',
-    location => '~ \/(mirantis|fuel-infra)\/(403|404|5xx).html',
+    location => '~ ^\/(mirantis|fuel-infra)\/(403|404|5xx)\.html$',
     ssl      => true,
     ssl_only => true,
     www_root => '/usr/share/error_pages',
