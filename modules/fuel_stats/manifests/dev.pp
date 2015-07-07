@@ -3,6 +3,7 @@ define fuel_stats::dev (
   $repo_url = 'https://github.com/stackforge/fuel-stats/',
   $dest_dir = "/var/www/${title}",
   $requirements = "/var/www/${title}/${title}/requirements.txt",
+  $pip_opts = '',
   $user = $title,
   $auto_update = true,
   $packages = [],
@@ -70,7 +71,7 @@ define fuel_stats::dev (
   }
 
   exec { "install-${title}-requirements" :
-    command => "/usr/bin/pip install -r ${requirements}",
+    command => "/usr/bin/pip install ${pip_opts} -r ${requirements}",
     require => [
       Exec["clone-github-${title}"],
       Package[$all_packages],
