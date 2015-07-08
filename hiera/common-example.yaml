@@ -241,6 +241,7 @@ gerrit::commentlinks:
 gerrit::email: 'review@test.local'
 gerrit::cache_web_session_age: '1w'
 gerrit::nginx_log_format: 'proxy'
+gerrit::secondary_index: true
 
 ldap:
   uri: 'ldap://ldap'
