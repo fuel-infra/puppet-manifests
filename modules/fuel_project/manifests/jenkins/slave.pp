@@ -795,6 +795,7 @@ class fuel_project::jenkins::slave (
   # Verify Jenkins jobs
   if ($verify_jenkins_jobs) {
     $verify_jenkins_jobs_packages = [
+      'bats',
       'python-tox',
       'shellcheck',
     ]
