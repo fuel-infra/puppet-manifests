@@ -89,6 +89,13 @@ INSTALLED_APPS = (
     '<%= app -%>',
     <% } -%>
 )
+
+<% if @additional_parameters -%>
+<% @additional_parameters.each {|key, value| -%>
+<%= key -%> = <%= value %>
+<% } -%>
+<% end -%>
+
 <% if @logging -%>
 import json
 LOGGING = json.load(open('/etc/<%= @title %>/logging.json', 'r'))

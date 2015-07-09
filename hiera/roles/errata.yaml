@@ -29,6 +29,8 @@ django::application::errata_base::logging:
         - 'file'
       'level': 'DEBUG'
       'propagate': true
+django::application::errata_base::additional_parameters:
+  'DOC_ROOT': "'/usr/share/doc/python-django-errata-base'"
 django::application::errata_base::packages:
   - python-django-errata-base
 django::application::errata_base::template_debug: true
