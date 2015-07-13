@@ -1,6 +1,7 @@
 # Class: fuel_project::apps::mirror
 #
 class fuel_project::apps::mirror (
+  $autoindex              = 'on',
   $dir                    = '/var/www/mirror',
   $dir_group              = 'www-data',
   $dir_owner              = 'www-data',
@@ -11,6 +12,9 @@ class fuel_project::apps::mirror (
   $nginx_log_format       = 'proxy',
   $port                   = 80,
   $rsync_writable_share   = true,
+  $rsync_share_comment    = 'Fuel mirror rsync share',
+  $rsync_rw_share_comment = 'Fuel mirror sync',
+  $rsync_mirror_lockfile  = '/var/run/rsync_mirror.lock',
   $service_aliases        = [],
   $service_fqdn           = "mirror.${::fqdn}",
   $sync_hosts_allow       = [],
@@ -51,11 +55,11 @@ class fuel_project::apps::mirror (
   }
 
   ::rsync::server::module{ 'mirror':
-    comment         => 'Fuel mirror rsync share',
+    comment         => $rsync_share_comment,
     uid             => 'nobody',
     gid             => 'nogroup',
     list            => 'yes',
-    lock_file       => '/var/run/rsync_mirror.lock',
+    lock_file       => $rsync_lockfile,
     max_connections => 100,
     path            => $dir,
     read_only       => 'yes',
@@ -65,7 +69,7 @@ class fuel_project::apps::mirror (
 
   if ($rsync_writable_share) {
     ::rsync::server::module{ 'mirror-sync':
-      comment         => 'Fuel mirror sync',
+      comment         => $rsync_rw_share_comment,
       uid             => $dir_owner,
       gid             => $dir_group,
       hosts_allow     => $sync_hosts_allow,
@@ -91,7 +95,7 @@ class fuel_project::apps::mirror (
   }
   ::nginx::resource::vhost { 'mirror' :
     ensure              => 'present',
-    www_root            => '/var/www/mirror',
+    www_root            => $dir,
     access_log          => $nginx_access_log,
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
@@ -101,7 +105,7 @@ class fuel_project::apps::mirror (
       join($service_aliases, ' ')
     ],
     location_cfg_append => {
-        autoindex => 'on',
+      autoindex => $autoindex,
     },
   }
 }

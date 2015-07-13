@@ -1,0 +1,12 @@
+---
+classes:
+  - '::fuel_project::common'
+  - '::fuel_project::jenkins::slave'
+  - '::fuel_project::roles::perestroika::builder'
+
+fuel_project::roles::perestroika::builder::install_docker: true
+fuel_project::roles::perestroika::builder::docker_package: 'lxc-docker-1.6.1'
+fuel_project::roles::perestroika::builder::known_hosts:
+'review.openstack.org':
+    host: 'review.openstack.org'
+    port: 29418

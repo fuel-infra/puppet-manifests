@@ -1,0 +1,101 @@
+---
+classes:
+  - '::gnupg'
+  - '::fuel_project::common'
+  - '::fuel_project::jenkins::slave'
+  - '::fuel_project::roles::perestroika::publisher'
+
+fuel_project::roles::perestroika::publisher::known_hosts:
+'review.openstack.org':
+    host: 'review.openstack.org'
+    port: 29418
+
+fuel_project::roles::perestroika::publisher::gpg_id_pub: '1FA22B08'
+fuel_project::roles::perestroika::publisher::gpg_id_priv: '1FA22B08'
+fuel_project::roles::perestroika::publisher::gpg_content_pub: |
+  -----BEGIN PGP PUBLIC KEY BLOCK-----
+  mQENBFWt8ogBCACtT/j4WMGuhEI486Vv9zVV0GWGefHE5hBlgJSjSgrExLFqQ2Fo
+  ScaABCfvzUeuXHNoh/c2eLjx3YE6oFrdiw5tam0NFlZMM+PSufciTxQz8vrXHGx7
+  VB5rg2TXKoqOv9cW690FsRAeOtKTtBxZvYVTLEPn2GJW09Xy9CBa+n23XBHTBvKs
+  j3hxkn25Oy70Wgxk/BJqpynXGno+NzuAnIbb+f+X7i6fiXwrvtp5zOYOJeUwS+fU
+  IM/mXbetOd/sHtJqc9NUYpTip4nElEqAYRCsXDTbuMNdzSr8VlSMM8b61mBGelLH
+  XJe+EPP+Logc5KXO8adoGgWhqlbD6n7w+ynHABEBAAG0LmZ1ZWwtaW5mcmEgKEV4
+  YW1wbGUga2V5KSA8ZGV2b3BzQG1pcmFudGlzLmNvbT6JATgEEwECACIFAlWt8ogC
+  GwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJELzlzEYfoisIkuQIAJl0cFJ5
+  BSKMXHhRYf0BeDzhdh3pmcOXs/jSznTIxB4OE5OdwrMgKyoIkSIP8AEttvB+BuOv
+  BHmhTL7kvRhP5xiKdbCwmDtoERoaqxhRRbZJcJ+pHvl7mkEu8Gj2KZe2lfE4Z6ZF
+  6q00Gx9HYfse1+VgUR5ymh41nZCvRTNEnYBp1RQcPogiLy2rYvZbxYnUtg4jaD7D
+  vuuEQwrfEHdKFUlWBCIVbl+e3K6ZSniOcqqyHK72/HI0SYuZpGfCzzw5deODcjWm
+  Gz4nZr41cB3eHXkfmG3ngdhmb2MpVr83u+JebOovjzusf71oIdZBTFNYsZNSVKrn
+  l0rrRuDIMHbQMuS5AQ0EVa3yiAEIALZqdLGXSGZAgUXl7zhPH5wnIQtdo6iMIovZ
+  zQNW95RDT2nm/3YddiRy6FuOTbaHXw07D4ZUl4dGVHzEwBllhULxcHV3OOdQ3gVp
+  4mBAZ8kv0EelzqPfDQWR2Cq0hi7IJ4Q4ePpZhQFiasz8qbV7D7CYbZdDAmQKxqAk
+  0XYOjbB3jzB2r6MHflAKmJzTp3+NAE9bDLAwXa0ot2THDbpPdB4R6pxpD6Y3jweW
+  uLUCnIfvyIBwhHobaU28pw/BA+0dkC9jnLnoO+TrzB9YD5839Lc3ctrdPBLiFPMG
+  wdfAVRCyfgLjOyULqjTudx1Mo+Dgz9+xrcTFoehI7UYoZnraEKkAEQEAAYkBHwQY
+  AQIACQUCVa3yiAIbDAAKCRC85cxGH6IrCPH5B/0Uc+OhMSCkRos1Yv5tA4bsEcjt
+  8+sJ2S6pUqCbZxmXpzKspKpnjp3DJjmQKDB2q4UPDVElVDMMdBlstTx1RRZDf8yk
+  nDvRBSzawk7Xhfloro8N2Lxv6gWhhMvHUYItyO6KMbAZuZ2M1I1/OFHG/f//7oPM
+  0QpNbihf+GqE/dWRz9ZDz+xlSFli6AR/3ldq7N6gkCsEFdi3j6ZDf0qLsZpazPUI
+  wiCC/aAYLkRDtTJV1G6EsWijmOTNNlCEFS/XDLQ3N2Ev/1sgAO0AlBMdXqSnqUI1
+  1h/eSKCiGmkwFWlCf/4HnJVP7QpSeRPLyw785Fvt3p9vT+64isZ0ZK6cpcj8
+  =0aQD
+  -----END PGP PUBLIC KEY BLOCK-----
+
+fuel_project::roles::perestroika::publisher::gpg_content_priv: |
+  -----BEGIN PGP PRIVATE KEY BLOCK-----
+  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
+  pcj8
+  =EmfQ
+  -----END PGP PRIVATE KEY BLOCK-----
