@@ -152,6 +152,15 @@ class fuel_project::roles::docs (
     ssl_only       => $community_ssl,
   }
 
+  # Bug: https://bugs.launchpad.net/fuel/+bug/1473440
+  ::nginx::resource::location { "${community_hostname}/fuel-qa" :
+    vhost          => $community_hostname,
+    location       => '/fuel-qa',
+    location_alias => "${www_root}/fuel-qa/fuel-master",
+    ssl            => $community_ssl,
+    ssl_only       => $community_ssl,
+  }
+
   ::nginx::resource::vhost { $hostname :
     ensure              => 'present',
     server_name         => [$hostname],
