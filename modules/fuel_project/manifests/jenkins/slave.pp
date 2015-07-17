@@ -18,6 +18,7 @@ class fuel_project::jenkins::slave (
   $jenkins_swarm_slave                  = false,
   $known_hosts                          = {},
   $known_hosts_overwrite                = false,
+  $libvirt_default_network              = false,
   $ldap                                 = false,
   $ldap_base                            = '',
   $ldap_ignore_users                    = '',
@@ -37,11 +38,6 @@ class fuel_project::jenkins::slave (
   $osci_centos_image_name               = 'centos6.4-x86_64-gold-master.img',
   $osci_centos_job_dir                  = '/home/jenkins/vm-centos-test-rpm',
   $osci_centos_remote_dir               = 'vm-centos-test-rpm',
-  $osci_dhcp_end                        = '',
-  $osci_dhcp_start                      = '',
-  $osci_ip_address                      = '',
-  $osci_ip_netmask                      = '',
-  $osci_libvirt_dev                     = '',
   $osci_obs_jenkins_key                 = '',
   $osci_obs_jenkins_key_contents        = '',
   $osci_rsync_source_server             = '',
@@ -205,19 +201,21 @@ class fuel_project::jenkins::slave (
 
   # Run system tests
   if ($run_tests == true) {
-    class { '::libvirt' :
-      listen_tls         => false,
-      listen_tcp         => true,
-      auth_tcp           => 'none',
-      listen_addr        => '127.0.0.1',
-      mdns_adv           => false,
-      unix_sock_group    => 'libvirtd',
-      unix_sock_rw_perms => '0777',
-      python             => true,
-      qemu               => true,
-      tcp_port           => 16509,
-      deb_default        => {
-        'libvirtd_opts' => '-d -l',
+    if ($libvirt_default_network == false) {
+      class { '::libvirt' :
+        listen_tls         => false,
+        listen_tcp         => true,
+        auth_tcp           => 'none',
+        listen_addr        => '127.0.0.1',
+        mdns_adv           => false,
+        unix_sock_group    => 'libvirtd',
+        unix_sock_rw_perms => '0777',
+        python             => true,
+        qemu               => true,
+        tcp_port           => 16509,
+        deb_default        => {
+          'libvirtd_opts' => '-d -l',
+        }
       }
     }
 
@@ -539,22 +537,6 @@ class fuel_project::jenkins::slave (
         qemu               => true,
         defaultnetwork     => true,
       }
-    }
-
-    $dhcp = {
-      'start' => $osci_dhcp_start,
-      'end'   => $osci_dhcp_end,
-    }
-
-    $ip = {
-      'address' => $osci_ip_address,
-      'netmask' => $osci_ip_netmask,
-      'dhcp'    => $dhcp,
-    }
-
-    libvirt::network { 'osci_testjob_network' :
-      forward_dev => $osci_libvirt_dev,
-      ip          => [ $ip ],
     }
 
     # osci needed directories
