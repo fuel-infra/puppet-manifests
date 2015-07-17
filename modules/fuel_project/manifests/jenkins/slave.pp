@@ -502,6 +502,7 @@ class fuel_project::jenkins::slave (
     # osci needed packages
     $osci_test_packages = [
       'osc',
+      'yum-utils',
     ]
 
     ensure_packages($osci_test_packages)
