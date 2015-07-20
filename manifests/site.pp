@@ -46,49 +46,9 @@ class pxe_deployment {
 
 # Nodes definitions
 
-node /(mc([0-9]+)n([0-9]+)|srv([0-9]+))-(msk|srt)\.(msk|srt)\.mirantis\.net/ {
-  class { '::fuel_project::jenkins::slave' :
-    run_tests           => true,
-    build_fuel_iso      => true,
-    http_share_iso      => true,
-    ldap                => true,
-    jenkins_swarm_slave => true,
-  }
-}
-
 # Jenkins Product slave to build documentation
 node /docs-slave01.vm.mirantis.net/ {
   class { '::fuel_project::jenkins::slave' :}
-}
-
-node /srv(22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37)-bud\.bud\.mirantis\.net/ {
-  class { '::fuel_project::jenkins::slave' :
-    run_tests           => true,
-    build_fuel_iso      => true,
-    http_share_iso      => true,
-    ldap                => true,
-    jenkins_swarm_slave => true,
-  }
-}
-
-node /srv([0-9]{2})-(bud|kha|mnv|msk|poz|srt)\.(devops|infra)\.mirantis\.net/ {
-  class { '::fuel_project::jenkins::slave' :
-    run_tests           => true,
-    build_fuel_iso      => true,
-    http_share_iso      => true,
-    ldap                => true,
-    jenkins_swarm_slave => true,
-  }
-}
-
-node /devops-(01|02)\.mnv\.mirantis\.net/ {
-  class { '::fuel_project::jenkins::slave' :
-    run_tests           => true,
-    build_fuel_iso      => true,
-    http_share_iso      => true,
-    ldap                => true,
-    jenkins_swarm_slave => true,
-  }
 }
 
 node /cacher01-(cz|kha|mnv|poz)\.vm\.mirantis\.net/ {
@@ -178,14 +138,6 @@ node /fuel-puppet(-tst)?\.vm\.mirantis\.net/ {
   class { '::fuel_project::puppet::master' :
     apply_firewall_rules => true,
     external_host        => true,
-  }
-}
-
-node 'twin1a-srt.srt.mirantis.net' {
-  class { '::fuel_project::jenkins::slave' :
-    run_tests           => true,
-    ldap                => true,
-    jenkins_swarm_slave => true,
   }
 }
 
