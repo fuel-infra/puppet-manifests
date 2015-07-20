@@ -60,7 +60,7 @@ class fuel_project::common (
       command => "/usr/local/bin/ldap2sshkeys.sh ${::hostname} 2>&1 | logger -t ldap2sshkeys",
       user    => root,
       hour    => '*',
-      minute  => 0,
+      minute  => fqdn_rand(59),
       require => File['/usr/local/bin/ldap2sshkeys.sh'],
     }
   }
