@@ -1,0 +1,95 @@
+---
+classes:
+  - '::fuel_project::common'
+  - '::fuel_project::apps::lodgeit'
+  - '::lodgeit::database'
+
+fuel_project::apps::lodgeit::service_fqdn: ['paste.test.local']
+lodgeit::web::database_host: 'localhost'
+lodgeit::web::database_username: 'lodgeit'
+lodgeit::web::database_password: 'j4cD46v4qkNSYODLqoweSI055KjVOXYt'
+lodgeit::web::database_name: 'lodgeit'
+lodgeit::web::database_engine: 'mysql'
+mysql::server::databases:
+  'lodgeit':
+    ensure: present
+    charset: utf8
+mysql::server::users:
+  'lodgeit@localhost':
+    password_hash: '*712E5E2699547C823C1363E5CE74655AC55CEA51' # j4cD46v4qkNSYODLqoweSI055KjVOXYt
+mysql::server::grants:
+  'lodgeit@localhost/lodgeit.*':
+    ensure: present
+    privileges: ['CREATE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE']
+    table: 'lodgeit.*'
+    user: 'lodgeit@localhost'
+mysql::server::override_options:
+  mysqld:
+    bind_address: '127.0.0.1'
+    innodb_buffer_pool_size: '1G'
+    innodb_file_per_table: 1
+    innodb_file_format: 'barracuda'
+    innodb_flush_method: 'O_DIRECT'
+    join_buffer_size: '512M'
+    lock_wait_timeout: 120
+    log_queries_not_using_indexes: 1
+    max_connections: 1024
+    query_cache_size: '128M'
+    query_cache_type: 1
+    read_rnd_buffer_size: '8M'
+    slow_query_log: 1
+    slow_query_log_file: '/var/log/mysql/slow.log'
+    sort_buffer_size: '4M'
+    table_open_cache: '256M'
+    thread_cache_size: '4M'
+
+fuel_project::apps::lodgeit::ssl_certificate_contents: |
+  -----BEGIN CERTIFICATE-----
+  MIIDBjCCAe4CCQDkvJu73/gWMDANBgkqhkiG9w0BAQsFADBFMQswCQYDVQQGEwJB
+  VTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0
+  cyBQdHkgTHRkMB4XDTE1MDcyMTAwMDAzN1oXDTE2MDcyMDAwMDAzN1owRTELMAkG
+  A1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoMGEludGVybmV0
+  IFdpZGdpdHMgUHR5IEx0ZDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+  ALnZZHwlfsNw2pK0CqQFr5lpV22lGs9rCmuMIApfcjsWkLVuhWOctrGZmFCWn224
+  bJqKtU/Ftis0X83sJoygMK1m9rEkybbNfpheMlQIKyEhCDtI1OSSzFmy0NWNeodE
+  T46gS/oHiK3hI2genVOVhnZs3VupCEB5bXmqukiKHZfIdURqEkSGa+7eIr01hq4Z
+  Dz27QMxLXaUsWgInKba+2t+vC0rvICwQEHAZSVPVtcMuyT7E8DQKOU1a1ORCcLPm
+  YLcg+r0cbBwgtHgOIjNbCtcWUqA6a/4iqe8I2tYTnzHb4/4FGqg2goisfNO13o6A
+  eJWytJgLM+zYeQl3HBstdUECAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAiP0VpLav
+  tjrPHkbF+J4eOjOo2nvG14dHiYoYtDGXrrqnpwRGPaSdWlnumsZpyCuYrKt7Jzhq
+  Q3kQLpB67bqHDAQ+REFWzjM4h+ErjBklRE07pZTFudGvWBFKxZMIDhBLtiLufY2z
+  qdUJFxlnAXKvEnMQWYp/BOsQ674d8jxUEKj+mduhNzK1Yjkk+RZB+fPf5zQ5Ou/p
+  JSHIB+W2uINic/priVdynMQkCQEqDloyftI9jJagIWsLgWwhH6+voE2ytyIOuYr8
+  nIbETvtRjaYT2yaghkjoFRBB7NPlTSp1bMu0vYqOBr0UX2sCgUJzBTNj+kFYqKi8
+  RqnQ8UtoZ7g6yA==
+  -----END CERTIFICATE-----
+
+fuel_project::apps::lodgeit::ssl_key_contents: |
+  -----BEGIN PRIVATE KEY-----
+  MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC52WR8JX7DcNqS
+  tAqkBa+ZaVdtpRrPawprjCAKX3I7FpC1boVjnLaxmZhQlp9tuGyairVPxbYrNF/N
+  7CaMoDCtZvaxJMm2zX6YXjJUCCshIQg7SNTkksxZstDVjXqHRE+OoEv6B4it4SNo
+  Hp1TlYZ2bN1bqQhAeW15qrpIih2XyHVEahJEhmvu3iK9NYauGQ89u0DMS12lLFoC
+  Jym2vtrfrwtK7yAsEBBwGUlT1bXDLsk+xPA0CjlNWtTkQnCz5mC3IPq9HGwcILR4
+  DiIzWwrXFlKgOmv+IqnvCNrWE58x2+P+BRqoNoKIrHzTtd6OgHiVsrSYCzPs2HkJ
+  dxwbLXVBAgMBAAECggEBAKPJZ9pVPRNG+QoDK8GD1U6xXMCfmjIkFqnTc0VQ+p4C
+  dAPBZEL2kLeSMn8LT3Pl7aiBB+tGxhXrcWdMcGjMoDmhnVVeo3q8PY5QrbALBt+K
+  efOtaxoKGZgPlCYwKkTdufNrZ6nxS85ZtNeE64gHJdpmdOrb3A7eNNHd2ZAmUJA7
+  MtpBprig8vs2ro1YlSDLmHyth5oA8ppodibe34op3NI5VxobnUNNc1Sv9c6Fes+O
+  0cGOnmiL0rzXUdMfzDbKQwNMfvDQpLPbUg9UQZGpAaSD9jhDwA8g3zoJjYVuCnOa
+  lglG0fBTbfQJSRJw5QhxXcfWhkUB0Pu5W5APNOKcZPECgYEA7fSwwaQN+F3nBulx
+  dXj8cj6CvFjTkglH02YfatRxJsZkSfChLKWpVnJxJHCP9ld5j7kzfanDKQ8rxphD
+  LBICMOJ919pEGQNKMtOuZ3jXqn2IT9wxqnOILfpEl9yx0+pJmBF6zghmj7KwIElg
+  b2muGlV744+Rc2hymSgCA6KpfRUCgYEAx/EvDCeKFKai9zvGbpdcWpTKcV4LPVnG
+  W07qd9L+C47MNJea92Pw4ESjyzOCn/Eh7nL7SbjGx95LN1RoMaVeX+oyzSiM2jqL
+  wmjJzP2CnxwaDXAZQr2sZxWjVeaBqu8LMN1xua+0gtGy2arNChR8mdfSXq4igWOZ
+  9BqNPAcqWn0CgYEArlQejq7u4S+CSskJq0NoxxXO18fHsGyGJ3TgvXZIM10TKixV
+  GA2B4uhSxZyFi7cIQugutfiCFvmbW5I/W/ERk9jK0zF/xEdpu5TjZ8DbV3dCPyeV
+  Z0fe07hPOmagDR3Ors7XhkwXP11stSqssNLej0JjUhLjP4actmHeH+WygAUCgYBT
+  vseP9be2Mp2rpFPW2nsKTawFk/htN/8HG6TFj5Bs0uDhXmbAHBI2PUnFwMuDpoIp
+  1+s807Ie4RLsF+SUdslyryucFtH4TfFf+ngb7ksZzbFz03IhLETb4IpLXoMNT5aG
+  XxpVRiz7Zk3dMdcz06Tk4yrwEUvOmiNPxRdG/1FUGQKBgAWZWO+lfgDppapZRKqW
+  BvH0eLDB9cHZeO67CFNOVu4xwGde7zcI+A+glJwsrxjFUjZ67CZfdNcv2HRM9gc5
+  0KkCe9vz+xO4+lhRnrNrNDHsIvtWDrarEWDAbhU8zOiBWGDAoaRNkZH6mHy1TbCs
+  89xvircaEBZHkvHXk61XQYSe
+  -----END PRIVATE KEY-----
