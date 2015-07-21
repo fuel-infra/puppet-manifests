@@ -19,11 +19,17 @@ class fuel_project::roles::docs (
   $ssl_key_filename            = '/etc/ssl/docs.key',
   $www_root                    = '/var/www'
 ) {
+  if ( ! defined(Class['::fuel_project::nginx']) ) {
+    class { '::fuel_project::nginx' : }
+  }
+
   user { $docs_user :
     ensure     => 'present',
     shell      => '/bin/bash',
     managehome => true,
   }
+
+  ensure_packages('error-pages')
 
   if ($ssl_cert_content and $ssl_key_content) {
     file { $ssl_cert_filename :
@@ -121,7 +127,7 @@ class fuel_project::roles::docs (
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
     location_cfg_append => {
-      'rewrite' => {
+      'rewrite'                => {
         '^/$'                => '/fuel-dev',
         '^/express/?$'       => '/openstack/express/latest',
         '^/(express/.+)'     => '/openstack/$1',
@@ -129,7 +135,21 @@ class fuel_project::roles::docs (
         '^/(fuel/.+)'        => '/openstack/$1',
         '^/openstack/fuel/$' => "/openstack/fuel/fuel-${fuel_version}",
       },
+      'error_page 403'         => '/fuel-infra/403.html',
+      'error_page 404'         => '/fuel-infra/404.html',
+      'error_page 500 502 504' => '/fuel-infra/5xx.html',
     }
+  }
+
+  # error pages for community
+  ::nginx::resource::location { "${community_hostname}-error-pages" :
+    ensure   => 'present',
+    vhost    => $community_hostname,
+    location => '~ ^\/fuel-infra\/(403|404|5xx)\.html$',
+    ssl      => true,
+    ssl_only => true,
+    www_root => '/usr/share/error_pages',
+    require  => Package['error-pages'],
   }
 
   # Disable fuel-master docs on community site
@@ -170,7 +190,7 @@ class fuel_project::roles::docs (
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
     location_cfg_append => {
-      'rewrite' => {
+      'rewrite'                => {
         '^/$'                => $redirect_root_to,
         '^/fuel-dev/?(.*)$'  => "http://${community_hostname}/fuel-dev/\$1",
         '^/express/?$'       => '/openstack/express/latest',
@@ -179,7 +199,21 @@ class fuel_project::roles::docs (
         '^/(fuel/.+)'        => '/openstack/$1',
         '^/openstack/fuel/$' => "/openstack/fuel/fuel-${fuel_version}",
       },
+      'error_page 403'         => '/mirantis/403.html',
+      'error_page 404'         => '/mirantis/404.html',
+      'error_page 500 502 504' => '/mirantis/5xx.html',
     }
+  }
+
+  # error pages for primary docs
+  ::nginx::resource::location { "${hostname}-error-pages" :
+    ensure   => 'present',
+    vhost    => $hostname,
+    location => '~ ^\/mirantis\/(403|404|5xx)\.html$',
+    ssl      => true,
+    ssl_only => true,
+    www_root => '/usr/share/error_pages',
+    require  => Package['error-pages'],
   }
 
   if (! defined(File[$www_root])) {

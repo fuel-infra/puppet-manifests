@@ -15,6 +15,7 @@ class fuel_stats::analytic (
   $psql_user              = $fuel_stats::params::psql_user,
   $nginx_access_log       = $fuel_stats::params::nginx_access_log,
   $nginx_error_log        = $fuel_stats::params::nginx_error_log,
+  $nginx_error_path       = 'fuel-infra',
   $nginx_limit_conn       = $fuel_stats::params::limit_conn,
   $nginx_log_format       = $fuel_stats::params::nginx_log_format,
   $service_hostname       = $::fqdn,
@@ -23,6 +24,8 @@ class fuel_stats::analytic (
   $ssl_key_file           = '/etc/ssl/analytic.key',
   $ssl_key_file_contents  = '',
 ) inherits fuel_stats::params {
+  ensure_packages('error-pages')
+
   if ( ! defined(Class['::fuel_stats::db']) ) {
     class { '::fuel_stats::db' :
       install_psql => false,
@@ -89,13 +92,18 @@ class fuel_stats::analytic (
 
   # rewrites, acl and limits configuration
   $_rewrite_to_https = { 'rewrite' => "^ https://${service_hostname}:${https_port}\$request_uri? permanent" }
+  $_error_pages = {
+    'error_page 403'         => "/${nginx_error_path}/403.html",
+    'error_page 404'         => "/${nginx_error_path}/404.html",
+    'error_page 500 502 504' => "/${nginx_error_path}/5xx.html",
+  }
   if ($nginx_limit_conn) {
     $_limit_conn = { 'limit_conn' => $nginx_limit_conn }
     $rewrite_to_https = merge($_rewrite_to_https, $_limit_conn)
-    $location_cfg_append_firewall_limit = merge($firewall_rules, $_limit_conn)
+    $location_cfg_append_firewall_limit = merge($firewall_rules, $_limit_conn, $_error_pages)
   } else {
     $rewrite_to_https = $_rewrite_to_https
-    $location_cfg_append_firewall_limit = $firewall_rules
+    $location_cfg_append_firewall_limit = merge($firewall_rules, $_error_pages)
   }
 
   # vhost configuration
@@ -108,6 +116,17 @@ class fuel_stats::analytic (
     access_log          => $nginx_access_log,
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
+  }
+
+  # error pages for primary docs
+  ::nginx::Resource::location { 'analytics-error-pages' :
+    ensure   => 'present',
+    vhost    => 'analytics',
+    location => '~ ^\/(mirantis|fuel-infra)\/(403|404|5xx)\.html$',
+    ssl      => true,
+    ssl_only => true,
+    www_root => '/usr/share/error_pages',
+    require  => Packages['error-pages'],
   }
 
   # enable ssl
