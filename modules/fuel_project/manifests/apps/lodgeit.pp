@@ -9,6 +9,7 @@ class fuel_project::apps::lodgeit (
   $nginx_access_log           = '/var/log/nginx/access.log',
   $nginx_error_log            = '/var/log/nginx/error.log',
   $nginx_log_format           = 'proxy',
+  $paste_header_contents      = '<h1>Lodge It</h1>',
 ) {
   if (! defined(Class['::nginx'])) {
     class { '::fuel_project::nginx' :}
@@ -29,6 +30,12 @@ class fuel_project::apps::lodgeit (
     owner   => 'root',
     group   => 'root',
     content => $ssl_key_contents,
+  }
+
+  file { '/usr/share/lodgeit/lodgeit/views/header.html' :
+    ensure  => 'present',
+    content => $paste_header_contents,
+    require => Class['::lodgeit::web'],
   }
 
   ::nginx::resource::vhost { 'paste' :
