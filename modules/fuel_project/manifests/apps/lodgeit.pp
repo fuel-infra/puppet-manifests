@@ -73,6 +73,12 @@ class fuel_project::apps::lodgeit (
       'X-Forwarded-For $remote_addr',
       'Host $host',
     ],
+    location_cfg_append => {
+      proxy_intercept_errors   => 'on',
+      'error_page 403'         => '/fuel-infra/403.html',
+      'error_page 404'         => '/fuel-infra/404.html',
+      'error_page 500 502 504' => '/fuel-infra/5xx.html',
+    },
     require             => [
       File[$ssl_certificate_file],
       File[$ssl_key_file],
@@ -80,11 +86,26 @@ class fuel_project::apps::lodgeit (
   }
 
   ::nginx::resource::location { 'paste-ssl-static' :
+    ensure              => 'present',
+    vhost               => 'paste-ssl',
+    ssl                 => true,
+    ssl_only            => true,
+    location            => '/static/',
+    www_root            => '/usr/share/lodgeit/lodgeit',
+    location_cfg_append => {
+      proxy_intercept_errors   => 'on',
+      'error_page 403'         => '/fuel-infra/403.html',
+      'error_page 404'         => '/fuel-infra/404.html',
+      'error_page 500 502 504' => '/fuel-infra/5xx.html',
+    },
+  }
+
+  ::nginx::resource::location { 'paste-error-pages' :
     ensure   => 'present',
     vhost    => 'paste-ssl',
+    location => '~ ^\/(mirantis|fuel-infra)\/(403|404|5xx)\.html$',
     ssl      => true,
     ssl_only => true,
-    location => '/static/',
-    www_root => '/usr/share/lodgeit/lodgeit',
+    www_root => '/usr/share/error_pages',
   }
 }
