@@ -15,6 +15,7 @@ class lodgeit::web (
   ],
   $secret_key        = '',
   $user              = 'lodgeit',
+  $mode              = 'uwsgi', # native || uwsgi
 ) {
   ensure_packages($packages)
 
@@ -43,8 +44,28 @@ class lodgeit::web (
     notify  => Service['python-lodgeit'],
   }
 
-  service { 'python-lodgeit' :
-    ensure => 'running',
-    enable => true,
+  if ($mode == 'native') {
+    service { 'python-lodgeit' :
+      ensure => 'running',
+      enable => true,
+    }
+  } else {
+    service { 'python-lodgeit' :
+      ensure => 'stopped',
+      enable => false,
+    }
+
+    include ::uwsgi
+
+    ::uwsgi::application { 'lodgeit' :
+      plugins  => 'python',
+      uid      => $user,
+      gid      => $group,
+      socket   => '127.0.0.1:4634',
+      chdir    => '/usr/share/lodgeit',
+      module   => 'wsgi',
+      callable => 'application',
+      require  => User[$user],
+    }
   }
 }

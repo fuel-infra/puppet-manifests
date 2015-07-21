@@ -66,15 +66,9 @@ class fuel_project::apps::lodgeit (
     access_log          => $nginx_access_log,
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
-    proxy               => 'http://127.0.0.1:5000',
-    proxy_redirect      => 'off',
-    proxy_read_timeout  => 120,
-    proxy_set_header    => [
-      'X-Forwarded-For $remote_addr',
-      'Host $host',
-    ],
+    uwsgi               => '127.0.0.1:4634',
     location_cfg_append => {
-      proxy_intercept_errors   => 'on',
+      uwsgi_intercept_errors   => 'on',
       'error_page 403'         => '/fuel-infra/403.html',
       'error_page 404'         => '/fuel-infra/404.html',
       'error_page 500 502 504' => '/fuel-infra/5xx.html',
@@ -93,7 +87,6 @@ class fuel_project::apps::lodgeit (
     location            => '/static/',
     www_root            => '/usr/share/lodgeit/lodgeit',
     location_cfg_append => {
-      proxy_intercept_errors   => 'on',
       'error_page 403'         => '/fuel-infra/403.html',
       'error_page 404'         => '/fuel-infra/404.html',
       'error_page 500 502 504' => '/fuel-infra/5xx.html',
@@ -108,4 +101,5 @@ class fuel_project::apps::lodgeit (
     ssl_only => true,
     www_root => '/usr/share/error_pages',
   }
+
 }
