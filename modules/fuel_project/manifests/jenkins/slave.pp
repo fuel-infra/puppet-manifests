@@ -623,6 +623,7 @@ class fuel_project::jenkins::slave (
       'python-virtualenv',
       'python2.6',
       'python2.6-dev',
+      'python3-dev',
       'rst2pdf',
     ]
 
