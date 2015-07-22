@@ -5,9 +5,18 @@ classes:
   - '::fuel_project::jenkins::slave'
   - '::fuel_project::roles::perestroika::publisher'
 
+fuel_project::jenkins::slave::known_hosts_overwrite: false
+fuel_project::jenkins::slave::overwrite_known_hosts: false
+
 fuel_project::roles::perestroika::publisher::known_hosts:
-'review.openstack.org':
+  'review.openstack.org':
     host: 'review.openstack.org'
+    port: 29418
+  'review.fuel-infra.org':
+    host: 'review.fuel-infra.org'
+    port: 29418
+  'gerrit.mirantis.com':
+    host: 'gerrit.mirantis.com'
     port: 29418
 
 fuel_project::roles::perestroika::publisher::gpg_id_pub: '1FA22B08'

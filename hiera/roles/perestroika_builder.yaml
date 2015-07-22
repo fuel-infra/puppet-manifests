@@ -4,9 +4,17 @@ classes:
   - '::fuel_project::jenkins::slave'
   - '::fuel_project::roles::perestroika::builder'
 
-fuel_project::roles::perestroika::builder::install_docker: true
-fuel_project::roles::perestroika::builder::docker_package: 'lxc-docker-1.6.1'
+fuel_project::jenkins::slave::docker_package: 'lxc-docker-1.6.1'
+fuel_project::jenkins::slave::install_docker: true
+fuel_project::jenkins::slave::known_hosts_overwrite: false
+fuel_project::jenkins::slave::overwrite_known_hosts: false
 fuel_project::roles::perestroika::builder::known_hosts:
-'review.openstack.org':
+  'review.openstack.org':
     host: 'review.openstack.org'
+    port: 29418
+  'review.fuel-infra.org':
+    host: 'review.fuel-infra.org'
+    port: 29418
+  'gerrit.mirantis.com':
+    host: 'gerrit.mirantis.com'
     port: 29418
