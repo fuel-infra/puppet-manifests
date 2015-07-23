@@ -19,7 +19,7 @@ apt::sources:
   devops:
     location: 'http://osci-mirror-msk.msk.mirantis.net/devops/ubuntu/'
     release: '/'
-    key: 'C1EC35C7D5A05778'
+    key: '62BF6A9C1D2B45A2'
     key_server: 'keyserver.ubuntu.com'
     repos: ''
     include_src: false
