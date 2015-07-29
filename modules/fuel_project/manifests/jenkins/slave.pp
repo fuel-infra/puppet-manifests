@@ -6,6 +6,7 @@ class fuel_project::jenkins::slave (
   $bind_policy                          = '',
   $build_fuel_iso                       = false,
   $build_fuel_packages                  = false,
+  $build_fuel_npm_packages              = ['grunt-cli', 'gulp'],
   $build_fuel_plugins                   = false,
   $check_tasks_graph                    = false,
   $docker_service                       = '',
@@ -79,6 +80,7 @@ class fuel_project::jenkins::slave (
   $verify_fuel_pkgs_requirements        = false,
   $verify_fuel_stats                    = false,
   $verify_fuel_web                      = false,
+  $verify_fuel_web_npm_packages         = ['casperjs','grunt-cli','gulp','phantomjs'],
   $verify_jenkins_jobs                  = false,
   $workspace                            = '/home/jenkins/workspace',
   $x11_display_num                      = 99,
@@ -345,11 +347,6 @@ class fuel_project::jenkins::slave (
       'sbuild',
     ]
 
-    $build_fuel_npm_packages = [
-      'grunt-cli',
-      'gulp',
-    ]
-
     User <| title == 'jenkins' |> {
       groups  +> 'mock',
       require => Package[$build_fuel_packages_list],
@@ -357,10 +354,12 @@ class fuel_project::jenkins::slave (
 
     ensure_packages($build_fuel_packages_list)
 
-    ensure_packages($build_fuel_npm_packages, {
-      provider => npm,
-      require  => Package['npm'],
-    })
+    if ($build_fuel_npm_packages) {
+      ensure_packages($build_fuel_npm_packages, {
+        provider => npm,
+        require  => Package['npm'],
+      })
+    }
   }
 
   # Build ISO
@@ -627,19 +626,14 @@ class fuel_project::jenkins::slave (
       'rst2pdf',
     ]
 
-    $verify_fuel_web_npm_packages = [
-      'casperjs',
-      'grunt-cli',
-      'gulp',
-      'phantomjs',
-    ]
-
     ensure_packages($verify_fuel_web_packages)
 
-    ensure_packages($verify_fuel_web_npm_packages, {
-      provider => npm,
-      require  => Package['npm'],
-    })
+    if ($verify_fuel_web_npm_packages) {
+      ensure_packages($verify_fuel_web_npm_packages, {
+        provider => npm,
+        require  => Package['npm'],
+      })
+    }
 
     if ($fuel_web_selenium) {
       $selenium_packages = [
