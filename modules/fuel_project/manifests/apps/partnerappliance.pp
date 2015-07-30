@@ -4,6 +4,7 @@ class fuel_project::apps::partnerappliance (
   $authorized_keys,
   $group            = 'appliance',
   $home_dir         = '/var/www/appliance',
+  $data_dir         = "${home_dir}/data",
   $user             = 'appliance',
   $vhost            = 'appliance',
   $service_fqdn     = "${vhost}.${::domain}",
@@ -19,6 +20,16 @@ class fuel_project::apps::partnerappliance (
     require => User[$user]
   }
 
+  file { $data_dir :
+    ensure  => 'directory',
+    owner   => $user,
+    group   => $group,
+    mode    => '0755',
+    require => [
+      File[$home_dir],
+    ]
+  }
+
   user { $user :
     ensure     => 'present',
     system     => true,
@@ -28,7 +39,7 @@ class fuel_project::apps::partnerappliance (
   }
 
   $opts = [
-    "command=\"rsync --server -rlpt --delete . ${home_dir}\"",
+    "command=\"rsync --server -rlpt --delete . ${data_dir}\"",
     'no-agent-forwarding',
     'no-port-forwarding',
     'no-user-rc',
@@ -48,6 +59,6 @@ class fuel_project::apps::partnerappliance (
 
   ::nginx::resource::vhost { $vhost :
     server_name => [ $service_fqdn ],
-    www_root    => $home_dir,
+    www_root    => $data_dir,
   }
 }
