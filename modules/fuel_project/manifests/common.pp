@@ -40,6 +40,7 @@ class fuel_project::common (
 
   ensure_packages([
     'apparmor',
+    'config-zabbix-oom-killer-item',
     'facter-facts',
     'screen',
     'tmux',
