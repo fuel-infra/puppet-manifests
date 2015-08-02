@@ -1,0 +1,25 @@
+---
+classes:
+  - jenkins::slave
+  - fuel_project::jenkins::slave::custom_scripts
+
+jenkins::slave::authorized_keys:
+  'jenkins@slave-24.test.local':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDsZkxAIQyPOQSsmZ9wvdL6KbxKW4kk90cG/EBfCTUb5BucFLwC2w4TBv1okfL5Pli0gy4ijZXgS/4+3EOFuQWRCeee7b/3zWaNsbzd/pcCx20T1tWoXz38QBlXGwoUG3cAL7vfCY58wLDhS9w5R7BOSmck8x1QBDmMqolBX8wBNZxrbTfQGrTIy30WJAZ3rCOkQ4TUTQRXX2kxHcb9f/SV1D+9Tcf9LncYC90Uy7/12U62xQdENs28KJOfoI+w+KFi3uJBesDrfEuaklToWdvp3wZBT7wd9vozMvYlAgeoOB7sHhqlZNbfwGgHOpodLDyM5c0N2VUTVVFVZMA0UgHD'
+
+fuel_project::jenkins::slave::custom_scripts::configs_path: '/etc/custom_scripts/'
+fuel_project::jenkins::slave::custom_scripts::configs:
+  'foo_bar':
+     path: "/etc/custom_scripts/foo_bar.config"
+     content: |
+       login: test1
+       password: passwd1
+  'bar_foo':
+     path: "/etc/custom_scripts/bar_foo.config"
+     content: |
+       login: test2
+       password: passwd2
+fuel_project::jenkins::slave::custom_scripts::docker_user: 'jenkins'
+fuel_project::jenkins::slave::custom_scripts::docker_package: 'lxc-docker-1.6.1'
+fuel_project::jenkins::slave::custom_scripts::install_docker: true
