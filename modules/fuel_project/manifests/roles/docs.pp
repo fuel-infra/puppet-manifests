@@ -127,7 +127,7 @@ class fuel_project::roles::docs (
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
     location_cfg_append => {
-      'rewrite'                => {
+      'rewrite' => {
         '^/$'                => '/fuel-dev',
         '^/express/?$'       => '/openstack/express/latest',
         '^/(express/.+)'     => '/openstack/$1',
@@ -135,6 +135,8 @@ class fuel_project::roles::docs (
         '^/(fuel/.+)'        => '/openstack/$1',
         '^/openstack/fuel/$' => "/openstack/fuel/fuel-${fuel_version}",
       },
+    },
+    vhost_cfg_append    => {
       'error_page 403'         => '/fuel-infra/403.html',
       'error_page 404'         => '/fuel-infra/404.html',
       'error_page 500 502 504' => '/fuel-infra/5xx.html',
@@ -190,7 +192,7 @@ class fuel_project::roles::docs (
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
     location_cfg_append => {
-      'rewrite'                => {
+      'rewrite' => {
         '^/$'                => $redirect_root_to,
         '^/fuel-dev/?(.*)$'  => "http://${community_hostname}/fuel-dev/\$1",
         '^/express/?$'       => '/openstack/express/latest',
@@ -199,6 +201,8 @@ class fuel_project::roles::docs (
         '^/(fuel/.+)'        => '/openstack/$1',
         '^/openstack/fuel/$' => "/openstack/fuel/fuel-${fuel_version}",
       },
+    },
+    vhost_cfg_append    => {
       'error_page 403'         => '/mirantis/403.html',
       'error_page 404'         => '/mirantis/404.html',
       'error_page 500 502 504' => '/mirantis/5xx.html',
