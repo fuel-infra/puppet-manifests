@@ -2,6 +2,7 @@
 #
 class fuel_project::puppet::master (
   $apply_firewall_rules    = false,
+  $enable_update_cronjob   = true,
   $external_host           = false,
   $firewall_allow_sources  = {},
   $hiera_backends          = ['yaml'],
@@ -56,10 +57,12 @@ class fuel_project::puppet::master (
     mode    => '0755',
     content => template('fuel_project/puppet/master/puppet-manifests-update.sh.erb')
   }
-  cron { 'puppet-manifests-update' :
-    command => '/usr/bin/timeout -k80 60 /usr/local/bin/puppet-manifests-update.sh 2>&1 | logger -t puppet-manifests-update',
-    user    => 'root',
-    minute  => '*/5',
-    require => File['/usr/local/bin/puppet-manifests-update.sh'],
+  if ($enable_update_cronjob) {
+    cron { 'puppet-manifests-update' :
+      command => '/usr/bin/timeout -k80 60 /usr/local/bin/puppet-manifests-update.sh 2>&1 | logger -t puppet-manifests-update',
+      user    => 'root',
+      minute  => '*/5',
+      require => File['/usr/local/bin/puppet-manifests-update.sh'],
+    }
   }
 }
