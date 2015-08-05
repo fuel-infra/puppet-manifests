@@ -119,14 +119,14 @@ class fuel_stats::analytic (
   }
 
   # error pages for primary docs
-  ::nginx::Resource::location { 'analytics-error-pages' :
+  ::nginx::resource::location { 'analytics-error-pages' :
     ensure   => 'present',
     vhost    => 'analytics',
     location => '~ ^\/(mirantis|fuel-infra)\/(403|404|5xx)\.html$',
     ssl      => true,
     ssl_only => true,
     www_root => '/usr/share/error_pages',
-    require  => Packages['error-pages'],
+    require  => Package['error-pages'],
   }
 
   # enable ssl
