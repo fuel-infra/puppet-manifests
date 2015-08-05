@@ -46,7 +46,7 @@ class fuel_project::roles::zabbix::server (
       group   => 'root',
       mode    => '0755',
       content => template('fuel_project/roles/zabbix/server/maintenance.sh.erb'),
-      require => Class['zabbix::server'],
+      require => Class['::zabbix::server'],
     }
 
     cron { 'zabbix-maintenance' :
