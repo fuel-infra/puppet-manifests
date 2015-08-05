@@ -1,0 +1,18 @@
+version: 0.1
+auth:
+  token:
+    realm: "https://<%= @service_fqdn %>:<%= @auth_port %>/auth"
+    service: "<%= @service_fqdn %>"
+    issuer: "<%= @service_fqdn %>"
+    # TLS certificate to verify tokens.
+    rootcertbundle: "<%= @ssl_certificate_token %>"
+log:
+  fields:
+    service: registry
+storage:
+    cache:
+        layerinfo: inmemory
+    filesystem:
+        rootdirectory: /var/lib/registry
+http:
+    addr: :<%= @server_backend_port %>
