@@ -10,7 +10,7 @@ class system (
   $root_password     = undef,
   $root_shell        = '/bin/bash',
   $timezone          = undef,
-  $tools_packages    = ['atop', 'curl', 'htop', 'sysstat']
+  $tools_packages    = ['curl', 'htop', 'sysstat']
 ) {
   if($root_password) {
     user { 'root' :

@@ -55,6 +55,9 @@ apt::sources:
     include_src: false
     include_deb: true
 
+atop::service: true
+atop::interval: 60
+
 bacula::director_name_suffix: ''
 bacula::director_password: 'xxxxx'
 bacula::director_server: 'bacula.test.local'

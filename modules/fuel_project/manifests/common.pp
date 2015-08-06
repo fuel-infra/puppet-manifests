@@ -19,6 +19,7 @@ class fuel_project::common (
   $sudoers_base       = '',
   $tls_cacertdir      = '',
 ) {
+  class { '::atop' :}
   class { '::ntp' :}
   class { '::puppet::agent' :}
   class { '::ssh::authorized_keys' :}
