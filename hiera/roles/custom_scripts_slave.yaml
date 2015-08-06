@@ -20,6 +20,47 @@ fuel_project::jenkins::slave::custom_scripts::configs:
      content: |
        login: test2
        password: passwd2
+  'abandon_private':
+     path: "/etc/custom_scripts/id_rsa"
+     content: |
+       -----BEGIN RSA PRIVATE KEY-----
+       MIIEpAIBAAKCAQEA8p32UYanHE1Kp4PZi/A5uOWkRCLliOwgrqZG7RfZ5lodtctO
+       gjwI0vU2t2Qu15ZerLodaNke/uTjoE/VSX17OBJRSDFthOD44w4gZLyCL/yNX88q
+       wza9bCjooJoQuFUueBNGqyuRq2o85MwyEDxenxLqeakffkZyH4CF1/EOSDkTw+Mb
+       fZZpq0gGXXsAQvJjSlHe4VDYy7TheCd+EeVPLulW3EqmO4ij9gBzD2C0puGX6M3e
+       iVJjr75NUbdvov9wU+HIQlRS0w75Ij0lU0qRFoRP8G2h5ZdcGt+ix6AillAxT3jU
+       MBSMz70R3H/48wJqEy+mWTBRfrQXgeI4nw6nYQIDAQABAoIBAQCxW8JmZL4jFWme
+       vec5wnof7VhBKxWLG7rkkc9FoWr8VyJi9GXHFOYKeZHvTMBlf5pkQIYhUJ+1DFRO
+       rC2qVJ3QJqvez6tVOTUYnwoVOi0dsU0UHhkPriOZPuqYBSh16GdZBhZiKS6LFdXA
+       GHn8nnU5apWYLIdGQ29IEidF7gVXy114WzveaJ/WffKKCyuQFOVCgVpnOwyP1OHC
+       o5+pqXhSG4f/T3Hh+/YOsVmo433+EA4e5hIVUK3CuZnZsIPDpOZ0iWSjYlF8QBPY
+       EQe676tjVGcoe2dEMFB6wshELRH302H7Oa9SNjFQJvvXcOV83XY8Z7ENrBUJPwvD
+       +A1siI6VAoGBAP1QWeMZGEfd7C6wD+0DK5pWFncdYvdI7FlSbQ285+zjcrANLPCj
+       /TrQg3jp6VxKrwZgwpF13RWh69pskJAL/j+ajBQ1RPop0G8+SA/op+ENxkC0RikZ
+       HnJNhnNqEVdaZp27hUyuDlijXufnSaDUXd+a7pJkncBdRrdnjEalM6v3AoGBAPUw
+       ksSRzXnO88dDKOHpXWpXLHcq3QCDqEPL3X2EpF9lQdYUAya7b/zjxEoDiiu6g8cH
+       yhAVakqnRLR8Df3nCRZiOfhFr1MycgW8MoNhPrGUEwi0tH921bnGUgDVtYiBYuEl
+       T7Igv8NyHU4ScqEqhuD4bwCofddXiOOKk36WC4FnAoGBAMvX1x2a2iErAp5na8ls
+       na/qytU7vqID+r2+SKefdnr4ZRgq4hkbvfGQTdwFT5bHOqVFRA1N7YU08dipOIPS
+       Qtzn/wVcAI/XCjYaxl6W+FFwhjMXXsY/wnJ01FcX6bCDvMP9XL1h64WEoiC3zFYx
+       zwDbalQ/x3o/FWMNXqKS2kvtAoGAZ0AzLg/wJVFfGxRPDQNG0VcwZGZqdqL6osIg
+       3ZCT35A2bz4yLYdVG3uW10wyTUPX5mKDVs6N2i4iIpbzFW7LRt/KZaCCulhN59he
+       tTCoRAOFGG9waxTR38+CDNPyBC/oQcOCkhJ0bouJh60BFJlh/y7fH7nUdHBqNtfO
+       UMpCwhUCgYB3WvAAk40qsxxNb8e7Znx1+20udPiMFC9PPm9sgdXwxGlxrpELZ5cS
+       AFobRSn6Tk4cEQiyUungQUXd5fPUBYTZLJfiNH84S7Smgui/Btealy3XluH6SEtx
+       /0zQ0EfkyiIGJbCqCrnFkjqsSUTN70hJZs/pkoZPsAf4s1NCUQkgNg==
+       -----END RSA PRIVATE KEY-----
+  'abandon_public':
+     path: "/etc/custom_scripts/id_rsa.pub"
+     content: |
+       ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDynfZRhqccTUqng9mL8Dm45aREIuWI7CCupkbtF9nmWh21y06CPAjS9Ta3ZC7Xll6suh1o2R7+5OOgT9VJfXs4ElFIMW2E4PjjDiBkvIIv/I1fzyrDNr1sKOigmhC4VS54E0arK5GrajzkzDIQPF6fEup5qR9+RnIfgIXX8Q5IORPD4xt9lmmrSAZdewBC8mNKUd7hUNjLtOF4J34R5U8u6VbcSqY7iKP2AHMPYLSm4Zfozd6JUmOvvk1Rt2+i/3BT4chCVFLTDvkiPSVTSpEWhE/wbaHll1wa36LHoCKWUDFPeNQwFIzPvRHcf/jzAmoTL6ZZMFF+tBeB4jifDqdh test@test.ru
 fuel_project::jenkins::slave::custom_scripts::docker_user: 'jenkins'
 fuel_project::jenkins::slave::custom_scripts::docker_package: 'lxc-docker-1.6.1'
 fuel_project::jenkins::slave::custom_scripts::install_docker: true
+fuel_project::jenkins::slave::custom_scripts::known_hosts:
+  'review.openstack.org':
+    host: 'review.openstack.org'
+    port: 29418
+  'review.fuel-infra.org':
+    host: 'review.fuel-infra.org'
+    port: 29418

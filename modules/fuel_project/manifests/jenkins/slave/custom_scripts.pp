@@ -37,6 +37,7 @@ class fuel_project::jenkins::slave::custom_scripts (
       overwrite => false,
       require   => User[$docker_user],
     })
+
   }
 
   if ($configs) {
@@ -44,14 +45,14 @@ class fuel_project::jenkins::slave::custom_scripts (
       ensure => 'directory',
       owner  => 'root',
       group  => 'root',
-      mode   => '0644',
+      mode   => '0700',
     }
 
     create_resources(file, $configs, {
       ensure  => 'present',
       owner   => 'root',
       group   => 'root',
-      mode    => '0644',
+      mode    => '0600',
       require => File[$configs_path],
     })
 
