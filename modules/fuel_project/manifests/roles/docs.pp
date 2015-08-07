@@ -260,11 +260,16 @@ class fuel_project::roles::docs (
   }
 
   ::nginx::resource::vhost { $specs_hostname :
-    server_name      => [$specs_hostname],
-    www_root         => $specs_www_root,
-    access_log       => $nginx_access_log,
-    error_log        => $nginx_error_log,
-    vhost_cfg_append => {
+    server_name         => [$specs_hostname],
+    www_root            => $specs_www_root,
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    location_cfg_append => {
+      'rewrite' => {
+        '^/$' => '/fuel-specs-master',
+      },
+    },
+    vhost_cfg_append    => {
       'error_page 403'         => '/mirantis/403.html',
       'error_page 404'         => '/mirantis/404.html',
       'error_page 500 502 504' => '/mirantis/5xx.html',
