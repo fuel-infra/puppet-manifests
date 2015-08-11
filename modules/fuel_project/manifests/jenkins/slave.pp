@@ -55,7 +55,6 @@ class fuel_project::jenkins::slave (
   $osci_vm_ubuntu_jenkins_key           = '',
   $osci_vm_ubuntu_jenkins_key_contents  = '',
   $ostf_db                              = ['ostf'],
-  $overwrite_known_hosts                = true,
   $pam_filter                           = '',
   $pam_password                         = '',
   $run_tests                            = false,
@@ -107,16 +106,6 @@ class fuel_project::jenkins::slave (
     class { '::jenkins::swarm_slave' :}
   } else {
     class { '::jenkins::slave' :}
-
-    # TODO: remove and use common $known_hosts array
-    ssh::known_host { 'slave-known-hosts' :
-      host      => $gerrit_host,
-      port      => $gerrit_port,
-      user      => 'jenkins',
-      overwrite => $overwrite_known_hosts,
-      require   => Class['::jenkins::slave'],
-    }
-    warning('$gerrit_host and $gerrit_port will be depricated soon. Pass it to $known_hosts hash')
   }
 
   # jenkins should be in www-data group by default
