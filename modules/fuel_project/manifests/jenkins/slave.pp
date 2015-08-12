@@ -12,8 +12,6 @@ class fuel_project::jenkins::slave (
   $docker_service                       = '',
   $external_host                        = false,
   $fuel_web_selenium                    = false,
-  $gerrit_host                          = 'review.openstack.org',
-  $gerrit_port                          = 29418,
   $http_share_iso                       = false,
   $install_docker                       = false,
   $jenkins_swarm_slave                  = false,
