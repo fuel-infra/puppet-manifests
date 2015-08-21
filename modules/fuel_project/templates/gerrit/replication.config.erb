@@ -1,6 +1,6 @@
 
 [remote "<%= @title %>"]
-    url = <%= @user %>@<%= @host %>:<%= @path %>${name}.git
+    url = <%= @user %>@<%= @user %>-<%= @name %>-<%= @host %>:<%= @path %>${name}.git
 <% if @admin_url != nil -%>
     adminUrl = <%= @admin_url %>
 <% end -%>
@@ -10,6 +10,9 @@
 <% if @create_missing_repositories != nil -%>
     createMissingRepositories = <%= @create_missing_repositories %>
 <% end -%>
+<% if @default_force_update != nil -%>
+    defaultForceUpdate = <%= @default_force_update %>
+<% end -%>
 <% if @mirror != nil -%>
     mirror = <%= @mirror %>
 <% end -%>
@@ -17,7 +20,7 @@
     projects = <%= @projects %>
 <% end -%>
 <% if @push != nil -%>
-    push = <%= @push %>
+    <%= @push %>
 <% end -%>
 <% if @receivepack != nil -%>
     receivepack = <%= @receivepack %>

@@ -9,14 +9,19 @@
 # Parameters:
 #   [*host*] - hostname of Gerrit to push to
 #   [*path*] - url path to Gerrit to push to
-#   [*user*] - user to authenticate with Gerrit
+#   [*user*] - user to authenticate with replication target
 #   [*auth_group*] - name of a group that the remote should use to access the
 #     repositories
 #   [*config_file_path*] - configuration file path
+#   [*default_force_update*] - allow use force update for project
 #   [*mirror*] - remove remote branches that absent locally or invisible to the
 #     replication
 #   [*private_key*] - private key to use for SSH communication
+#   [*projects*] - names of the projects to replicate
 #   [*public_key*] - public key to use for SSH communication
+#   [*push*] - references to replicate on target repositories
+#   [*remote_name_style*] - part of a project name to use as name
+#     of a repository on tagert host
 #   [*replicate_permissions*] - permissions-only projects and the
 #     refs/meta/config branch will also be replicated to the remote site
 #   [*replication_delay*] - number of seconds to wait before scheduling a remote
@@ -30,9 +35,13 @@ define fuel_project::gerrit::replication (
   $user,
   $auth_group            = undef,
   $config_file_path      = '/var/lib/gerrit/review_site/etc/replication.config',
+  $default_force_update  = undef,
   $mirror                = undef,
   $private_key           = undef,
+  $projects              = undef,
   $public_key            = undef,
+  $push                  = undef,
+  $remote_name_style     = undef,
   $replicate_permissions = undef,
   $replication_delay     = 0,
   $threads               = 3,
@@ -68,24 +77,36 @@ define fuel_project::gerrit::replication (
   })
 
   # add host to known_hosts
-  ssh::known_host { "${host}-known-hosts" :
-    host    => $host,
-    user    => 'gerrit',
-    require => User['gerrit'],
-  }
+  # we can have ${host}-known-hosts multiple times but with different users,
+  # so need to be sure for NO DUPLICATION ERROR
+  ensure_resource(
+    'ssh::known_host',
+    "${host}-known-hosts",
+    {
+      host      => $host,
+      user      => 'gerrit',
+      overwrite => false,
+      require   => User['gerrit'],
+  })
 
   # add ssh key-pare for replication
-  sshuserconfig::remotehost { "${user}-${host}" :
-    unix_user           => 'gerrit',
-    ssh_config_dir      => '/var/lib/gerrit/.ssh',
-    remote_hostname     => $host,
-    remote_username     => $user,
-    private_key_content => $private_key,
-    public_key_content  => $public_key,
-  }
+  # we can have ${user}-${name}-${host} multiple times but with different pathes,
+  # so need to be sure for NO DUPLICATION ERROR
+  ensure_resource(
+    'sshuserconfig::remotehost',
+    "${user}-${name}-${host}",
+    {
+      unix_user           => 'gerrit',
+      ssh_config_dir      => '/var/lib/gerrit/.ssh',
+      remote_hostname     => $host,
+      remote_username     => $user,
+      private_key_content => $private_key,
+      public_key_content  => $public_key,
+  })
 
   # add replica configuration to gerrrit replication.conf
-  concat::fragment { "${user}-${host}-${path}":
+  # "${user}-${name}-${host}" - MUST be uniq, so failed with duplication error is expected
+  concat::fragment { "${user}-${name}-${host}":
     target  => $config_file_path,
     content => template('fuel_project/gerrit/replication.config.erb'),
   }
