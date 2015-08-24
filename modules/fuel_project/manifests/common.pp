@@ -16,7 +16,6 @@ class fuel_project::common (
   $pam_password       = '',
   $root_password_hash = 'r00tme',
   $root_shell         = '/bin/bash',
-  $sudoers_base       = '',
   $tls_cacertdir      = '',
 ) {
   class { '::atop' :}
