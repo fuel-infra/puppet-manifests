@@ -70,7 +70,6 @@ class fuel_project::jenkins::slave (
   ],
   $simple_syntax_check                  = false,
   $sudo_commands                        = ['/sbin/ebtables'],
-  $sudoers_base                         = '',
   $tls_cacertdir                        = '',
   $verify_fuel_astute                   = false,
   $verify_fuel_docs                     = false,
@@ -92,7 +91,6 @@ class fuel_project::jenkins::slave (
       tls_cacertdir     => $tls_cacertdir,
       pam_password      => $pam_password,
       pam_filter        => $pam_filter,
-      sudoers_base      => $sudoers_base,
       bind_policy       => $bind_policy,
       ldap_ignore_users => $ldap_ignore_users,
     }
