@@ -4,6 +4,7 @@ classes:
   - '::jenkins::slave'
   - '::fuel_project::roles::perestroika::builder'
 
+fuel_project::common::kernel_package: 'linux-image-extra-3.19.0-26-generic'
 fuel_project::roles::perestroika::builder::docker_package: 'lxc-docker-1.6.1'
 fuel_project::roles::perestroika::builder::known_hosts:
   'review.openstack.org':

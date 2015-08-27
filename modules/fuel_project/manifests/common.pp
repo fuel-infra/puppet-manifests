@@ -7,6 +7,7 @@ class fuel_project::common (
     'location' => $::location,
     'role'     => $::role,
   },
+  $kernel_package     = undef,
   $ldap               = false,
   $ldap_base          = '',
   $ldap_ignore_users  = '',
@@ -43,6 +44,12 @@ class fuel_project::common (
     'screen',
     'tmux',
   ])
+
+  # install the exact version of kernel package
+  # please note, that reboot must be done manually
+  if($kernel_package) {
+    ensure_packages($kernel_package)
+  }
 
   if($ldap) {
     class { '::ssh::ldap' :}
