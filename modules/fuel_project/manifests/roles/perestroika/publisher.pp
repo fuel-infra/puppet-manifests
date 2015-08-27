@@ -14,6 +14,7 @@ class fuel_project::roles::perestroika::publisher (
     'createrepo',
     'devscripts',
     'expect',
+    'python-lxml',
     'reprepro',
     'rpm',
     'yum-utils',
