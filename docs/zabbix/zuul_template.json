@@ -1,0 +1,255 @@
+{
+ "zabbix_export": {
+  "date": "2015-09-06T14:52:36Z",
+  "graphs": [
+   {
+    "graph_items": [
+     {
+      "calc_fnc": "2",
+      "color": "C80000",
+      "drawtype": "0",
+      "item": {
+       "host": "Template App Zuul Service",
+       "key": "zuul.wait_time.all"
+      },
+      "sortorder": "0",
+      "type": "0",
+      "yaxisside": "0"
+     }
+    ],
+    "height": "200",
+    "name": "Zuul job start wait time",
+    "percent_left": "0.0000",
+    "percent_right": "0.0000",
+    "show_3d": "0",
+    "show_legend": "1",
+    "show_triggers": "1",
+    "show_work_period": "1",
+    "type": "0",
+    "width": "900",
+    "yaxismax": "100.0000",
+    "yaxismin": "0.0000",
+    "ymax_item_1": "0",
+    "ymax_type_1": "0",
+    "ymin_item_1": "0",
+    "ymin_type_1": "0"
+   },
+   {
+    "graph_items": [
+     {
+      "calc_fnc": "2",
+      "color": "C80000",
+      "drawtype": "0",
+      "item": {
+       "host": "Template App Zuul Service",
+       "key": "zuul.wait_count.all"
+      },
+      "sortorder": "0",
+      "type": "0",
+      "yaxisside": "0"
+     }
+    ],
+    "height": "200",
+    "name": "Zuul queue length",
+    "percent_left": "0.0000",
+    "percent_right": "0.0000",
+    "show_3d": "0",
+    "show_legend": "1",
+    "show_triggers": "1",
+    "show_work_period": "1",
+    "type": "0",
+    "width": "900",
+    "yaxismax": "100.0000",
+    "yaxismin": "0.0000",
+    "ymax_item_1": "0",
+    "ymax_type_1": "0",
+    "ymin_item_1": "0",
+    "ymin_type_1": "0"
+   }
+  ],
+  "groups": [
+   {
+    "name": "Templates"
+   }
+  ],
+  "templates": [
+   {
+    "applications": [
+     {
+      "name": "Zuul"
+     }
+    ],
+    "discovery_rules": [],
+    "groups": [
+     {
+      "name": "Templates"
+     }
+    ],
+    "items": [
+     {
+      "allowed_hosts": "",
+      "applications": [
+       {
+        "name": "Zuul"
+       }
+      ],
+      "authtype": "0",
+      "data_type": "0",
+      "delay": "300",
+      "delay_flex": "",
+      "delta": "0",
+      "description": "Longest waiting time in the queue, all queues",
+      "formula": "1",
+      "history": "90",
+      "inventory_link": "0",
+      "ipmi_sensor": "",
+      "key": "zuul.wait_time.all",
+      "multiplier": "0",
+      "name": "Zuul longest wait time",
+      "params": "",
+      "password": "",
+      "port": "",
+      "privatekey": "",
+      "publickey": "",
+      "snmp_community": "",
+      "snmp_oid": "",
+      "snmpv3_authpassphrase": "",
+      "snmpv3_authprotocol": "0",
+      "snmpv3_contextname": "",
+      "snmpv3_privpassphrase": "",
+      "snmpv3_privprotocol": "0",
+      "snmpv3_securitylevel": "0",
+      "snmpv3_securityname": "",
+      "status": "0",
+      "trends": "365",
+      "type": "0",
+      "units": "s",
+      "username": "",
+      "value_type": "3",
+      "valuemap": []
+     },
+     {
+      "allowed_hosts": "",
+      "applications": [
+       {
+        "name": "Zuul"
+       }
+      ],
+      "authtype": "0",
+      "data_type": "0",
+      "delay": "300",
+      "delay_flex": "",
+      "delta": "0",
+      "description": "Number of jobs waiting in all queues",
+      "formula": "1",
+      "history": "90",
+      "inventory_link": "0",
+      "ipmi_sensor": "",
+      "key": "zuul.wait_count.all",
+      "multiplier": "0",
+      "name": "Zuul waiting jobs count",
+      "params": "",
+      "password": "",
+      "port": "",
+      "privatekey": "",
+      "publickey": "",
+      "snmp_community": "",
+      "snmp_oid": "",
+      "snmpv3_authpassphrase": "",
+      "snmpv3_authprotocol": "0",
+      "snmpv3_contextname": "",
+      "snmpv3_privpassphrase": "",
+      "snmpv3_privprotocol": "0",
+      "snmpv3_securitylevel": "0",
+      "snmpv3_securityname": "",
+      "status": "0",
+      "trends": "365",
+      "type": "0",
+      "units": "jobs",
+      "username": "",
+      "value_type": "3",
+      "valuemap": []
+     }
+    ],
+    "macros": [],
+    "name": "Template App Zuul Service",
+    "screens": [
+     {
+      "hsize": "2",
+      "name": "Zuul",
+      "screen_items": [
+       {
+        "application": "",
+        "colspan": "1",
+        "dynamic": "0",
+        "elements": "0",
+        "halign": "0",
+        "height": "100",
+        "resource": {
+         "host": "Template App Zuul Service",
+         "name": "Zuul queue length"
+        },
+        "resourcetype": "0",
+        "rowspan": "1",
+        "sort_triggers": "0",
+        "style": "0",
+        "url": "",
+        "valign": "0",
+        "width": "500",
+        "x": "0",
+        "y": "0"
+       },
+       {
+        "application": "",
+        "colspan": "1",
+        "dynamic": "0",
+        "elements": "0",
+        "halign": "0",
+        "height": "100",
+        "resource": {
+         "host": "Template App Zuul Service",
+         "name": "Zuul job start wait time"
+        },
+        "resourcetype": "0",
+        "rowspan": "1",
+        "sort_triggers": "0",
+        "style": "0",
+        "url": "",
+        "valign": "0",
+        "width": "500",
+        "x": "1",
+        "y": "0"
+       }
+      ],
+      "vsize": "1"
+     }
+    ],
+    "template": "Template App Zuul Service",
+    "templates": []
+   }
+  ],
+  "triggers": [
+   {
+    "dependencies": [],
+    "description": "",
+    "expression": "{Template App Zuul Service:zuul.wait_time.all.last(0)}>7200",
+    "name": "Jobs waiting in queue >2h",
+    "priority": "2",
+    "status": "0",
+    "type": "0",
+    "url": ""
+   },
+   {
+    "dependencies": [],
+    "description": "",
+    "expression": "{Template App Zuul Service:zuul.wait_time.all.last(0)}>10800",
+    "name": "Jobs waiting in queue >3h",
+    "priority": "4",
+    "status": "0",
+    "type": "0",
+    "url": ""
+   }
+  ],
+  "version": "2.0"
+ }
+}

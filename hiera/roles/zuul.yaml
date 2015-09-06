@@ -2,3 +2,4 @@
   classes:
     - '::fuel_project::common'
     - '::zuul'
+    - '::fuel_project::zuul'
