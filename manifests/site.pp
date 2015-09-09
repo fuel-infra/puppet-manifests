@@ -51,10 +51,6 @@ node /docs-slave01.vm.mirantis.net/ {
   class { '::fuel_project::jenkins::slave' :}
 }
 
-node /cacher01-(cz|kha|mnv|poz)\.vm\.mirantis\.net/ {
-  class { '::fuel_project::jenkins::slave' :}
-}
-
 node /(tracker([0-9]{2})-(msk|mnv|bud|srt|kha|poz)\.infra|ctorrent-msk\.msk)\.mirantis\.net/ {
   class { '::fuel_project::roles::tracker' :}
 }
