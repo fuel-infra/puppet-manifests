@@ -5,6 +5,12 @@ classes:
 fuel_project::jenkins::master::install_label_dumper: true
 fuel_project::jenkins::master::install_plugins: true
 fuel_project::jenkins::master::install_zabbix_item: true
+fuel_project::jenkins::master::log_gzip_cron_params:
+  hour: '5'
+  minute: '35'
+fuel_project::jenkins::master::log_gzip_days: '7'
+fuel_project::jenkins::master::log_gzip_enable: true
+fuel_project::jenkins::master::log_gzip_threads: '2'
 fuel_project::jenkins::master::service_fqdn: 'jenkins-product.test.local'
 
 jenkins::master::install_groovy: true
