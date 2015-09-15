@@ -9,8 +9,8 @@ class zuul (
   $nginx_log_format = 'proxy',
   $service_fqdn     = 'zuul.local',
   $packages         = [
-    'zuul',
     'nginx',
+    'zuul',
   ],
 ) {
 
@@ -40,6 +40,8 @@ class zuul (
     class { '::nginx' :}
   }
 
+  # zuul configuration for nginx adopted from
+  # https://github.com/openstack-infra/puppet-zuul/blob/master/templates/zuul.vhost.erb
   ::nginx::resource::vhost { 'zuul_status' :
     ensure      => 'present',
     www_root    => $dir,
@@ -51,4 +53,21 @@ class zuul (
       "zuul.${::fqdn}",
     ],
   }
+
+  ::nginx::resource::location { 'status.json' :
+    ensure   => 'present',
+    location => '/status.json',
+    vhost    => 'zuul_status',
+    proxy    => 'http://127.0.0.1:8001/status.json',
+  }
+
+  # Correctly use matching for zuul status targeted pass through so that
+  # we can get the optimized per change zuul results.
+  ::nginx::resource::location { 'status' :
+    ensure   => 'present',
+    location => '~ ^/status/(.*)',
+    vhost    => 'zuul_status',
+    proxy    => 'http://127.0.0.1:8001/status/$1',
+  }
+
 }
