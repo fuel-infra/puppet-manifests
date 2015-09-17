@@ -1,0 +1,40 @@
+---
+classes:
+  - '::fuel_project::common'
+  - '::fuel_project::nginx'
+  - '::fuel_project::inventory'
+django::application::racks::apps:
+  - south
+  - security
+  - inventory
+  - reports
+django::application::racks::database_engine: 'django.db.backends.mysql'
+django::application::racks::database_host: 'localhost'
+django::application::racks::database_name: 'racks'
+django::application::racks::database_port: 3306
+django::application::racks::database_user: 'racks'
+django::application::racks::database_password: '6ZHlH4EMrScuR6uKPDcHmlckRv7HJJQ2'
+django::application::racks::debug: true
+django::application::racks::group: 'racks'
+django::application::racks::logging:
+  'version': 1
+  'disable_existing_loggers': false
+  'handlers':
+    'file':
+      'level': 'DEBUG'
+      'class': 'logging.FileHandler'
+      'filename': '/var/log/racks/debug.log'
+  'loggers':
+    'django.request':
+      'handlers':
+        - 'file'
+      'level': 'DEBUG'
+      'propagate': true
+django::application::racks::packages:
+  - python-django-racks
+django::application::racks::template_debug: true
+django::application::racks::user: 'racks'
+django::application::racks::uwsgi: true
+django::application::racks::uwsgi_chdir: '/usr/share/racks'
+django::application::racks::uwsgi_module: 'racks.wsgi'
+django::application::racks::uwsgi_socket: '127.0.0.1:4689'
