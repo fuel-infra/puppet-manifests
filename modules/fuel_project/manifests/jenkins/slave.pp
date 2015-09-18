@@ -330,6 +330,8 @@ class fuel_project::jenkins::slave (
       'reprepro',
       'ruby',
       'sbuild',
+      'zlib1g',
+      'zlib1g-dev',
     ]
 
     User <| title == 'jenkins' |> {
