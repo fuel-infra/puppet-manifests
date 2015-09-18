@@ -11,7 +11,7 @@ class fuel_stats::collector (
   $nginx_access_log       = $fuel_stats::params::nginx_access_log,
   $nginx_error_log        = $fuel_stats::params::nginx_error_log,
   $nginx_limit_conn       = $fuel_stats::params::limit_conn,
-  $nginx_log_format       = $fuel_stats::params::nginx_log_format,
+  $nginx_log_format       = 'custom_collector',
   $psql_db                = $fuel_stats::params::psql_db,
   $psql_pass              = $fuel_stats::params::psql_pass,
   $psql_user              = $fuel_stats::params::psql_user,
@@ -48,6 +48,13 @@ class fuel_stats::collector (
       mode    => '0400',
       content => $ssl_key_file_contents,
     }
+  }
+
+  file { '/etc/nignx/conf.d/log_format.conf' :
+    source => 'puppet:///modules/fuel_stats/log_format.conf',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
   }
 
   # Limiting access to analytics only from hosts

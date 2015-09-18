@@ -17,7 +17,7 @@ class fuel_stats::analytic (
   $nginx_error_log        = $fuel_stats::params::nginx_error_log,
   $nginx_error_path       = 'fuel-infra',
   $nginx_limit_conn       = $fuel_stats::params::limit_conn,
-  $nginx_log_format       = $fuel_stats::params::nginx_log_format,
+  $nginx_log_format       = 'proxy',
   $service_hostname       = $::fqdn,
   $ssl_cert_file          = '/etc/ssl/analytic.crt',
   $ssl_cert_file_contents = '',
