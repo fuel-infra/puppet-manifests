@@ -50,7 +50,7 @@ class fuel_stats::collector (
     }
   }
 
-  file { '/etc/nignx/conf.d/log_format.conf' :
+  file { '/etc/nginx/conf.d/log_format.conf' :
     source => 'puppet:///modules/fuel_stats/log_format.conf',
     owner  => 'root',
     group  => 'root',
