@@ -123,8 +123,8 @@ class fuel_stats::analytic (
     ensure   => 'present',
     vhost    => 'analytics',
     location => '~ ^\/(mirantis|fuel-infra)\/(403|404|5xx)\.html$',
-    ssl      => true,
-    ssl_only => true,
+    ssl      => $ssl,
+    ssl_only => $ssl,
     www_root => '/usr/share/error_pages',
     require  => Package['error-pages'],
   }
