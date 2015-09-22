@@ -10,6 +10,7 @@ define django::application (
   $database              = hiera_hash("django::application::${title}::database", undef),
   $debug                 = hiera("django::application::${title}::debug", false),
   $group                 = hiera("django::application::${title}::group", 'nogroup'),
+  $imports               = hiera_array("django::application::${title}::imports"),
   $logging               = hiera_hash("django::application::${title}::logging"),
   $packages              = hiera_array("django::application::${title}::packages", []),
   $template_debug        = hiera("django::application::${title}::template_debug", false),

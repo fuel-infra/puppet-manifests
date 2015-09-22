@@ -1,5 +1,10 @@
 # Django settings.
 
+<% if @imports %>
+<% @imports.each {|mod| -%>
+<%= mod %>
+<% } -%>
+<% end -%>
 import os
 PROJECT_ROOT = os.path.dirname(__file__)
 
