@@ -37,13 +37,6 @@ file { '/var/lib/puppet/gitrevision.txt' :
   require => File['/var/lib/puppet'],
 }
 
-# Class: pxe_deployment
-#
-class pxe_deployment {
-  class { '::fuel_project::common' :}
-  include pxetool
-}
-
 # Nodes definitions
 
 # Jenkins Product slave to build documentation
@@ -97,10 +90,6 @@ node /perestroika-slave([0-9]{2})\.infra\.mirantis\.net/ {
     run_tests => true,
     ldap      => true,
   }
-}
-
-node /pxe-product2?-(msk|srt|cz)\.((msk|srt|vm)\.mirantis\.net|fuel-infra\.org)/ {
-  include pxe_deployment
 }
 
 node /mirror(\d+)\.fuel-infra\.org/ {
@@ -251,11 +240,6 @@ node 'devops-jenkins-test.vm.mirantis.net' {
 
 node 'slave01-tst.vm.mirantis.net' {
   class { '::fuel_project::jenkins::slave' :}
-}
-
-node 'pxetool.test.local' {
-  class { '::fuel_project::puppet::master' :}
-  class { '::pxetool' :}
 }
 
 # Default
