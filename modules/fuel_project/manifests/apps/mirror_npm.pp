@@ -114,16 +114,9 @@ class fuel_project::apps::mirror_npm (
     },
   }
 
-  file { '/var/run/npm' :
-    ensure  => 'directory',
-    owner   => 'npmuser',
-    group   => 'root',
-    require => User['npmuser'],
-  }
-
   cron { 'npm-mirror' :
     minute      => $cron_frequency,
-    command     => 'flock -n /var/run/npm/mirror.lock timeout -k 2m 30m npm-mirror /etc/npm_mirror/config.yml 2>&1 | logger -t npm-mirror',
+    command     => 'flock -n /var/run/lock/npm-mirror.lock timeout -k 2m 30m npm-mirror /etc/npm_mirror/config.yml 2>&1 | logger -t npm-mirror',
     environment => 'PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
     user        => 'npmuser',
     require     => [

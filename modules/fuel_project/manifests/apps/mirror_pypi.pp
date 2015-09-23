@@ -89,19 +89,9 @@ class fuel_project::apps::mirror_pypi (
     www_root => "${mirror_dir}/web",
   }
 
-  file { '/var/run/bandersnatch' :
-    ensure  => 'directory',
-    owner   => 'pypi',
-    group   => 'root',
-    require => [
-      User['pypi'],
-      Package[$packages],
-    ]
-  }
-
   cron { 'pypi-mirror' :
     minute      => $cron_frequency,
-    command     => 'flock -n /var/run/bandersnatch/mirror.lock timeout -k 2m 30m /usr/bin/run-bandersnatch 2>&1 | logger -t pypi-mirror',
+    command     => 'flock -n /var/run/lock/bandersnatch-mirror.lock timeout -k 2m 30m /usr/bin/run-bandersnatch 2>&1 | logger -t pypi-mirror',
     user        => 'pypi',
     environment => 'PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
     require     => [
