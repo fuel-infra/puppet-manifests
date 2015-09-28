@@ -4,6 +4,11 @@ class fuel_project::roles::zabbix::server (
   $mysql_replication_password = '',
   $mysql_replication_user     = 'repl',
   $mysql_slave_host           = undef,
+  $maintenance_cron           = {
+    'zabbix-maintenance' => {
+      hour => '*/24',
+    },
+  },
   $maintenance_script         = '/usr/share/zabbix-server-mysql/maintenance.sh',
   $maintenance_script_config  = '/root/.my.cnf',
   $server_role                = 'master', # master || slave
@@ -49,11 +54,9 @@ class fuel_project::roles::zabbix::server (
       require => Class['::zabbix::server'],
     }
 
-    cron { 'zabbix-maintenance' :
+    create_resources('cron', $maintenance_cron, {
       ensure  => 'present',
       command => "${maintenance_script} 2>&1 | logger -t zabbix-maintenance",
-      weekday => 'Wednesday',
-      hour    => '15',
-    }
+    })
   }
 }
