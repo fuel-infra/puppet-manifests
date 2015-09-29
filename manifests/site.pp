@@ -44,10 +44,6 @@ node /docs-slave01.vm.mirantis.net/ {
   class { '::fuel_project::jenkins::slave' :}
 }
 
-node /(tracker([0-9]{2})-(msk|mnv|bud|srt|kha|poz)\.infra|ctorrent-msk\.msk)\.mirantis\.net/ {
-  class { '::fuel_project::roles::tracker' :}
-}
-
 node /osci-mirror-(msk|srt|kha|poz)\.(msk|srt|kha|infra)\.mirantis\.net/ {
   class { '::fuel_project::common' :}
   class { '::fuel_project::apps::mirror' :}
