@@ -1,12 +1,16 @@
 # Class: fuel_project::nailgun_demo
 #
 class fuel_project::nailgun_demo (
+  $server_name,
+  $ssl_certificate_content,
+  $ssl_key_content,
   $apply_firewall_rules = false,
   $lock_file            = '',
   $nginx_access_log     = '/var/log/nginx/access.log',
   $nginx_error_log      = '/var/log/nginx/error.log',
   $nginx_log_format     = 'proxy',
-  $server_name          = '',
+  $ssl_certificate      = '/etc/ssl/certs/demo.crt',
+  $ssl_key              = '/etc/ssl/private/demo.key',
 ) {
 
   if (!defined(Class['fuel_project::common'])) {
@@ -32,20 +36,9 @@ class fuel_project::nailgun_demo (
     'postgresql-server-dev-all',
   ]
 
-  $npm_packages = [
-    'grunt-cli',
-    'gulp',
-    'inflight',
-  ]
-
   package { $packages:
     ensure => 'present',
   }
-
-  ensure_packages($npm_packages, {
-    provider => npm,
-    require  => Package['npm'],
-  })
 
   # create main user
   user { 'nailgun':
@@ -122,32 +115,31 @@ class fuel_project::nailgun_demo (
     onlyif  => "test ! -f  ${lock_file}",
   }
 
-  venv::exec { 'venv-loaddata' :
-    command => './manage.py loaddata nailgun/fixtures/sample_environment.json',
+  venv::exec { 'venv-gendata' :
+    command => './manage.py generate_nodes_fixture -n 50 -i 2',
     cwd     => '/usr/share/fuel-web/nailgun',
     venv    => '/home/nailgun/python',
     user    => 'nailgun',
-    require => Venv::Exec['venv-loaddefault'],
+    require => Venv::Venv['venv-nailgun'],
+    onlyif  => "test ! -f  ${lock_file}",
+  }
+
+  venv::exec { 'venv-loaddata' :
+    command => './manage.py loaddata nailgun/fixtures/50_fake_nodes_environment.json',
+    cwd     => '/usr/share/fuel-web/nailgun',
+    venv    => '/home/nailgun/python',
+    user    => 'nailgun',
+    require => [Venv::Exec['venv-gendata'],
+                Venv::Exec['venv-loaddefault'],],
     onlyif  => "test ! -f ${lock_file}",
   }
 
   exec { 'venv-npm' :
-    command => 'npm install',
-    cwd     => '/usr/share/fuel-web/nailgun',
-    user    => 'nailgun',
-    require => [
-      Venv::Exec['venv-loaddata'],
-      Package[$npm_packages],
-    ],
-    onlyif  => "test ! -f ${lock_file}",
-  }
-
-  exec { 'venv-gulp' :
-    command     => '/usr/local/bin/gulp bower',
+    command     => 'npm install',
     cwd         => '/usr/share/fuel-web/nailgun',
     environment => 'HOME=/home/nailgun',
     user        => 'nailgun',
-    require     => Exec['venv-npm'],
+    require     => Venv::Exec['venv-loaddata'],
     onlyif      => "test ! -f ${lock_file}",
   }
 
@@ -185,6 +177,48 @@ class fuel_project::nailgun_demo (
     }
   }
 
+  # create certificate files for Nginx
+  file { $ssl_certificate:
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0640',
+    content => $ssl_certificate_content,
+  }
+
+  file { $ssl_key:
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0640',
+    content => $ssl_key_content,
+  }
+
+  nginx::resource::vhost { 'demo-ssl' :
+    ensure              => 'present',
+    listen_port         => 8443,
+    ssl_port            => 8443,
+    ssl                 => true,
+    ssl_cert            => $ssl_certificate,
+    ssl_key             => $ssl_key,
+    ssl_cache           => 'shared:SSL:10m',
+    ssl_stapling        => true,
+    ssl_stapling_verify => true,
+    ssl_session_timeout => '10m',
+    server_name         => [$server_name],
+    access_log          => $nginx_access_log,
+    error_log           => $nginx_error_log,
+    format_log          => $nginx_log_format,
+    uwsgi               => '127.0.0.1:7933',
+    location_cfg_append => {
+      uwsgi_connect_timeout => '3m',
+      uwsgi_read_timeout    => '3m',
+      uwsgi_send_timeout    => '3m',
+    },
+    require             => [File[$ssl_certificate],
+                            File[$ssl_key],],
+  }
+
   nginx::resource::location { 'demo-static' :
     ensure   => 'present',
     vhost    => 'demo',
@@ -204,8 +238,8 @@ class fuel_project::nailgun_demo (
     workers        => '8',
     enable_threads => true,
     require        => [File_line['fake_mode'],
-                Exec['venv-gulp'],
-                User['nailgun'],],
+                        Exec['venv-npm'],
+                        User['nailgun'],],
   }
 
   if $apply_firewall_rules {
