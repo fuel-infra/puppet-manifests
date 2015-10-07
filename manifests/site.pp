@@ -64,12 +64,6 @@ node /ci-slave([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
-node /infra-ci-slave([0-9]{2})\.fuel-infra\.org/ {
-  class { '::fuel_project::jenkins::slave' :
-    external_host       => true,
-  }
-}
-
 node /(infra|fuel)-jenkins(\d+)\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::master' :}
 }

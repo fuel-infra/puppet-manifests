@@ -1,0 +1,33 @@
+---
+classes:
+  - '::fuel_project::common'
+  - '::fuel_project::jenkins::slave'
+  - '::fuel_project::jenkins::slave::infra'
+
+fuel_project::common::external_host: true
+fuel_project::jenkins::slave::verify_jenkins_jobs: true
+fuel_project::jenkins::slave::sudo_commands:
+  - /sbin/ebtables
+  - /usr/bin/puppet agent -vd --onetime --no-daemonize
+  - /usr/bin/puppet agent -vd --onetime --no-daemonize --noop
+
+jenkins::slave::authorized_keys:
+  'jenkins@infra-ci.fuel-jenkins.org':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDjKXfSRWlFvlqSQErc5T9ZpLKLY6kPOJiKs8qmJZtqQ5yAU9nSBfQrPQaxj5lgoEscFVxzBOq6igh/MWcUU2nxDeKpHunfcA/w08Rq1jD0TGDBFjE0oyWAa9N9bGa5n/Fx/WDGz70+1BLfVkg+RFVQecTZkb0glC3eTkWOCF9sSdLYdalO6x1R1JvUQ/rp83eZzP6J09FoZUxrQPOeW6YtvF9Mh0xS2+y7zt/dVBDqucvgMkNyUOZMPKx42iUUtXemQCgrCsKWtFankRbEsCE2HGv+tWCa3HnKu9/XkFqjo5RU5Gn3z7/t7QT1AZzFFbXweBpjSW0A0y42ILvug1En'
+
+sysctl::base::values:
+  net.ipv4.ip_forward:
+    value: '1'
+  net.ipv4.tcp_syncookies:
+    value: 1
+  net.ipv4.tcp_window_scaling:
+    value: 1
+  net.ipv4.tcp_congestion_control:
+    value: cubic
+  net.ipv4.tcp_no_metrics_save:
+    value: 1
+  net.ipv4.tcp_moderate_rcvbuf:
+    value: 1
+  fs.inotify.max_user_instances:
+    value: 256
