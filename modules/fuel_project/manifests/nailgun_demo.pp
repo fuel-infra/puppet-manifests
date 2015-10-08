@@ -13,20 +13,6 @@ class fuel_project::nailgun_demo (
   $ssl_key              = '/etc/ssl/private/demo.key',
 ) {
 
-  if (!defined(Class['fuel_project::common'])) {
-    class { 'fuel_project::common':
-      external_host => $apply_firewall_rules,
-    }
-  }
-
-  if (!defined(Class['fuel_project::nginx'])) {
-    class { 'fuel_project::nginx': }
-  }
-
-  if (!defined(Class['postgresql::server'])) {
-    class { 'postgresql::server': }
-  }
-
   # required packages
   # http://docs.mirantis.com/fuel-dev/develop/nailgun/development/env.html
   $packages = [
@@ -149,7 +135,7 @@ class fuel_project::nailgun_demo (
     require => Vcsrepo['/usr/share/fuel-web'],
   }
 
-  ::nginx::resource::vhost { 'demo-redirect' :
+  nginx::resource::vhost { 'demo-redirect' :
     ensure              => 'present',
     listen_port         => 80,
     server_name         => [$server_name],
@@ -240,17 +226,6 @@ class fuel_project::nailgun_demo (
     require        => [File_line['fake_mode'],
                         Exec['venv-npm'],
                         User['nailgun'],],
-  }
-
-  if $apply_firewall_rules {
-    include firewall_defaults::pre
-    firewall { '1000 Allow demo 80, 8000 connection' :
-      ensure  => present,
-      dport   => [80, 8000],
-      proto   => 'tcp',
-      action  => 'accept',
-      require => Class['firewall_defaults::pre'],
-    }
   }
 
 }

@@ -1,6 +1,10 @@
 ---
 classes:
+  - '::fuel_project::apps::firewall'
+  - '::fuel_project::common'
+  - '::fuel_project::nginx'
   - '::fuel_project::nailgun_demo'
+  - '::postgresql::server'
 
 fuel_project::nailgun_demo::server_name: 'demo.test.local'
 fuel_project::nailgun_demo::lock_file: '/usr/share/fuel-web/nailgun/static/js/libs/bower/requirejs/js/require.js'
@@ -59,3 +63,17 @@ fuel_project::nailgun_demo::ssl_key_content: |
   IMjK3YBsHDrVQ9xjRF5NhF5Z
   -----END PRIVATE KEY-----
 
+fuel_project::apps::firewall::rules:
+  '1000 - allow ssh connections from 0.0.0.0/0':
+    source: 0.0.0.0/0
+    dport: 22
+    proto: tcp
+    action: accept
+  '1000 - allow all connections to nailgun ports':
+    source: 0.0.0.0/0
+    dport:
+      - 80
+      - 8000
+      - 8443
+    proto: tcp
+    action: accept
