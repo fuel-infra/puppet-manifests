@@ -367,9 +367,10 @@ class fuel_project::jenkins::slave (
       'libparse-debian-packages-perl',
       'libyaml-dev',
       'lrzip',
-      'python-daemon',
+      'python-daemon=1.5.5-1ubuntu1',
       'python-ipaddr',
       'python-jinja2',
+      'python-lockfile=1:0.8-2ubuntu2',
       'python-nose',
       'python-paramiko',
       'python-pip',
@@ -390,6 +391,18 @@ class fuel_project::jenkins::slave (
     ]
 
     ensure_packages($build_fuel_iso_packages)
+    ensure_resource('apt::pin', {
+      'python-daemon' => {
+        packages => 'python-daemon',
+        version  => '1.5.5-1ubuntu1',
+        priority => 1000,
+      },
+      'python-lockfile' => {
+        packages => 'python-lockfile',
+        version  => '1:0.8-2ubuntu2',
+        priority => 1000,
+      }
+    })
 
     ensure_resource('file', '/var/www', {
       ensure  => 'directory',
