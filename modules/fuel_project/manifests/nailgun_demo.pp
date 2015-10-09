@@ -26,6 +26,12 @@ class fuel_project::nailgun_demo (
     ensure => 'present',
   }
 
+  # gulp required to make compressed static
+  package { 'gulp':
+    provider => npm,
+    require  => Package['npm'],
+  }
+
   # create main user
   user { 'nailgun':
     ensure     => 'present',
@@ -61,7 +67,7 @@ class fuel_project::nailgun_demo (
     user     => 'nailgun',
     require  => [User['nailgun'],
                 File['/usr/share/fuel-web'],
-                Package['git'] ],
+                Package['git']],
   }
 
   # prepare database
@@ -88,7 +94,7 @@ class fuel_project::nailgun_demo (
     venv    => '/home/nailgun/python',
     user    => 'nailgun',
     require => [Venv::Venv['venv-nailgun'],
-                Postgresql::Server::Db['nailgun'],],
+                Postgresql::Server::Db['nailgun']],
     onlyif  => "test ! -f ${lock_file}",
   }
 
@@ -116,17 +122,29 @@ class fuel_project::nailgun_demo (
     venv    => '/home/nailgun/python',
     user    => 'nailgun',
     require => [Venv::Exec['venv-gendata'],
-                Venv::Exec['venv-loaddefault'],],
+                Venv::Exec['venv-loaddefault']],
     onlyif  => "test ! -f ${lock_file}",
   }
 
-  exec { 'venv-npm' :
+  exec { 'npm-install' :
     command     => 'npm install',
     cwd         => '/usr/share/fuel-web/nailgun',
     environment => 'HOME=/home/nailgun',
     user        => 'nailgun',
     require     => Venv::Exec['venv-loaddata'],
     onlyif      => "test ! -f ${lock_file}",
+    timeout     => 600,
+  }
+
+  exec { 'compress-static' :
+    command     => 'gulp build --static-dir=static_compressed',
+    cwd         => '/usr/share/fuel-web/nailgun',
+    environment => 'HOME=/home/nailgun',
+    user        => 'nailgun',
+    require     => [Exec['npm-install'],
+                    Package['gulp']],
+    onlyif      => "test ! -f ${lock_file}",
+    timeout     => 600,
   }
 
   file_line { 'fake_mode':
@@ -202,14 +220,17 @@ class fuel_project::nailgun_demo (
       uwsgi_send_timeout    => '3m',
     },
     require             => [File[$ssl_certificate],
-                            File[$ssl_key],],
+                            File[$ssl_key]],
   }
 
   nginx::resource::location { 'demo-static' :
-    ensure   => 'present',
-    vhost    => 'demo',
-    location => '/static/',
-    www_root => '/usr/share/fuel-web/nailgun',
+    ensure              => 'present',
+    vhost               => 'demo',
+    location            => '/static/',
+    www_root            => '/usr/share/fuel-web/nailgun',
+    location_cfg_append => {
+      rewrite => '^/static/(.*)$ /static_compressed/$1 break'
+    }
   }
 
   uwsgi::application { 'fuel-web' :
@@ -224,8 +245,8 @@ class fuel_project::nailgun_demo (
     workers        => '8',
     enable_threads => true,
     require        => [File_line['fake_mode'],
-                        Exec['venv-npm'],
-                        User['nailgun'],],
+                        Exec['npm-install'],
+                        User['nailgun']],
   }
 
 }
