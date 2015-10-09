@@ -52,7 +52,7 @@ fi
 
 MODULES["puppetlabs-vcsrepo"]="1.2.0"
 MODULES["puppetlabs-apt"]="1.6.0"
-MODULES["puppetlabs-firewall"]="1.1.3"
+MODULES["puppetlabs-firewall"]="1.7.1"
 MODULES["puppetlabs-concat"]="1.1.0"
 MODULES["puppetlabs-mysql"]="2.3.1"
 MODULES["puppetlabs-ntp"]="3.1.2"
