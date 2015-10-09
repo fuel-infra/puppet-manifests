@@ -118,17 +118,6 @@ class fuel_stats::analytic (
     format_log          => $nginx_log_format,
   }
 
-  # error pages for primary docs
-  ::nginx::resource::location { 'analytics-error-pages' :
-    ensure   => 'present',
-    vhost    => 'analytics',
-    location => '~ ^\/(mirantis|fuel-infra)\/(403|404|5xx)\.html$',
-    ssl      => $ssl,
-    ssl_only => $ssl,
-    www_root => '/usr/share/error_pages',
-    require  => Package['error-pages'],
-  }
-
   # enable ssl
   if ( defined(File[$ssl_cert_file]) and defined(File[$ssl_key_file]) )  {
     $ssl = true
@@ -150,6 +139,17 @@ class fuel_stats::analytic (
       server_name         => [$::fqdn],
       location_cfg_append => $rewrite_to_https,
     }
+  }
+
+  # error pages for analytics
+  ::nginx::resource::location { 'analytics-error-pages' :
+    ensure   => 'present',
+    vhost    => 'analytics',
+    location => '~ ^\/(mirantis|fuel-infra)\/(403|404|5xx)\.html$',
+    ssl      => $ssl,
+    ssl_only => $ssl,
+    www_root => '/usr/share/error_pages',
+    require  => Package['error-pages'],
   }
 
   ::nginx::resource::location { 'analytics-exporter' :
