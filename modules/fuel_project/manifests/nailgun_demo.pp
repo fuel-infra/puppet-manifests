@@ -181,6 +181,16 @@ class fuel_project::nailgun_demo (
     }
   }
 
+  nginx::resource::location { 'demo-static' :
+    ensure              => 'present',
+    vhost               => 'demo',
+    location            => '/static/',
+    www_root            => '/usr/share/fuel-web/nailgun',
+    location_cfg_append => {
+      rewrite => '^/static/(.*)$ /static_compressed/$1 break'
+    }
+  }
+
   # create certificate files for Nginx
   file { $ssl_certificate:
     ensure  => 'file',
@@ -223,11 +233,13 @@ class fuel_project::nailgun_demo (
                             File[$ssl_key]],
   }
 
-  nginx::resource::location { 'demo-static' :
+  nginx::resource::location { 'demo-ssl-static' :
     ensure              => 'present',
-    vhost               => 'demo',
+    vhost               => 'demo-ssl',
     location            => '/static/',
     www_root            => '/usr/share/fuel-web/nailgun',
+    ssl                 => true,
+    ssl_only            => true,
     location_cfg_append => {
       rewrite => '^/static/(.*)$ /static_compressed/$1 break'
     }
