@@ -391,7 +391,7 @@ class fuel_project::jenkins::slave (
     ]
 
     ensure_packages($build_fuel_iso_packages)
-    ensure_resource('apt::pin', {
+    create_resources('apt::pin', {
       'python-daemon' => {
         packages => 'python-daemon',
         version  => '1.5.5-1ubuntu1',
