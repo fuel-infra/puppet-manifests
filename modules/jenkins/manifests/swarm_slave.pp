@@ -1,9 +1,7 @@
 # Class: jenkins::swarm_slave
 #
 class jenkins::swarm_slave (
-  $cache_labels            = false,
   $java_package            = $::jenkins::params::slave_java_package,
-  $jenkins_fetchlabels_url = '',
   $labels                  = $::jenkins::params::swarm_labels,
   $master                  = $::jenkins::params::swarm_master,
   $package                 = $::jenkins::params::swarm_package,
@@ -27,23 +25,15 @@ class jenkins::swarm_slave (
     }
   }
 
-  if($cache_labels == true) {
-    file { '/usr/local/bin/fetchlabels.sh' :
-      ensure  => 'present',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0755',
-      content => template('jenkins/fetchlabels.sh.erb'),
-    }
-
-    cron { 'fetchlabels' :
-      command => '/usr/local/bin/fetchlabels.sh 2>&1 | logger -t fetchlabels',
-      user    => 'root',
-      hour    => '*',
-      minute  => '*/30',
-      require => File['/usr/local/bin/fetchlabels.sh'],
-    }
+  # Backward compability & Cleanup {
+  # FIXME: Remove some time after
+  file { '/usr/local/bin/fetchlabels.sh' :
+    ensure  => 'absent',
   }
+  cron { 'fetchlabels' :
+    ensure => 'absent',
+  }
+  # }
 
   if (!defined(Package[$package])) {
     package { $package :

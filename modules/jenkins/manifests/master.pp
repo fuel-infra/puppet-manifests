@@ -14,13 +14,11 @@ class jenkins::master (
   $ssl_key_file                     = '/etc/ssl/jenkins.key',
   $ssl_key_file_contents            = '',
   # Jenkins config parameters
-  $install_label_dumper             = false,
   $install_zabbix_item              = false,
   $jenkins_address                  = '0.0.0.0',
   $jenkins_java_args                = '',
   $jenkins_port                     = '8080',
   $jenkins_proto                    = 'http',
-  $label_dumper_nginx_location      = '/labels',
   $nginx_access_log                 = '/var/log/nginx/access.log',
   $nginx_error_log                  = '/var/log/nginx/error.log',
   $nginx_log_format                 = undef,
@@ -168,6 +166,34 @@ class jenkins::master (
     },
   }
 
+  ::nginx::resource::location { 'static' :
+    ensure                => 'present',
+    vhost                 => 'jenkins',
+    ssl                   => true,
+    ssl_only              => true,
+    location              => '/static/',
+    proxy                 => 'http://127.0.0.1:8080',
+    proxy_cache           => 'static',
+    proxy_cache_min_uses  => 1,
+    proxy_cache_use_stale => 'timeout',
+    proxy_cache_valid     => 'any 60m',
+    proxy_ignore_headers  => [
+      'Cache-Control',
+      'Expires',
+      'Set-Cookie',
+      'X-Accel-Expires',
+    ],
+    proxy_redirect        => 'off',
+    proxy_read_timeout    => 120,
+    proxy_set_header      => [
+      'X-Forwarded-For $remote_addr',
+      'Host $host',
+    ],
+    location_cfg_append   => {
+      proxy_intercept_errors => 'on',
+    },
+  }
+
   if $ssl_cert_file_contents != '' {
     file { $ssl_cert_file:
       owner   => 'root',
@@ -203,39 +229,15 @@ class jenkins::master (
     }
   }
 
-  if($install_label_dumper) {
-    file { '/usr/local/bin/labeldump.py' :
-      ensure  => 'present',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0700',
-      content => template('jenkins/labeldump.py.erb'),
-    }
-
-    cron { 'labeldump-cronjob' :
-      command => '/usr/bin/test -f /tmp/jenkins.is.fine && /usr/local/bin/labeldump.py 2>&1 | logger -t labeldump',
-      user    => 'root',
-      hour    => '*',
-      minute  => '*/30',
-      require => File['/usr/local/bin/labeldump.py'],
-    }
-
-    file { "${www_root}${label_dumper_nginx_location}" :
-      ensure => 'directory',
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0755',
-    }
-
-    ::nginx::resource::location { 'labels' :
-      ensure   => 'present',
-      ssl      => true,
-      ssl_only => true,
-      location => $label_dumper_nginx_location,
-      vhost    => 'jenkins',
-      www_root => $www_root,
-    }
+  # Backward compability & Cleanup {
+  # FIXME: Remove some time after
+  cron { 'labeldump-cronjob' :
+    ensure => 'absent',
   }
+  file { '/usr/local/bin/labeldump.py' :
+    ensure  => 'absent',
+  }
+  # }
 
   if $apply_firewall_rules {
     include firewall_defaults::pre
