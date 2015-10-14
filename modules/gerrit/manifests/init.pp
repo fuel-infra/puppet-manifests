@@ -115,6 +115,7 @@ class gerrit (
     ssl_only              => true,
     location              => '~* \.cache\.(html|gif|png|css|jar|swf|js)$',
     proxy                 => 'http://127.0.0.1:8081',
+    proxy_cache           => 'static',
     proxy_cache_min_uses  => 1,
     proxy_cache_use_stale => 'timeout',
     proxy_cache_valid     => 'any 60m',
@@ -132,7 +133,7 @@ class gerrit (
     ],
   }
 
-  ::nginx::resource::location { 'static' :
+  ::nginx::resource::location { 'custom-static' :
     ensure   => 'present',
     vhost    => 'gerrit',
     ssl      => true,
