@@ -19,7 +19,6 @@ class fuel_project::jenkins::master (
   class { '::jenkins::master':
     apply_firewall_rules => $firewall_enable,
     install_zabbix_item  => $install_zabbix_item,
-    install_label_dumper => $install_label_dumper,
     service_fqdn         => $service_fqdn,
   }
   if($install_plugins) {
