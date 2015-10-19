@@ -20,7 +20,22 @@ fuel_project::apps::seed::seed_cleanup_dirs:
     pattern: 'fuel-*'
 
 fuel_project::apps::mirror::apply_firewall_rules: true
+
 fuel_project::apps::plugins::apply_firewall_rules: true
+fuel_project::apps::plugins::syncer_username: 'plugin-syncer'
+fuel_project::apps::plugins::syncer_ssh_keys:
+  'my@local':
+    type: ssh-rsa
+    key: 'MY KEY'
+rssh::users:
+#  user:umask:access bits
+#  Five binary digits, which indicate whether the user is allowed to use rsync, rdist, cvs, sftp, and scp,
+#  in that order. One means the command is allowed, zero means it is not.
+#  PS. they are six digits realy. More details:
+#   http://linux.die.net/man/5/rssh.conf
+  "plugin-syncer:022:100000"
+
+
 fuel_project::apps::updates::apply_firewall_rules: true
 
 fuel_project::apps::partnershare::apply_firewall_rules: true

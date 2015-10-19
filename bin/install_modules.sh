@@ -72,6 +72,7 @@ MODULES["rodjek-logrotate"]="1.1.1"
 MODULES["saz-sudo"]="3.0.9"
 MODULES["golja-gnupg"]="1.2.1"
 MODULES["gnubilafrance-atop"]="0.0.4"
+MODULES["blom-rssh"]="0.0.3"
 
 SOURCE_MODULES["https://github.com/iberezovskiy/puppet-mongodb"]="0.1"
 SOURCE_MODULES["https://github.com/monester/puppet-bacula"]="v0.4.0.1"

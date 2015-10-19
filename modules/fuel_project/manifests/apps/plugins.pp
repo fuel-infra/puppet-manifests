@@ -8,8 +8,10 @@ class fuel_project::apps::plugins (
   $nginx_log_format       = 'proxy',
   $plugins_dir            = '/var/www/plugins',
   $service_fqdn           = "plugins.${::fqdn}",
-  $sync_hosts_allow       = [],
+  $syncer_username        = 'plugin-syncer',
+  $syncer_ssh_keys        = {},
 ) {
+  include rssh
   if (!defined(Class['::fuel_project::nginx'])) {
     class { '::fuel_project::nginx' :}
   }
@@ -25,34 +27,33 @@ class fuel_project::apps::plugins (
 
   file { $plugins_dir :
     ensure  => 'directory',
-    owner   => 'www-data',
-    group   => 'www-data',
+    owner   => $syncer_username,
+    group   => $syncer_username,
     require => Class['::nginx'],
   }
 
-  if (!defined(Class['::rsync::server'])) {
-    class { '::rsync::server' :
-      gid        => 'root',
-      uid        => 'root',
-      use_chroot => 'yes',
-      use_xinetd => false,
-    }
+  $syncer_homedir = "/var/lib/${syncer_username}"
+
+  user { $syncer_username :
+    ensure     => 'present',
+    home       => $syncer_homedir,
+    shell      => '/usr/bin/rssh',
+    managehome => true,
+    system     => true,
   }
 
-  ::rsync::server::module{ 'plugins':
-    comment         => 'Fuel plugins sync',
-    uid             => 'www-data',
-    gid             => 'www-data',
-    hosts_allow     => $sync_hosts_allow,
-    hosts_deny      => ['*'],
-    incoming_chmod  => '0755',
-    outgoing_chmod  => '0644',
-    list            => 'yes',
-    lock_file       => '/var/run/rsync_plugins_sync.lock',
-    max_connections => 100,
-    path            => $plugins_dir,
-    read_only       => 'no',
-    write_only      => 'no',
-    require         => File[$plugins_dir],
+  file { $syncer_homedir :
+    ensure  => 'directory',
+    owner   => $syncer_username,
+    group   => $syncer_username,
+    require => User[$syncer_username],
   }
+
+  create_resources('ssh_authorized_key', $syncer_ssh_keys, {
+    user    => $syncer_username,
+    require => [
+      User[$syncer_username],
+      File[$plugins_dir],
+      File[$syncer_homedir],
+    ]})
 }
