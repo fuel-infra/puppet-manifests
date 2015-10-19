@@ -20,7 +20,7 @@ class docker_registry (
     $search_socket = '127.0.0.1:5802',
     $search_user = 'index',
     $server_backend_port = 5800,
-    $server_port = 5000,
+    $server_port = 443,
     $ssl_certificate = '/etc/ssl/certs/registry.crt',
     $ssl_certificate_token = '/etc/registry/token.crt',
     $ssl_key = '/etc/ssl/private/registry.key',

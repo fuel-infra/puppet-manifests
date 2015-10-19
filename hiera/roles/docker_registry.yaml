@@ -145,9 +145,8 @@ fuel_project::apps::firewall::rules:
   '1000 - allow connections to public Registry services':
     source: 0.0.0.0/0
     dport:
-      - 5000
+      - 443
       - 5001
-      - 5002
     proto: tcp
     action: accept
   '1000 - allow connections to search Registry service':
