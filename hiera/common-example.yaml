@@ -476,6 +476,9 @@ pxetool::root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS
 pxetool::timezone: 'UTC'
 pxetool::nginx_log_format: 'proxy'
 
+ssh::banner::content:: |
+  Welcome to %{::fqdn}
+
 ssh::ldap::ldap_uri: 'ldap://ldap'
 ssh::ldap::ldap_base: 'dc=company,dc=net'
 ssh::ldap::tls_cacertdir: '/etc/openldap/cacerts'
