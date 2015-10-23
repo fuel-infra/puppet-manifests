@@ -10,6 +10,9 @@ class fuel_project::jenkins::slave (
   $build_fuel_npm_packages              = ['grunt-cli', 'gulp'],
   $build_fuel_plugins                   = false,
   $check_tasks_graph                    = false,
+  $docker_config                        = undef,
+  $docker_config_path                   = '/home/jenkins/.dockercfg',
+  $docker_config_user                   = 'jenkins',
   $docker_service                       = '',
   $external_host                        = false,
   $fuel_web_selenium                    = false,
@@ -877,6 +880,18 @@ class fuel_project::jenkins::slave (
           Package[$docker_package],
           Group['docker'],
         ],
+      }
+    }
+
+    # create configuration file for docker
+    if ($docker_config) {
+      file { $docker_config_path:
+        ensure  => 'present',
+        owner   => $docker_config_user,
+        group   => $docker_config_user,
+        mode    => '0400',
+        content => $docker_config,
+        require => User['jenkins'],
       }
     }
 
