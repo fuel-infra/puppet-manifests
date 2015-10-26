@@ -1,0 +1,23 @@
+---
+classes:
+  - '::fuel_project::apps::firewall'
+  - '::fuel_project::common'
+  - '::fuel_project::roles::blackduck::server'
+
+fuel_project::apps::firewall::rules:
+  '1000 - allow ssh connections from 0.0.0.0/0':
+    source: '0.0.0.0/0'
+    dport: 22
+    proto: 'tcp'
+    action: 'accept'
+  '1000 - allow connections on 80 port from 0.0.0.0/0':
+    source: '0.0.0.0/0'
+    dport: 80
+    proto: 'tcp'
+    action: 'accept'
+
+fuel_project::roles::blackduck::server::blackduck_release: 'Red Hat Enterprise Linux Server release 6.2 (Santiago)'
+fuel_project::roles::blackduck::server::database_path: '/var/lib/bds-export'
+fuel_project::roles::blackduck::server::mount_point: '/mnt/blackduck_distr' # same as name variable from fuel_project::roles::blackduck::server::iso
+fuel_project::roles::blackduck::server::iso: '/mnt/image.iso'
+fuel_project::roles::blackduck::server::ssh_public_key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCyEWHZvqKwj0hTkTDgKFE+uiz63SgTEkPdtkpd+q41ZeW9Aq+PJ7zTzJ0zoakGYX4UbHdOBEz44M3P1Ayw8PER2xdxK1x8uSr8NbOuUiXlomsK0L5zHj/w+cZfrf63dVMzQyQfNkHAY1r9bOLpMy37ghCyDuD/qj9HrTB+jYo7w9LPoFKVSpJTxYq2uPKjceKY4RJGsU+Ky3ObYTSfews1LMnZckHyuTt/2k4mtMcyrzXyf021EXboQun3g1DwvqdxOV0Q2aD+i+tNj9bBdAs0z6LWym7iJRnk15XfR6fw7UUSKDPrP5rOIbYZk/xaGYAYqT6EUFscTVAvT7jcWeG3'

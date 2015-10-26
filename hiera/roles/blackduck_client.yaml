@@ -1,0 +1,64 @@
+---
+classes:
+  - '::fuel_project::apps::firewall'
+  - '::fuel_project::common'
+  - '::fuel_project::jenkins::slave'
+  - '::fuel_project::roles::blackduck::client'
+
+fuel_project::apps::firewall::rules:
+  '1000 - allow ssh connections from 0.0.0.0/0':
+    source: '0.0.0.0/0'
+    dport: 22
+    proto: 'tcp'
+    action: 'accept'
+
+fuel_project::roles::blackduck::client::google_creds:
+    type: 'service_account'
+    private_key_id: 'put_here_your_id'
+    private_key: 'put_here_your_key'
+    client_email: 'put_here_your_client_email'
+    client_id: 'put_here_your_client_id'
+    auth_uri: 'https://accounts.google.com/o/oauth2/auth'
+    token_uri: 'https://accounts.google.com/o/oauth2/token'
+    auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
+    client_x509_cert_url: 'put_here_your_client_x509_cert_url'
+
+fuel_project::roles::blackduck::client::known_hosts:
+  'blackduck.test.local':
+    host: 'blackduck.test.local'
+    port: 22
+fuel_project::roles::blackduck::client::known_hosts_overwrite: false
+
+fuel_project::roles::blackduck::client::sdk_dst: '/home/jenkins/'
+fuel_project::roles::blackduck::client::sdk_path: '/mnt/Export-SDK.zip'
+fuel_project::roles::blackduck::client::ssh_private_key: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEogIBAAKCAQEAshFh2b6isI9IU5Ew4ChRPros+t0oExJD3bZKXfquNWXlvQKv
+  jye808ydM6GpBmF+FGx3TgRM+ODNz9QMsPDxEdsXcStcfLkq/DWzrlIl5aJrCtC+
+  cx4/8PnGX63+t3VTM0MkHzZBwGNa/Wzi6TMt+4IQsg7g/6o/R60wfo2KO8PSz6BS
+  lUqSU8WKtrjyo3HimOESRrFPistzm2E0n3sLNSzJ2XJB8rk7f9pOJrTHMq818n9N
+  tRF26ELp94NQ8L6ncTldENmg/ovrTY/WwXQLNM+i1spu4iUZ5NeV30en8O1FEigz
+  6z+aziG2GZP8WhmAGKk+hFBbHE1QL0+43FnhtwIDAQABAoIBAHRjUCXWqNfmj0uv
+  1tZtA82QOt4tt4ffpGRCRhFvTHayh5snKkDTpGR7lTSuMaBuEM6gpspjnTv/FAcH
+  ftQYaDlXjtb1lJohHauEHlGOeB7ELlr/Xbw4xWpol/Tp8VdQZHVZKT8NY6SwTETg
+  6t+qCCAgP3FisEXrrTjYRp4xPW0Z1eStPiVWt5NSyCYdDymZNi0D6EHq8KRg0eMV
+  668IBX701VwN2gpqe1HWg3PxYa1J9UXowHp4Xe6NcqqxQYsGnessXCxbvxr/mcPO
+  YJG9UQVKGXtrEE2JEnjq8pW8pv6Y0HCXOYN+JscbbOzEwGmaupYxZgxT0CG0XVRW
+  SXPstMECgYEA5N6bK+PpAaOOs4ZUUlrfe2bZWrtA4N//tpnl759RnoAscUoBdrON
+  z9nnIw5UaS+JulgrBBALWM7yev7XSGWtjLfc4w4hi4FP+GVkvh8/x+oflKBf+Cnm
+  O+PzAZmHxsKcfxr1oNbWkOc8mDiaGE9JHuyqBA+u9N0Oo+VgX4OKjckCgYEAxy0f
+  bg7kj1BE1Ac4og979SF5sGLaY2+S+VfHublCzwjxNkyI7PON+JEqVWqhBVsq0n+v
+  1H2A8JDqTbHRUu8uNxa4lkMetjwZtk+a39WWwmdU0SZZLpgoHAaAigl3IcbtT1Dq
+  XlQq0u/AKMEl/RrJqT2E//9LAOd2VHUJxwKqs38CgYAYps2J7bOERKyzM43TjQwz
+  S4Gv3yl+z0HI1kzJAZ0V+HJRBYqg0Xg94heeVAXNipxIIQUJG/1M5IWDr/1aQ/Fs
+  jcVSA4yjbRtDAxDV1aHWE6axKJENtt2gp83d5z6TrxSSMEIyv9E+rFl/f+FBKxES
+  LqWlaFcM8t6H0sYNo6qB2QKBgDhinMgybR/pMGL53F18lrHxlRqLEZoexvPRltgM
+  C07DEE434nd6B5H7volJ02XJxlirDyLPmMYBsGLoWQLqdSHhS8Y2ICak4v6KkKSX
+  OcO1Lvy6p3qaVpiAerkZLuGgCCRxGrgziaAHgVXIQDHj+HzxzooOQrRx0jzcmTT+
+  m0aPAoGAfSwniCpvAYKK7GzDVfTdEdWNSZZrIEHnc2+mT0FexAttTp2QB1eEDnoc
+  RWVB1Cah1aqUmvaar5Preyuhek0m3Mzbs9aAwiOPjDW9W23OzDxE2CluWEZi6Ppv
+  UxmCJmfZPxoBpp6+9ZI6Fh+8UItF/4QJatsxUvlR/a6W0VBEiPU=
+  -----END RSA PRIVATE KEY-----
+
+fuel_project::roles::blackduck::client::ssh_private_key_path: '/home/jenkins/.ssh/'
+
