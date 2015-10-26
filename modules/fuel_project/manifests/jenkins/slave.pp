@@ -78,6 +78,7 @@ class fuel_project::jenkins::slave (
   $verify_fuel_web                      = false,
   $verify_fuel_web_npm_packages         = ['casperjs','grunt-cli','gulp','phantomjs'],
   $verify_jenkins_jobs                  = false,
+  $verify_network_checker               = false,
   $workspace                            = '/home/jenkins/workspace',
   $x11_display_num                      = 99,
 ) {
@@ -706,6 +707,19 @@ class fuel_project::jenkins::slave (
       source       => $raemon_file,
       require      => [ Rvm_system_ruby["ruby-${ruby_version}"], File[$raemon_file] ],
     }
+  }
+
+  if ($verify_network_checker) {
+    $verify_network_checker_packages = [
+      'libpcap-dev',
+      'python-all-dev',
+      'python-tox',
+      'python-virtualenv',
+      'python2.6',
+      'python2.6-dev',
+      'python3-dev',
+    ]
+    ensure_packages($verify_network_checker_packages)
   }
 
   # Simple syntax check by:

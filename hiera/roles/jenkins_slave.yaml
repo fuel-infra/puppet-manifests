@@ -3,6 +3,8 @@ classes:
   - '::fuel_project::jenkins::slave'
   - '::sudo'
 
+fuel_project::jenkins::slave::verify_network_checker: true
+
 # keep current sudo configuration
 sudo::purge: false
 sudo::config_file_replace: false
