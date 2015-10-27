@@ -1,0 +1,259 @@
+---
+classes:
+  - fuel_project::roles::storage
+  - fuel_project::apps::firewall
+  - fuel_project::common
+  - fuel_project::nginx
+  - kibana4
+  - elasticsearch
+  - logstash
+  - logstashforwarder
+  - log_storage::logstash
+  - log_storage::logstashforwarder
+  - log_storage::params
+  - log_storage::storage::nginx
+  - log_storage::storage::zabbix
+  - java
+
+fuel_project::roles::storage::iso_vault_fqdn: 'vault.fuel-infra.org'
+fuel_project::apps::mirror::sync_hosts_allow:
+ - '127.0.0.1/32'
+
+kibana4::package_provider: 'package'
+kibana4::package_ensure: '4.1.1-ubuntu3'
+kibana4::service_name: 'kibana'
+kibana4::manage_user: true
+kibana4::symlink: 'true'
+kibana4::symlink_name: '/opt/kibana-4.1.1-ubuntu3'
+kibana4::kibana4_user: 'kibana'
+kibana4::kibana4_group: 'kibana'
+kibana4::elasticsearch_url: 'http://%{::fqdn}:9200'
+kibana4::host: 'localhost'
+
+elasticsearch::manage_repo: false
+elasticsearch::package_pin: true
+elasticsearch::version: '1.6.0-ubuntu2'
+elasticsearch::instances_hiera_merge: true
+elasticsearch::ensure: 'present'
+elasticsearch::status: 'enabled'
+elasticsearch::instances:
+  '%{::fqdn}-node':
+    config:
+      cluster.name: 'logcluster'
+      node.name: '%{::fqdn}'
+      discovery.zen.ping.multicast.enabled: false
+      discovery.zen.ping.unicast.hosts:
+        - 'storage01.test.local'
+        - 'storage02.test.local'
+      network.publish_host: 0.0.0.0
+      http.host: '%{::fqdn}'
+
+logstash::manage_repo: false
+logstash::package_pin: true
+logstash::version: '1.5.2-ubuntu2'
+
+log_storage::logstash::elasticsearch_bind_port: '9302'
+log_storage::logstash::elasticsearch_cluster: 'logcluster'
+
+log_storage::storage::nginx::oauth_domain: 'domain.com'
+log_storage::storage::nginx::oauth_client_id: 'oauth_client_id'
+log_storage::storage::nginx::oauth_client_secret: 'oauth_client_secret'
+log_storage::storage::nginx::oauth_token_secret: 'tpauth_token_secret'
+log_storage::storage::nginx::ssl_certificate_file: '/etc/nginx/ssl/ssl.crt'
+log_storage::storage::nginx::ssl_key_file: '/etc/nginx/ssl/ssl.key'
+
+logstashforwarder::servers:
+  - '%{::fqdn}:5000'
+  - 'storage-proxy-tst.infra.mirantis.net:5000'
+
+log_storage::params::nginx_ssl_ca: |
+  -----BEGIN CERTIFICATE-----
+  MIIDmzCCAoOgAwIBAgIJALlXI6301P0RMA0GCSqGSIb3DQEBCwUAMGQxCzAJBgNV
+  BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
+  aWRnaXRzIFB0eSBMdGQxHTAbBgNVBAMMFCouaW5mcmEubWlyYW50aXMubmV0MB4X
+  DTE1MDgxMTE0MDk1MVoXDTE2MDYwNjE0MDk1MVowZDELMAkGA1UEBhMCQVUxEzAR
+  BgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoMGEludGVybmV0IFdpZGdpdHMgUHR5
+  IEx0ZDEdMBsGA1UEAwwUKi5pbmZyYS5taXJhbnRpcy5uZXQwggEiMA0GCSqGSIb3
+  DQEBAQUAA4IBDwAwggEKAoIBAQCjp5hRE3tqIw7OZMnObfCfJ0PcaBHQAV/8A8/4
+  F2vzgwGx6wZ4tVw7m+dDDBYlgbd4ZBMy8OhN9xhyEAxouTHrAS8njtCJ4Dz3OWhm
+  z4xmw7WPXk8pa3+n1My95cJJzT0UA0GU5WzugIQRr8ZqIjo3bB/+AbTBJyxfZzaT
+  Jq96EYGivaqJydKbaZa2/14mJNc89uR4SkXBz54c8jRMzYlTmkDXuQDGCGeK5P5u
+  YtSOICkJOKd0Vu0b/Oyy73qIiELPvW/HqCBlCHrBlKL8H2fGzgbxaF25PUEy4Uo9
+  jPuZn+uJVdl/fP2Oa63Sq4yBTHHWY4vBnpysezJA2/r9pd4XAgMBAAGjUDBOMB0G
+  A1UdDgQWBBS0sFRW+zqVvqCVwrj4hzECTR63HDAfBgNVHSMEGDAWgBS0sFRW+zqV
+  vqCVwrj4hzECTR63HDAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQAC
+  0Ma1BEa9Fi6nGR1Efr93l9KRHq+4Wu+yuOiliZ6sYquvHHZxX9lR8GNN3AmgV7AF
+  GCEkfvCWUK1tMfJVj3YEoHE3sXKtM2v2pMJmeaNkrlw4Mi/X5+m9WB5N+1bhPeyo
+  pTa80QxH2Xas394zLLX5ODQ9+Z8R2Hc7dCdQo1CuT9eabEPdJ7gKR9wRegC8jn/7
+  Kgyod3EbQ502PiuFow9qG4hlVTMJ2SC30WdDXua6N9J8uhD7PaDZRrnEg/ktYy+S
+  vaueWpOY79gbHX86FN+FROm7WoulR3mT8kMIdyGYll1Yf/iPvJMtAiRtKnCtmegU
+  xfCiBVx2Cl1dX4oCnCcY
+  -----END CERTIFICATE-----
+log_storage::params::nginx_ssl_certificate: |
+  -----BEGIN CERTIFICATE-----
+  MIIDRDCCAiwCCQDNd4YvL9gylzANBgkqhkiG9w0BAQsFADBkMQswCQYDVQQGEwJB
+  VTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0
+  cyBQdHkgTHRkMR0wGwYDVQQDDBQqLmluZnJhLm1pcmFudGlzLm5ldDAeFw0xNTA4
+  MTExNDExMjNaFw0xNjA2MDYxNDExMjNaMGQxCzAJBgNVBAYTAkFVMRMwEQYDVQQI
+  DApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQx
+  HTAbBgNVBAMMFCouaW5mcmEubWlyYW50aXMubmV0MIIBIjANBgkqhkiG9w0BAQEF
+  AAOCAQ8AMIIBCgKCAQEA0mHIzCmTlY31Y1+vGtL+UvG7R9WUg/xXRARwI0tTU3Sz
+  AbHGfiLGwSWW/TnJRcH+PklnqUtvsnQ74o8baNRnunqaS344NwhwDglWfr4z/czI
+  0v9yhGtjD4LoGpyVOiIDIxVIupZTBtRtxLDJ+RrECSBNVnZi3nwJ+SobzRgJKXht
+  HQV1dbvoE1tDOdTYaTkBw6xqvpaHNCw/KwsWlWEfW6PHrCfHDmMnA1FJ8EFcV09G
+  yC5hcg75p96OS7oDAEYw/kAUGG7OyD3c8KVL+82CJHCzQMxPO1kepes0VQiR53b9
+  os95QKWwcK8Odjt0lYmIZJcJ2xIufTY5y+wq9/9QVwIDAQABMA0GCSqGSIb3DQEB
+  CwUAA4IBAQBNE60LwIFuFaxcOwes/2gnbYiwku4bG4JrsVS4CNOwE4MyNTL8HM9I
+  QEIBGxlIq1Hwj1KR02zNrukyVIDRBBrQ+wHxnioak9/vyVxxVhrmjoZwqRWWmmyf
+  RDE4sW3M1ixWjQrQaghMrFDQ5H6pNzvY16BDx+CJc7ipxOT89elAAXgUFrot4aKh
+  10+CMCT46tktQ0gVnBwmNWAk1ZKfFQq4ZRzT1YhTLjGfp3LWkixAEVNFP0TqMpkf
+  FcguRyqlNXTF7OpExBwL1U8myQIdjioraiMDTPAwIws2b73KOmN3CipIjiBRiHH9
+  bA+ytYosDVRPjeMtn2vXmv7sjWyROyiI
+  -----END CERTIFICATE-----
+log_storage::params::nginx_ssl_key: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpAIBAAKCAQEA0mHIzCmTlY31Y1+vGtL+UvG7R9WUg/xXRARwI0tTU3SzAbHG
+  fiLGwSWW/TnJRcH+PklnqUtvsnQ74o8baNRnunqaS344NwhwDglWfr4z/czI0v9y
+  hGtjD4LoGpyVOiIDIxVIupZTBtRtxLDJ+RrECSBNVnZi3nwJ+SobzRgJKXhtHQV1
+  dbvoE1tDOdTYaTkBw6xqvpaHNCw/KwsWlWEfW6PHrCfHDmMnA1FJ8EFcV09GyC5h
+  cg75p96OS7oDAEYw/kAUGG7OyD3c8KVL+82CJHCzQMxPO1kepes0VQiR53b9os95
+  QKWwcK8Odjt0lYmIZJcJ2xIufTY5y+wq9/9QVwIDAQABAoIBAQCVUANEK0nsfdko
+  EzPi1NbdpWTm4cXLOt/wjTnNQtu7wnp9fF/FDAeF85jK1iVsVfeM22ov9DMtM2OB
+  M1Ifv4hzCCrT45wgKuPkgmoaAAJEYgAyCEyNgO3Ih38VzAX5QUR6tNNuYdxBX6kc
+  TOC75Gw3ke5xrAoVn3EwntsmX6W5AM70YVS+WNYCyJ/7omQUxykyUIZH7EibCBjX
+  acaSdzlDjXlatAanZ5/N01/ym5sPXz8aR/ET0VvTxBY42558ofM7ITjxQnEsAAgn
+  gYUEQPeZtyvlw5FxTDX6MZn3X+vinD7eZYx+KWI5MlGziTxbnETc2gRRnJQJ92x5
+  rthlnwCJAoGBAOtkbyTRS3FCrTOopxmDc6NChu4sRgf5mMPO1FsORjHlue6k8hHM
+  1sFwmLfcwGq0FVAxk+6rRY3XO8l+A8LuK6nNqk6IZX6ZKCWFXvikTqBTLbvYWOkc
+  aXsqmTihFNRqpAgIfnxuBYfMD+YLrO8165mRb8QTCbLa39wgtu1DXT97AoGBAOTM
+  0r2vpydejeoHjZz0VprE1Yur7oPHXEM338LO2U0ikf77TYsOReyq+EuYGV53EUPn
+  PsvlXoWmOUVx77EieaKZNHrg3+fNHCITMAVon6iDYi+znTdHRo8nYMbSe4Ygh4x1
+  nrag3yGtcP4D9cSf3BoGFipsgUAE4Ytk4jiAfM3VAoGBAJyHQNE+y+gY6ov7joKM
+  wwzBZHBkyHztIQS0OMoEB/GOTcG/tajYicZAVY2OIfXSoomdLj37blkP0xX90gqB
+  zk8wEBwA31z8A5JPygOVXyOFrFfJWfZJimr4vMLHes51y3X8EAA2OT9AFyJmiSzY
+  sj6AU84SytRAb7Q1nO7RaOSZAoGAAiTBHLHWmRHTtouXkg7f+Nc7QPG9bFKj1KVj
+  XUne01Atmfv0wAbENPFtHhgwtKfc64vxFKvzdMEX7ESjAD/Yb+OLkFMnBd7wEomn
+  e4V9aXDBrLy8DlaGnLS7vWEfcyQ+4NwBPqjHLmOXmWmkFdGBmGTSNFeL5nOlQU8S
+  p4DcqnkCgYBibXLycmFC0nWojEo7187B6gWhB1GyJMThBKV/lgaSQG+xVrOMTCGU
+  8xK8pE+woskmDVkR8aDKLdvV1nETR9+6zBflHs1Kl/c/ze34/yIsao+QGJOkz3cx
+  Vi7zlubcCEuMg7nAJF6bjAfRo+qjnHshSlEWXq38XZ/+WUxSvRW1og==
+  -----END RSA PRIVATE KEY-----
+
+# firewall configuration
+fuel_project::apps::firewall::rules:
+  '0050 - logstash to elasticsearch connections from SRT proxy in /29 sub':
+    source: 1.1.1.0/29
+    dport: 9201
+    proto: tcp
+    action: accept
+  '0050 - logstash to elasticsearch connections from MSK proxy in /29 sub':
+    source: 1.1.2.0/29
+    dport:  9201
+    proto: tcp
+    action: accept
+  '0050 - logstash to elasticsearch connections from BUD proxy in /29 sub':
+    source: 1.1.3.0/29
+    dport: 9201
+    proto: tcp
+    action: accept
+  '0051 - reject all remaining traffic from the storage proxy in SRT to the storage backends':
+    source: 1.1.1.0/29
+    proto: all
+    action: reject
+    reject: icmp-port-unreachable
+  '0051 - reject all remaining traffic from the storage proxy in MSK to the storage backends':
+    source: 1.1.2.0/29
+    proto: all
+    action: reject
+    reject: icmp-port-unreachable
+  '0051 - reject all remaining traffic from the storage proxy in BUD to the storage backends':
+    source: 1.1.3.0/29
+    proto: all
+    action: reject
+    reject: icmp-port-unreachable
+  '0052 - elasticsearch connections between storage nodes only - allow from storage01-msk':
+     source: 1.1.4.1/32
+     dport: 9300
+     proto: tcp
+     action: accept
+  '0052 - elasticsearch connections between storage nodes only - allow from storage01-srt':
+     source: 1.1.5.1/32
+     dport: 9300
+     proto: tcp
+     action: accept
+  '0053 - connections between storage nodes only - reject remaining traffic from storage01-msk':
+     source: 1.1.4.1/32
+     proto: all
+     action: reject
+     reject: icmp-port-unreachable
+  '0053 - connections between storage nodes only - reject remaining traffic from storage01-srt':
+     source: 1.1.5.1/32
+     proto: all
+     action: reject
+     reject: icmp-port-unreachable
+  '1000 - allow connections from 1.1.1.0/23 - SRT location':
+    source: 1.1.1.0/23
+    dport:
+      - 22
+      - 80
+      - 873
+    proto: tcp
+    action: accept
+  '1000 - allow connections from 1.1.2.0/22 - MSK location':
+    source: 1.1.2.0/22
+    dport:
+      - 22
+      - 80
+      - 873
+    proto: tcp
+    action: accept
+  '1000 - allow connections from 1.1.6.1/32 - CZ DC Uplink':
+    source: 1.1.6.1/32
+    dport:
+      - 22
+      - 80
+      - 873
+    proto: tcp
+    action: accept
+  '1000 - allow connections from 1.1.7.0/23 - KHA location':
+    source: 1.1.7.0/23
+    dport:
+      - 22
+      - 80
+    proto: tcp
+    action: accept
+  '1000 - allow connections from 1.1.8.0/29 - LVV location':
+    source: 1.1.8.0/29
+    dport:
+      - 22
+      - 80
+    proto: tcp
+    action: accept
+  '1000 - allow connections from 1.1.9.0/29 - MNV_1 location':
+    source: 1.1.9.0/29
+    dport:
+      - 22
+      - 80
+    proto: tcp
+    action: accept
+  '1000 - allow connections from 1.1.10.0/30 - MNV_2 location':
+    source: 1.1.10.0/30
+    dport:
+      - 22
+      - 80
+    proto: tcp
+    action: accept
+  '1000 - allow connections from 1.1.11.0/29 - MNV_3 location':
+    source: 1.1.11.0/29
+    dport:
+      - 22
+      - 80
+    proto: tcp
+    action: accept
+  '1000 - allow connections from 1.1.12.0/28 - POZ location':
+    source: 1.1.12.0/28
+    dport:
+      - 22
+      - 80
+    proto: tcp
+    action: accept

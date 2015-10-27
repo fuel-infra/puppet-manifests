@@ -1,0 +1,8 @@
+filter {
+  if [type] == "<%= @nginx_filter_access_type %>" {
+    grok {
+      match => { "message" => "%{<%= @nginx_filter_access_message %>}" }
+      patterns_dir => "<%= @logstash_patterns_dir %>"
+    }
+  }
+}

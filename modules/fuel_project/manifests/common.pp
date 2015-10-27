@@ -20,6 +20,7 @@ class fuel_project::common (
   $tls_cacertdir      = '',
 ) {
   class { '::atop' :}
+  class { '::log_storage::logstashforwarder' :}
   class { '::ntp' :}
   class { '::puppet::agent' :}
   class { '::ssh::authorized_keys' :}

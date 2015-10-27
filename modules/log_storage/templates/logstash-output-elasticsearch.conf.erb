@@ -1,0 +1,24 @@
+output {
+  elasticsearch {
+    host => <%= @elasticsearch_host %>
+    protocol => "<%= @elasticsearch_protocol %>"
+    <% if @elasticsearch_port %>
+    port => "<%= @elasticsearch_port %>"
+    <% end %>
+    <% if @elasticsearch_bind_port %>
+    bind_port => "<%= @elasticsearch_bind_port %>"
+    <% end %>
+    <% if @elasticsearch_cluster %>
+    cluster => "<%= @elasticsearch_cluster %>"
+    <% end %>
+    <% if @elasticsearch_ssl %>
+    ssl => "<%= @elasticsearch_ssl %>"
+    <% end %>
+    <% if @elasticsearch_ssl_cert_verify %>
+    ssl_certificate_verification => "<%= @elasticsearch_ssl_cert_verify %>"
+    <% end %>
+    <% if @elasticsearch_cacert %>
+    cacert => "<%= @elasticsearch_cacert %>"
+    <% end %>
+  }
+}

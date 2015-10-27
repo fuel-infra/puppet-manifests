@@ -858,3 +858,148 @@ logrotate::rules:
     ifempty: false
     create: false
     delaycompress: true
+
+log_storage::params::logstash_ssl_ca: |
+  -----BEGIN CERTIFICATE-----
+  MIIDmzCCAoOgAwIBAgIJALlXI6301P0RMA0GCSqGSIb3DQEBCwUAMGQxCzAJBgNV
+  BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
+  aWRnaXRzIFB0eSBMdGQxHTAbBgNVBAMMFCouaW5mcmEubWlyYW50aXMubmV0MB4X
+  DTE1MDgxMTE0MDk1MVoXDTE2MDYwNjE0MDk1MVowZDELMAkGA1UEBhMCQVUxEzAR
+  BgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoMGEludGVybmV0IFdpZGdpdHMgUHR5
+  IEx0ZDEdMBsGA1UEAwwUKi5pbmZyYS5taXJhbnRpcy5uZXQwggEiMA0GCSqGSIb3
+  DQEBAQUAA4IBDwAwggEKAoIBAQCjp5hRE3tqIw7OZMnObfCfJ0PcaBHQAV/8A8/4
+  F2vzgwGx6wZ4tVw7m+dDDBYlgbd4ZBMy8OhN9xhyEAxouTHrAS8njtCJ4Dz3OWhm
+  z4xmw7WPXk8pa3+n1My95cJJzT0UA0GU5WzugIQRr8ZqIjo3bB/+AbTBJyxfZzaT
+  Jq96EYGivaqJydKbaZa2/14mJNc89uR4SkXBz54c8jRMzYlTmkDXuQDGCGeK5P5u
+  YtSOICkJOKd0Vu0b/Oyy73qIiELPvW/HqCBlCHrBlKL8H2fGzgbxaF25PUEy4Uo9
+  jPuZn+uJVdl/fP2Oa63Sq4yBTHHWY4vBnpysezJA2/r9pd4XAgMBAAGjUDBOMB0G
+  A1UdDgQWBBS0sFRW+zqVvqCVwrj4hzECTR63HDAfBgNVHSMEGDAWgBS0sFRW+zqV
+  vqCVwrj4hzECTR63HDAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQAC
+  0Ma1BEa9Fi6nGR1Efr93l9KRHq+4Wu+yuOiliZ6sYquvHHZxX9lR8GNN3AmgV7AF
+  GCEkfvCWUK1tMfJVj3YEoHE3sXKtM2v2pMJmeaNkrlw4Mi/X5+m9WB5N+1bhPeyo
+  pTa80QxH2Xas394zLLX5ODQ9+Z8R2Hc7dCdQo1CuT9eabEPdJ7gKR9wRegC8jn/7
+  Kgyod3EbQ502PiuFow9qG4hlVTMJ2SC30WdDXua6N9J8uhD7PaDZRrnEg/ktYy+S
+  vaueWpOY79gbHX86FN+FROm7WoulR3mT8kMIdyGYll1Yf/iPvJMtAiRtKnCtmegU
+  xfCiBVx2Cl1dX4oCnCcY
+  -----END CERTIFICATE-----
+log_storage::params::logstash_ssl_certificate: |
+  -----BEGIN CERTIFICATE-----
+  MIIDRDCCAiwCCQDNd4YvL9gylzANBgkqhkiG9w0BAQsFADBkMQswCQYDVQQGEwJB
+  VTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0
+  cyBQdHkgTHRkMR0wGwYDVQQDDBQqLmluZnJhLm1pcmFudGlzLm5ldDAeFw0xNTA4
+  MTExNDExMjNaFw0xNjA2MDYxNDExMjNaMGQxCzAJBgNVBAYTAkFVMRMwEQYDVQQI
+  DApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQx
+  HTAbBgNVBAMMFCouaW5mcmEubWlyYW50aXMubmV0MIIBIjANBgkqhkiG9w0BAQEF
+  AAOCAQ8AMIIBCgKCAQEA0mHIzCmTlY31Y1+vGtL+UvG7R9WUg/xXRARwI0tTU3Sz
+  AbHGfiLGwSWW/TnJRcH+PklnqUtvsnQ74o8baNRnunqaS344NwhwDglWfr4z/czI
+  0v9yhGtjD4LoGpyVOiIDIxVIupZTBtRtxLDJ+RrECSBNVnZi3nwJ+SobzRgJKXht
+  HQV1dbvoE1tDOdTYaTkBw6xqvpaHNCw/KwsWlWEfW6PHrCfHDmMnA1FJ8EFcV09G
+  yC5hcg75p96OS7oDAEYw/kAUGG7OyD3c8KVL+82CJHCzQMxPO1kepes0VQiR53b9
+  os95QKWwcK8Odjt0lYmIZJcJ2xIufTY5y+wq9/9QVwIDAQABMA0GCSqGSIb3DQEB
+  CwUAA4IBAQBNE60LwIFuFaxcOwes/2gnbYiwku4bG4JrsVS4CNOwE4MyNTL8HM9I
+  QEIBGxlIq1Hwj1KR02zNrukyVIDRBBrQ+wHxnioak9/vyVxxVhrmjoZwqRWWmmyf
+  RDE4sW3M1ixWjQrQaghMrFDQ5H6pNzvY16BDx+CJc7ipxOT89elAAXgUFrot4aKh
+  10+CMCT46tktQ0gVnBwmNWAk1ZKfFQq4ZRzT1YhTLjGfp3LWkixAEVNFP0TqMpkf
+  FcguRyqlNXTF7OpExBwL1U8myQIdjioraiMDTPAwIws2b73KOmN3CipIjiBRiHH9
+  bA+ytYosDVRPjeMtn2vXmv7sjWyROyiI
+  -----END CERTIFICATE-----
+log_storage::params::logstash_ssl_key: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpAIBAAKCAQEA0mHIzCmTlY31Y1+vGtL+UvG7R9WUg/xXRARwI0tTU3SzAbHG
+  fiLGwSWW/TnJRcH+PklnqUtvsnQ74o8baNRnunqaS344NwhwDglWfr4z/czI0v9y
+  hGtjD4LoGpyVOiIDIxVIupZTBtRtxLDJ+RrECSBNVnZi3nwJ+SobzRgJKXhtHQV1
+  dbvoE1tDOdTYaTkBw6xqvpaHNCw/KwsWlWEfW6PHrCfHDmMnA1FJ8EFcV09GyC5h
+  cg75p96OS7oDAEYw/kAUGG7OyD3c8KVL+82CJHCzQMxPO1kepes0VQiR53b9os95
+  QKWwcK8Odjt0lYmIZJcJ2xIufTY5y+wq9/9QVwIDAQABAoIBAQCVUANEK0nsfdko
+  EzPi1NbdpWTm4cXLOt/wjTnNQtu7wnp9fF/FDAeF85jK1iVsVfeM22ov9DMtM2OB
+  M1Ifv4hzCCrT45wgKuPkgmoaAAJEYgAyCEyNgO3Ih38VzAX5QUR6tNNuYdxBX6kc
+  TOC75Gw3ke5xrAoVn3EwntsmX6W5AM70YVS+WNYCyJ/7omQUxykyUIZH7EibCBjX
+  acaSdzlDjXlatAanZ5/N01/ym5sPXz8aR/ET0VvTxBY42558ofM7ITjxQnEsAAgn
+  gYUEQPeZtyvlw5FxTDX6MZn3X+vinD7eZYx+KWI5MlGziTxbnETc2gRRnJQJ92x5
+  rthlnwCJAoGBAOtkbyTRS3FCrTOopxmDc6NChu4sRgf5mMPO1FsORjHlue6k8hHM
+  1sFwmLfcwGq0FVAxk+6rRY3XO8l+A8LuK6nNqk6IZX6ZKCWFXvikTqBTLbvYWOkc
+  aXsqmTihFNRqpAgIfnxuBYfMD+YLrO8165mRb8QTCbLa39wgtu1DXT97AoGBAOTM
+  0r2vpydejeoHjZz0VprE1Yur7oPHXEM338LO2U0ikf77TYsOReyq+EuYGV53EUPn
+  PsvlXoWmOUVx77EieaKZNHrg3+fNHCITMAVon6iDYi+znTdHRo8nYMbSe4Ygh4x1
+  nrag3yGtcP4D9cSf3BoGFipsgUAE4Ytk4jiAfM3VAoGBAJyHQNE+y+gY6ov7joKM
+  wwzBZHBkyHztIQS0OMoEB/GOTcG/tajYicZAVY2OIfXSoomdLj37blkP0xX90gqB
+  zk8wEBwA31z8A5JPygOVXyOFrFfJWfZJimr4vMLHes51y3X8EAA2OT9AFyJmiSzY
+  sj6AU84SytRAb7Q1nO7RaOSZAoGAAiTBHLHWmRHTtouXkg7f+Nc7QPG9bFKj1KVj
+  XUne01Atmfv0wAbENPFtHhgwtKfc64vxFKvzdMEX7ESjAD/Yb+OLkFMnBd7wEomn
+  e4V9aXDBrLy8DlaGnLS7vWEfcyQ+4NwBPqjHLmOXmWmkFdGBmGTSNFeL5nOlQU8S
+  p4DcqnkCgYBibXLycmFC0nWojEo7187B6gWhB1GyJMThBKV/lgaSQG+xVrOMTCGU
+  8xK8pE+woskmDVkR8aDKLdvV1nETR9+6zBflHs1Kl/c/ze34/yIsao+QGJOkz3cx
+  Vi7zlubcCEuMg7nAJF6bjAfRo+qjnHshSlEWXq38XZ/+WUxSvRW1og==
+  -----END RSA PRIVATE KEY-----
+
+log_storage::logstash::nginx_filter_access_message: 'NGINXACCESS'
+log_storage::logstash::nginx_filter_access_type: 'nginx-access'
+log_storage::logstash::nginx_filter_error_message: 'NGINXERROR'
+log_storage::logstash::nginx_filter_error_type: 'nginx-error'
+log_storage::logstash::syslog_filter_match:
+  - "syslog_timestamp"
+  - "MMM  d HH:mm:ss"
+  - "MMM dd HH:mm:ss"
+
+log_storage::logstashforwarder::ssl_ca_file: '/etc/logstashforwarder/ssl.ca'
+log_storage::logstashforwarder::ssl_ca: '%{log_storage::params::logstash_ssl_ca}'
+log_storage::logstashforwarder::files:
+  syslog:
+    paths:
+      - /var/log/alternatives.log
+      - /var/log/apt/*.log
+      - /var/log/atop/daily.log
+      - /var/log/auth.log
+      - /var/log/bacula/*.log
+      - /var/log/boot.log
+      - /var/log/cloud-init.log
+      - /var/log/cron.log
+      - /var/log/daemon.log
+      - /var/log/debug
+      - /var/log/dpkg.log
+      - /var/log/fsck/checkfs
+      - /var/log/fsck/checkroot
+      - /var/log/jenkins/*.log
+      - /var/log/kern.log
+      - /var/log/libvirt/libvirtd.log
+      - /var/log/libvirt/libxl/*.log
+      - /var/log/libvirt/lxc/*.log
+      - /var/log/libvirt/qemu/*.log
+      - /var/log/libvirt/shutdownlog.log
+      - /var/log/libvirt/uml/*.log
+      - /var/log/lpr.log
+      - /var/log/mail.log
+      - /var/log/messages
+      - /var/log/mysql.err
+      - /var/log/mysql.log
+      - /var/log/mysql/*.log
+      - /var/log/postgresql/*.log
+      - /var/log/puppet/*.log
+      - /var/log/syslog
+      - /var/log/ufw.log
+      - /var/log/upstart/*.log
+      - /var/log/user.log
+      - /var/log/zabbix-agent/*.log
+      - /var/lib/gerrit/review_site/logs/error_log
+      - /var/lib/gerrit/review_site/logs/gc_log
+      - /var/lib/gerrit/review_site/logs/sshd_log
+    fields:
+      type: syslog
+
+  nginx-access:
+    paths:
+      - /var/log/nginx/*access.log
+    fields:
+      type: nginx-access
+
+  nginx-error:
+    paths:
+      - /var/log/nginx/*error.log
+    fields:
+      type: nginx-error
+
+logstashforwarder::manage_repo: false
+logstashforwarder::version: '0.4.0-ubuntu1'
+logstashforwarder::ssl_ca: '%{log_storage::logstashforwarder::ssl_ca_file}'
+logstashforwarder::servers:
+ - storage-proxy-tst.infra.mirantis.net:5000

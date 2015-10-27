@@ -1,0 +1,3 @@
+NGUSER [a-zA-Z\.\@\-\+_%]+
+PROXY [0-9a-zA-Z\.\@\-\+_%():\s*]+
+<%= @nginx_filter_access_message %> ((%{IPORHOST:clientip} %{NGUSER:ident} %{NGUSER:auth} \[%{HTTPDATE:timestamp}\] \"%{WORD:verb} %{URIPATHPARAM:request} HTTP/%{NUMBER:httpversion}\" %{NUMBER:response} (?:%{NUMBER:bytes}|-) (?:\"(?:%{URI:referrer}|-)\"|%{QS:referrer}) %{QS:agent})|(\[%{HTTPDATE:timestamp}\] %{HOSTNAME:vhost} %{IPORHOST:clientip} \"%{WORD:verb} %{URIPATHPARAM:request} HTTP/%{NUMBER:httpversion}\" %{NUMBER:response} (?:\"(?:%{URI:referrer}|-)\"|%{QS:referrer}) %{QS:agent} \"%{NGUSER:ident}\" \"%{NGUSER:auth}\" \[%{PROXY:proxy}.*\] (?:%{NUMBER:request_length}|-) (?:%{NUMBER:bytes}|-) %{NUMBER:request_time}))
