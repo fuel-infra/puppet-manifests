@@ -18,7 +18,10 @@ class fuel_project::apps::mirror (
   $service_aliases          = [],
   $service_fqdn             = "mirror.${::fqdn}",
   $sync_hosts_allow         = [],
+  $syncer_username          = 'mirror-syncer',
+  $syncer_ssh_keys          = {},
 ) {
+  include rssh
   if(!defined(Class['rsync'])) {
     class { 'rsync' :
       package_ensure => 'present',
@@ -67,6 +70,7 @@ class fuel_project::apps::mirror (
     require         => File[$dir],
   }
 
+  # FIXME: It's legacy plain rsync share to be removed
   if ($rsync_writable_share) {
     ::rsync::server::module{ 'mirror-sync':
       comment         => $rsync_rw_share_comment,
@@ -89,6 +93,32 @@ class fuel_project::apps::mirror (
         ],
     }
   }
+  # /FIXME
+
+  $syncer_homedir = "/var/lib/${syncer_username}"
+
+  user { $syncer_username :
+    ensure     => 'present',
+    home       => $syncer_homedir,
+    shell      => '/usr/bin/rssh',
+    managehome => true,
+    system     => true,
+  }
+
+  file { $syncer_homedir :
+    ensure  => 'directory',
+    owner   => $syncer_username,
+    group   => $syncer_username,
+    require => User[$syncer_username],
+  }
+
+  create_resources('ssh_authorized_key', $syncer_ssh_keys, {
+    user    => $syncer_username,
+    require => [
+      User[$syncer_username],
+      File[$plugins_dir],
+      File[$syncer_homedir],
+    ]})
 
   if (!defined(Class['::fuel_project::nginx'])) {
     class { '::fuel_project::nginx' :}
