@@ -37,4 +37,27 @@ class fuel_project::jenkins::master (
         hour    => '2',
     })
   }
+
+  # error-pages
+  ensure_packages('error-pages')
+
+  ::Nginx::Resource::Vhost <| title == 'jenkins' |> {
+    vhost_cfg_append    => {
+      'error_page 403'         => '/fuel-infra/403.html',
+      'error_page 404'         => '/fuel-infra/404.html',
+      'error_page 500 502 504' => '/fuel-infra/5xx.html',
+    }
+  }
+
+  # error pages for jenkins
+  ::nginx::resource::location { 'jenkins-error-pages' :
+    ensure   => 'present',
+    vhost    => 'jenkins',
+    location => '~ ^\/(mirantis|fuel-infra)\/(403|404|5xx)\.html$',
+    ssl      => true,
+    ssl_only => true,
+    www_root => '/usr/share/error_pages',
+    require  => Package['error-pages'],
+  }
+
 }

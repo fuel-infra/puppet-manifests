@@ -155,15 +155,16 @@ class jenkins::master (
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
     location_cfg_append => {
-      client_max_body_size => '8G',
-      proxy_redirect       => 'off',
-      proxy_set_header     => {
+      client_max_body_size   => '8G',
+      proxy_intercept_errors => 'on',
+      proxy_redirect         => 'off',
+      proxy_set_header       => {
         'X-Forwarded-For'   => '$remote_addr',
         'X-Forwarded-Proto' => 'https',
         'X-Real-IP'         => '$remote_addr',
         'Host'              => '$host',
       },
-    },
+    }
   }
 
   ::nginx::resource::location { 'static' :
