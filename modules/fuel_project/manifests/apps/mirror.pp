@@ -3,8 +3,6 @@
 class fuel_project::apps::mirror (
   $autoindex                = 'on',
   $dir                      = '/var/www/mirror',
-  $dir_group                = 'www-data',
-  $dir_owner                = 'www-data',
   $firewall_allow_sources   = {},
   $nginx_access_log         = '/var/log/nginx/access.log',
   $nginx_error_log          = '/var/log/nginx/error.log',
@@ -28,23 +26,15 @@ class fuel_project::apps::mirror (
     }
   }
 
-  ensure_resource('user', $dir_owner, {
-    ensure     => 'present',
-  })
-
-  ensure_resource('group', $dir_group, {
-    ensure     => 'present',
-  })
-
   file { $dir :
     ensure  => 'directory',
-    owner   => $dir_owner,
-    group   => $dir_group,
+    owner   => $syncer_username,
+    group   => $syncer_username,
+    recurse => true,
     mode    => '0755',
     require => [
         Class['nginx'],
-        User[$dir_owner],
-        Group[$dir_group],
+        User[$syncer_username],
       ],
   }
 
@@ -74,8 +64,8 @@ class fuel_project::apps::mirror (
   if ($rsync_writable_share) {
     ::rsync::server::module{ 'mirror-sync':
       comment         => $rsync_rw_share_comment,
-      uid             => $dir_owner,
-      gid             => $dir_group,
+      uid             => $syncer_username,
+      gid             => $syncer_username,
       hosts_allow     => $sync_hosts_allow,
       hosts_deny      => ['*'],
       incoming_chmod  => '0755',
@@ -88,8 +78,7 @@ class fuel_project::apps::mirror (
       write_only      => 'no',
       require         => [
           File[$dir],
-          User[$dir_owner],
-          Group[$dir_group],
+          User[$syncer_username],
         ],
     }
   }
