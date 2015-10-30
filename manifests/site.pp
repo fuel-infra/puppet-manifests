@@ -44,11 +44,6 @@ node /docs-slave01.vm.mirantis.net/ {
   class { '::fuel_project::jenkins::slave' :}
 }
 
-node /osci-mirror-(msk|srt|kha|poz)\.(msk|srt|kha|infra)\.mirantis\.net/ {
-  class { '::fuel_project::common' :}
-  class { '::fuel_project::apps::mirror' :}
-}
-
 node /ci-slave([0-9]{2})\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::slave' :
     external_host       => true,
