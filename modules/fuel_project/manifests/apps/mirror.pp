@@ -30,7 +30,6 @@ class fuel_project::apps::mirror (
     ensure  => 'directory',
     owner   => $syncer_username,
     group   => $syncer_username,
-    recurse => true,
     mode    => '0755',
     require => [
         Class['nginx'],
