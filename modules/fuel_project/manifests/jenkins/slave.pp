@@ -191,6 +191,28 @@ class fuel_project::jenkins::slave (
 
   # Run system tests
   if ($run_tests == true) {
+    # FIXME: Qemu 2.4 stub to enable kvm_intel module loading {
+    # Should be removed after package fix.
+    if($::virtual == 'physical') {
+      if($::processor0 =~ /^Intel/) {
+        file { '/etc/modprobe.d/qemu-system-x86.conf' :
+          ensure  => 'present',
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644',
+          content => 'options kvm_intel nested=1'
+        }
+      } else {
+        warning("qemu-kvm modules was not loaded because processor vendor is not Intel. Don't know what to load :(")
+      }
+      exec { '/sbin/modprobe -a' :
+        user      => 'root',
+        logoutput => 'on_failure',
+        require   => File['/etc/modprobe.d/qemu-system-x86.conf'],
+      }
+    }
+    # }
+
     if ($libvirt_default_network == false) {
       class { '::libvirt' :
         listen_tls         => false,
@@ -484,6 +506,27 @@ class fuel_project::jenkins::slave (
 
   # osci_tests - for deploying osci jenkins slaves
   if ($osci_test == true) {
+    # FIXME: Qemu 2.4 stub to enable kvm_intel module loading {
+    # Should be removed after package fix.
+    if($::virtual == 'physical') {
+      if($::processor0 =~ /^Intel/) {
+        file { '/etc/modprobe.d/qemu-system-x86.conf' :
+          ensure  => 'present',
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644',
+          content => 'options kvm_intel nested=1'
+        }
+      } else {
+        warning("qemu-kvm modules was not loaded because processor vendor is not Intel. Don't what to load :(")
+      }
+      exec { '/sbin/modprobe -a' :
+        user      => 'root',
+        logoutput => 'on_failure',
+        require   => File['/etc/modprobe.d/qemu-system-x86.conf'],
+      }
+    }
+    # }
 
     # osci needed packages
     $osci_test_packages = [
