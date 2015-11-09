@@ -202,13 +202,14 @@ class fuel_project::jenkins::slave (
           mode    => '0644',
           content => 'options kvm_intel nested=1'
         }
+        # load kvm_intel module only if Intel cpu found.
+        exec { '/sbin/modprobe kvm_intel' :
+          user      => 'root',
+          logoutput => 'on_failure',
+          require   => File['/etc/modprobe.d/qemu-system-x86.conf'],
+        }
       } else {
         warning("qemu-kvm modules was not loaded because processor vendor is not Intel. Don't know what to load :(")
-      }
-      exec { '/sbin/modprobe -a' :
-        user      => 'root',
-        logoutput => 'on_failure',
-        require   => File['/etc/modprobe.d/qemu-system-x86.conf'],
       }
     }
     # }
@@ -517,13 +518,14 @@ class fuel_project::jenkins::slave (
           mode    => '0644',
           content => 'options kvm_intel nested=1'
         }
+        # load kvm_intel module only if Intel cpu found.
+        exec { '/sbin/modprobe kvm_intel' :
+          user      => 'root',
+          logoutput => 'on_failure',
+          require   => File['/etc/modprobe.d/qemu-system-x86.conf'],
+        }
       } else {
         warning("qemu-kvm modules was not loaded because processor vendor is not Intel. Don't what to load :(")
-      }
-      exec { '/sbin/modprobe -a' :
-        user      => 'root',
-        logoutput => 'on_failure',
-        require   => File['/etc/modprobe.d/qemu-system-x86.conf'],
       }
     }
     # }
