@@ -40,6 +40,7 @@ class fuel_project::common (
 
   ensure_packages([
     'apparmor',
+    'config-zabbix-agent-dmesg-item',
     'config-zabbix-agent-oom-killer-item',
     'facter-facts',
     'screen',
