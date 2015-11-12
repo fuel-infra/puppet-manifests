@@ -4,6 +4,7 @@ class fuel_project::jenkins::slave (
   $docker_package,
   $ruby_version,
   $bind_policy                          = '',
+  $bats_tests                           = false,
   $build_fuel_iso                       = false,
   $build_fuel_packages                  = false,
   $build_fuel_npm_packages              = ['grunt-cli', 'gulp'],
@@ -116,6 +117,11 @@ class fuel_project::jenkins::slave (
   }
 
   ensure_packages(['git', 'python-seed-client'])
+
+  # bats tests
+  if($bats_tests) {
+    ensure_packages('bats')
+  }
 
   # bug: https://bugs.launchpad.net/fuel/+bug/1497275
   ensure_packages(['python-yaml', 'python-git'])
@@ -821,7 +827,6 @@ class fuel_project::jenkins::slave (
   # Verify Jenkins jobs
   if ($verify_jenkins_jobs) {
     $verify_jenkins_jobs_packages = [
-      'bats',
       'python-tox',
       'shellcheck',
     ]
