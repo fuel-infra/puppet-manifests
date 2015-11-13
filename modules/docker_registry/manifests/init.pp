@@ -6,9 +6,11 @@ class docker_registry (
     $oauth_client_secret,
     $oauth_domain,
     $service_fqdn,
-    $ssl_certificate_content,
+    $ssl_certificate_global_content,
+    $ssl_certificate_internal_content,
     $ssl_certificate_token_content,
-    $ssl_key_content,
+    $ssl_key_global_content,
+    $ssl_key_internal_content,
     $ssl_key_token_content,
     $anonymous = true,
     $auth_port = 5001,
@@ -21,9 +23,11 @@ class docker_registry (
     $search_user = 'index',
     $server_backend_port = 5800,
     $server_port = 443,
-    $ssl_certificate = '/etc/ssl/certs/registry.crt',
+    $ssl_certificate_global = '/etc/ssl/certs/registry.crt',
+    $ssl_certificate_internal = '/etc/ssl/certs/internal.crt',
     $ssl_certificate_token = '/etc/registry/token.crt',
-    $ssl_key = '/etc/ssl/private/registry.key',
+    $ssl_key_global = '/etc/ssl/private/registry.key',
+    $ssl_key_internal = '/etc/ssl/private/internal.key',
     $ssl_key_token = '/etc/registry/token.key',
     $static_users = {},
 ) {
@@ -65,22 +69,41 @@ class docker_registry (
     require => Package[$packages],
   }
 
-  # create certificate files for Nginx
-  file { $ssl_certificate:
+  # create certificate files for global Nginx
+  file { $ssl_certificate_global:
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
     mode    => '0640',
-    content => $ssl_certificate_content,
+    content => $ssl_certificate_global_content,
     require => Package[$packages],
   }
 
-  file { $ssl_key:
+  file { $ssl_key_global:
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
     mode    => '0640',
-    content => $ssl_key_content,
+    content => $ssl_key_global_content,
+    require => Package[$packages],
+  }
+
+  # create certificate files for internal Nginx
+  file { $ssl_certificate_internal:
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0640',
+    content => $ssl_certificate_internal_content,
+    require => Package[$packages],
+  }
+
+  file { $ssl_key_internal:
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0640',
+    content => $ssl_key_internal_content,
     require => Package[$packages],
   }
 
@@ -108,10 +131,10 @@ class docker_registry (
     ensure              => 'present',
     ssl_port            => $auth_port,
     listen_port         => $auth_port,
-    server_name         => [$service_fqdn, $::fqdn],
+    server_name         => [$service_fqdn],
     ssl                 => true,
-    ssl_cert            => $ssl_certificate,
-    ssl_key             => $ssl_key,
+    ssl_cert            => $ssl_certificate_global,
+    ssl_key             => $ssl_key_global,
     ssl_cache           => 'shared:SSL:10m',
     ssl_session_timeout => '10m',
     ssl_stapling        => true,
@@ -128,17 +151,17 @@ class docker_registry (
         'Host'              => '$host',
       },
     },
-    require             => [File[$ssl_key], File[$ssl_certificate]],
+    require             => [File[$ssl_key_global], File[$ssl_certificate_global]],
   }
 
-  ::nginx::resource::vhost { 'registry' :
+  ::nginx::resource::vhost { 'registry-global' :
     ensure              => 'present',
     listen_port         => $server_port,
     ssl_port            => $server_port,
-    server_name         => [$service_fqdn, $::fqdn],
+    server_name         => [$service_fqdn],
     ssl                 => true,
-    ssl_cert            => $ssl_certificate,
-    ssl_key             => $ssl_key,
+    ssl_cert            => $ssl_certificate_global,
+    ssl_key             => $ssl_key_global,
     ssl_cache           => 'shared:SSL:10m',
     ssl_session_timeout => '10m',
     ssl_stapling        => true,
@@ -155,7 +178,34 @@ class docker_registry (
         'Host'              => '$host',
       },
     },
-    require             => [File[$ssl_key], File[$ssl_certificate]],
+    require             => [File[$ssl_key_global], File[$ssl_certificate_global]],
+  }
+
+  ::nginx::resource::vhost { 'registry-internal' :
+    ensure              => 'present',
+    listen_port         => $server_port,
+    ssl_port            => $server_port,
+    server_name         => [$::fqdn],
+    ssl                 => true,
+    ssl_cert            => $ssl_certificate_internal,
+    ssl_key             => $ssl_key_internal,
+    ssl_cache           => 'shared:SSL:10m',
+    ssl_session_timeout => '10m',
+    ssl_stapling        => true,
+    ssl_stapling_verify => true,
+    proxy               => "http://127.0.0.1:${server_backend_port}",
+    proxy_read_timeout  => 120,
+    location_cfg_append => {
+      client_max_body_size => '8G',
+      proxy_redirect       => 'off',
+      proxy_set_header     => {
+        'X-Forwarded-For'   => '$remote_addr',
+        'X-Forwarded-Proto' => 'https',
+        'X-Real-IP'         => '$remote_addr',
+        'Host'              => '$host',
+      },
+    },
+    require             => [File[$ssl_key_internal], File[$ssl_certificate_internal]],
   }
 
   ::nginx::resource::vhost { 'search' :
