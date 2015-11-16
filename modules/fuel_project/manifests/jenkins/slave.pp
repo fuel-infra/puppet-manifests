@@ -117,6 +117,9 @@ class fuel_project::jenkins::slave (
 
   ensure_packages(['git', 'python-seed-client'])
 
+  # bug: https://bugs.launchpad.net/fuel/+bug/1497275
+  ensure_packages(['python-yaml', 'python-git'])
+
   # release status reports
   if ($build_fuel_iso == true or $run_tests == true) {
     class { '::landing_page::updater' :}
