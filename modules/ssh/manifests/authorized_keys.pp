@@ -7,8 +7,15 @@ class ssh::authorized_keys {
   #   purge_ssh_key => true,
   # }
   #
+  file { '/root/.ssh' :
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0700',
+  }
   exec { 'echo "" > /root/.ssh/authorized_keys' :
-    user => 'root',
+    user    => 'root',
+    require => File['/root/.ssh'],
   }
   # /FIXME
   create_resources(ssh_authorized_key,
