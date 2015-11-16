@@ -44,21 +44,6 @@ node /docs-slave01.vm.mirantis.net/ {
   class { '::fuel_project::jenkins::slave' :}
 }
 
-node /ci-slave([0-9]{2})\.fuel-infra\.org/ {
-  class { '::fuel_project::jenkins::slave' :
-    external_host       => true,
-    run_tests           => true,
-    simple_syntax_check => true,
-    verify_fuel_web     => true,
-    verify_fuel_astute  => true,
-    verify_fuel_docs    => true,
-    build_fuel_plugins  => true,
-    verify_fuel_stats   => true,
-    check_tasks_graph   => true,
-    fuel_web_selenium   => true,
-  }
-}
-
 node /(infra|fuel)-jenkins(\d+)\.fuel-infra\.org/ {
   class { '::fuel_project::jenkins::master' :}
 }
