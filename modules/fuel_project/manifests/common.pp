@@ -43,6 +43,7 @@ class fuel_project::common (
     'apparmor',
     'config-zabbix-agent-dmesg-item',
     'config-zabbix-agent-oom-killer-item',
+    'config-zabbix-agent-ulimit-item',
     'facter-facts',
     'screen',
     'tmux',
