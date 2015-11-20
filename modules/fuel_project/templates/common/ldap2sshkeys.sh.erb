@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 sh=$1
 if [ $# -lt 1 ]; then
@@ -8,47 +8,44 @@ if [ $# -lt 1 ]; then
 fi
 
 d=/etc/ssh/keys.$$
-t=/tmp/ldap2sshkeys.$$
-g=/tmp/ldap2sshkeys-sg.$$
-tmpDir=/tmp/ldap2sshkeys_dir.$$
+keys=/tmp/ldap2sshkeys.$$
+sg=/tmp/ldap2sshkeys-sg.$$
+groups=/tmp/ldap2sshkeys-gr.$$
 
 [ -d $d ] || mkdir $d
-[ -d $tmpDir ] || mkdir $tmpDir
 
-ldapsearch -LLL -x -b "o=mirantis,dc=mirantis,dc=net" "(&(objectClass=groupOfNames)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)))" memberUid | awk '/memberUid:/ {print $2}' > $t
-ldapsearch -LLL -x -b "ou=people,ou=external,dc=mirantis,dc=net" "(&(objectClass=groupOfNames)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)))" memberUid | awk '/memberUid:/ {print $2}' >> $t
-ldapsearch -LLL -x -b "ou=people,ou=external,dc=mirantis,dc=net" "(&(sshPublicKey=*)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)(memberOf=cn=it,ou=groups,o=mirantis,dc=mirantis,dc=net)))" uid | awk '/uid:/ {print $2}' >> $t
-ldapsearch -LLL -x -b "o=mirantis,dc=mirantis,dc=net" "(&(sshPublicKey=*)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)(memberOf=cn=it,ou=groups,o=mirantis,dc=mirantis,dc=net)))" uid | awk '/uid:/ {print $2}' >> $t
+ldapsearch -LLL -x -b "o=mirantis,dc=mirantis,dc=net" "(&(objectClass=groupOfNames)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)))" dn | awk '/dn:/ {print $2}' > $groups
+ldapsearch -LLL -x -b "ou=people,ou=external,dc=mirantis,dc=net" "(&(objectClass=groupOfNames)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)))" dn | awk '/dn:/ {print $2}' >> $groups
+ldapsearch -LLL -x -b "ou=people,ou=external,dc=mirantis,dc=net" -o ldif-wrap=no "(&(sshPublicKey=*)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)(memberOf=cn=it,ou=groups,o=mirantis,dc=mirantis,dc=net)))" uid sshPublicKey > $keys
+ldapsearch -LLL -x -b "o=mirantis,dc=mirantis,dc=net" -o ldif-wrap=no "(&(sshPublicKey=*)(|(&(accessTo=$sh)(trustModel=byhost))(trustModel=fullaccess)(memberOf=cn=it,ou=groups,o=mirantis,dc=mirantis,dc=net)))" uid sshPublicKey >> $keys
 
-ldapsearch -LLL -x -b "ou=groups,ou=servers,dc=mirantis,dc=net" "(&(objectClass=gosaGroupOfNames)(member=cn=$sh*))" dn | grep -oP '(?<=.{7,7}).*(?=,ou=groups)' >> $g
+ldapsearch -LLL -x -b "ou=groups,ou=servers,dc=mirantis,dc=net" "(&(objectClass=gosaGroupOfNames)(member=cn=$sh*))" dn | grep -oP '(?<=.{7,7}).*(?=,ou=groups)' > $sg
 
-for s in `sort -u $g`; do
-   ldapsearch -LLL -x -b "o=mirantis,dc=mirantis,dc=net" "(&(objectClass=groupOfNames)(|(&(accessTo=$s)(trustModel=byhost))(trustModel=fullaccess)))" memberUid | awk '/memberUid:/ {print $2}' >> $t
-   ldapsearch -LLL -x -b "ou=people,ou=external,dc=mirantis,dc=net" "(&(objectClass=groupOfNames)(|(&(accessTo=$s)(trustModel=byhost))(trustModel=fullaccess)))" memberUid | awk '/memberUid:/ {print $2}' >> $t
-   ldapsearch -LLL -x -b "ou=people,ou=external,dc=mirantis,dc=net" "(&(sshPublicKey=*)(|(&(accessTo=$s)(trustModel=byhost))(trustModel=fullaccess)(memberOf=cn=it,ou=groups,o=mirantis,dc=mirantis,dc=net)))" uid | awk '/uid:/ {print $2}' >> $t
-   ldapsearch -LLL -x -b "o=mirantis,dc=mirantis,dc=net" "(&(sshPublicKey=*)(|(&(accessTo=$s)(trustModel=byhost))(trustModel=fullaccess)(memberOf=cn=it,ou=groups,o=mirantis,dc=mirantis,dc=net)))" uid | awk '/uid:/ {print $2}' >> $t
+for s in `sort -u $sg`; do
+   ldapsearch -LLL -x -b "o=mirantis,dc=mirantis,dc=net" "(&(objectClass=groupOfNames)(|(&(accessTo=$s)(trustModel=byhost))(trustModel=fullaccess)))" dn | awk '/dn:/ {print $2}' >> $groups
+   ldapsearch -LLL -x -b "ou=people,ou=external,dc=mirantis,dc=net" "(&(objectClass=groupOfNames)(|(&(accessTo=$s)(trustModel=byhost))(trustModel=fullaccess)))" dn | awk '/dn:/ {print $2}' >> $groups
+   ldapsearch -LLL -x -b "ou=people,ou=external,dc=mirantis,dc=net" -o ldif-wrap=no "(&(sshPublicKey=*)(|(&(accessTo=$s)(trustModel=byhost))(trustModel=fullaccess)(memberOf=cn=it,ou=groups,o=mirantis,dc=mirantis,dc=net)))" uid sshPublicKey >> $keys
+   ldapsearch -LLL -x -b "o=mirantis,dc=mirantis,dc=net" -o ldif-wrap=no "(&(sshPublicKey=*)(|(&(accessTo=$s)(trustModel=byhost))(trustModel=fullaccess)(memberOf=cn=it,ou=groups,o=mirantis,dc=mirantis,dc=net)))" uid sshPublicKey >> $keys
 done
 
-for u in `sort -u $t`;do
-   ldapsearch -x -LLL -b "o=mirantis,dc=mirantis,dc=net" "uid=$u" sshPublicKey -tt -T $tmpDir > /dev/null 2>&1
-   [ "xxx`ls $tmpDir`" != 'xxx' ] && ( cat $tmpDir/* > $d/$u ; rm -f $tmpDir/* ) && (sed -i "s/ssh-rsa/\nssh-rsa/2g" $d/$u)
-done
-for u in `sort -u $t`;do
-   ldapsearch -x -LLL -b "ou=people,ou=services,dc=mirantis,dc=net" "uid=$u" sshPublicKey -tt -T $tmpDir > /dev/null 2>&1
-   [ "xxx`ls $tmpDir`" != 'xxx' ]  && ( cat $tmpDir/* > $d/$u ; rm -f $tmpDir/* ) && (sed -i "s/ssh-rsa/\nssh-rsa/2g" $d/$u)
-done
-for u in `sort -u $t`;do
-   ldapsearch -x -LLL -b "ou=people,ou=external,dc=mirantis,dc=net" "uid=$u" sshPublicKey -tt -T $tmpDir > /dev/null 2>&1
-   [ "xxx`ls $tmpDir`" != 'xxx' ]  && ( cat $tmpDir/* > $d/$u ; rm -f $tmpDir/* ) && (sed -i "s/ssh-rsa/\nssh-rsa/2g" $d/$u)
-done
+while read group; do
+    ldapsearch -x -LLL -b "o=mirantis,dc=mirantis,dc=net" -o ldif-wrap=no "(&(sshPublicKey=*)(memberOf=$group))" uid sshPublicKey >> $keys
+done < $groups
 
-rm $g
-rm $t
-rm -fR $tmpDir
+sed -i '/dn: uid/d' $keys
+sed -i -e ':a;N;$!ba;s/\n/ /g' -e "s/uid: /\n/g" -e "s/sshPublicKey: //g" $keys
+
+while read line; do
+    u=`echo $line | awk '{print $1}'`
+    k=`echo $line | awk '{$1=""; print $0}' | awk '{for(i=1;i<=NF;i++) if ($i~/sshPublicKey::/) "echo "$((i+1))" | base64 -d "|getline $((i+1))}1' | sed 's/sshPublicKey:: //g'`
+    [ -n "${u}" ] && [ -n "${k}" ] && echo $k > $d/$u && (sed -i "s/ssh-rsa/\nssh-rsa/2g" $d/$u)
+done < $keys
 
 if (grep -E '(dss|rsa)' $d/*>/dev/null);then
         [ -d /etc/ssh/keys.old ] && rm -rf /etc/ssh/keys.old
         [ -d /etc/ssh/keys ] && mv /etc/ssh/keys /etc/ssh/keys.old
         mv $d /etc/ssh/keys
-        rm -rf etc/ssh/keys.*
+        rm -rf /etc/ssh/keys.*
 fi
+
+rm -f $keys $groups $sg
