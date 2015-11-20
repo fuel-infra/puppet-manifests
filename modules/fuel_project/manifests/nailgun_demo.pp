@@ -5,7 +5,7 @@ class fuel_project::nailgun_demo (
   $ssl_certificate_content,
   $ssl_key_content,
   $apply_firewall_rules = false,
-  $lock_file            = '',
+  $lock_file            = '/usr/share/fuel-web/.installed',
   $nginx_access_log     = '/var/log/nginx/access.log',
   $nginx_error_log      = '/var/log/nginx/error.log',
   $nginx_log_format     = 'proxy',
@@ -145,6 +145,15 @@ class fuel_project::nailgun_demo (
                     Package['gulp']],
     onlyif      => "test ! -f ${lock_file}",
     timeout     => 600,
+  }
+
+  # at the end of setup process create lock file
+  file { 'lock_file':
+    ensure  => present,
+    path    => $lock_file,
+    owner   => 'nailgun',
+    content => '',
+    require => Exec['compress-static'],
   }
 
   file_line { 'fake_mode':

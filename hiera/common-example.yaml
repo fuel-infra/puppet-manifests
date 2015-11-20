@@ -757,9 +757,6 @@ nginx::config::conf_dir: /etc/nginx
 nginx::config::super_user: true
 nginx::config::daemon_user: www-data
 
-fuel_project::nailgun_demo::server_name: 'demo.fuel-infra.org'
-fuel_project::nailgun_demo::lock_file: '/usr/share/fuel-web/nailgun/static/js/libs/bower/requirejs/js/require.js'
-
 mongodb::server::keyfile: '/etc/mongodb.key'
 mongodb::server::keyfile_content: '3188816874'
 mongodb::server::port: 27017

@@ -7,7 +7,6 @@ classes:
   - '::postgresql::server'
 
 fuel_project::nailgun_demo::server_name: 'demo.test.local'
-fuel_project::nailgun_demo::lock_file: '/usr/share/fuel-web/nailgun/static/js/libs/bower/requirejs/js/require.js'
 
 fuel_project::nailgun_demo::ssl_certificate_content: |
   -----BEGIN CERTIFICATE-----
