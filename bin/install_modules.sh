@@ -86,7 +86,7 @@ SOURCE_MODULES["https://github.com/SergK/puppet-sshuserconfig"]="0.0.1"
 SOURCE_MODULES["https://github.com/SergK/puppet-znc"]="0.0.9"
 SOURCE_MODULES["https://github.com/teran/puppet-bind"]="0.5.1-hiera-debian-keys-controls-support"
 SOURCE_MODULES["https://github.com/teran/puppet-mailman"]="0.1.4+user-fix"
-SOURCE_MODULES["https://github.com/teran/puppet-nginx"]="0.1.1+ssl_ciphers(renew)"
+SOURCE_MODULES["https://github.com/teran/puppet-nginx"]="0.1.1+ssl_ciphers(renew)+mimetypes"
 SOURCE_MODULES["https://github.com/teran/puppet-rssh"]="0.0.3+non-ascii-char-fix"
 
 MODULE_LIST=`puppet module list`
