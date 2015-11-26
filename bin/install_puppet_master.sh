@@ -1,36 +1,55 @@
-#!/bin/sh
+#!/bin/bash
 
 set -xe
 
-export DEBIAN_FRONTEND=noninteractive
+export DEBIAN_FRONTEND="noninteractive"
+export PUPPET_ETC_DIR="/etc/puppet"
+export HIERA_VAR_DIR="/var/lib/hiera"
+
+# check if running it as root
+if [[ "$(id -u)" != "0" ]]; then
+  echo "Error. This script must be run as root"
+  exit 1
+fi
+
+# check if puppet etc dir exists
+if [[ ! -d "${PUPPET_ETC_DIR}" ]]; then
+  echo "Error. Could not find Puppet etc directory!"
+  exit 1
+fi
+
+# check if hiera var dir exits
+if [[ -d "${HIERA_VAR_DIR}" ]]; then
+  echo "Error. Hiera var dir already exists!"
+  exit 1
+fi
 
 apt-get update
-apt-get upgrade -y
-apt-get install -y git puppet apt-transport-https tar
+apt-get dist-upgrade -y
+apt-get install -y puppet apt-transport-https
 
-if [ -z "${PUPPET_MODULES_ARCHIVE}" ]; then
-    /etc/puppet/bin/install_modules.sh
+mkdir -p ${HIERA_VAR_DIR}
+cp -ar ${PUPPET_ETC_DIR}/hiera/{nodes,locations,roles} ${HIERA_VAR_DIR}/
+cp -ar ${PUPPET_ETC_DIR}/hiera/common-example.yaml ${HIERA_VAR_DIR}/common.yaml
+
+if [[ -x "${PUPPET_ETC_DIR}/bin/install_modules.sh" ]]; then
+  ${PUPPET_ETC_DIR}/bin/install_modules.sh
 else
-    MODULEPATH=$(puppet config print | awk -F':' '/^modulepath/{print $NF}')
-    if [ -f "${PUPPET_MODULES_ARCHIVE}" ]; then
-        tar xvf "${PUPPET_MODULES_ARCHIVE}" --strip-components=1 -C "${MODULEPATH}"
-    else
-        echo "${PUPPET_MODULES_ARCHIVE} is not a file. Quitting!"
-        exit 2
-    fi
+  echo "Unable to install modules!"
+  exit 1
 fi
 
-expect_hiera=$(puppet apply -vd --genconfig | awk '/ hiera_config / {print $3}')
-if [ ! -f "${expect_hiera}" ]; then
-    echo "File ${expect_hiera} not found!"
-    if [ ! -f /etc/hiera.yaml ]; then
-        ln -s /etc/puppet/hiera/hiera-stub.yaml "${expect_hiera}"
+EXPECT_HIERA="$(puppet apply -vd --genconfig | awk '/ hiera_config / {print $3}')"
+if [[ ! -f "${EXPECT_HIERA}" ]]; then
+    echo "File ${EXPECT_HIERA} not found!"
+    if [[ ! -f /etc/hiera.yaml ]]; then
+        ln -s ${PUPPET_ETC_DIR}/hiera/hiera-stub.yaml "${EXPECT_HIERA}"
     else
         echo "Found default /etc/hiera.yaml"
-        ln -s /etc/hiera.yaml  "${expect_hiera}"
+        ln -s /etc/hiera.yaml "${EXPECT_HIERA}"
     fi
 fi
 
-FACTER_PUPPET_APPLY=true FACTER_ROLE=puppetmaster puppet apply -vd /etc/puppet/manifests/site.pp
+FACTER_PUPPET_APPLY="true" FACTER_ROLE="puppetmaster" puppet apply -vd ${PUPPET_ETC_DIR}/manifests/site.pp
 puppet agent --enable
 puppet agent -vd --no-daemonize --onetime
