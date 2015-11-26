@@ -1,0 +1,8 @@
+DATABASES:
+  default:
+    <% if @database_engine %>ENGINE: '<%= @database_engine %>'<% end %>
+    <% if @database_host %>HOST: '<%= @database_host %>'<% end %>
+    <% if @database_port %>PORT: <%= @database_port %><% end %>
+    <% if @database_name %>NAME: '<%= @database_name %>'<% end %>
+    <% if @database_user %>USER: '<%= @database_user %>'<% end %>
+    <% if @database_password %>PASSWORD: '<%= @database_password %>'<% end %>

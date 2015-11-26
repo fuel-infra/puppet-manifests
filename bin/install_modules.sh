@@ -77,6 +77,7 @@ MODULES["saz-sudo"]="3.0.9"
 MODULES["thias-php"]="1.1.0"
 MODULES["thias-sysctl"]="1.0.0"
 MODULES["example42-yum"]="2.1.25"
+MODULES["ajcrowe-supervisord"]="0.6.0"
 
 SOURCE_MODULES["https://github.com/iberezovskiy/puppet-mongodb"]="0.1"
 SOURCE_MODULES["https://github.com/monester/puppet-bacula"]="v0.4.0.1"

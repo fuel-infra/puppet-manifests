@@ -1,0 +1,95 @@
+classes:
+- '::fuel_project::common'
+- '::pxetool::master'
+- '::mysql::server'
+- '::mysql::client'
+
+supervisord:
+  package_name: 'supervisor'
+  package_provider: 'apt'
+
+supervisord::programs:
+  'pxetool':
+    command: 'celery worker -A pxetool -B -s /var/lib/pxetool/celery-schedule --loglevel=INFO'
+    user: 'pxetool'
+    autostart: yes
+    autorestart: 'true'
+    program_environment:
+      PXETOOL_CFG: '/etc/pxetool.yaml'
+
+pxetool::master::packages:
+- python-mysqldb
+
+pxetool::master::database_engine: django.db.backends.mysql
+pxetool::master::database_name: pxetool
+pxetool::master::database_host: 127.0.0.1
+pxetool::master::database_user: pxetool
+pxetool::master::database_password: pxetool
+
+pxetool::master::ssh_id_rsa_pub: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDW65F7YhHASDtgoJfwnRcOOWVvnvcZ0eCZOPmRlg3aRIcBZ7SS7yFylcRU0Dd2gbvhxb9S9FZowokfZtJEbjW2VSxKk5OiWUmEdTxMbEmkHW+udQ3DrP1NDf2BfW8lgZS2WTdpFqEDwN4OS24CYRj/ocK2cV18aYvjF3j4ngcFu7ixggqNuMv5pls6RtIEbCeCsOZBoDt18jUjBugzCSbUgpatLOvXTlAvAroavEzthQk22/bfhi+nVMsrm60qK4Ll9WI6JUjjj2rB/LFQhMoBmGg9lTtBVQel7h6KnDppkSYk3tVyrwv13YdF75FT1B2zrXVUw4ZVXfcdpCMfR92MEw9fjGrU5V/aSZ4j8Ax8kZ6bm9szyg8Zc0LwuKSjf3q8bDNWR7bfjqXGae4n3IaPGdt8x3q3UPlvVEFRyOftPC/8c5ZRo8A+sNX3rlAwKMMHMYX7U+J+nCPnHi72oKGaCfS7X2/GhMXI8lm7OZIR5YSiygDGEHCLxrpC3LSzvxg5od3C5o2gVVre6gAhthudKEyfJAbjzwVGjgkkUnXE8DGNYzcm79Uwp/lYiAF3ucbXG40/may5S96w4yae7k9zgfJmR7he9uKD2CqTam0rT+ionHYF7ec6cdK3KPMvVPqvM6Ovo5UGKNvs5ovAVmeAxCoshaRbg19haCqNH5JtjQ== pxetool@pxe.infra.mirantis.net
+pxetool::master::ssh_id_rsa: |
+  -----BEGIN RSA PRIVATE KEY-----
+  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
+  -----END RSA PRIVATE KEY-----
+
+mysql::server::databases:
+  'pxetool':
+    ensure: present
+    charset: utf8
+mysql::server::users:
+  'pxetool@127.0.0.1':
+    password_hash: '*E4F4A04FA0E8C4D1EECEE66FCD2632072ED9097F'  # pxetool
+mysql::server::grants:
+  'pxetool@127.0.0.1/pxetool.*':
+    ensure: present
+    privileges: ['ALTER', 'CREATE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE']
+    table: 'pxetool.*'
+    user: 'pxetool@127.0.0.1'
