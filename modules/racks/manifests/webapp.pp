@@ -108,6 +108,15 @@ class racks::webapp (
     www_root => '/usr/share/racks/webapp',
   }
 
+  ::nginx::resource::location { 'racks-docs' :
+    ensure   => 'present',
+    vhost    => 'racks',
+    location => '/docs/',
+    ssl      => true,
+    ssl_only => true,
+    www_root => '/usr/share/racks',
+  }
+
   ::nginx::resource::location { 'racks-error-pages' :
     ensure   => 'present',
     vhost    => 'racks',
