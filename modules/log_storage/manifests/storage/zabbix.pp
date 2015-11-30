@@ -1,7 +1,7 @@
 # class log_storage::storage::zabbix
 #
 class log_storage::storage::zabbix (
-  $zabbix_items_package = 'config-zabbix-log-storage-item',
+  $zabbix_items_package = 'config-zabbix-agent-log-storage-item',
 ) {
 
   package { $zabbix_items_package :
