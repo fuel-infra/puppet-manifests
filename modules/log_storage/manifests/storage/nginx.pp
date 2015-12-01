@@ -101,14 +101,14 @@ class log_storage::storage::nginx (
 
     ::nginx::resource::vhost { 'kibana-redirect' :
       ensure              => 'present',
-      server_name         => [$nginx_kibana_service_fqdn, $::fqdn],
+      server_name         => [$nginx_kibana_service_fqdn],
       listen_port         => 80,
       www_root            => $www_root,
       access_log          => $nginx_access_log,
       error_log           => $nginx_error_log,
       format_log          => $nginx_log_format,
       location_cfg_append => {
-        return => "301 https://${::fqdn}\$request_uri",
+        return => "301 https://${nginx_kibana_service_fqdn}\$request_uri",
       },
     }
 
