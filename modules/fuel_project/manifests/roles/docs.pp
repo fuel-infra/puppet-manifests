@@ -13,7 +13,6 @@ class fuel_project::roles::docs (
   $nginx_log_format            = undef,
   $redirect_root_to            = 'http://www.mirantis.com/openstack-documentation/',
   $specs_hostname              = 'specs.fuel-infra.org',
-  $specs_www_root              = '/var/www/specs',
   $ssh_auth_key                = undef,
   $ssl_cert_content            = '',
   $ssl_cert_filename           = '/etc/ssl/docs.crt',
@@ -247,32 +246,14 @@ class fuel_project::roles::docs (
     require => File[$www_root],
   }
 
-  # fuel specs
-  file { $specs_www_root :
-    ensure  => 'directory',
-    mode    => '0755',
-    owner   => $docs_user,
-    group   => $docs_user,
-    require => [
-      File[$www_root],
-      User[$docs_user],
-    ]
-  }
-
   ::nginx::resource::vhost { $specs_hostname :
     server_name         => [$specs_hostname],
-    www_root            => $specs_www_root,
     access_log          => $nginx_access_log,
     error_log           => $nginx_error_log,
     location_cfg_append => {
       'rewrite' => {
-        '^/$' => '/fuel-specs-master',
+        '^/(.*)$' => 'https://specs.openstack.org/openstack/fuel-specs/$1',
       },
     },
-    vhost_cfg_append    => {
-      'error_page 403'         => '/mirantis/403.html',
-      'error_page 404'         => '/mirantis/404.html',
-      'error_page 500 502 504' => '/mirantis/5xx.html',
-    }
   }
 }
