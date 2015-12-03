@@ -250,6 +250,7 @@ class fuel_project::roles::docs (
     server_name         => [$specs_hostname],
     access_log          => $nginx_access_log,
     error_log           => $nginx_error_log,
+    www_root            => $www_root,
     location_cfg_append => {
       'rewrite' => {
         '^/(.*)$' => 'https://specs.openstack.org/openstack/fuel-specs/$1',
