@@ -461,21 +461,6 @@ puppet::master::firewall_allow_sources:
     source: '192.168.0.0/16'
 puppet::master::nginx_log_format: 'proxy'
 
-pxetool::additional_repos:
-  - 'deb http://osci-obs.vm.mirantis.net:82/qa-ubuntu/ubuntu/ /'
-pxetool::apply_firewall_rules: false
-pxetool::firewall_allow_sources:
-  '1000 - puppet master connections from 10.0.0.0/8':
-    source: '10.0.0.0/8'
-  '1000 - puppet master connections from 172.16.0.0/12':
-    source: '172.16.0.0/12'
-  '1000 - puppet master connections from 192.168.0.0/16':
-    source: '192.168.0.0/16'
-pxetool::mirror: 'archive.ubuntu.com'
-pxetool::root_password_hash: '$6$rqlo82B/$nKaHJ2oNy08spMfByg1Pk.U/fnJvhOdWAMe2MS53zW8yw3ZIGGMoiqz98s/DDeeOzKrc2iR7WWoOfN5RoVnd9/'
-pxetool::timezone: 'UTC'
-pxetool::nginx_log_format: 'proxy'
-
 ssh::banner::content:: |
   Welcome to %{::fqdn}
 
