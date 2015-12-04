@@ -147,11 +147,11 @@ class pxetool::master(
       content => $ssl_key_file_content,
     }
     Nginx::Resource::Vhost <| title == 'pxetool' |>  {
-      listen_port => $https_port,
       ssl         => true,
       ssl_cert    => $ssl_cert_file,
       ssl_key     => $ssl_key_file,
       ssl_port    => 443,
+      listen_port => 443,
       require     => [
         File[$ssl_cert_file],
         File[$ssl_key_file],
@@ -169,7 +169,9 @@ class pxetool::master(
       access_log          => $nginx_access_log,
       error_log           => $nginx_error_log,
       format_log          => $nginx_log_format,
-      location_cfg_append => $rewrite_to_https,
+      location_cfg_append => {
+        return => "301 https://${nginx_server_name}\$request_uri",
+      }
     }
   }
 
