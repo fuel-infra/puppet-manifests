@@ -5,11 +5,15 @@ class lpreports::webapp (
   $nginx_access_log         = '/var/log/nginx/access.log',
   $nginx_error_log          = '/var/log/nginx/error.log',
   $nginx_log_format         = undef,
+  $review_filters           = {},
   $ssl_certificate          = '/etc/ssl/certs/lpreports.crt',
   $ssl_certificate_contents = undef,
   $ssl_key                  = '/etc/ssl/private/lpreports.key',
   $ssl_key_contents         = undef,
 ) {
+  if (!defined(Class['::nginx'])) {
+    class { '::nginx' :}
+  }
   package { 'python-lp-reports' :
     ensure => 'present',
   }
@@ -44,19 +48,20 @@ class lpreports::webapp (
     group   => 'lpreports',
     mode    => '0400',
     content => template('lpreports/review.json.erb'),
+    require => Package['python-lp-reports'],
   }
 
   uwsgi::application { 'lpreports' :
-    plugins   => 'python',
-    module    => 'lpreports:wsgi',
-    callable  => 'app',
-    master    => true,
-    processes => $::processorcount,
-    socket    => '127.0.0.1:6776',
-    vacuum    => true,
-    uid       => 'lpreports',
-    gid       => 'lpreports',
-    require   => [
+    plugins  => 'python',
+    module   => 'lpreports:wsgi',
+    callable => 'app',
+    master   => true,
+    workers  => $::processorcount,
+    socket   => '127.0.0.1:6776',
+    vacuum   => true,
+    uid      => 'lpreports',
+    gid      => 'lpreports',
+    require  => [
       User['lpreports'],
       Package['python-lp-reports'],
     ],
@@ -90,11 +95,13 @@ class lpreports::webapp (
     access_log          => $nginx_access_log,
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
-    proxy               => $nginx_proxy_pass,
-    proxy_set_header    => [
-      'X-Forwarded-For $remote_addr',
-      'Host $host',
-    ],
+    uwsgi               => '127.0.0.1:6776',
+    location_cfg_append => {
+      uwsgi_connect_timeout  => '3m',
+      uwsgi_read_timeout     => '3m',
+      uwsgi_send_timeout     => '3m',
+      uwsgi_intercept_errors => 'on',
+    },
     require             => [
       File[$ssl_certificate],
       File[$ssl_key],
