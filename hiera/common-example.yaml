@@ -126,7 +126,7 @@ mysql:
   root_password: 'peNTZ7GA2Zr90y'
 
 puppet:
-  master: 'pxetool.test.local'
+  master: 'puppet-master.test.local'
 
 landing_page::config_template: 'fuel_project/landing_page/landing_page.py.erb'
 landing_page::database_name: 'release'
@@ -450,7 +450,7 @@ mysql::client::package_name: 'percona-server-client-5.6'
 mysql::server::package_name: 'percona-server-server-5.6'
 mysql::server::root_password: 'WpUrXaC92cZQ4XHMLpfraTRsl16ZtoTu'
 
-puppet::agent::server: 'pxetool.test.local'
+puppet::agent::server: 'puppet-master.test.local'
 puppet::master::autosign: true
 puppet::master::firewall_allow_sources:
   '1000 - puppet master connections from 10.0.0.0/8':
