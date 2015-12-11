@@ -13,6 +13,7 @@ define django::application (
   $imports               = hiera_array("django::application::${title}::imports"),
   $logging               = hiera_hash("django::application::${title}::logging"),
   $packages              = hiera_array("django::application::${title}::packages", []),
+  $secret_key            = hiera("django::application::${title}::secret_key", ''),
   $template_debug        = hiera("django::application::${title}::template_debug", false),
   $user                  = hiera("django::application::${title}::user", 'nobody'),
   $uwsgi                 = hiera("django::application::${title}::uwsgi", true),
@@ -22,6 +23,10 @@ define django::application (
 ) {
   if ($packages == [] or $packages == '') {
     fatal('$packages could not be empty')
+  }
+
+  if ($secret_key == '' or $secret_key == undef) {
+    warning('$secret_key is not specified, thus passwords stored in database are not so securely hashed.')
   }
 
   if ($database) {

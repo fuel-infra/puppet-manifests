@@ -59,7 +59,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-SECRET_KEY = '<KEY>'
+SECRET_KEY = '<%= @secret_key %>'
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
