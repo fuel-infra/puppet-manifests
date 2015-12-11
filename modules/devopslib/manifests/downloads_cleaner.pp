@@ -1,5 +1,13 @@
 # Class: devopslib::downloads_cleaner
-
+#
+# This class deploys very simple mechanism (started from cron) which is
+# cleaning old files in directories specified in cleanup_dirs variable. As an
+# extension it always cleans torrent seeds used by Infra Torrents ecosystem - if
+# clean_seeds switch is used.
+#
+# Parameters:
+#   [*cleanup_dirs*] - directories to clean
+#   [*clean_seeds*] - cleans torrent seeds
 #
 class devopslib::downloads_cleaner (
   $cleanup_dirs = undef,

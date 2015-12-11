@@ -1,5 +1,36 @@
 # Class: etherpad_lite::webapp
 #
+# This class deploys fully functional etherpad instance. Required parameters
+# are SSL certificate and key as usually. Hiera example role 'etherpad'
+# provides commented config hashes which are also required.
+#
+# Parameters:
+#   [*ssl_certificate_contents*] - ssl certificate content for client connections
+#   [*ssl_key_contents*] - ssl key content for client connections
+#   [*config_path*] - etherpad config location
+#   [*config_template*] - config template for Puppet
+#   [*nginx_access_log*] - access log file
+#   [*nginx_error_log*] - error log file
+#   [*nginx_log_format*] - log format
+#   [*nginx_proxy_pass*] - etherpad backend port
+#   [*nginx_server_name*] - vhost hostname
+#   [*packages*] - required packages
+#   [*ssl_certificate*] - ssl certificate path for client connections
+#   [*ssl_key*] - ssl key path for client connections
+#
+# webapp::config:
+#   [*maxAge*] - How long may clients use served javascript code (in seconds)? Without versioning this may cause problems during deployment. Set to 0 to disable caching.
+#   [*abiword*] - This is the path to the Abiword executable. Setting it to null, disables abiword.  Abiword is needed to advanced import/export features of pads.
+#   [*tidyHtml*] - This is the path to the Tidy executable. Setting it to null, disables Tidy. Tidy is used to improve the quality of exported pads*/
+#   [*allowUnknownFileEnds*] - Allow import of file types other than the supported types: txt, doc, docx, rtf, odt, html & htm.
+#   [*requireAuthentication*] - This setting is used if you require authentication of all users.
+#   [*requireAuthorization*] - Require authorization by a module, or a user with is_admin set, see below.
+#   [*trustProxy*] - When you use NginX or another proxy/ load-balancer set this to true.
+#   [*disableIPlogging*] - Privacy: disable IP logging.
+#   [*socketTransportProtocols*] - Restrict socket.io transport methods.
+#   [*loadTest*] - Allow Load Testing tools to hit the Etherpad Instance.  Warning this will disable security on the instance.
+#   [*loglevel*] - The log level we are using, can be: DEBUG, INFO, WARN, ERROR.
+
 class etherpad_lite::webapp (
   $ssl_certificate_contents,
   $ssl_key_contents,

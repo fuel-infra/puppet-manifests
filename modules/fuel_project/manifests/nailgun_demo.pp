@@ -1,5 +1,22 @@
 # Class: fuel_project::nailgun_demo
 #
+# This class deploys fully functional fake nailgun instance. It will be  able
+# to simulate how nailgun interface works. Allows to create fake clouds,
+# pick nodes from example node pool (also fake ones, pretending to be hardware),
+# also simulates deployment process of nodes, shows installation progress etc.
+#
+# Parameters:
+#   [*server_name*] - service fqdn
+#   [*ssl_certificate_content*] - client connection certificate content
+#   [*ssl_key_content*] - client connection key content
+#   [*apply_firewall_rules*] - use firewall rules
+#   [*lock_file*] - lock file used to check if installation was done or not
+#   [*nginx_access_log*] - access log file location
+#   [*nginx_error_log*] - error log file location
+#   [*nginx_log_format*] - log file format
+#   [*ssl_certificate*] - client connection certificate
+#   [*ssl_key*] - client connection key
+#
 class fuel_project::nailgun_demo (
   $server_name,
   $ssl_certificate_content,
