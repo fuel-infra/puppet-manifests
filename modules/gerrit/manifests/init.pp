@@ -1,5 +1,86 @@
 # Class: gerrit
 #
+# This class deploys fully functional Gerrit instance with Java and Nginx
+# reverse proxy. Multiple extended features are also available like ldap,
+# openid support or SSL certificates.
+#
+# For usage example use please look at 'gerrit' hiera role.
+#
+# Parameters:
+#  [*allow_remote_admin*] - allow remote administration
+#  [*cache_web_session_age*] - how long to keep web sessions
+#  [*canonicalweburl*] - default URL for Gerrit to be accessed through
+#  [*commentlinks*] - comment links are find/replace strings applied to change
+#     descriptions, patch comments, in-line code comments and approval category
+#     value descriptions to turn set strings into hyperlinks
+#  [*contactstore*] - use contact store
+#  [*contactstore_appsec*] - a shared secret "password" shared with contact store
+#  [*contactstore_pubkey*] - contact store public key
+#  [*contactstore_url*] - contact store url
+#  [*container_heaplimit*] - java heaplimit setting
+#  [*core_packedgitlimit*] - maximum number of bytes to map simultaneously into
+#     memory from pack files
+#  [*core_packedgitopenfiles*] - maximum number of pack files to have open at once
+#  [*core_packedgitwindowsize*] - number of bytes of a pack file to load into
+#     memory in a single read operation
+#  [*database_poollimit*] - maximum number of open database connections
+#  [*default_max_clause_count*] - index maximum number of clauses
+#  [*email*] - default email to be used by Gerrit
+#  [*email_private_key*] - private key used to sign emails
+#  [*enable_javamelody_top_menu*] - enable top menu of javamelody plugin
+#  [*enable_melody*] - enable javamelody plugin
+#  [*gerrit_auth_type*] - authorization type used by Gerrit
+#  [*gerrit_contributor_agreement*] - contributor agreemenet for Gerrit
+#  [*gerrit_listen*] - listening address of Gerrit
+#  [*gerrit_site*] - Gerrit site environment values
+#  [*gerrit_start_timeout*] - init script Gerrit starting timeout
+#  [*gitweb*] - use gitweb
+#  [*ldap_account_base*] - ldap authorization account base value
+#  [*ldap_account_email_address*] - ldap authorization email address value
+#  [*ldap_account_pattern*] - ldap authorization pattern value
+#  [*ldap_accountfullname*] - ldap authorization full name value
+#  [*ldap_password*] - ldap authorization password
+#  [*ldap_server*] - ldap authorization server
+#  [*ldap_ssh_account_name*] - ldap authorization account name
+#  [*ldap_sslverify*] - ldap ssl verification
+#  [*ldap_username*] - ldap authorzation username
+#  [*melody_session*] - enable session data collection for melody
+#  [*mysql_database*] - MySQL database name used by Gerrit
+#  [*mysql_host*] - MySQL host used by Gerrit
+#  [*mysql_password*] - MySQL password used by Gerrit
+#  [*mysql_user*] - MySQL user used by Gerrit
+#  [*nginx_access_log*] - nginx access log path
+#  [*nginx_error_log*] - nginx error log path
+#  [*nginx_log_format*] - nginx log format
+#  [*openidssourl*] - SSO url used by OpenID
+#  [*replicate_local*] - unused value
+#  [*replicate_path*] - replication path
+#  [*replication*] - unused value
+#  [*robots_txt_source*] - robots.txt file source
+#  [*secondary_index*] - use secondary index
+#  [*secondary_index_type*] - secondary index type
+#  [*sendemail_from*] - sendemail 'from' setting
+#  [*serveradmin*] - unused value
+#  [*service_fqdn*] - Gerrit service FQDN
+#  [*smtpserver*] - smtp server to use
+#  [*ssh_dsa_key_contents*] - ssh dsa key contents
+#  [*ssh_dsa_pubkey_contents*] - ssh dsa pubkey contents
+#  [*ssh_project_rsa_key_contents*] - ssh project rsa key contents
+#  [*ssh_project_rsa_pubkey_contents*] - ssh project rsa pubkey contents
+#  [*ssh_replication_rsa_key_contents*] - ssh replication rsa key contents
+#  [*ssh_replication_rsa_pubkey_contents*] - ssh replication rsa pubkey contents
+#  [*ssh_rsa_key_contents*] - ssh rsa key contents
+#  [*ssh_rsa_pubkey_contents*] - ssh rsa pubkey contents
+#  [*sshd_listen_address*] - sshd daemon listening address
+#  [*sshd_threads*] - sshd threads to start
+#  [*ssl_cert_file*] - ssl certificate file path
+#  [*ssl_cert_file_contents*] - ssl certiticate file contents
+#  [*ssl_chain_file*] - ssl chain file path
+#  [*ssl_chain_file_contents*] - ssl chain file contents
+#  [*ssl_key_file*] - ssl key file path
+#  [*ssl_key_file_contents*] - ssl key file contents
+#  [*web_repo_url*] - gitweb url
+#
 class gerrit (
   $allow_remote_admin                  = false,
   $cache_web_session_age               = '1d',
@@ -57,8 +138,8 @@ class gerrit (
   $ssh_dsa_pubkey_contents             = '', # If left empty puppet will not create file.
   $ssh_project_rsa_key_contents        = '', # If left empty will not create file.
   $ssh_project_rsa_pubkey_contents     = '', # If left empty will not create file.
-  $ssh_replication_rsa_key_contents    = '', # If left emptry will not create files.
-  $ssh_replication_rsa_pubkey_contents = '', # If left emptry will not create files.
+  $ssh_replication_rsa_key_contents    = '', # If left empty will not create files.
+  $ssh_replication_rsa_pubkey_contents = '', # If left empty will not create files.
   $ssh_rsa_key_contents                = '', # If left empty puppet will not create file.
   $ssh_rsa_pubkey_contents             = '', # If left empty puppet will not create file.
   $sshd_listen_address                 = '*:29418',

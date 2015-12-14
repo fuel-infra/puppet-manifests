@@ -1,5 +1,12 @@
 # Class: firewall_defaults::pre
 #
+# Simple class which is run at the beggining of firewall rules. It covers four
+# basic tasks:
+# - installs persistent firewall
+# - accept all the icmp packets
+# - allow any traffic on lo interface
+# - allow already estabished and related connections
+#
 class firewall_defaults::pre {
   include firewall_defaults::post
 

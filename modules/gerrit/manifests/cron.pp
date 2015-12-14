@@ -1,5 +1,6 @@
-# == Class: gerrit::cron
+# Class: gerrit::cron
 #
+# This class deploys cron entries which are required by Gerrit.
 class gerrit::cron {
 
   cron { 'gerrit_repack':

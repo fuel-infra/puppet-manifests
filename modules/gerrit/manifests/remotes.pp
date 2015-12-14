@@ -1,6 +1,14 @@
-# == Class: gerrit::remotes
+# Class: gerrit::remotes
 #
-class gerrit::remotes($ensure=present) {
+# This simple class sets cron entry which uses jeepyb to fetch remote locations.
+# It fetches twice per hour witch randomized time.
+#
+# Parameters:
+#   [*ensure*] - cron entry existance (absent/present)
+#
+class gerrit::remotes(
+  $ensure=present
+) {
     cron { 'gerritfetchremotes':
       ensure  => $ensure,
       user    => 'gerrit',

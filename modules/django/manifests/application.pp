@@ -1,5 +1,31 @@
 # Define: django::application
 #
+# This class deploys django database config file and uwsgi daemon setup.
+# It does not cover Nginx configuration - only uwsgi daemon will listen.
+#
+# Parameters:
+#  [*additional_parameters*] - additional parameters in django settings file
+#  [*admins*] - username, e-mail pairs of admin users
+#  [*apps*] - apps included in django settings file
+#  [*config*] - django configuration files location
+#  [*config_mode*] - django configuration files mode
+#  [*config_template*] - django settings file template
+#  [*database*] - django database settings file entries
+#  [*debug*] - enable debug mode
+#  [*group*] - django installation working group
+#  [*imports*] - imports used in django app
+#  [*logging*] - django logging settings file entries
+#  [*packages*] - system packages required by application
+#  [*secret_key*] - django application secret key
+#  [*template_debug*] - enable template debug mode
+#  [*user*] - django installation working user
+#  [*uwsgi*] - install uwsgi interface
+#  [*uwsgi_chdir*] - uwsgi chdir setting
+#  [*uwsgi_module*] - uwsgi module setting
+#  [*uwsgi_socket*] - uwsgi listening socket
+#  [*uwsgi_vacuum*] - uwsgi vacuum setting
+#  [*uwsgi_workers*] - uwsgi workers amount
+#
 define django::application (
   $additional_parameters = hiera_hash("django::application::${title}::additional_parameters", {}),
   $admins                = hiera_array("django::application::${title}::admins", []),

@@ -1,4 +1,12 @@
-# == Class: gerrit::mysql
+# Class: gerrit::mysql
+#
+# This class is very simple wrapper to deploy a database server and create
+# an account for gerrit with given parameters.
+#
+# Parameters:
+#   [*database_name*] - name of database
+#   [*database_password*] - database user password
+#   [*database_user*] - database user name
 #
 class gerrit::mysql (
   $database_name     = '',

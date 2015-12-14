@@ -1,5 +1,11 @@
 # Class: gerrit::hideci
 #
+# This class installs hideci package and creates configuration file for it.
+#
+# Parameters:
+#   [*ci_regex*] - CI name regex used
+#     Example: '/^(openstack-ci-.*|mos-infra-ci|ci-build-.*$/'
+#
 class gerrit::hideci (
   $ci_regex = '//',
 ) {
