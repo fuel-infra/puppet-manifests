@@ -81,17 +81,6 @@ node /irc-bouncer([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
-node /zabbix-tst01\.vm\.mirantis\.net/ {
-  class { '::fuel_project::zabbix::server' :}
-}
-
-node /fuel-puppet(-tst)?\.vm\.mirantis\.net/ {
-  class { '::fuel_project::puppet::master' :
-    apply_firewall_rules => true,
-    external_host        => true,
-  }
-}
-
 node 'lab-cz.vm.mirantis.net' {
   class { '::fuel_project::lab_cz' :
     external_host => false,
@@ -178,10 +167,6 @@ node 'mongo-primary.vm.mirantis.net' {
 
 node 'obs-1.mirantis.com' {
   class { '::obs_server' :}
-}
-
-node /racktables.(vm\.mirantis\.net|test\.local)/ {
-  class { '::fuel_project::racktables' : }
 }
 
 # Sandbox
