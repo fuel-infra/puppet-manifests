@@ -1,15 +1,18 @@
 # lpreports::webapp
 #
 class lpreports::webapp (
+  $config                   = {},
   $nginx_server_name        = $::fqdn,
   $nginx_access_log         = '/var/log/nginx/access.log',
   $nginx_error_log          = '/var/log/nginx/error.log',
   $nginx_log_format         = undef,
+  $reports                  = {},
   $review_filters           = {},
   $ssl_certificate          = '/etc/ssl/certs/lpreports.crt',
   $ssl_certificate_contents = undef,
   $ssl_key                  = '/etc/ssl/private/lpreports.key',
   $ssl_key_contents         = undef,
+  $teams                    = {},
 ) {
   if (!defined(Class['::nginx'])) {
     class { '::nginx' :}
@@ -51,9 +54,36 @@ class lpreports::webapp (
     require => Package['python-lp-reports'],
   }
 
+  file { '/etc/lpreports/lpreports.conf' :
+    ensure  => 'present',
+    owner   => 'lpreports',
+    group   => 'lpreports',
+    mode    => '0400',
+    content => template('lpreports/lpreports.conf.erb'),
+    require => Package['python-lp-reports'],
+  }
+
+  file { '/etc/lpreports/teams.yaml' :
+    ensure  => 'present',
+    owner   => 'lpreports',
+    group   => 'lpreports',
+    mode    => '0400',
+    content => template('lpreports/teams.yaml.erb'),
+    require => Package['python-lp-reports'],
+  }
+
+  file { '/etc/lpreports/reports.yaml' :
+    ensure  => 'present',
+    owner   => 'lpreports',
+    group   => 'lpreports',
+    mode    => '0400',
+    content => template('lpreports/reports.yaml.erb'),
+    require => Package['python-lp-reports'],
+  }
+
   uwsgi::application { 'lpreports' :
     plugins  => 'python',
-    module   => 'lpreports:wsgi',
+    module   => 'lpreports.wsgi',
     callable => 'app',
     master   => true,
     workers  => $::processorcount,
