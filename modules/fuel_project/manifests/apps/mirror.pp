@@ -123,7 +123,8 @@ class fuel_project::apps::mirror (
       join($service_aliases, ' ')
     ],
     location_cfg_append => {
-      autoindex => $autoindex,
+      autoindex        => $autoindex,
+      disable_symlinks => 'if_not_owner',
     },
   }
 }

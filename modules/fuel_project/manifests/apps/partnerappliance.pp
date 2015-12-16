@@ -58,7 +58,10 @@ class fuel_project::apps::partnerappliance (
   })
 
   ::nginx::resource::vhost { $vhost :
-    server_name => [ $service_fqdn ],
-    www_root    => $data_dir,
+    server_name      => [ $service_fqdn ],
+    www_root         => $data_dir,
+    vhost_cfg_append => {
+      disable_symlinks => 'if_not_owner',
+    },
   }
 }

@@ -55,6 +55,7 @@ class fuel_project::apps::partnershare (
       'autoindex'            => 'on',
       'auth_basic'           => '"Restricted access!"',
       'auth_basic_user_file' => '/etc/nginx/partners.htpasswd',
+      'disable_symlinks'     => 'if_not_owner',
     }
   }
 

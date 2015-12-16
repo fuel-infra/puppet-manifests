@@ -16,13 +16,16 @@ class fuel_project::apps::plugins (
     class { '::fuel_project::nginx' :}
   }
   ::nginx::resource::vhost { 'plugins' :
-    ensure      => 'present',
-    autoindex   => 'on',
-    access_log  => $nginx_access_log,
-    error_log   => $nginx_error_log,
-    format_log  => $nginx_log_format,
-    www_root    => $plugins_dir,
-    server_name => [$service_fqdn, "plugins.${::fqdn}"]
+    ensure           => 'present',
+    access_log       => $nginx_access_log,
+    error_log        => $nginx_error_log,
+    format_log       => $nginx_log_format,
+    www_root         => $plugins_dir,
+    server_name      => [$service_fqdn, "plugins.${::fqdn}"],
+    vhost_cfg_append => {
+      autoindex        => 'on',
+      disable_symlinks => 'if_not_owner',
+    },
   }
 
   file { $plugins_dir :

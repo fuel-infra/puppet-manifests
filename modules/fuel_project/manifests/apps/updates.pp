@@ -14,13 +14,16 @@ class fuel_project::apps::updates (
     class { '::fuel_project::nginx' :}
   }
   ::nginx::resource::vhost { 'updates' :
-    ensure      => 'present',
-    autoindex   => 'on',
-    access_log  => $nginx_access_log,
-    error_log   => $nginx_error_log,
-    format_log  => $nginx_log_format,
-    www_root    => $updates_dir,
-    server_name => [$service_fqdn, "updates.${::fqdn}"]
+    ensure           => 'present',
+    autoindex        => 'on',
+    access_log       => $nginx_access_log,
+    error_log        => $nginx_error_log,
+    format_log       => $nginx_log_format,
+    www_root         => $updates_dir,
+    server_name      => [$service_fqdn, "updates.${::fqdn}"],
+    vhost_cfg_append => {
+      disable_symlinks => 'if_not_owner',
+    },
   }
 
   file { $updates_dir :

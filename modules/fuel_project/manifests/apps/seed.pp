@@ -17,13 +17,16 @@ class fuel_project::apps::seed (
     class { '::fuel_project::nginx' :}
   }
   ::nginx::resource::vhost { 'seed' :
-    ensure      => 'present',
-    autoindex   => 'off',
-    access_log  => $nginx_access_log,
-    error_log   => $nginx_error_log,
-    format_log  => $nginx_log_format,
-    www_root    => $seed_dir,
-    server_name => [$service_fqdn, $::fqdn]
+    ensure           => 'present',
+    access_log       => $nginx_access_log,
+    error_log        => $nginx_error_log,
+    format_log       => $nginx_log_format,
+    www_root         => $seed_dir,
+    server_name      => [$service_fqdn, $::fqdn],
+    vhost_cfg_append => {
+      autoindex        => 'off',
+      disable_symlinks => 'if_not_owner',
+    },
   }
 
   ::nginx::resource::vhost { 'seed-upload' :
@@ -40,6 +43,7 @@ class fuel_project::apps::seed (
       client_max_body_size => $client_max_body_size,
       allow                => $vhost_acl_allow,
       deny                 => 'all',
+      disable_symlinks     => 'if_not_owner',
     }
   }
 
