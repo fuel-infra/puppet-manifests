@@ -271,6 +271,9 @@ class fuel_project::jenkins::slave (
       # repo building utilities
       'reprepro',
       'createrepo',
+
+      # monitoring
+      'config-zabbix-agent-reverted-counter-item',
     ]
 
     ensure_packages($system_tests_packages)
