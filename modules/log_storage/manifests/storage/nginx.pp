@@ -128,6 +128,9 @@ class log_storage::storage::nginx (
       access_log                 => $nginx_kibana_access_log,
       error_log                  => $nginx_kibana_error_log,
       format_log                 => $nginx_log_format,
+      owner                      => 'root',
+      group                      => 'root',
+      mode                       => '0400',
       vhost_cfg_append           => {
         access_by_lua_file       => "\"${oauth_access_file}\"",
         'set $ngo_domain'        => "\"${oauth_domain}\"",
