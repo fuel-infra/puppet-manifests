@@ -2,6 +2,8 @@
 #
 class lpreports::webapp (
   $config                   = {},
+  $logdir                   = '/var/log/lpreports',
+  $managepy_path            = '/usr/lib/python2.7/dist-packages/lpreports/manage.py',
   $nginx_server_name        = $::fqdn,
   $nginx_access_log         = '/var/log/nginx/access.log',
   $nginx_error_log          = '/var/log/nginx/error.log',
@@ -27,6 +29,13 @@ class lpreports::webapp (
     home       => '/var/lib/lpreports',
     managehome => true,
     system     => true
+  }
+
+  file { $logdir :
+    ensure => 'directory',
+    owner  => 'lpreports',
+    group  => 'lpreports',
+    mode   => '0700',
   }
 
   file { $ssl_certificate :
@@ -94,6 +103,7 @@ class lpreports::webapp (
     require  => [
       User['lpreports'],
       Package['python-lp-reports'],
+      File[$logdir],
     ],
   }
 
@@ -136,6 +146,46 @@ class lpreports::webapp (
       File[$ssl_certificate],
       File[$ssl_key],
       Package['python-lp-reports'],
+    ],
+  }
+
+  ::nginx::resource::location { 'static' :
+    ensure   => 'present',
+    vhost    => 'lpreports',
+    ssl      => true,
+    ssl_only => true,
+    location => '/static/',
+    www_root => '/usr/lib/python2.7/dist-packages/lpreports',
+  }
+
+  cron { 'lpreports-syncdb' :
+    command => "${managepy_path} syncdb >> ${logdir}/syncdb.log 2>&1",
+    user    => 'lpreports',
+    minute  => '*/10',
+    require => [
+      Package['python-lp-reports'],
+      File[$logdir],
+    ],
+  }
+
+  cron { 'lpreports-collect-assignees' :
+    command => "${managepy_path} collect-assignees >> ${logdir}/collect-assignees.log 2>&1",
+    user    => 'lpreports',
+    minute  => '*/1',
+    require => [
+      Package['python-lp-reports'],
+      File[$logdir],
+    ],
+  }
+
+  cron { 'lpreports-cleanup-db' :
+    command => "${managepy_path} cleanup-db >> ${logdir}/cleanup-db.log 2>&1",
+    user    => 'lpreports',
+    hour    => '22',
+    minute  => '0',
+    require => [
+      Package['python-lp-reports'],
+      File[$logdir],
     ],
   }
 }
