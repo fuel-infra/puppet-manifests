@@ -209,7 +209,6 @@ class fuel_project::jenkins::slave (
         listen_tls         => false,
         listen_tcp         => true,
         auth_tcp           => 'none',
-        listen_addr        => '127.0.0.1',
         mdns_adv           => false,
         unix_sock_group    => 'libvirtd',
         unix_sock_rw_perms => '0777',
