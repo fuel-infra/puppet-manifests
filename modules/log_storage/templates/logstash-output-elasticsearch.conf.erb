@@ -20,5 +20,8 @@ output {
     <% if @elasticsearch_cacert %>
     cacert => "<%= @elasticsearch_cacert %>"
     <% end %>
+    <% if @elasticsearch_workers %>
+    workers => "<%= @elasticsearch_workers %>"
+    <% end %>
   }
 }

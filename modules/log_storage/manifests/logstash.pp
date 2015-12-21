@@ -14,6 +14,7 @@ class log_storage::logstash (
   $elasticsearch_port            = undef,
   $elasticsearch_ssl             = undef,
   $elasticsearch_ssl_cert_verify = undef,
+  $elasticsearch_workers         = 2,
   $lumberjack_host               = $::fqdn,
   $lumberjack_port               = '5000',
   $lumberjack_type               = 'logs',

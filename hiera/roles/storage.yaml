@@ -54,6 +54,7 @@ logstash::version: '1.5.2-ubuntu2'
 
 log_storage::logstash::elasticsearch_bind_port: '9302'
 log_storage::logstash::elasticsearch_cluster: 'logcluster'
+log_storage::logstash::elasticsearch_workers: '4'
 
 log_storage::storage::nginx::oauth_domain: 'domain.com'
 log_storage::storage::nginx::oauth_client_id: 'oauth_client_id'

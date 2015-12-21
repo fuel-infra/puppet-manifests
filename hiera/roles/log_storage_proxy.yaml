@@ -21,6 +21,7 @@ log_storage::logstash::elasticsearch_port: '9201'
 log_storage::logstash::elasticsearch_protocol: 'http'
 log_storage::logstash::elasticsearch_ssl: true
 log_storage::logstash::elasticsearch_ssl_cert_verify: 'false'
+log_storage::logstash::elasticsearch_workers: '4'
 log_storage::logstash::lumberjack_host: '0.0.0.0'
 
 logstashforwarder::servers:
