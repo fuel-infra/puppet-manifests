@@ -15,6 +15,8 @@ class fuel_project::common (
   $logrotate_rules    = hiera_hash('logrotate::rules', {}),
   $pam_filter         = '',
   $pam_password       = '',
+  $puppet_cron        = {},
+  $puppet_cron_ok     = '',
   $root_password_hash = 'r00tme',
   $root_shell         = '/bin/bash',
   $tls_cacertdir      = '',
@@ -145,5 +147,19 @@ class fuel_project::common (
     subscribe   => File['/etc/hostname'],
     refreshonly => true,
     require     => File['/etc/hostname'],
+  }
+
+  #
+  # Allow puppet run by CRON in testing only and with real care
+  #
+  if($puppet_cron and $puppet_cron_ok == 'YES, I KNOW WHAT I AM DOING, REALLY.' and $::fqdn =~ /-tst\.infra\.mirantis\.net$/) {
+    create_resources(
+      'cron',
+      {'puppet-cron' => $puppet_cron},
+      {
+        ensure  => 'present',
+        command => '/usr/bin/puppet agent -tvd --noop >> /var/log/puppet.log 2>&1 && /usr/bin/puppet agent -tvd >> /var/log/puppet.log 2>&1'
+      }
+    )
   }
 }
