@@ -18,8 +18,11 @@ define django::application (
   $user                  = hiera("django::application::${title}::user", 'nobody'),
   $uwsgi                 = hiera("django::application::${title}::uwsgi", true),
   $uwsgi_chdir           = hiera("django::application::${title}::uwsgi_chdir", undef),
+  $uwsgi_master          = hiera("django::application::${title}::uwsgi_master", undef),
   $uwsgi_module          = hiera("django::application::${title}::uwsgi_module", undef),
   $uwsgi_socket          = hiera("django::application::${title}::uwsgi_socket", '127.0.0.1:12345'),
+  $uwsgi_vacuum          = hiera("django::application::${title}::uwsgi_vacuum", undef),
+  $uwsgi_workers         = hiera("django::application::${title}::uwsgi_workers", undef),
 ) {
   if ($packages == [] or $packages == '') {
     fatal('$packages could not be empty')
@@ -91,6 +94,9 @@ define django::application (
       socket  => $uwsgi_socket,
       chdir   => $uwsgi_chdir,
       module  => $uwsgi_module,
+      vacuum  => $uwsgi_vacuum,
+      master  => $uwsgi_master,
+      workers => $uwsgi_workers,
       require => [
         Package[$packages],
         User[$user],
