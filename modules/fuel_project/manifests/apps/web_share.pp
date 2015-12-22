@@ -1,5 +1,19 @@
 # Class: fuel_project::apps::web_share
 #
+# This class deploys Nginx powered http share with possibility to use sftp to
+# have RW access.
+#
+# Parameters:
+#   [*authorized_keys*] - ssh keys authorized for sftp access
+#   [*group*] - group of sftp user and share root directory
+#   [*nginx_access_log*] - access log path
+#   [*nginx_autoindex*] - allow autoindexing on http share
+#   [*nginx_error_log*] - error log path
+#   [*nginx_log_format*] - log format
+#   [*nginx_server_name*] - hostname for http service
+#   [*share_root*] - share directory path
+#   [*user*] - user for sftp access
+#
 class fuel_project::apps::web_share (
   $authorized_keys,
   $group             = 'jenkins',

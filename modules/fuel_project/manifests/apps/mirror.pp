@@ -1,5 +1,27 @@
 # Class: fuel_project::apps::mirror
 #
+# This class deploys Nginx + Rsync powered storage with ability to upload files
+# using rsync+ssh protocol.
+#
+# Parameters:
+#   [*autoindex*] - directory autoindexing on http share
+#   [*dir*] - storage path
+#   [*firewall_allow_sources*] - unused variable
+#   [*nginx_access_log*] - access log path
+#   [*nginx_error_log*] - error log path
+#   [*nginx_log_format*] - log format
+#   [*port*] - http daemon listening port
+#   [*rsync_mirror_lockfile*] - rsync lock_file for RO share
+#   [*rsync_mirror_lockfile_rw*] - rsync lock_file for RW share
+#   [*rsync_rw_share_comment*] - rsync RW share comment
+#   [*rsync_share_comment*] - rsync RO share comment
+#   [*rsync_writable_share*] - enable writable share
+#   [*service_aliases*] - aliases for http service
+#   [*service_fqdn*] - main FQDN for http service
+#   [*sync_hosts_allow*] - hosts allowed to use RW legacy share
+#   [*syncer_username*] - rsync+ssh protocol username for RW access
+#   [*syncer_ssh_keys*] - rsync+ssh protocol keys for RW access
+#
 class fuel_project::apps::mirror (
   $autoindex                = 'on',
   $dir                      = '/var/www/mirror',

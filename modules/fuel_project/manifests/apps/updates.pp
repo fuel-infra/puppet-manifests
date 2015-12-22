@@ -1,5 +1,18 @@
 # Class: fuel_project::apps::update
 #
+# This class deploys Nginx powered share with ability to upload files via rsync
+# protocol.
+#
+# Paramters:
+#   [*apply_firewall_rules*] - unused variable
+#   [*firewall_allow_sources*] - unused variable
+#   [*nginx_access_log*] - access log path
+#   [*nginx_error_log*] - error log path
+#   [*nginx_log_format*] - log format
+#   [*service_fqdn*] - FQDN for this service
+#   [*sync_hosts_allow*] - hosts allowed to use RW rsync share
+#   [*updates_dir*] - path where files are store
+#
 class fuel_project::apps::updates (
   $apply_firewall_rules   = false,
   $firewall_allow_sources = {},
