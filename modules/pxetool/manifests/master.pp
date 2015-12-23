@@ -128,6 +128,13 @@ class pxetool::master(
     www_root => '/usr/lib/python2.7/dist-packages/pxetool_ui',
   }
 
+  ::nginx::resource::location { 'pxetool-docs' :
+    ensure   => 'present',
+    vhost    => 'pxetool',
+    location => '/docs/',
+    www_root => '/usr/share/pxetool',
+  }
+
   if (
     $ssl_cert_file and $ssl_cert_file_content != '' and
     $ssl_key_file and $ssl_key_file_content != ''
@@ -158,6 +165,10 @@ class pxetool::master(
       ],
     }
     Nginx::Resource::Location <| title == 'pxetool-static' |> {
+      ssl         => true,
+      ssl_only    => true,
+    }
+    Nginx::Resource::Location <| title == 'pxetool-docs' |> {
       ssl         => true,
       ssl_only    => true,
     }
