@@ -3,10 +3,6 @@
 class fuel_project::common (
   $bind_policy        = '',
   $external_host      = false,
-  $facts              = {
-    'location' => $::location,
-    'role'     => $::role,
-  },
   $kernel_package     = undef,
   $ldap               = false,
   $ldap_base          = '',
@@ -22,6 +18,10 @@ class fuel_project::common (
   $root_shell         = '/bin/bash',
   $tls_cacertdir      = '',
 ) {
+  $facts = hiera_hash('::fuel_project::common::facts', {
+    'location' => $::location,
+    'role'     => $::role,
+  })
   class { '::atop' :}
   if($logstash_forwarder) {
     class { '::log_storage::logstashforwarder' :}
