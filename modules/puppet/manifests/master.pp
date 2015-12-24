@@ -139,6 +139,8 @@ class puppet::master (
     require => Package[$package]
   }
 
+  class { 'puppet::auth' :}
+
   if $apply_firewall_rules {
     include firewall_defaults::pre
     create_resources(firewall, $firewall_allow_sources, {
