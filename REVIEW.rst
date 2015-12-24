@@ -35,6 +35,7 @@ Requirements
 
      $firewall_enable
 
+#) Class and definition declarations must be covered with puppet docstrings
 #) You must declare resources with ``ensure_*`` functions if duplicate declaration error is expected, except the cases when you need to fail with duplicate declaration.
 #) If declarations must be with brackets.
 
