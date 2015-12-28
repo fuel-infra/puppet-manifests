@@ -123,7 +123,7 @@ class fuel_project::jenkins::slave (
 
   # bats tests
   if($bats_tests) {
-    ensure_packages('bats')
+    ensure_packages(['bats', 'xmlstarlet'])
   }
 
   # bug: https://bugs.launchpad.net/fuel/+bug/1497275
