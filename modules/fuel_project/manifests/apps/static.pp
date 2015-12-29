@@ -1,5 +1,19 @@
 # Class: fuel_project::apps::static
 #
+# This class deploys Nginx powered simple web share with specific directory.
+#
+# Parameters:
+#   [*nginx_access_log*] - access log path
+#   [*nginx_error_log*] - error log path
+#   [*nginx_log_format*] - log format
+#   [*packages*] - packages to install
+#   [*service_fqdn*] - FQDN of web service
+#   [*ssl_certificate*] - SSL certificate path
+#   [*ssl_certificate_content*] - SSL certificate content
+#   [*ssl_key*] - SSL key path
+#   [*ssl_key_content*] - SSL key content
+#   [*static_dir*] - directory to share
+#
 class fuel_project::apps::static (
   $nginx_access_log        = '/var/log/nginx/access.log',
   $nginx_error_log         = '/var/log/nginx/error.log',
@@ -12,7 +26,7 @@ class fuel_project::apps::static (
   $ssl_key_content         = '',
   $static_dir              = '/usr/share/javascript',
 ) {
-  ensure_packages(['javascript-bundle'])
+  ensure_packages($packages)
 
   if($ssl_certificate and $ssl_certificate_content) {
     file { $ssl_certificate :

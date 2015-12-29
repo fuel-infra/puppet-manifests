@@ -1,5 +1,19 @@
 # Class: fuel_project::apps::plugins
 #
+# This class deploys Nginx powered share with ability to upload files using
+# scp and sftp protocols.
+#
+# Parameters:
+#   [*apply_firewall_rules*] - unused parameter
+#   [*firewall_allow_sources*] - unused parameter
+#   [*nginx_access_log*] - access log path
+#   [*nginx_error_log*] - error log path
+#   [*nginx_log_format*] - log format
+#   [*plugins_dir*] - path to storage
+#   [*service_fqdn*] - FQDN of web service
+#   [*syncer_username*] - ssh username of the uploader user
+#   [*syncer_ssh_keys*] - ssh authorized keys for the uploader user
+#
 class fuel_project::apps::plugins (
   $apply_firewall_rules   = false,
   $firewall_allow_sources = {},

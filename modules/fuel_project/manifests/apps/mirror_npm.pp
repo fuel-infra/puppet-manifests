@@ -1,4 +1,17 @@
-# == Class: fuel_project::apps::mirror_npm
+# Class: fuel_project::apps::mirror_npm
+#
+# This class deploys Nginx powered NPM registry mirror.
+#
+# Parameters:
+#   [*cron_frequency*] - how often to synchronize
+#   [*nginx_access_log*] - access log path
+#   [*nginx_error_log*] - error log path
+#   [*nginx_log_format*] - log format
+#   [*npm_dir*] - directory where NPM mirror is stored
+#   [*parallelism*] - unused variable
+#   [*recheck*] - unused variable
+#   [*service_fqdn*] - FQDN to be used on http share
+#   [*upstream_mirror*] - url of upstream mirror
 #
 class fuel_project::apps::mirror_npm (
   $cron_frequency   = '*/5',

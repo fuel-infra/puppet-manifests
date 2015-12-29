@@ -1,5 +1,20 @@
 # Class: fuel_project::apps::seed
 #
+# This class deploys Nginx powered http based storage with ability to put
+# images from a different locations.
+#
+# Parameters:
+#   [*apply_firewall_rules*] - add firewall rules for declared for this class
+#   [*client_max_body_size*] - maximum size of single file uploaded by PUT
+#   [*nginx_access_log*] - access log path
+#   [*nginx_error_log*] - error log path
+#   [*nginx_log_format*] - log format
+#   [*seed_cleanup_dirs*] - directories to clean by downloads_cleaner
+#   [*seed_dir*] - seed storage directory
+#   [*seed_port*] - daemon listening port
+#   [*service_fqdn*] - FQDN for the service
+#   [*vhost_acl_allow*] - hosts allowed to PUT data
+#
 class fuel_project::apps::seed (
   $apply_firewall_rules = false,
   $client_max_body_size = '5G',

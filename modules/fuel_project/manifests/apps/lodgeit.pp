@@ -1,5 +1,18 @@
 # Class: fuel_project::apps::lodgeit
 #
+# This class deploys LodgeIt! instance with reverse proxy and SSL certificates.
+#
+# Parameters:
+#   [*ssl_certificate_contents*] - SSL certificate contents
+#   [*ssl_key_contents*] - SSL key contents
+#   [*ssl_certificate_file*] - SSL certificate file patch
+#   [*ssl_key_file*] - SSL key file patch
+#   [*service_fqdn*] - FQDN of web service
+#   [*nginx_access_log*] - path to access log
+#   [*nginx_error_log*] - path to error log
+#   [*nginx_log_format*] - log format
+#   [*paste_header_contents*] - main header contents
+#
 class fuel_project::apps::lodgeit (
   $ssl_certificate_contents,
   $ssl_key_contents,
