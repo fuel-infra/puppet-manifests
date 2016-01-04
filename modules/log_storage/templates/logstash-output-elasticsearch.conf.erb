@@ -23,5 +23,11 @@ output {
     <% if @elasticsearch_workers %>
     workers => "<%= @elasticsearch_workers %>"
     <% end %>
+    <% if @elasticsearch_max_retries %>
+    max_retries => "<%= @elasticsearch_max_retries %>"
+    <% end %>
+    <% if @elasticsearch_retry_max_items %>
+    retry_max_items => "<%= @elasticsearch_retry_max_items %>"
+    <% end %>
   }
 }
