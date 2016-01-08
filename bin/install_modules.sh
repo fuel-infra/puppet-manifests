@@ -50,10 +50,13 @@ fi
 # - our intent was not to limit it's use and it should be Apache
 # licensed
 
+MODULES["ajcrowe-supervisord"]="0.6.0"
+MODULES["ceritsc-yum"]="0.9.6"
 MODULES["darin-zypprepo"]="1.0.1"
 MODULES["elasticsearch-elasticsearch"]="0.9.8"
 MODULES["elasticsearch-logstash"]="0.5.1"
 MODULES["elasticsearch-logstashforwarder"]="0.1.1"
+MODULES["gbrown-yumrepos"]="0.0.3"
 MODULES["gnubilafrance-atop"]="0.0.4"
 MODULES["golja-gnupg"]="1.2.1"
 MODULES["lesaux-kibana4"]="0.0.9"
@@ -76,8 +79,6 @@ MODULES["rodjek-logrotate"]="1.1.1"
 MODULES["saz-sudo"]="3.0.9"
 MODULES["thias-php"]="1.1.0"
 MODULES["thias-sysctl"]="1.0.0"
-MODULES["example42-yum"]="2.1.25"
-MODULES["ajcrowe-supervisord"]="0.6.0"
 
 SOURCE_MODULES["https://github.com/iberezovskiy/puppet-mongodb"]="0.1"
 SOURCE_MODULES["https://github.com/monester/puppet-bacula"]="v0.4.0.1"

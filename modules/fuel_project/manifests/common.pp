@@ -92,6 +92,9 @@ class fuel_project::common (
     }
     'RedHat': {
       class { '::yum' :}
+      $yum_repos_gpgkey = hiera_hash('yum::gpgkey', {})
+      create_resources('::yum::gpgkey', $yum_repos_gpgkey)
+      class { '::yumrepos' :}
     }
     default: { }
   }
