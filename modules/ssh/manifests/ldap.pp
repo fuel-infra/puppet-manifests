@@ -21,6 +21,16 @@ class ssh::ldap (
     ensure => 'present',
   }
 
+  case $::osfamily {
+    'Debian': {
+      $etc_ldap_dir = '/etc/ldap'
+    }
+    'RedHat': {
+      $etc_ldap_dir = '/etc/openldap'
+    }
+    default: { }
+  }
+
   file { '/etc/ldap.conf':
     ensure  => 'present',
     mode    => '0600',
@@ -29,7 +39,7 @@ class ssh::ldap (
     content => template('ssh/ldap.conf.erb'),
   }
 
-  file { '/etc/ldap/ldap.conf' :
+  file { "${etc_ldap_dir}/ldap.conf" :
     ensure => 'link',
     target => '/etc/ldap.conf',
   }
@@ -61,7 +71,7 @@ class ssh::ldap (
   Class['ssh::sshd']->
     Package[$ldap_packages]->
     File['/etc/ldap.conf']->
-    File['/etc/ldap/ldap.conf']->
+    File["${etc_ldap_dir}/ldap.conf"]->
     File['/etc/nsswitch.conf']->
     File['/etc/pam.d/common-session']->
     Service['nscd']

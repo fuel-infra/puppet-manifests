@@ -11,17 +11,21 @@ class ssh::params {
     'openssh-server'
   ]
 
-  $ldap_packages = [
-    'ldap-utils',
-    'libpam-ldap',
-    'nscd',
-  ]
-
   case $::osfamily {
     'RedHat': {
+      $ldap_packages = [
+        'openldap',
+        'nss-pam-ldapd',
+        'nscd',
+      ]
       $service = 'sshd'
     }
     'Debian': {
+      $ldap_packages = [
+        'ldap-utils',
+        'libpam-ldap',
+        'nscd',
+      ]
       $service = 'ssh'
     }
     default: {
