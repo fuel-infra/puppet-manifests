@@ -2,20 +2,26 @@
 classes:
   - '::fuel_project::common'
   - '::fuel_project::nginx'
-  - '::fuel_project::inventory'
+  - '::fuel_project::apps::inventory'
 django::application::racks::apps:
   - south
   - security
   - inventory
   - reports
-django::application::racks::database_engine: 'django.db.backends.mysql'
-django::application::racks::database_host: 'localhost'
-django::application::racks::database_name: 'racks'
-django::application::racks::database_port: 3306
-django::application::racks::database_user: 'racks'
-django::application::racks::database_password: '6ZHlH4EMrScuR6uKPDcHmlckRv7HJJQ2'
+django::application::racks::database:
+  engine: 'django.db.backends.mysql'
+  host: 'localhost'
+  name: 'racks'
+  port: 3306
+  user: 'racks'
+  password: '6ZHlH4EMrScuR6uKPDcHmlckRv7HJJQ2'
+
 django::application::racks::debug: true
 django::application::racks::group: 'racks'
+django::application::racks::imports:
+  - import ldap
+  - from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
+  - from django.contrib.messages import constants as messages
 django::application::racks::logging:
   'version': 1
   'disable_existing_loggers': false
@@ -38,3 +44,57 @@ django::application::racks::uwsgi: true
 django::application::racks::uwsgi_chdir: '/usr/share/racks'
 django::application::racks::uwsgi_module: 'racks.wsgi'
 django::application::racks::uwsgi_socket: '127.0.0.1:4689'
+
+racks::webapp::ssl_cert_file_content: |
+  -----BEGIN CERTIFICATE-----
+  MIIDmTCCAoGgAwIBAgIJAJGc54yYKZs8MA0GCSqGSIb3DQEBCwUAMGMxCzAJBgNV
+  BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
+  aWRnaXRzIFB0eSBMdGQxHDAaBgNVBAMME3JlZ2lzdHJ5LnRlc3QubG9jYWwwHhcN
+  MTUwODIwMDgxMDMwWhcNMTYwODE5MDgxMDMwWjBjMQswCQYDVQQGEwJBVTETMBEG
+  A1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkg
+  THRkMRwwGgYDVQQDDBNyZWdpc3RyeS50ZXN0LmxvY2FsMIIBIjANBgkqhkiG9w0B
+  AQEFAAOCAQ8AMIIBCgKCAQEApY41bO7rbYG0TGKlMQVCd7NEQ/HSn1mZjtQyWdUy
+  orh7RpSN6g7Q5c9diLmv2+dzbJzNldL9/r5hiA5zz/7qnWUNU9+9Kl6JRq7RWUoy
+  aMoqtOjx+qUQSuYV966ZbIygcQb2iT20gVogGQTb0qx72mXj7YVD1WDgkl2MpUyt
+  8R9b7SfulBodK4mO3G+N5Ym2Ebo/EkaBhUPo9ErHFbKu1gQNq+tvDfVi2Aqwtiue
+  5FHezU1v6BsFgp+/W4Ojw+69WUt1TZhI5sqlhPLGZDpEgFBJnBz03p2gZJ70HPWZ
+  SwUMtmhct7qH4wT8khGtPrmHDFB7f+l84YBHrHMBSNM09wIDAQABo1AwTjAdBgNV
+  HQ4EFgQUQLMQy8btaVq/Zjpn2qZ4/5H6VFcwHwYDVR0jBBgwFoAUQLMQy8btaVq/
+  Zjpn2qZ4/5H6VFcwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAK3Ms
+  cJh0eSYNYZ6CnIFWwfuECdpeqhyK/JfnpILQ8lXhxGDxKmjELyy7NFcB+z+cLOju
+  42X4VG1XERNS2kk+SaD25nybUi6dm57kMwe6e43kaxrFxu8BGVOMmseyJV5VgM60
+  nMkSOCGOOi13WuZZ5E3/dmEVqRmEZr5HZdhGftXZO6MASpteTSnwrSlFJq9FTyhH
+  NaY5XIlgajAtAsO2PvZ/nK8CQaR4NELXP2g+iGydlvgkpz3ZZw1ZGNuScLW5tk3y
+  LACfM+QTWd1JlWInSAcpJ/5oyeiPghF+RyewE7Q5ohAPi1dJBTOHFBaGc7guSJvn
+  hBrtuTHuW16PtQHgeQ==
+  -----END CERTIFICATE-----
+
+racks::webapp::ssl_key_file_content: |
+  -----BEGIN PRIVATE KEY-----
+  MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCljjVs7uttgbRM
+  YqUxBUJ3s0RD8dKfWZmO1DJZ1TKiuHtGlI3qDtDlz12Iua/b53NsnM2V0v3+vmGI
+  DnPP/uqdZQ1T370qXolGrtFZSjJoyiq06PH6pRBK5hX3rplsjKBxBvaJPbSBWiAZ
+  BNvSrHvaZePthUPVYOCSXYylTK3xH1vtJ+6UGh0riY7cb43libYRuj8SRoGFQ+j0
+  SscVsq7WBA2r628N9WLYCrC2K57kUd7NTW/oGwWCn79bg6PD7r1ZS3VNmEjmyqWE
+  8sZkOkSAUEmcHPTenaBknvQc9ZlLBQy2aFy3uofjBPySEa0+uYcMUHt/6XzhgEes
+  cwFI0zT3AgMBAAECggEABa0didGbQtLqop/TOB4NDFuaIJY++XWx/SKrY0cbCFc4
+  6s+XGgpOAUMd2t06+VgzLesmZVepm71dTLPqJpx/4MuhLFoEe1pobIL77IrNtagQ
+  1MkT2tsj9t1yrV5QJlef/KAXfdcexDyZ0yHGg6+kQ3Ww3ejuzXcX3AzXEKfTYuv5
+  NSD4MxFomkA64+IcCI49IXsXFshk3oL0LiWhaWgHWzA0RyhLwndyXyVMiCl99uVP
+  ZAN7U965mv+AtsaChg/1K87AR7e6+ZxfmKuTAoJCU4xcgMVUntC1nXigDok+9IAa
+  Pfx4k5JoaFz7wjyxui1qWtKaPnq5d4JhtSdBTIrwGQKBgQDSOzMk2Ul2XYm3omag
+  kGAOFW+bdvRdYrnUA54ycQDLELhXN7mOypIBNMe72q+oU8Y5BmPgJS5iGIXORWK6
+  BluCsRZJwJsG8Hv5X4NEPNk21TSJeCdUNcyEzNPUVInQ/oZrsP908w27CwjpU6oW
+  Wh9vsngZbyy1oAGvwwO+BcmFywKBgQDJmRlvm2pELizTrpXA8DCkQf3JGqOj+Yt7
+  68v2Kbbt/+fbcJj96XljZKNDh75BfHZsjCOgeBEKqpK9cdEDprv9RpQtbyN1iI2m
+  5obmhDOAE2O/jkZb8XdlZhe9GfXPKdp8U17Qv+RJR+7YblFDZasBkDHPbbUms8iC
+  UXToXnfIBQKBgQCST+cxTxREj6boKdt5BeIEC0EolqpNUAd6maYA/wqJSTKyaLL4
+  wNzKgBw+Dl3QLbW4PE1IUzgrx1tgioPCaehIVczoOWbrdnUhwiqOVDbsZYfx4LCm
+  d+bFyfPnQ4rC7FFLI902XG4C7hQepz6p3cEhMLlLIkeghCKIW5YAKvDs7wKBgCry
+  zPJz/72qwK4QQaMrCJHV5UVUwYwLe+XYpEk7Ndeab0DWyiE9/jholkeqwaOd6nTR
+  nj1vluHY2Q43Ezpd6SraQHM1fC5r+xGVhyPRAk/E0blbjC3GUZNunpwQzcdmuT9H
+  W6nJV88s3fuJ9RIQtM/Ocm4ohzFJl+v7gpaGmaopAoGBAIGV5cMTHADemhoPPGsC
+  EkkuUTgT14WteC+s/ks0k3j/Ya3LxodukZ++gLlp+XDC8dU1U6+34zXFapAzs5AY
+  FrGQnprUJC2djN9JPlOxa/X2Bl4OEJUkTWALFY5uLXQyKA8fH2nkxiypXnil41Rd
+  IMjK3YBsHDrVQ9xjRF5NhF5Z
+  -----END PRIVATE KEY-----
