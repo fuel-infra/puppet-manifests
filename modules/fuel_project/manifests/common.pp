@@ -13,6 +13,7 @@ class fuel_project::common (
   $ldap_ignore_users  = '',
   $ldap_uri           = '',
   $logrotate_rules    = hiera_hash('logrotate::rules', {}),
+  $logstash_forwarder = false,
   $pam_filter         = '',
   $pam_password       = '',
   $puppet_cron        = {},
@@ -22,7 +23,9 @@ class fuel_project::common (
   $tls_cacertdir      = '',
 ) {
   class { '::atop' :}
-  class { '::log_storage::logstashforwarder' :}
+  if($logstash_forwarder) {
+    class { '::log_storage::logstashforwarder' :}
+  }
   class { '::ntp' :}
   class { '::puppet::agent' :}
   class { '::ssh::authorized_keys' :}

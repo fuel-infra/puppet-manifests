@@ -980,8 +980,8 @@ log_storage::logstashforwarder::files:
     fields:
       type: nginx-error
 
+fuel_project::common::logstash_forwarder: false
 logstashforwarder::manage_repo: false
-logstashforwarder::version: '0.4.0-ubuntu1'
 logstashforwarder::ssl_ca: '%{log_storage::logstashforwarder::ssl_ca_file}'
 logstashforwarder::servers:
  - storage-proxy-tst.infra.mirantis.net:5000
