@@ -2,8 +2,15 @@
 #
 class jenkins::params {
   $slave_authorized_keys = {}
-  $slave_java_package = 'openjdk-7-jre-headless'
-
+  case $::osfamily {
+    'Debian': {
+      $slave_java_package = 'openjdk-7-jre-headless'
+    }
+    'RedHat': {
+      $slave_java_package = 'java-1.7.0-openjdk-headless'
+    }
+    default: { }
+  }
   $swarm_labels = ''
   $swarm_master = ''
   $swarm_user = ''

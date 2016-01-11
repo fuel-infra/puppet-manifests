@@ -109,11 +109,6 @@ class fuel_project::jenkins::slave (
     class { '::jenkins::slave' :}
   }
 
-  # jenkins should be in www-data group by default
-  User <| title == 'jenkins' |> {
-    groups  +> 'www-data',
-  }
-
   class {'::devopslib::downloads_cleaner' :
     cleanup_dirs => $seed_cleanup_dirs,
     clean_seeds  => true,
@@ -131,7 +126,15 @@ class fuel_project::jenkins::slave (
   }
 
   # bug: https://bugs.launchpad.net/fuel/+bug/1497275
-  ensure_packages(['python-yaml', 'python-git'])
+  case $::osfamily {
+    'Debian': {
+      ensure_packages(['python-yaml', 'python-git'])
+    }
+    'RedHat': {
+      ensure_packages(['pyyaml', 'gitpython'])
+    }
+    default: { }
+  }
 
   # release status reports
   if ($build_fuel_iso == true or $run_tests == true) {
@@ -209,18 +212,30 @@ class fuel_project::jenkins::slave (
   if ($run_tests == true) {
 
     if ($libvirt_default_network == false) {
+      case $::osfamily {
+        'Debian': {
+          $unix_sock_group = 'libvirtd'
+        }
+        'RedHat': {
+          $unix_sock_group = 'libvirt'
+        }
+        default: { }
+      }
       class { '::libvirt' :
         listen_tls         => false,
         listen_tcp         => true,
         auth_tcp           => 'none',
         mdns_adv           => false,
-        unix_sock_group    => 'libvirtd',
+        unix_sock_group    => $unix_sock_group,
         unix_sock_rw_perms => '0777',
         python             => true,
         qemu               => true,
         tcp_port           => 16509,
         deb_default        => {
           'libvirtd_opts' => '-d -l',
+        },
+        sysconfig          => {
+          'LIBVIRTD_ARGS' => '--listen',
         }
       }
     }
@@ -249,23 +264,16 @@ class fuel_project::jenkins::slave (
     }
     # /python-devops installation
 
-    $system_tests_packages = [
+    $system_tests_packages_common = [
       # dependencies
-      'libevent-dev',
-      'libffi-dev',
-      'libvirt-dev',
-      'python-dev',
       'python-psycopg2',
       'python-virtualenv',
-      'python-yaml',
       'pkg-config',
-      'postgresql-server-dev-all',
 
       # diagnostic utilities
       'htop',
       'sysstat',
       'dstat',
-      'vncviewer',
       'tcpdump',
 
       # usefull utils
@@ -279,6 +287,33 @@ class fuel_project::jenkins::slave (
       'config-zabbix-agent-reverted-counter-item',
     ]
 
+    ensure_packages($system_tests_packages_common)
+
+    case $::osfamily {
+      'Debian': {
+        $system_tests_packages = [
+          'libevent-dev',
+          'libffi-dev',
+          'libvirt-dev',
+          'postgresql-server-dev-all',
+          'python-dev',
+          'python-yaml',
+          'vncviewer',
+        ]
+      }
+      'RedHat': {
+        $system_tests_packages = [
+          'libevent-devel',
+          'libffi-devel',
+          'libvirt-devel',
+          'postgresql-devel',
+          'python-devel',
+          'pyyaml',
+          'gtk-vnc',
+        ]
+      }
+      default: { }
+    }
     ensure_packages($system_tests_packages)
 
     file { $workspace :
@@ -334,7 +369,7 @@ class fuel_project::jenkins::slave (
   # provide env for building packages, actaully for "make sources"
   # from fuel-main and remove duplicate packages from build ISO
   if ($build_fuel_packages or $build_fuel_iso) {
-    $build_fuel_packages_list = [
+    $build_fuel_packages_list_common = [
       'devscripts',
       'libparse-debcontrol-perl',
       'make',
@@ -350,16 +385,34 @@ class fuel_project::jenkins::slave (
       'reprepro',
       'ruby',
       'sbuild',
-      'zlib1g',
-      'zlib1g-dev',
     ]
+
+    case $::osfamily {
+      'Debian': {
+        $build_fuel_packages_list = [
+          'zlib1g',
+          'zlib1g-dev',
+        ]
+      }
+      'RedHat': {
+        $build_fuel_packages_list = [
+          'zlib',
+          'zlib-devel',
+        ]
+      }
+      default: { }
+    }
 
     User <| title == 'jenkins' |> {
       groups  +> 'mock',
-      require => Package[$build_fuel_packages_list],
+        require => [
+          Package[$build_fuel_packages_list_common],
+          Package[$build_fuel_packages_list],
+        ]
     }
-
     ensure_packages($build_fuel_packages_list)
+
+    ensure_packages($build_fuel_packages_list_common)
 
     if ($build_fuel_npm_packages) {
       ensure_packages($build_fuel_npm_packages, {
@@ -371,37 +424,24 @@ class fuel_project::jenkins::slave (
 
   # Build ISO
   if ($build_fuel_iso == true) {
-    $build_fuel_iso_packages = [
+    $build_fuel_iso_packages_common = [
       'bc',
       'build-essential',
       'createrepo',
       'debmirror',
       'debootstrap',
       'dosfstools',
-      'extlinux',
       'genisoimage',
       'isomd5sum',
       'kpartx',
-      'libconfig-auto-perl',
-      'libmysqlclient-dev',
-      'libparse-debian-packages-perl',
-      'libyaml-dev',
       'lrzip',
-      'python-daemon=1.5.5-1ubuntu1',
       'python-ipaddr',
       'python-jinja2',
-      'python-lockfile=1:0.8-2ubuntu2',
       'python-nose',
       'python-paramiko',
       'python-pip',
-      'python-xmlbuilder',
       'python-virtualenv',
-      'python-yaml',
       'realpath',
-      'ruby-bundler',
-      'ruby-builder',
-      'ruby-dev',
-      'rubygems-integration',
       'syslinux',
       'time',
       'unzip',
@@ -410,19 +450,51 @@ class fuel_project::jenkins::slave (
       'yum-utils',
     ]
 
-    ensure_packages($build_fuel_iso_packages)
-    create_resources('apt::pin', {
-      'python-daemon' => {
-        packages => 'python-daemon',
-        version  => '1.5.5-1ubuntu1',
-        priority => 1000,
-      },
-      'python-lockfile' => {
-        packages => 'python-lockfile',
-        version  => '1:0.8-2ubuntu2',
-        priority => 1000,
+    ensure_packages($build_fuel_iso_packages_common)
+
+    case $::osfamily {
+      'Debian': {
+          $build_fuel_iso_packages = [
+            'extlinux',
+            'libconfig-auto-perl',
+            'libmysqlclient-dev',
+            'libparse-debian-packages-perl',
+            'libyaml-dev',
+            'python-daemon=1.5.5-1ubuntu1',
+            'python-lockfile=1:0.8-2ubuntu2',
+            'python-xmlbuilder',
+            'python-yaml',
+            'ruby-bundler',
+            'ruby-builder',
+            'ruby-dev',
+            'rubygems-integration',
+          ]
+          create_resources('apt::pin', {
+            'python-daemon' => {
+              packages => 'python-daemon',
+              version  => '1.5.5-1ubuntu1',
+              priority => 1000,
+            },
+            'python-lockfile' => {
+              packages => 'python-lockfile',
+              version  => '1:0.8-2ubuntu2',
+              priority => 1000,
+            }
+          })
       }
-    })
+      'RedHat': {
+        $build_fuel_iso_packages = [
+          'libyaml-devel',
+          'python-daemon',
+          'pyyaml',
+          'ruby-devel',
+          'syslinux-extlinux',
+        ]
+      }
+      default: { }
+    }
+
+    ensure_packages($build_fuel_iso_packages)
 
     ensure_resource('file', '/var/www', {
       ensure  => 'directory',
@@ -444,6 +516,30 @@ class fuel_project::jenkins::slave (
 
     if ($http_share_iso) {
       class { '::fuel_project::nginx' :}
+      case $::osfamily {
+        'Debian': {
+          # jenkins should be in www-data group by default in Debian based distros
+          ensure_resource('group', 'www-data', {
+            ensure => 'present',
+            system => true,
+          })
+          User <| title == 'jenkins' |> {
+            groups  +> 'www-data',
+          }
+        }
+        'RedHat': {
+          # jenkins should be in nginx group by default in RHEL based distros
+          ensure_resource('group', 'nginx', {
+            ensure => 'present',
+            system => true,
+          })
+          User <| title == 'jenkins' |> {
+            groups  +> 'nginx',
+          }
+        }
+        default: { }
+      }
+
       ::nginx::resource::vhost { 'share':
         server_name => ['_'],
         autoindex   => 'on',
@@ -467,10 +563,15 @@ class fuel_project::jenkins::slave (
         ensure => '2.1.6ubuntu3'
       }
     }
-    apt::pin { 'multistrap' :
-      packages => 'multistrap',
-      version  => '2.1.6ubuntu3',
-      priority => 1000,
+    case $::osfamily {
+      'Debian': {
+        apt::pin { 'multistrap' :
+          packages => 'multistrap',
+          version  => '2.1.6ubuntu3',
+          priority => 1000,
+        }
+      }
+      default: { }
     }
 
     # LP: https://bugs.launchpad.net/ubuntu/+source/libxml2/+bug/1375637
@@ -484,10 +585,16 @@ class fuel_project::jenkins::slave (
         ensure => '2.9.1+dfsg1-ubuntu1',
       }
     }
-    apt::pin { 'libxml2' :
-      packages => 'libxml2 python-libxml2',
-      version  => '2.9.1+dfsg1-ubuntu1',
-      priority => 1000,
+
+    case $::osfamily {
+      'Debian': {
+        apt::pin { 'libxml2' :
+          packages => 'libxml2 python-libxml2',
+          version  => '2.9.1+dfsg1-ubuntu1',
+          priority => 1000,
+        }
+      }
+      default: { }
     }
     # /LP
 
@@ -653,23 +760,42 @@ class fuel_project::jenkins::slave (
 
   # Web tests by verify-fuel-web, stackforge-verify-fuel-web, verify-fuel-ostf
   if ($verify_fuel_web) {
-    $verify_fuel_web_packages = [
+    $verify_fuel_web_packages_common = [
       'inkscape',
-      'libxslt1-dev',
       'nodejs-legacy',
       'npm',
-      'postgresql-server-dev-all',
-      'python-all-dev',
       'python-cloud-sptheme',
       'python-sphinx',
       'python-tox',
       'python-virtualenv',
-      'python2.6',
-      'python2.6-dev',
-      'python3-dev',
       'rst2pdf',
     ]
 
+    ensure_packages($verify_fuel_web_packages_common)
+
+    case $::osfamily {
+      'Debian': {
+        $verify_fuel_web_packages = [
+          'libxslt1-dev',
+          'postgresql-server-dev-all',
+          'python-all-dev',
+          'python2.6',
+          'python2.6-dev',
+          'python3-dev',
+        ]
+      }
+      'RedHat': {
+        $verify_fuel_web_packages = [
+          'libxslt-devel',
+          'postgresql-devel',
+          'python-devel',
+          'python26',
+          'python26-devel',
+          'python34-devel',
+        ]
+      }
+      default: { }
+    }
     ensure_packages($verify_fuel_web_packages)
 
     if ($verify_fuel_web_npm_packages) {
@@ -680,17 +806,32 @@ class fuel_project::jenkins::slave (
     }
 
     if ($fuel_web_selenium) {
-      $selenium_packages = [
+      $selenium_packages_common = [
         'chromium-browser',
         'chromium-chromedriver',
         'firefox',
         'imagemagick',
-        'x11-apps',
         'xfonts-100dpi',
         'xfonts-75dpi',
         'xfonts-cyrillic',
         'xfonts-scalable',
       ]
+
+      ensure_packages($selenium_packages_common)
+
+      case $::osfamily {
+        'Debian': {
+            $selenium_packages = [
+              'x11-apps',
+            ]
+        }
+        'RedHat': {
+          $selenium_packages = [
+            'xorg-x11-apps',
+          ]
+        }
+        default: { }
+      }
       ensure_packages($selenium_packages)
 
       class { 'display' :
@@ -698,7 +839,6 @@ class fuel_project::jenkins::slave (
         width   => 1366,
         height  => 768,
       }
-
     }
 
     if (!defined(Class['postgresql::server'])) {
@@ -753,15 +893,33 @@ class fuel_project::jenkins::slave (
   }
 
   if ($verify_network_checker) {
-    $verify_network_checker_packages = [
-      'libpcap-dev',
-      'python-all-dev',
+    $verify_network_checker_packages_common = [
       'python-tox',
       'python-virtualenv',
-      'python2.6',
-      'python2.6-dev',
-      'python3-dev',
+
     ]
+    ensure_packages($verify_network_checker_packages_common)
+    case $::osfamily {
+      'Debian': {
+        $verify_network_checker_packages = [
+          'libpcap-dev',
+          'python-all-dev',
+          'python2.6',
+          'python2.6-dev',
+          'python3-dev',
+        ]
+      }
+      'RedHat': {
+        $verify_network_checker_packages = [
+          'libpcap-devel',
+          'python-devel',
+          'python26',
+          'python26-devel',
+          'python3-devel',
+        ]
+      }
+      default: { }
+    }
     ensure_packages($verify_network_checker_packages)
   }
 
@@ -769,13 +927,27 @@ class fuel_project::jenkins::slave (
   # - verify-fuel-devops
   # - fuellib_review_syntax_check (puppet tests)
   if ($simple_syntax_check) {
-    $syntax_check_packages = [
-      'libxslt1-dev',
+    $syntax_check_packages_common = [
       'puppet-lint',
       'python-flake8',
       'python-tox',
     ]
 
+    ensure_packages($syntax_check_packages_common)
+
+    case $::osfamily {
+      'Debian': {
+        $syntax_check_packages = [
+          'libxslt1-dev',
+        ]
+      }
+      'RedHat': {
+        $syntax_check_packages = [
+          'libxslt-devel',
+        ]
+      }
+      default: { }
+    }
     ensure_packages($syntax_check_packages)
 
     rvm_gem { 'puppet-lint' :
@@ -798,9 +970,8 @@ class fuel_project::jenkins::slave (
 
   # Verify Fuel docs
   if ($verify_fuel_docs) {
-    $verify_fuel_docs_packages =  [
+    $verify_fuel_docs_packages_common =  [
       'inkscape',
-      'libjpeg-dev',
       'make',
       'plantuml',
       'python-cloud-sptheme',
@@ -810,6 +981,21 @@ class fuel_project::jenkins::slave (
       'texlive-font-utils', # provides epstopdf binary
     ]
 
+    ensure_packages($verify_fuel_docs_packages_common)
+
+    case $::osfamily {
+      'Debian': {
+        $verify_fuel_docs_packages = [
+          'libjpeg-dev',
+        ]
+      }
+      'RedHat': {
+        $verify_fuel_docs_packages = [
+          'libjpeg-turbo-devel',
+        ]
+      }
+      default: { }
+    }
     ensure_packages($verify_fuel_docs_packages)
   }
 
@@ -825,21 +1011,39 @@ class fuel_project::jenkins::slave (
 
   # Verify and Build fuel-plugins project
   if ($build_fuel_plugins) {
-    $build_fuel_plugins_packages = [
+    $build_fuel_plugins_packages_common = [
       'rpm',
       'createrepo',
       'dpkg-dev',
-      'libyaml-dev',
       'make',
-      'python-dev',
-      'ruby-dev',
       'gcc',
-      'python2.6',
-      'python2.6-dev',
       'python-tox',
       'python-virtualenv',
     ]
 
+    ensure_packages($build_fuel_plugins_packages_common)
+
+    case $::osfamily {
+      'Debian': {
+        $build_fuel_plugins_packages = [
+          'libyaml-dev',
+          'python-dev',
+          'python2.6',
+          'python2.6-dev',
+          'ruby-dev',
+        ]
+      }
+      'RedHat': {
+        $build_fuel_plugins_packages = [
+          'libyaml-devel',
+          'python-devel',
+          'python26',
+          'python26-devel',
+          'ruby-devel',
+        ]
+      }
+      default: { }
+    }
     ensure_packages($build_fuel_plugins_packages)
 
     # we also need fpm gem
