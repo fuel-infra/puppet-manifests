@@ -1,4 +1,6 @@
-# get cerificate from hiera and create then on destination system
+# Definition: devopslib::ssl_certificate
+# This definition get cerificate from hiera and creates it on destination
+# system.
 #
 # Hiera usage:
 # ---
@@ -20,6 +22,7 @@
 # devopslib::ssl_certificate { 'sample_cert':
 #   owner => 'www-data'
 # }
+#
 define devopslib::ssl_certificate(
   $certificate = hiera_hash("ssl_certificates::${title}"),
   $owner       = 'root',

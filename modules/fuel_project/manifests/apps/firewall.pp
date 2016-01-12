@@ -1,5 +1,17 @@
 # Class: fuel_project::apps::firewall
 #
+# This is new class which defines firewall from hiera database. Includes
+# standard pre and post custom rules.
+#
+# Hiera parameters:
+#   [*rules*] - defines hash with firewall entries
+#     Example:
+#     '100 - SSH access from New York Office':
+#       source: '11.22.33.44/23'
+#       dport: 22
+#       proto: 'tcp'
+#       action: 'accept'
+#
 class fuel_project::apps::firewall {
   $rules = hiera_hash('fuel_project::apps::firewall::rules', undef)
 

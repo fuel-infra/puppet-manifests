@@ -1,5 +1,20 @@
 # Class: fuel_project::apps::mirror_pypi
 #
+# This class deploys Nginx powered PyPI mirror.
+#
+# Parameters:
+#   [*cron_frequency*] - how often to synchronize
+#   [*mirror_delete_packages*] - delete packages deleted in upstream
+#   [*mirror_dir*] - directory where mirror is stored
+#   [*mirror_master*] - upstream url
+#   [*mirror_stop_on_error*] - stop mirror process on error
+#   [*mirror_timeout*] - mirror timeout
+#   [*mirror_workers*] - how many workers to start
+#   [*nginx_access_log*] - access log path
+#   [*nginx_error_log*] - error log path
+#   [*nginx_log_format*] - log format
+#   [*service_fqdn*] - FQDN to be used on http share
+#
 class fuel_project::apps::mirror_pypi (
   $cron_frequency         = '*/5',
   $mirror_delete_packages = true,

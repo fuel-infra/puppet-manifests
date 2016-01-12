@@ -1,4 +1,14 @@
-# == Class: fuel_project::apps::mirror_rubygems
+# Class: fuel_project::apps::mirror_rubygems
+#
+# Parameters:
+#   [*cron_frequency*] - how often to synchronize
+#   [*nginx_access_log*] - access log path
+#   [*nginx_error_log*] - error log path
+#   [*nginx_log_format*] - log format
+#   [*parallelism*] - how many workers to start
+#   [*rubygems_dir*] - directory where ruby mirror is stored
+#   [*service_fqdn*] - FQDN to be used on http share
+#   [*upstream_mirror*] - url of upstream mirror
 #
 class fuel_project::apps::mirror_rubygems (
   $cron_frequency   = '*/5',
