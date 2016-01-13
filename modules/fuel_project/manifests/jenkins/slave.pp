@@ -119,7 +119,11 @@ class fuel_project::jenkins::slave (
     clean_seeds  => true,
   }
 
-  ensure_packages(['git', 'python-seed-client'])
+  ensure_packages([
+    'git',
+    'python-seed-client',
+    'python-tox'
+  ])
 
   # bats tests
   if($bats_tests) {
