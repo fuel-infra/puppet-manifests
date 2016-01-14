@@ -12,6 +12,7 @@
 #   [*ssl_key_file_contents*] - SSL key file contents
 #   [*install_zabbix_item*] - install Zabbix agent items for Jenkins
 #   [*jenkins_address*] - Jenkins listening IP address
+#   [*jenkins_admin_email*] - global configuration of system admin email
 #   [*jenkins_java_args*] - Jenkins Java arguments
 #   [*jenkins_port*] - Jenkins listening port
 #   [*jenkins_proto*] - Jenkins listening protocol
@@ -20,6 +21,7 @@
 #   [*nginx_error_log*] - error log file path
 #   [*nginx_log_format*] - log format
 #   [*number_of_executors*] - amount of executors for jenkins master node
+#   [*scm_checkout_retry_count*] - retry count for jenkins scm checkout
 #   [*www_root*] - root web directory path
 #   [*install_groovy*] - install Groovy script for Jenkins
 #   [*jenkins_cli_file*] - Jenkins cli file path
@@ -59,6 +61,7 @@ class jenkins::master (
   # Jenkins config parameters
   $install_zabbix_item              = false,
   $jenkins_address                  = '0.0.0.0',
+  $jenkins_admin_email              = 'jenkins@example.com',
   $jenkins_java_args                = '',
   $jenkins_port                     = '8080',
   $jenkins_proto                    = 'http',
@@ -67,6 +70,7 @@ class jenkins::master (
   $nginx_error_log                  = '/var/log/nginx/error.log',
   $nginx_log_format                 = undef,
   $number_of_executors              = '2',
+  $scm_checkout_retry_count         = '0',
   $www_root                         = '/var/www',
   # Jenkins auth
   $install_groovy                   = 'yes',
@@ -361,34 +365,18 @@ class jenkins::master (
     user      => 'jenkins',
   }
 
-  exec { 'jenkins_executors_config':
+  # Execute groovy script to setup global configuration
+  exec { 'jenkins_main_config':
     command   => join([
         '/usr/bin/java',
         "-jar ${jenkins_cli_file}",
         "-s ${jenkins_proto}://${jenkins_address}:${jenkins_port}",
         "groovy ${jenkins_libdir}/jenkins_cli.groovy",
-        'set_executors',
-        $number_of_executors,
-    ], ' '),
-    tries     => $jenkins_cli_tries,
-    try_sleep => $jenkins_cli_try_sleep,
-    user      => 'jenkins',
-    require   => [
-      File["${jenkins_libdir}/jenkins_cli.groovy"],
-      Package['groovy'],
-      Service['jenkins'],
-      Exec['jenkins_auth_config'],
-    ],
-  }
-
-  exec { 'jenkins_markup_formatter':
-    command   => join([
-        '/usr/bin/java',
-        "-jar ${jenkins_cli_file}",
-        "-s ${jenkins_proto}://${jenkins_address}:${jenkins_port}",
-        "groovy ${jenkins_libdir}/jenkins_cli.groovy",
-        'set_markup',
+        'set_main_configuration',
+        $jenkins_admin_email,
         $markup_formatter,
+        $number_of_executors,
+        $scm_checkout_retry_count,
     ], ' '),
     tries     => $jenkins_cli_tries,
     try_sleep => $jenkins_cli_try_sleep,

@@ -43,18 +43,6 @@ class Actions {
   }
 
   ///////////////////////////////////////////////////////////////////////////////
-  // this is -> setup_email_adm
-  ///////////////////////////////////////////////////////////////////////////////
-  //
-  // Allows to set specific admin email in Jenkins Master instance
-  //
-  void setup_email_adm(String email) {
-    def loc = JenkinsLocationConfiguration.get()
-    loc.setAdminAddress(email)
-    loc.save()
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////
   // this is -> enable_slave_to_master_acl
   ///////////////////////////////////////////////////////////////////////////////
   //
@@ -351,29 +339,42 @@ class Actions {
     }
   }
 
-///////////////////////////////////////////////////////////////////////////////
-// Enabling Markup Formatter configuration
-///////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////
+  // Sets up jenkins global configuration
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  void set_main_configuration(
+    String jenkins_admin_email=null,
+    String markup_formatter=null,
+    String num_of_executors=null,
+    String scm_checkout_retry_count=null
+    ) {
+    //updating admin email configuration
+    def location = JenkinsLocationConfiguration.get()
+    location.setAdminAddress(jenkins_admin_email)
+    location.save()
 
-  void set_markup(String markup) {
-    if (markup == "raw-html") {
-      Jenkins.instance.setMarkupFormatter(new RawHtmlMarkupFormatter(false))
-      Jenkins.instance.save()
-    } else if (markup == "plain-text") {
-      Jenkins.instance.setMarkupFormatter(new EscapedMarkupFormatter())
-      Jenkins.instance.save()
-    } else if (markup == "unsafe") {
-      Jenkins.instance.setMarkupFormatter(new UnsafeMarkupFormatter())
-      Jenkins.instance.save()
-    }
-  }
-
-  void set_executors(String n) {
+    //enabling markup formatter
     Jenkins jenkins = Jenkins.getInstance()
-    if (jenkins.getNumExecutors() != Integer.parseInt(n)) {
-      jenkins.setNumExecutors(Integer.parseInt(n))
-      jenkins.save()
+    if (markup_formatter == "raw-html") {
+      Jenkins.instance.setMarkupFormatter(new RawHtmlMarkupFormatter(false))
+    } else if (markup_formatter == "plain-text") {
+      Jenkins.instance.setMarkupFormatter(new EscapedMarkupFormatter())
+    } else if (markup_formatter == "unsafe") {
+      Jenkins.instance.setMarkupFormatter(new UnsafeMarkupFormatter())
     }
+
+    //updating number of executors for master node
+    if (jenkins.getNumExecutors() != Integer.parseInt(num_of_executors)) {
+      jenkins.setNumExecutors(Integer.parseInt(num_of_executors))
+    }
+
+    //update scm checkout retry count
+    if (jenkins.getScmCheckoutRetryCount() != Integer.parseInt(scm_checkout_retry_count)) {
+      jenkins.setScmCheckoutRetryCount(Integer.parseInt(scm_checkout_retry_count))
+    }
+    //saving changes
+    jenkins.save()
   }
 }
 
