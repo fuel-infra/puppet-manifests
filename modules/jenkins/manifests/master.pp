@@ -15,6 +15,7 @@
 #   [*jenkins_java_args*] - Jenkins Java arguments
 #   [*jenkins_port*] - Jenkins listening port
 #   [*jenkins_proto*] - Jenkins listening protocol
+#   [*$markup_formatter*] - markup formatter for Jenkins
 #   [*nginx_access_log*] - access log file path
 #   [*nginx_error_log*] - error log file path
 #   [*nginx_log_format*] - log format
@@ -61,6 +62,7 @@ class jenkins::master (
   $jenkins_java_args                = '',
   $jenkins_port                     = '8080',
   $jenkins_proto                    = 'http',
+  $markup_formatter                 = 'plain-text',
   $nginx_access_log                 = '/var/log/nginx/access.log',
   $nginx_error_log                  = '/var/log/nginx/error.log',
   $nginx_log_format                 = undef,
@@ -367,6 +369,26 @@ class jenkins::master (
         "groovy ${jenkins_libdir}/jenkins_cli.groovy",
         'set_executors',
         $number_of_executors,
+    ], ' '),
+    tries     => $jenkins_cli_tries,
+    try_sleep => $jenkins_cli_try_sleep,
+    user      => 'jenkins',
+    require   => [
+      File["${jenkins_libdir}/jenkins_cli.groovy"],
+      Package['groovy'],
+      Service['jenkins'],
+      Exec['jenkins_auth_config'],
+    ],
+  }
+
+  exec { 'jenkins_markup_formatter':
+    command   => join([
+        '/usr/bin/java',
+        "-jar ${jenkins_cli_file}",
+        "-s ${jenkins_proto}://${jenkins_address}:${jenkins_port}",
+        "groovy ${jenkins_libdir}/jenkins_cli.groovy",
+        'set_markup',
+        $markup_formatter,
     ], ' '),
     tries     => $jenkins_cli_tries,
     try_sleep => $jenkins_cli_try_sleep,

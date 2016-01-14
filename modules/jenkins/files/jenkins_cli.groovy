@@ -18,6 +18,9 @@ import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey
 import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 import com.cloudbees.plugins.credentials.domains.Domain
 import com.cloudbees.plugins.credentials.CredentialsScope
+import hudson.markup.RawHtmlMarkupFormatter
+import hudson.markup.EscapedMarkupFormatter
+import org.jenkinsci.plugins.UnsafeMarkupFormatter
 
 class InvalidAuthenticationStrategy extends Exception{}
 class InvalidUserCredentials extends Exception{}
@@ -345,6 +348,23 @@ class Actions {
     // now setup s2m if requested
     if(s2m_acl != null) {
       enable_slave_to_master_acl(s2m_acl)
+    }
+  }
+
+///////////////////////////////////////////////////////////////////////////////
+// Enabling Markup Formatter configuration
+///////////////////////////////////////////////////////////////////////////////
+
+  void set_markup(String markup) {
+    if (markup == "raw-html") {
+      Jenkins.instance.setMarkupFormatter(new RawHtmlMarkupFormatter(false))
+      Jenkins.instance.save()
+    } else if (markup == "plain-text") {
+      Jenkins.instance.setMarkupFormatter(new EscapedMarkupFormatter())
+      Jenkins.instance.save()
+    } else if (markup == "unsafe") {
+      Jenkins.instance.setMarkupFormatter(new UnsafeMarkupFormatter())
+      Jenkins.instance.save()
     }
   }
 
