@@ -1,4 +1,10 @@
 # Used for deployment of TPI lab
+#
+# Parameters:
+#   [*btsync_secret*] - BitTorrent Sync password
+#   [*sudo_commands*] - sudo commands allowed on 'jenkins' user
+#   [*local_home_basenames*] - TPI NFS shares basenames
+#
 class fuel_project::tpi::lab (
   $btsync_secret = $fuel_project::tpi::params::btsync_secret,
   $sudo_commands = [ '/sbin/ebtables', '/sbin/iptables' ],

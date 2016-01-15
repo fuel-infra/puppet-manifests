@@ -1,5 +1,28 @@
 # Class fuel_project::devops_tools::lpupdatebug
 #
+# This class deploys lpupdatebug package and it's configuration.
+#
+# Parameters:
+#
+#   [*access_token*] - OAuth access token
+#   [*access_secret*] - OAuth access token secret
+#   [*appname*] - application name
+#   [*cachedir*] - directory with cache path
+#   [*consumer_key*] - OAuth Consumer key
+#   [*consumer_secret*] - OAuth Consumer password
+#   [*credfile*] - credentials file path
+#   [*env*] - environment name
+#   [*host*] - host name for lpupdatebug
+#   [*id*] - unique ID used in credentials config file
+#   [*logfile*] - log file path
+#   [*package_name*] - lpupdatebug package name
+#   [*port*] - Gerrit SSH port
+#   [*projects*] - Launchpad projects list to parse
+#   [*sshprivkey*] - SSH private key path
+#   [*sshprivkey_contents*] - SSH private key file contents
+#   [*update_status*] - update ticket statuses
+#   [*username*] - SSH username
+#
 class fuel_project::devops_tools::lpupdatebug (
   $access_token = '',
   $access_secret = '',

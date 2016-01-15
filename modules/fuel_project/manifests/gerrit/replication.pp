@@ -2,8 +2,27 @@
 #
 # Replication path consists of:
 #   uri: 'user@host:path'
+#
 # More docs:
 # https://gerrit.libreoffice.org/plugins/replication/Documentation/config.html
+#
+# Parameters:
+#   [*host*] - hostname of Gerrit to push to
+#   [*path*] - url path to Gerrit to push to
+#   [*user*] - user to authenticate with Gerrit
+#   [*auth_group*] - name of a group that the remote should use to access the
+#     repositories
+#   [*config_file_path*] - configuration file path
+#   [*mirror*] - remove remote branches that absent locally or invisible to the
+#     replication
+#   [*private_key*] - private key to use for SSH communication
+#   [*public_key*] - public key to use for SSH communication
+#   [*replicate_permissions*] - permissions-only projects and the
+#     refs/meta/config branch will also be replicated to the remote site
+#   [*replication_delay*] - number of seconds to wait before scheduling a remote
+#     push operation
+#   [*threads*] - number of worker threads to dedicate to pushing to the
+#     repositories described by this remote
 #
 define fuel_project::gerrit::replication (
   $host,

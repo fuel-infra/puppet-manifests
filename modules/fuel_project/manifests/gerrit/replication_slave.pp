@@ -1,5 +1,10 @@
 # Class fuel_project::gerrit::replication_slave
 #
+# This class deploys resources required on slave side for replication.
+#
+# Parameters:
+#   [*authorized_keys*] - public keys that can authorize
+#
 class fuel_project::gerrit::replication_slave (
   $authorized_keys = {}
 ) {

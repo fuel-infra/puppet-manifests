@@ -1,5 +1,19 @@
 # Class: fuel_project::apps::partnerappliance
 #
+# This class deploys a simple http directory to share files. To upload files
+# you have to use rsync+ssh/scp method and upload to 'appliance' user with
+# '/var/www/appliance' location. All the files will be available on the
+# 'share.fuel-infra.org' address.
+#
+# Parameters:
+#   [*authorized_keys*] - keys authorized to upload data
+#   [*group*] - base user group
+#   [*home_dir*] - base user home directory path
+#   [*data_dir*] - data directory path
+#   [*user*] - base user name
+#   [*vhost*] - virtual host config name
+#   [*service_fqdn*] - FQDN of service
+#
 class fuel_project::apps::partnerappliance (
   $authorized_keys,
   $group            = 'appliance',

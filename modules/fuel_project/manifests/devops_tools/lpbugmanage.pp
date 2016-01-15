@@ -1,5 +1,26 @@
 #Class fuel_project::devops_tools::lpbugmanage
 #
+# This class deploys lpbugmanage package and it's configuration.
+#
+# Parameters:
+#
+#   [*id*] - unique ID used in config file
+#   [*consumer_key*] - OAuth Consumer key
+#   [*consumer_secret*] - OAuth Consumer password
+#   [*access_token*] - OAuth access token
+#   [*access_secret*] - OAuth access token secret
+#   [*section*] - Launchpad section
+#   [*appname*] - application name
+#   [*credfile*] - credentials file path
+#   [*cachedir*] - directory with cache path
+#   [*logfile*] - log file path
+#   [*env*] - environment name
+#   [*status*] - supported statuses
+#   [*series*] - data series URL
+#   [*milestone*] - milestone object URL
+#   [*distr*] - dist value
+#   [*package_name*] - lpbugmanage package name
+#
 class fuel_project::devops_tools::lpbugmanage (
   $id = '',
   $consumer_key = '',
