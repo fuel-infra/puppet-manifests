@@ -21,6 +21,9 @@ import com.cloudbees.plugins.credentials.CredentialsScope
 import hudson.markup.RawHtmlMarkupFormatter
 import hudson.markup.EscapedMarkupFormatter
 import org.jenkinsci.plugins.UnsafeMarkupFormatter
+import com.sonyericsson.hudson.plugins.gerrit.trigger.config.Config
+import com.sonyericsson.hudson.plugins.gerrit.trigger.GerritServer
+import com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl
 
 class InvalidAuthenticationStrategy extends Exception{}
 class InvalidUserCredentials extends Exception{}
@@ -376,6 +379,34 @@ class Actions {
     //saving changes
     jenkins.save()
   }
+
+///////////////////////////////////////////////////////////////////////////////
+// Gerrit trigger configuration
+///////////////////////////////////////////////////////////////////////////////
+
+  void setup_gerrit(
+    String gerrit_hostname = null,
+    String gerrit_key_path = null,
+    String gerrit_server_name = null,
+    String gerrit_url = null,
+    String gerrit_username = null
+  ) {
+    Config config
+    if (PluginImpl.getInstance().getServer(gerrit_server_name) == null) {
+        GerritServer defaultServer = new GerritServer(gerrit_server_name)
+        config = defaultServer.getConfig()
+        PluginImpl.getInstance().addServer(defaultServer)
+        defaultServer.start()
+    } else {
+        config = PluginImpl.getInstance().getServer(gerrit_server_name).getConfig()
+    }
+    config.setGerritBuildCurrentPatchesOnly(true)
+    config.setGerritHostName(gerrit_hostname)
+    config.setGerritFrontEndURL(gerrit_url)
+    config.setGerritUserName(gerrit_username)
+    config.setGerritAuthKeyFile(new File(gerrit_key_path))
+    PluginImpl.getInstance().save()
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

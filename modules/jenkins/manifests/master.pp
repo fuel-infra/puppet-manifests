@@ -59,6 +59,7 @@ class jenkins::master (
   $ssl_key_file                     = '/etc/ssl/jenkins.key',
   $ssl_key_file_contents            = '',
   # Jenkins config parameters
+  $gerrit_trigger_enabled           = false,
   $install_zabbix_item              = false,
   $jenkins_address                  = '0.0.0.0',
   $jenkins_admin_email              = 'jenkins@example.com',
@@ -387,5 +388,51 @@ class jenkins::master (
       Service['jenkins'],
       Exec['jenkins_auth_config'],
     ],
+  }
+
+  # Getting hash from gerrit_trigger_conf
+  $gerrit_trigger_conf = hiera_hash('jenkins::master::gerrit_trigger_conf', {})
+
+  # Define: exec_gerrit_conf which runs setup of gerrit configuration
+  #
+  define exec_gerrit_conf(
+    $gerrit_hostname,
+    $gerrit_server_name,
+    $gerrit_url,
+    $gerrit_username,
+    $gerrit_key_path,
+    $jenkins_address,
+    $jenkins_cli_file,
+    $jenkins_libdir,
+    $jenkins_port,
+    $jenkins_proto
+  ) {
+    exec { $gerrit_server_name:
+      command   => join([
+          '/usr/bin/java',
+          "-jar ${jenkins_cli_file}",
+          "-s ${jenkins_proto}://${jenkins_address}:${jenkins_port}",
+          "groovy ${jenkins_libdir}/jenkins_cli.groovy",
+          'setup_gerrit',
+          $gerrit_hostname,
+          $gerrit_key_path,
+          $gerrit_server_name,
+          $gerrit_url,
+          $gerrit_username,
+      ], ' '),
+      tries     => '6',
+      try_sleep => '30',
+      user      => 'jenkins',
+      require   => [
+        File["${jenkins_libdir}/jenkins_cli.groovy"],
+        Package['groovy'],
+        Service['jenkins'],
+        Exec['jenkins_auth_config'],
+      ],
+    }
+  }
+
+  if $gerrit_trigger_enabled == true {
+    create_resources(exec_gerrit_conf, $gerrit_trigger_conf)
   }
 }

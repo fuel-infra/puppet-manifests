@@ -13,6 +13,19 @@ fuel_project::jenkins::master::log_gzip_enable: true
 fuel_project::jenkins::master::log_gzip_threads: '2'
 fuel_project::jenkins::master::service_fqdn: 'jenkins-product.test.local'
 
+jenkins::master::gerrit_trigger_conf:
+  'gerrit_server_1':
+     gerrit_hostname: 'gerrit.example.com'
+     gerrit_key_path: '/var/lib/jenkins/.ssh/id_rsa'
+     gerrit_server_name: 'gerrit-server'
+     gerrit_url: 'http://gerit.example.com'
+     gerrit_username: 'gerrit'
+     jenkins_address: "%{jenkins::master::jenkins_address}"
+     jenkins_cli_file: "%{jenkins::master::jenkins_cli_file}"
+     jenkins_libdir: "%{jenkins::master::jenkins_libdir}"
+     jenkins_port: "%{jenkins::master::jenkins_port}"
+     jenkins_proto: "%{jenkins::master::jenkins_proto}"
+jenkins::master::gerrit_trigger_enabled: false
 jenkins::master::install_groovy: true
 jenkins::master::jenkins_admin_email: 'jenkins@example.com'
 jenkins::master::jenkins_cli_file: '/var/cache/jenkins/war/WEB-INF/jenkins-cli.jar'
