@@ -214,29 +214,38 @@ class fuel_project::jenkins::slave (
     if ($libvirt_default_network == false) {
       case $::osfamily {
         'Debian': {
-          $unix_sock_group = 'libvirtd'
+          class { '::libvirt' :
+            listen_tls         => false,
+            listen_tcp         => true,
+            auth_tcp           => 'none',
+            mdns_adv           => false,
+            unix_sock_group    => 'libvirtd',
+            unix_sock_rw_perms => '0777',
+            python             => true,
+            qemu               => true,
+            tcp_port           => 16509,
+            deb_default        => {
+              'libvirtd_opts' => '-d -l',
+            },
+          }
         }
         'RedHat': {
-          $unix_sock_group = 'libvirt'
+          class { '::libvirt' :
+            listen_tls         => false,
+            listen_tcp         => true,
+            auth_tcp           => 'none',
+            mdns_adv           => false,
+            unix_sock_group    => 'libvirt',
+            unix_sock_rw_perms => '0777',
+            python             => true,
+            qemu               => true,
+            tcp_port           => 16509,
+            sysconfig          => {
+              'LIBVIRTD_ARGS' => '--listen',
+            }
+          }
         }
         default: { }
-      }
-      class { '::libvirt' :
-        listen_tls         => false,
-        listen_tcp         => true,
-        auth_tcp           => 'none',
-        mdns_adv           => false,
-        unix_sock_group    => $unix_sock_group,
-        unix_sock_rw_perms => '0777',
-        python             => true,
-        qemu               => true,
-        tcp_port           => 16509,
-        deb_default        => {
-          'libvirtd_opts' => '-d -l',
-        },
-        sysconfig          => {
-          'LIBVIRTD_ARGS' => '--listen',
-        }
       }
     }
 
