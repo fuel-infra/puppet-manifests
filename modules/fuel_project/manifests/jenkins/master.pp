@@ -43,7 +43,6 @@ class fuel_project::jenkins::master (
 
   ::Nginx::Resource::Vhost <| title == 'jenkins' |> {
     vhost_cfg_append    => {
-      'error_page 403'         => '/fuel-infra/403.html',
       'error_page 404'         => '/fuel-infra/404.html',
       'error_page 500 502 504' => '/fuel-infra/5xx.html',
     }
