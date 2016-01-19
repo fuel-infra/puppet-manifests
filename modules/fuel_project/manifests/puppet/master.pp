@@ -17,10 +17,10 @@
 #   [*hiera_json_datadir*] - hiera directory with json files
 #   [*hiera_logger*] - where to log hiera events
 #   [*hiera_merge_behavior*] - must be one of the following:
-#     native (default) — merge top-level keys only
-#     deep — merge recursively; in the event of conflicting keys, allow lower
+#     native (default) - merge top-level keys only
+#     deep - merge recursively; in the event of conflicting keys, allow lower
 #       priority values to win
-#     deeper — merge recursively; in the event of a conflict, allow higher
+#     deeper - merge recursively; in the event of a conflict, allow higher
 #       priority values to win
 #   [*hiera_yaml_datadir*] - hiera directory with yaml files
 #   [*manifests_binpath*] - path to store Puppet helper scripts
