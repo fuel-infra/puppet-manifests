@@ -94,42 +94,15 @@ yumrepos::repos:
     'descr': 'CentOS-$releasever - Base'
     'baseurl': 'http://mirror.centos.org/centos/$releasever/os/$basearch/'
     'gpgcheck': true
-  'centosplus':
-    'descr': 'CentOS-$releasever - Plus'
-    'baseurl': 'http://mirror.centos.org/centos/$releasever/centosplus/$basearch/'
-    'gpgcheck': true
-  'contrib':
-    'descr': 'CentOS-$releasever - Contrib'
-    'baseurl': 'http://mirror.centos.org/centos/$releasever/contrib/$basearch/'
-    'gpgcheck': true
   'devops':
     'descr': 'Devops repository'
     'baseurl': 'http://mirror.fuel-infra.org/devops/centos/'
     'gpgcheck': true
     'gpgkey': 'file://etc/pki/rpm-gpg/RPM-GPG-KEY-devops'
-  'epel':
-    'descr': 'epel $releasever'
-    'mirrorlist': 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
-    'gpgcheck': true
-    'gpgkey': 'https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
-  'extras':
-    'descr': 'CentOS-$releasever - Extras'
-    'baseurl': 'http://mirror.centos.org/centos/$releasever/extras/$basearch/'
-    'gpgcheck': true
-  'jpackage':
-    'descr': 'JPackage'
-    'mirrorlist': 'http://www.jpackage.org/mirrorlist.php?dist=generic&type=free&release=5.0'
-    'gpgcheck': true
-    'gpgkey': 'http://www.jpackage.org/jpackage.asc'
   'updates':
     'descr': 'CentOS-$releasever - Updates'
     'baseurl': 'http://mirror.centos.org/centos/$releasever/updates/$basearch/'
     'gpgcheck': true
-  'zabbix':
-    'descr': 'Zabbix Official Repository - $basearch'
-    'baseurl': 'http://repo.zabbix.com/zabbix/2.2/rhel/6/$basearch/'
-    'gpgcheck': true
-    'gpgkey': 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX'
 
 firewall:
   known_networks:
