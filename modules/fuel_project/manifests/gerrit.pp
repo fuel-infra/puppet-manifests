@@ -16,6 +16,13 @@ class fuel_project::gerrit (
 ) {
 
   $gerrit = hiera_hash('gerrit')
+
+  class { '::gerrit::mysql' :
+    database_name     => $gerrit['mysql_database'],
+    database_user     => $gerrit['mysql_user'],
+    database_password => $gerrit['mysql_password'],
+  }
+
   class { '::gerrit' :
     canonicalweburl                     => $gerrit['service_url'],
     contactstore                        => $gerrit['contactstore'],
@@ -43,13 +50,9 @@ class fuel_project::gerrit (
     ssl_chain_file_contents             => $gerrit['ssl_chain_file_contents'],
     ssl_key_file                        => $gerrit['ssl_key_file'],
     ssl_key_file_contents               => $gerrit['ssl_key_file_contents'],
+    require                             => Class['gerrit::mysql']
   }
 
-  class { '::gerrit::mysql' :
-    database_name     => $gerrit['mysql_database'],
-    database_user     => $gerrit['mysql_user'],
-    database_password => $gerrit['mysql_password'],
-  }
 
   class { '::gerrit::hideci' :}
 
