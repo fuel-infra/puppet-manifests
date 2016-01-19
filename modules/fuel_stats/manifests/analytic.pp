@@ -1,4 +1,33 @@
-# Anonymous statistics analytic
+# Class: fuel_stats::analytic
+#
+# This class deploys anonymous statistics analytic instance.
+#
+# Parameters:
+#   [*auto_update*] - run github poller every 15 minutes
+#   [*development*] - development deployment type
+#   [*elastic_http_port*] - Elasticsearch http port
+#   [*elastic_listen_ip*] - Elasticsearch listening ip
+#   [*elastic_tcp_port*] - Elasticsearch TCP port
+#   [*firewall_enable*] - enable embedded firewall rules
+#   [*fuel_stats_repo*] - fuel-stats repository URL
+#   [*http_port*] - http listening port
+#   [*https_port*] - https listening port
+#   [*psql_db*] - PostgreSQL database name
+#   [*psql_host*] - PostgreSQL host name
+#   [*psql_pass*] - PostgreSQL database password
+#   [*psql_user*] - PostgreSQL user name
+#   [*nginx_access_log*] - access log path
+#   [*nginx_error_log*] - error log path
+#   [*nginx_error_path*] - error pages path
+#   [*nginx_limit_conn*] - sets the shared memory zone and the maximum allowed
+#       number of connections
+#   [*nginx_log_format*] - log format
+#   [*service_hostname*] - service hostname
+#   [*ssl_cert_file*] - ssl certificate file path
+#   [*ssl_cert_file_contents*] - ssl certificate file contents
+#   [*ssl_key_file*] - ssl key file path
+#   [*ssl_key_file_contents*] - ssl key file contents
+#
 class fuel_stats::analytic (
   $auto_update            = $fuel_stats::params::auto_update,
   $development            = $fuel_stats::params::development,
@@ -6,7 +35,7 @@ class fuel_stats::analytic (
   $elastic_listen_ip      = '127.0.0.1',
   $elastic_tcp_port       = '9300',
   $firewall_enable        = $fuel_stats::params::firewall_enable,
-  $fuel_stats_repo        = 'https://github.com/stackforge/fuel-stats/',
+  $fuel_stats_repo        = 'https://github.com/openstack/fuel-stats/',
   $http_port              = $fuel_stats::params::http_port,
   $https_port             = $fuel_stats::params::https_port,
   $psql_db                = $fuel_stats::params::psql_db,

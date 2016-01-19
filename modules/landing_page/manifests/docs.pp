@@ -1,5 +1,18 @@
 # Class: landing_page::docs
 #
+# This class deploys a simple web page to serve a collection of links to main
+# landing page resources.
+#
+# Parameters:
+#   [*apply_firewall_rules*] - apply embedded firewall rules
+#   [*firewall_allow_sources*] - source addresses which may contact the service
+#   [*nginx_access_log*] - access log path
+#   [*nginx_error_log*] - error log path
+#   [*nginx_log_format*] - log format
+#   [*nginx_server_name*] - service host name
+#   [*nginx_www_root*] - www_root path for service
+#   [*package*] - package providing landing page documents
+#
 class landing_page::docs (
   $apply_firewall_rules   = false,
   $firewall_allow_sources = {},

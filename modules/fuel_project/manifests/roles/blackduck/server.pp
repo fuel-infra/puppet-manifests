@@ -2,18 +2,15 @@
 #
 # This class is about configuration of Blackduck's server.
 #
-# [*blackduck_release*] - string, version of operation system
-# on a goal server.
-#
-# [*database_path*] - string, directory where Blackduck's database
-# is placed. This variable is used to check that database exists.
-#
-# [*iso*] - string, path to the image with Blackduck distro
-#
-# [*mount_point*] - string, path to mount the iso
-#
-# [*ssh_public_key*] - string, value of public ssh-key for an user
-# from Blackduck client
+# Parameters:
+#   [*blackduck_release*] - string, version of operation system
+#   on a goal server.
+#   [*database_path*] - string, directory where Blackduck's database
+#   is placed. This variable is used to check that database exists.
+#   [*iso*] - string, path to the image with Blackduck distro
+#   [*mount_point*] - string, path to mount the iso
+#   [*ssh_public_key*] - string, value of public ssh-key for an user
+#   from Blackduck client
 #
 class fuel_project::roles::blackduck::server (
   $blackduck_release = 'Red Hat Enterprise Linux Server release 6.2 (Santiago)',

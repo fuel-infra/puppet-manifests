@@ -1,30 +1,30 @@
 # Class: fuel_project::roles::blackduck::server::client
 #
 # This class is about configuration of Blackduck's client.
-# [*google_creds*] - JSON-hash to have an ability to work
-#  with Google services (Google Drive, for example).
-#  Hash in the following form:
-#   type: 'service_account'
-#   private_key_id: 'put_here_your_id'
-#   private_key: 'put_here_your_key'
-#   client_email: 'put_here_your_client_email'
-#   client_id: 'put_here_your_client_id'
-#   auth_uri: 'https://accounts.google.com/o/oauth2/auth'
-#   token_uri: 'https://accounts.google.com/o/oauth2/token'
-#   auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
-#   client_x509_cert_url: 'put_here_your_client_x509_cert_url'
 #
-#  [*known_hosts*] - set of hosts to add them into known_hosts file.
-#  Set in the following form:
-#   'user@server.test.local':
-#     host: 'user@server.test.local'
-#     port: 22
-#
-#  [*known_hosts_overwrite*] - boolean, if we should overwrite known_hosts file
-#  [*sdk_dst*] - string, path to directory where SDK should be unpacked
-#  [*sdk_path*] - string, path to director where SDK's distr is placed
-#  [*ssh_private_key*] - string, value of private ssh-key
-#  [*ssh_private_key_path*] - string, path to directory to store private ssh-key
+# Parameters:
+#   [*google_creds*] - hash to have an ability to work with Google services
+#    (Google Drive, for example).
+#    Hash in the following form:
+#     type: 'service_account'
+#     private_key_id: 'put_here_your_id'
+#     private_key: 'put_here_your_key'
+#     client_email: 'put_here_your_client_email'
+#     client_id: 'put_here_your_client_id'
+#     auth_uri: 'https://accounts.google.com/o/oauth2/auth'
+#     token_uri: 'https://accounts.google.com/o/oauth2/token'
+#     auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
+#     client_x509_cert_url: 'put_here_your_client_x509_cert_url'
+#    [*known_hosts*] - set of hosts to add them into known_hosts file.
+#    Set in the following form:
+#     'user@server.test.local':
+#       host: 'user@server.test.local'
+#       port: 22
+#    [*known_hosts_overwrite*] - boolean, if we should overwrite known_hosts file
+#    [*sdk_dst*] - string, path to directory where SDK should be unpacked
+#    [*sdk_path*] - string, path to director where SDK's distr is placed
+#    [*ssh_private_key*] - string, value of private ssh-key
+#    [*ssh_private_key_path*] - string, path to directory to store private ssh-key
 #
 class fuel_project::roles::blackduck::client (
   $google_creds          = hiera_hash('fuel_project::roles::blackduck::client::google_creds', undef),
