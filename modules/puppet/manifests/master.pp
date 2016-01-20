@@ -1,5 +1,14 @@
 # Class: puppet::master
 #
+# This class deploys Puppet masters instance.
+#
+# Parameters are mostly described in 'params.pp' file. Some additional ones:
+#   [*nginx_access_log*] - access log file path
+#   [*nginx_error_log*] - error log file path
+#   [*nginx_log_format*] - log format
+#   [*puppet_master_run_with*] - 'webrick' or 'nginx+uwsgi'
+#   [*server*] - unused variable
+#
 class puppet::master (
   $apply_firewall_rules   = $::puppet::params::apply_firewall_rules,
   $autosign               = $::puppet::params::autosign,
@@ -19,7 +28,7 @@ class puppet::master (
   $nginx_error_log        = '/var/log/nginx/error.log',
   $nginx_log_format       = undef,
   $package                = $::puppet::params::master_package,
-  $puppet_master_run_with = 'webrick', # or nginx+uwsgi
+  $puppet_master_run_with = 'webrick',
   $server                 = '',
   $service                = $::puppet::params::master_service,
 ) inherits ::puppet::params {

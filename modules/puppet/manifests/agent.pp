@@ -1,5 +1,9 @@
 # Class: puppet::agent
 #
+# This class deploys Puppet agent instance.
+#
+# Parameters are described in 'params.pp' file.
+#
 class puppet::agent (
   $archive_file_server = $::puppet::params::archive_file_server,
   $archive_files       = $::puppet::params::archive_files,

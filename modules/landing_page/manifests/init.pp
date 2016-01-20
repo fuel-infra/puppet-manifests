@@ -1,5 +1,37 @@
 # Class: landing_page
 #
+# This class deploys instance of landing page Django application.
+#
+# Parameters:
+#   [*app_user*] - user and group used to deploy instance
+#   [*apply_firewall_rules*] - apply embedded firewall rules
+#   [*apps*] - applications to deploy
+#   [*config*] - configuration file path
+#   [*config_template*] - configuration file template
+#   [*database_engine*] - database engine used by Django
+#   [*database_host*] - database host name
+#   [*database_name*] - database name
+#   [*database_password*] - database password
+#   [*database_port*] - database port
+#   [*database_user*] - database user
+#   [*debug*] - enable Django debug
+#   [*firewall_allow_sources*] - allow connections from these sources
+#   [*google_analytics_property_id*] - Google Analytics property_id
+#   [*nginx_access_log*] - access log
+#   [*nginx_error_log*] - error log
+#   [*nginx_log_format*] - log format
+#   [*nginx_server_aliases*] - server aliases
+#   [*nginx_server_name*] - server primary name
+#   [*package*] - packages required to install
+#   [*plugins_repository*] - plugins repository URL
+#   [*ssl*] - enable ssl port
+#   [*ssl_cert_file*] - ssl certificate file path
+#   [*ssl_cert_file_contents*] - ssl certificate file contents
+#   [*ssl_key_file*] - ssl key file path
+#   [*ssl_key_file_contents*] - ssl key file contents
+#   [*timezone*] - timezone used in application
+#   [*uwsgi_socket*] - uwsgi listening socket
+#
 class landing_page (
   $app_user                     = $::landing_page::params::app_user,
   $apply_firewall_rules         = $::landing_page::params::apply_firewall_rules,

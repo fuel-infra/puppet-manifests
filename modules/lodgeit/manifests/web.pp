@@ -1,5 +1,21 @@
 # Class: lodgeit::web
 #
+# This class deploys lodgeit web part.
+#
+# Parameters:
+#   [*config*] - lodgeit configuration file path
+#   [*database_engine*] - database engine
+#   [*database_host*] - database hostname
+#   [*database_name*] - database name
+#   [*database_password*] - database password
+#   [*database_username*] - database username
+#   [*debug*] - enable debug
+#   [*group*] - group used to install application
+#   [*packages*] - packages required for this instance
+#   [*secret_key*] - application secret key
+#   [*user*] - user used to install application
+#   [*mode*] - native or uwsgi application mode
+#
 class lodgeit::web (
   $config            = '/etc/lodgeit/settings.py',
   $database_engine   = 'mysql',

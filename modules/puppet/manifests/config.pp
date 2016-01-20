@@ -1,5 +1,9 @@
 # Class: puppet::config
 #
+# Puppet config reading class.
+#
+# Parameters are described in 'params.pp' file.
+#
 define puppet::config (
   $archive_file_server   = undef,
   $archive_files         = undef,

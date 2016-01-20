@@ -1,5 +1,7 @@
 # Class: landing_page::updater
 #
+# This class deploys updater part of landing page application.
+#
 class landing_page::updater (
   $application  = $::landing_page::params::updater_app,
   $config       = $::landing_page::params::updater_config,

@@ -1,5 +1,7 @@
 # Class: landing_page::params
 #
+# This class keeps default parameters for landing_page only.
+#
 class landing_page::params {
   # Landing page webapp
   $app_user                     = 'release'

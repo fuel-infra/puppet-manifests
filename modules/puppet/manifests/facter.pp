@@ -1,5 +1,10 @@
 # Define: puppet::facter
 #
+# This class deploys facter settings.
+#
+# Parameters:
+#   [*facts*] - defines the list of facts which are deployed on host
+#
 define puppet::facter (
   $facts,
 ) {

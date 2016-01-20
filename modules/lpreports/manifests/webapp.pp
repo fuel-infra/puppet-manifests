@@ -1,4 +1,22 @@
-# lpreports::webapp
+# Class: lpreports::webapp
+#
+# This class deploys webapp part of lpreports application.
+#
+# Parameters:
+#   [*config*] - lpreports configuration file entries
+#   [*logdir*] - log directory of lpreports
+#   [*managepy_path*] - path to lpreports manage.py file
+#   [*nginx_server_name*] - FQDN of service
+#   [*nginx_access_log*] - access log file path
+#   [*nginx_error_log*] - error log file path
+#   [*nginx_log_format*] - log file format
+#   [*reports*] - reports configuration file entries
+#   [*review_filters*] - reports configuration file entries
+#   [*ssl_certificate*] - ssl certificate file path
+#   [*ssl_certificate_contents*] - ssl certificate file contents
+#   [*ssl_key*] - ssl key file path
+#   [*ssl_key_contents*] - ssl key file contents
+#   [*teams*] - team configuration file entries
 #
 class lpreports::webapp (
   $config                   = {},
