@@ -44,6 +44,9 @@
 #  [*ldap_ssh_account_name*] - ldap authorization account name
 #  [*ldap_sslverify*] - ldap ssl verification
 #  [*ldap_username*] - ldap authorzation username
+#  [*ldap_groupbase*] - ldap groupbase
+#  [*ldap_grouppattern*] - ldap group pattern
+#  [*ldap_groupmemberpattern*] - ldap member pattern
 #  [*melody_session*] - enable session data collection for melody
 #  [*mysql_database*] - MySQL database name used by Gerrit
 #  [*mysql_host*] - MySQL host used by Gerrit
@@ -109,12 +112,15 @@ class gerrit (
   $ldap_account_base                   = '',
   $ldap_account_email_address          = '',
   $ldap_account_pattern                = '',
-  $ldap_accountfullname                = '',
-  $ldap_password                       = '',
+  $ldap_accountfullname                = undef,
+  $ldap_password                       = undef,
   $ldap_server                         = '',
   $ldap_ssh_account_name               = '',
-  $ldap_sslverify                      = true,
-  $ldap_username                       = '',
+  $ldap_sslverify                      = undef,
+  $ldap_username                       = undef,
+  $ldap_groupbase                      = undef,
+  $ldap_grouppattern                   = undef,
+  $ldap_groupmemberpattern             = undef,
   $melody_session                      = false,
   $mysql_database                      = 'reviewdb',
   $mysql_host                          = 'localhost',
