@@ -68,13 +68,6 @@ node /mirror(\d+)\.fuel-infra\.org/ {
   include nginx::share
 }
 
-node /build(\d+)\.fuel-infra\.org/ {
-  class { '::fuel_project::jenkins::slave' :
-    external_host  => true,
-    build_fuel_iso => true,
-  }
-}
-
 node /irc-bouncer([0-9]{2})\.fuel-infra\.org/ {
   class { '::fuel_project::znc' :
     apply_firewall_rules => true,
