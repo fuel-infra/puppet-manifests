@@ -916,6 +916,10 @@ log_storage::params::logstash_ssl_key: |
   Vi7zlubcCEuMg7nAJF6bjAfRo+qjnHshSlEWXq38XZ/+WUxSvRW1og==
   -----END RSA PRIVATE KEY-----
 
+log_storage::logstash::mysql_slow_log_filter_access_type: 'mysql-slow-log'
+log_storage::logstash::mysql_slow_log_filter_query_data_message: 'QueryData'
+log_storage::logstash::mysql_slow_log_filter_timestamp_message: 'Timestamp'
+log_storage::logstash::mysql_slow_log_filter_user_host_message: 'UserHost'
 log_storage::logstash::nginx_filter_access_message: 'NGINXACCESS'
 log_storage::logstash::nginx_filter_access_type: 'nginx-access'
 log_storage::logstash::nginx_filter_error_message: 'NGINXERROR'
@@ -956,7 +960,7 @@ log_storage::logstashforwarder::files:
       - /var/log/messages
       - /var/log/mysql.err
       - /var/log/mysql.log
-      - /var/log/mysql/*.log
+      - /var/log/mysql/error.log
       - /var/log/postgresql/*.log
       - /var/log/puppet/*.log
       - /var/log/syslog
@@ -969,18 +973,21 @@ log_storage::logstashforwarder::files:
       - /var/lib/gerrit/review_site/logs/sshd_log
     fields:
       type: syslog
-
   nginx-access:
     paths:
       - /var/log/nginx/*access.log
     fields:
       type: nginx-access
-
   nginx-error:
     paths:
       - /var/log/nginx/*error.log
     fields:
       type: nginx-error
+  mysql-slow-log:
+    paths:
+      - /var/log/mysql/slow.log
+    fields:
+      type: mysql-slow-log
 
 fuel_project::common::logstash_forwarder: false
 logstashforwarder::manage_repo: false

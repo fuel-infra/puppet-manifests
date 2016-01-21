@@ -1,0 +1,27 @@
+filter {
+  if [type] == "<%= @mysql_slow_log_filter_access_type %>" {
+    if [message] =~ "^# Time:" {
+      drop {}
+    }
+    multiline {
+      what => previous
+      pattern => "^# User@Host:"
+      negate => true
+    }
+    grok {
+      match => { "message" => [
+          "%{<%= @mysql_slow_log_filter_user_host_message %>}",
+          "%{<%= @mysql_slow_log_filter_query_data_message %>}",
+          "%{<%= @mysql_slow_log_filter_timestamp_message %>}"
+        ]
+      }
+      patterns_dir => "<%= @logstash_patterns_dir %>"
+    }
+    date {
+      match => [ "timestamp", "UNIX" ]
+    }
+    mutate {
+      remove_field => "timestamp"
+    }
+  }
+}

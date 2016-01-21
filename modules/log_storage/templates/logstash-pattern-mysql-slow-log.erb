@@ -1,0 +1,3 @@
+<%= @mysql_slow_log_filter_user_host_message %> ^# User@Host: %{USER:mysql_user}(?:\[[^\]]+\])?\s+@\s+%{HOST:mysql_client_hostname}?\s+\[%{IP:mysql_client_ip}?\]\s+Id:\s+%{NUMBER:mysql_connection_id}
+<%= @mysql_slow_log_filter_query_data_message %> ^# Query_time: %{NUMBER:mysql_query_time} \s*Lock_time: %{NUMBER:mysql_query_lock_wait} \s*Rows_sent: %{NUMBER:mysql_query_rows_sent} \s*Rows_examined: %{NUMBER:mysql_query_rows_examinated} \s*Rows_affected:( %{NUMBER:mysql_query_rows_affected})?
+<%= @mysql_slow_log_filter_timestamp_message %> ^SET timestamp=%{NUMBER:timestamp};
