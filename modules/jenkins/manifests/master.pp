@@ -18,6 +18,7 @@
 #   [*nginx_access_log*] - access log file path
 #   [*nginx_error_log*] - error log file path
 #   [*nginx_log_format*] - log format
+#   [*number_of_executors*] - amount of executors for jenkins master node
 #   [*www_root*] - root web directory path
 #   [*install_groovy*] - install Groovy script for Jenkins
 #   [*jenkins_cli_file*] - Jenkins cli file path
@@ -63,6 +64,7 @@ class jenkins::master (
   $nginx_access_log                 = '/var/log/nginx/access.log',
   $nginx_error_log                  = '/var/log/nginx/error.log',
   $nginx_log_format                 = undef,
+  $number_of_executors              = '2',
   $www_root                         = '/var/www',
   # Jenkins auth
   $install_groovy                   = 'yes',
@@ -355,5 +357,25 @@ class jenkins::master (
     tries     => $jenkins_cli_tries,
     try_sleep => $jenkins_cli_try_sleep,
     user      => 'jenkins',
+  }
+
+  exec { 'jenkins_executors_config':
+    command   => join([
+        '/usr/bin/java',
+        "-jar ${jenkins_cli_file}",
+        "-s ${jenkins_proto}://${jenkins_address}:${jenkins_port}",
+        "groovy ${jenkins_libdir}/jenkins_cli.groovy",
+        'set_executors',
+        $number_of_executors,
+    ], ' '),
+    tries     => $jenkins_cli_tries,
+    try_sleep => $jenkins_cli_try_sleep,
+    user      => 'jenkins',
+    require   => [
+      File["${jenkins_libdir}/jenkins_cli.groovy"],
+      Package['groovy'],
+      Service['jenkins'],
+      Exec['jenkins_auth_config'],
+    ],
   }
 }
