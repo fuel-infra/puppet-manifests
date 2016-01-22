@@ -1,7 +1,7 @@
 filter {
-  if [type] == "<%= @nginx_filter_error_type %>" {
+  if [type] == "<%= @logstash_filter_pattern_params['nginx_filter_error_type'] %>" {
     grok {
-      match => { "message" => "%{<%= @nginx_filter_error_message %>}" }
+      match => { "message" => "%{<%= @logstash_filter_pattern_params['nginx_filter_error_message'] %>}" }
       patterns_dir => "<%= @logstash_patterns_dir %>"
     }
   }

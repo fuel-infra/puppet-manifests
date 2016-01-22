@@ -1,15 +1,7 @@
 # log_storage::logstash class
 #
 class log_storage::logstash (
-  $mysql_slow_log_filter_access_type,
-  $mysql_slow_log_filter_query_data_message,
-  $mysql_slow_log_filter_timestamp_message,
-  $mysql_slow_log_filter_user_host_message,
-  $nginx_filter_access_message,
-  $nginx_filter_access_type,
-  $nginx_filter_error_message,
-  $nginx_filter_error_type,
-  $syslog_filter_match,
+  $logstash_filter_pattern_params,
   $elasticsearch_bind_port       = undef,
   $elasticsearch_cacert          = undef,
   $elasticsearch_cluster         = undef,
@@ -64,6 +56,11 @@ class log_storage::logstash (
     order   => 23,
   }
 
+  logstash::configfile { 'logstash-filter-libvirt-qemu-env-log' :
+    content => template('log_storage/logstash-filter-libvirt-qemu-env-log.conf.erb'),
+    order   => 24,
+  }
+
   logstash::configfile { 'logstash-output-elasticsearch' :
     content => template('log_storage/logstash-output-elasticsearch.conf.erb'),
     order   => 40,
@@ -98,6 +95,17 @@ class log_storage::logstash (
     group   => $user,
     mode    => '0444',
     content => template('log_storage/logstash-pattern-mysql-slow-log.erb'),
+    require => [
+      File[$logstash_patterns_dir],
+      User[$user],
+    ]
+  }
+
+  file { "${logstash_patterns_dir}/libvirt-qemu-env-log" :
+    owner   => $user,
+    group   => $user,
+    mode    => '0444',
+    content => template('log_storage/logstash-pattern-libvirt-qemu-env-log.erb'),
     require => [
       File[$logstash_patterns_dir],
       User[$user],

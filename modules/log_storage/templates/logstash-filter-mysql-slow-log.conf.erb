@@ -1,5 +1,5 @@
 filter {
-  if [type] == "<%= @mysql_slow_log_filter_access_type %>" {
+  if [type] == "<%= @logstash_filter_pattern_params['mysql_slow_log_filter_access_type'] %>" {
     if [message] =~ "^# Time:" {
       drop {}
     }
@@ -10,9 +10,9 @@ filter {
     }
     grok {
       match => { "message" => [
-          "%{<%= @mysql_slow_log_filter_user_host_message %>}",
-          "%{<%= @mysql_slow_log_filter_query_data_message %>}",
-          "%{<%= @mysql_slow_log_filter_timestamp_message %>}"
+          "%{<%= @logstash_filter_pattern_params['mysql_slow_log_filter_user_host_message'] %>}",
+          "%{<%= @logstash_filter_pattern_params['mysql_slow_log_filter_query_data_message'] %>}",
+          "%{<%= @logstash_filter_pattern_params['mysql_slow_log_filter_timestamp_message'] %>}"
         ]
       }
       patterns_dir => "<%= @logstash_patterns_dir %>"

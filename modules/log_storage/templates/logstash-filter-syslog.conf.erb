@@ -7,7 +7,7 @@ filter {
     }
     syslog_pri { }
     date {
-      match => <%= @syslog_filter_match %>
+      match => <%= @logstash_filter_pattern_params['syslog_filter_match'] %>
     }
   }
 }

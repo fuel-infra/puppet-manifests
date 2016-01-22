@@ -916,18 +916,21 @@ log_storage::params::logstash_ssl_key: |
   Vi7zlubcCEuMg7nAJF6bjAfRo+qjnHshSlEWXq38XZ/+WUxSvRW1og==
   -----END RSA PRIVATE KEY-----
 
-log_storage::logstash::mysql_slow_log_filter_access_type: 'mysql-slow-log'
-log_storage::logstash::mysql_slow_log_filter_query_data_message: 'QueryData'
-log_storage::logstash::mysql_slow_log_filter_timestamp_message: 'Timestamp'
-log_storage::logstash::mysql_slow_log_filter_user_host_message: 'UserHost'
-log_storage::logstash::nginx_filter_access_message: 'NGINXACCESS'
-log_storage::logstash::nginx_filter_access_type: 'nginx-access'
-log_storage::logstash::nginx_filter_error_message: 'NGINXERROR'
-log_storage::logstash::nginx_filter_error_type: 'nginx-error'
-log_storage::logstash::syslog_filter_match:
-  - "syslog_timestamp"
-  - "MMM  d HH:mm:ss"
-  - "MMM dd HH:mm:ss"
+log_storage::logstash::logstash_filter_pattern_params:
+  'libvirt_qemu_env_log_filter_access_type': 'libvirt-qemu-env-log'
+  'libvirt_qemu_env_log_filter_message': 'LibvirtQemuEnv'
+  'mysql_slow_log_filter_access_type': 'mysql-slow-log'
+  'mysql_slow_log_filter_query_data_message': 'QueryData'
+  'mysql_slow_log_filter_timestamp_message': 'Timestamp'
+  'mysql_slow_log_filter_user_host_message': 'UserHost'
+  'nginx_filter_access_message': 'NGINXACCESS'
+  'nginx_filter_access_type': 'nginx-access'
+  'nginx_filter_error_message': 'NGINXERROR'
+  'nginx_filter_error_type': 'nginx-error'
+  'syslog_filter_match':
+    - "syslog_timestamp"
+    - "MMM  d HH:mm:ss"
+    - "MMM dd HH:mm:ss"
 
 log_storage::logstashforwarder::ssl_ca_file: '/etc/logstashforwarder/ssl.ca'
 log_storage::logstashforwarder::ssl_ca: '%{log_storage::params::logstash_ssl_ca}'
@@ -952,7 +955,6 @@ log_storage::logstashforwarder::files:
       - /var/log/libvirt/libvirtd.log
       - /var/log/libvirt/libxl/*.log
       - /var/log/libvirt/lxc/*.log
-      - /var/log/libvirt/qemu/*.log
       - /var/log/libvirt/shutdownlog.log
       - /var/log/libvirt/uml/*.log
       - /var/log/lpr.log
@@ -973,6 +975,11 @@ log_storage::logstashforwarder::files:
       - /var/lib/gerrit/review_site/logs/sshd_log
     fields:
       type: syslog
+  libvirt-qemu-env-log:
+    paths:
+      - /var/log/libvirt/qemu/*.log
+    fields:
+      type: libvirt-qemu-env-log
   nginx-access:
     paths:
       - /var/log/nginx/*access.log
