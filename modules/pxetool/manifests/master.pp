@@ -1,5 +1,29 @@
 # Class: pxetool
 #
+# This class deploys fully functional Django powered PXEtool tool which allows
+# to configure DHCP servers to boot, install OS on machines and configure it.
+#
+# Parameters:
+#   [*ssh_id_rsa,*] - ssh private key contents
+#   [*ssh_id_rsa_pub,*] - ssh public key contents
+#   [*config*] - PXEtool configuration file path
+#   [*database_engine*] - Django database engine to use
+#   [*database_host*] - database host
+#   [*database_name*] - database name
+#   [*database_password*] - database password
+#   [*database_port*] - database port
+#   [*database_user*] - database user name
+#   [*nginx_access_log*] - access log file path
+#   [*nginx_error_log*] - error log file path
+#   [*nginx_log_format*] - log file format
+#   [*packages*] - additional packages (example: database library for Python)
+#   [*server_name*] - service hostname
+#   [*ssl_cert_file*] - ssl certificate file path
+#   [*ssl_cert_file_content*] - ssl certificate file contents
+#   [*ssl_key_file*] - ssl private key file path
+#   [*ssl_key_file_content*] - ssl private key file contents
+#   [*user*] - user to install application on
+#
 class pxetool::master(
   $ssh_id_rsa,
   $ssh_id_rsa_pub,

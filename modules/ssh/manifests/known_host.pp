@@ -1,5 +1,13 @@
 # Define: ssh::known_host
 #
+# This class setup known_host file on host for particular user.
+#
+# Parameters:
+#   [*host*] - destination host name for the entry
+#   [*overwrite*] - delete existing file first
+#   [*port*] - port on destination host
+#   [*user*] - user on destination host
+#
 define ssh::known_host (
   $host      = $title,
   $overwrite = true,

@@ -1,5 +1,17 @@
 # Class: ssh::ldap
 #
+# This class sets up ldap authorization on particular machine.
+#
+# Parameters:
+#   [*bind_policy*] - bind policy type
+#   [*ldap_base*] - ldap base for authentication
+#   [*ldap_ignore_users*] - users ignored in this authentication model
+#   [*ldap_uri*] - ldap URI
+#   [*pam_filter*] - pam filter used by setup
+#   [*pam_password*] - pam password hash type
+#   [*sudoers_base*] - ldap sudoers base
+#   [*tls_cacertdir*] - directory with ca certificates path
+#
 class ssh::ldap (
   $bind_policy       = $ssh::params::bind_policy,
   $ldap_base         = '',

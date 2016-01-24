@@ -1,5 +1,32 @@
 # Define: racks::importer
 #
+# This class setups Cron entries for Racks application.
+#
+# Parameters:
+#
+#   [*options*] - importer configuration file entries
+#     Example:
+#      'instances':
+#        'example-ci.infra.org':
+#          'racks_url': 'https://racks.infra.org'
+#          'racks_application': 'jenkins-importer'
+#          'racks_auth_token': 'xyz123456'
+#          'jenkins_url': 'https://example.infra.org'
+#          'jenkins_user': 'racktables-importer'
+#          'jenkins_token': 'xyz654321'
+#          'label_tag': 'exampleci'
+#   [*cron*] - cron entries to create
+#     Example:
+#       'jenkins-importer':
+#         'minute': '*/5'
+#   [*files*] - files to create
+#     Example:
+#       '/etc/ssl/certs/some-importer.crt':
+#         'content': |
+#           -----BEGIN CERTIFICATE-----
+#           abcdefghijklmnopqrstuwxyz12
+#           -----END CERTIFICATE-----
+#
 define racks::importer (
   $options = hiera_hash("racks::importer::${title}::options", {}),
   $cron = hiera_hash("racks::importer::${title}::cron", {}),

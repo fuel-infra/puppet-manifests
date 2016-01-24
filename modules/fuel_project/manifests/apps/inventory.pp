@@ -1,5 +1,7 @@
 # Class: fuel_project::apps::inventory
 #
+# This class deploys a fully functional inventory application.
+#
 # Parameters:
 #   [*importers*] - defines many different types of importers required by racks
 #     Example:

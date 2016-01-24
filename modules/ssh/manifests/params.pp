@@ -1,5 +1,17 @@
 # Class: ssh::params
 #
+# This class contains default parameters for ssh on host.
+#
+# Parameters:
+#   [*apply_firewall_rules*] - apply embedded firewall rules
+#   [*bind_policy*] - bind policy type
+#   [*firewall_allow_sources*] - sources which are allowed to contact this
+#   [*ldap_ignore_users*] - users ignored in this authentication model
+#   [*pam_password*] - pam password hash type
+#   [*packages*] - packages required to deploy ssh daemon
+#   [*ldap_packages*] - packages required for ldap authentication
+#   [*service*] - ssh service name
+#
 class ssh::params {
   $apply_firewall_rules   = false
   $bind_policy            = 'soft'

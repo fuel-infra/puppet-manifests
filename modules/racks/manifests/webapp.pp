@@ -1,5 +1,30 @@
 # Class: racks::webapp
 #
+# This class deploys web application part of inventory application.
+#
+# Parameters:
+#
+#   [*config*] - configuration file path for application
+#   [*database_engine*] - Django database engine to use
+#   [*database_host*] - database host name
+#   [*database_name*] - database name
+#   [*database_password*] - database password
+#   [*database_port*] - database port
+#   [*database_user*] - database user name
+#   [*debug*] - enable debug mode
+#   [*group*] - group used to install application
+#   [*nginx_access_log*] - access log file path
+#   [*nginx_error_log*] - error log file path
+#   [*nginx_log_format*] - log file format
+#   [*nginx_server_name*] - service host name
+#   [*package*] - required python packages
+#   [*ssl_cert_file*] - ssl certificate file path
+#   [*ssl_cert_file_content*] - ssl certificate file contents
+#   [*ssl_key_file*] - ssl key file path
+#   [*ssl_key_file_content*] - ssl key file contents
+#   [*user*] - user used to install application
+#   [*uwsgi_socket*] - uwsgi socket listening address
+#
 class racks::webapp (
   $config                = '/etc/racks/setting.py',
   $database_engine       = 'django.db.backends.mysql',

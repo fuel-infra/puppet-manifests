@@ -1,5 +1,19 @@
 # Class: system
 #
+# This class sets up basic host services and tools.
+#
+# Parameters:
+#   [*install_tools*] - install packages from $tools_packages parameter
+#   [*mta_aliases*] - path to mta aliases file
+#   [*mta_local_only*] - allow only local e-mails
+#   [*mta_newaliasescmd*] - path to mta aliases processing file
+#   [*mta_packages*] - packages required to install mta
+#   [*root_email*] - e-mail address of root
+#   [*root_password*] - root user password
+#   [*root_shell*] - root user shell path
+#   [*timezone*] - timezone used on host
+#   [*tools_packages*] - tools to be installed
+#
 class system (
   $install_tools     = false,
   $mta_aliases       = '/etc/aliases',
