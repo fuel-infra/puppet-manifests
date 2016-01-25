@@ -1,5 +1,26 @@
 # Define: uwsgi::application
 #
+# This definition sets up uwsgi application entry.
+#
+# Parameters:
+#   [*buffer_size*] - application buffer size
+#   [*callable*] - entry point into the application
+#   [*chdir*] - application working directory
+#   [*chmod*] - socket privileges
+#   [*enable_threads*] - enable threads support
+#   [*env*] - set environment value
+#   [*gid*] - group to run application in
+#   [*home*] - Python home directory
+#   [*listen*] - socket listen queue size
+#   [*master*] - enable master process
+#   [*module*] - load a WSGI module
+#   [*plugins*] - load uWSGI plugins
+#   [*rack*] - load a rack app
+#   [*socket*] - bind to the specified UNIX/TCP socket using default protocol
+#   [*uid*] - user to run application as
+#   [*vacuum*] - try to remove all of the generated file/sockets
+#   [*workers*] - spawn the specified number of workers/processes
+#
 define uwsgi::application (
   $buffer_size    = $::uwsgi::params::buffer_size,
   $callable       = $::uwsgi::params::callable,

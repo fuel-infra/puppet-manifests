@@ -1,6 +1,16 @@
 # Define: venv::exec
-# This class provides exec command interface inside defined environment.
+#
+# This definition provides exec command interface inside defined environment.
 # Provides all exec functionalities (like cwd and onlyif).
+#
+# Parameters:
+#
+#   [*command*] - command to run under venv
+#   [*venv*] - venv path to use
+#   [*cwd*] - working directory
+#   [*onlyif*] - run only if this command returns 0
+#   [*user*] - user to run this command
+#
 
 define venv::exec (
   $command,

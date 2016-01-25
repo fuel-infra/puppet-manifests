@@ -1,5 +1,15 @@
 # Define: venv::venv
 #
+# Defines base for venv environments.
+#
+# Parameters:
+#   [*path*] - path to venv
+#   [*options*] - virtualenv options to use
+#   [*packages*] - packages required by virtualenv
+#   [*pip_opts*] - additional pip command options
+#   [*requirements*] - file with venv requirements
+#   [*user*] - user to run virtualenv command
+#
 define venv::venv (
   $path,
   $options      = '',

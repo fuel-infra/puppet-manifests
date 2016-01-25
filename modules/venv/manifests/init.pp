@@ -1,8 +1,15 @@
-# == Class venv::init
+# Class venv::init
+#
+# This class initialize venv environment for Python.
+#
+# Parameters:
+#
+#   [*pip_opts*] - additional pip command options
+#   [*requirements*] - file with venv requirements
 #
 class venv (
   $pip_opts     = '',
-  $requirements = 'https://raw.github.com/stackforge/fuel-main/master/fuelweb_test/requirements.txt',
+  $requirements = 'https://raw.github.com/openstack/fuel-qa/master/fuelweb_test/requirements.txt',
 ) {
   venv::venv { 'venv-nailgun-tests' :
     path         => '/home/jenkins/venv-nailgun-tests',

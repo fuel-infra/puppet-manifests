@@ -1,4 +1,87 @@
-# == Class: transmission::init
+# Class: transmission::daemon
+#
+# This class deploys Transmission daemon and configures it.
+#
+# Parameters:
+#   [*alt_speed_down*] - alternative download speed
+#   [*alt_speed_enabled*] - alternative speed limits enabled
+#   [*alt_speed_time_begin*] - alternative speed limits start time
+#   [*alt_speed_time_day*] - alternative speed limits days
+#   [*alt_speed_time_enabled*] - alternative speed limit time trigger
+#   [*alt_speed_time_end*] - alternative speed limits end time
+#   [*alt_speed_up*] - alternative upload speed
+#   [*apply_firewall_rules*] - apply embedded firewall rules
+#   [*bind_address_ipv4*] - ipv4 listening address
+#   [*bind_address_ipv6*] - ipv6 listening address
+#   [*blocklist_enabled*] - enable blocklist
+#   [*blocklist_url*] - blocklist url
+#   [*cache_size_mb*] - cache size used by Transmission
+#   [*dht_enabled*] - enable DHT services
+#   [*download_dir*] - download directory path
+#   [*download_limit*] - download speed limit
+#   [*download_limit_enabled*] - enable download limit
+#   [*download_queue_enabled*] - enable dowload queue
+#   [*download_queue_size*] - download queue size
+#   [*encryption*] - connection encryption:
+#     0 = Prefer unencrypted connections,
+#     1 = Prefer encrypted connections,
+#     2 = Require encrypted connections
+#   [*idle_seeding_limit*] - stop seeding after being idle for N minutes
+#   [*idle_seeding_limit_enabled*] - enable seeding limit
+#   [*incomplete_dir*] - incomplete torrents storage path
+#   [*incomplete_dir_enabled*] - use incomplete storage
+#   [*lpd_enabled*] - enable local peer discovery
+#   [*max_peers_global*] - maximum peers global limit
+#   [*message_level*] - set verbosity of transmission messages:
+#     0 = None, 1 = Error, 2 = Info, 3 = Debug
+#   [*peer_congestion_algorithm*] - http://www.pps.jussieu.fr/~jch/software/bittorrent/tcp-congestion-control.html
+#   [*peer_limit_global*] - maximum peers global limit
+#   [*peer_limit_per_torrent*] - maximum peers per torrent
+#   [*peer_port*] - peer connection port (static)
+#   [*peer_port_random_high*] - highest limit of randomized port
+#   [*peer_port_random_low*] - lowest limit of randomized port
+#   [*peer_port_random_on_start*] - use randomized peer port
+#   [*peer_socket_tos*] - set the Type-Of-Service (TOS) parameter for outgoing
+#     TCP packets, possible values are "default", "lowcost", "throughput",
+#     "lowdelay" and "reliability".
+#   [*pex_enabled*] - enable Peer Exchange (PEX)
+#   [*port_forwarding_enabled*] - enable UPnP or NAT-PMP
+#   [*preallocation*] - file preallocation type: 0 = Off, 1 = Fast, 2 = Full
+#   [*prefetch_enabled*] - Transmission will hint to the OS which piece data
+#     it's about to read from disk in order to satisfy requests from peers
+#   [*queue_stalled_enabled*] - torrents that have not shared data for
+#     queue-stalled-minutes are treated as 'stalled' and are not counted
+#     against the queue-download-size and seed-queue-size limits
+#   [*queue_stalled_minutes*] - see queue_stalled_enabled
+#   [*ratio_limit*] - ratio limit to stop seeding after reaching it
+#   [*ratio_limit_enabled*] - enable ratio limit
+#   [*rename_partial_files*] - partially downloaded files with ".part"
+#   [*rpc_authentication_required*] - enable authentication for RPC
+#   [*rpc_bind_address*] - RPC listening address
+#   [*rpc_enabled*] - enable RPC connections
+#   [*rpc_password*] - RPC password
+#   [*rpc_port*] - RPC port
+#   [*rpc_url*] - RPC url (default: /transmission)
+#   [*rpc_username*] - RPC user name
+#   [*rpc_whitelist*] - RPC whitelisted hosts
+#   [*rpc_whitelist_enabled*] - enable RPC whitelist
+#   [*scrape_paused_torrents_enabled*] - scrape paused torrents
+#   [*script_torrent_done_enabled*] - run script when download is finished
+#   [*script_torrent_done_filename*] - script to run when download is finished
+#   [*seed_queue_enabled*] - enable seed queue
+#   [*seed_queue_size*] - seed queue size
+#   [*speed_limit_down*] - download speed limit
+#   [*speed_limit_down_enabled*] - enable download speed limit
+#   [*speed_limit_up*] - upload speed limit
+#   [*speed_limit_up_enabled*] - enable upload speed limit
+#   [*start_added_torrents*] - automatically start dowloading new torrents
+#   [*trash_original_torrent_files*] - delete torrents added from the watch
+#     directory
+#   [*umask*] - umask variable for new files
+#   [*upload_limit*] - upload speed limit
+#   [*upload_limit_enabled*] - enable upload speed limit
+#   [*upload_slots_per_torrent*] - maximum upload seeds per torrent
+#   [*utp_enabled*] - enable Micro Transport Protocol (uTP)
 #
 class transmission::daemon (
   $alt_speed_down                 = 0,

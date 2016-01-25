@@ -1,5 +1,7 @@
 # Class: uwsgi::params
 #
+# This class contains default values for uwsgi classes.
+#
 class uwsgi::params {
   $package = 'uwsgi'
   $service = 'uwsgi'
