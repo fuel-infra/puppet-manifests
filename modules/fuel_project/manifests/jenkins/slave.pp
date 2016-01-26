@@ -470,6 +470,7 @@ class fuel_project::jenkins::slave (
             'libparse-debian-packages-perl',
             'libyaml-dev',
             'python-daemon=1.5.5-1ubuntu1',
+            'python-dev',
             'python-lockfile=1:0.8-2ubuntu2',
             'python-xmlbuilder',
             'python-yaml',
@@ -495,6 +496,7 @@ class fuel_project::jenkins::slave (
         $build_fuel_iso_packages = [
           'libyaml-devel',
           'python-daemon',
+          'python-devel',
           'pyyaml',
           'ruby-devel',
           'syslinux-extlinux',
