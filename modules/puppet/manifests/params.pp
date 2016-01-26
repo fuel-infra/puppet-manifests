@@ -23,10 +23,10 @@
 #   [*hiera_json_datadir*] - hiera json data directory
 #   [*hiera_logger*] - hiera logger type
 #   [*hiera_merge_behavior*] - must be one of the following:
-#     native (default) — merge top-level keys only
-#     deep — merge recursively; in the event of conflicting keys, allow lower
+#     native (default) - merge top-level keys only
+#     deep - merge recursively; in the event of conflicting keys, allow lower
 #       priority values to win
-#     deeper — merge recursively; in the event of a conflict, allow higher
+#     deeper - merge recursively; in the event of a conflict, allow higher
 #       priority values to win
 #   [*hiera_yaml_datadir*] - hiera directory with yaml files
 #   [*localconfig*] - where puppet agent caches the local configuration
