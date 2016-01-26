@@ -181,7 +181,7 @@ class pxetool::master(
       error_log           => $nginx_error_log,
       format_log          => $nginx_log_format,
       location_cfg_append => {
-        return => "301 https://${nginx_server_name}\$request_uri",
+        return => "301 https://${server_name}\$request_uri",
       }
     }
   }
