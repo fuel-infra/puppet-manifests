@@ -1,4 +1,7 @@
-# == Class: jeepyb
+# Class: jeepyb
+#
+# This class deploys Jeepyb, collection of tools which make managing Gerrit
+# easier.
 #
 class jeepyb {
   include mysql::bindings::python

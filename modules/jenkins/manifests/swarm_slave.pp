@@ -1,5 +1,19 @@
 # Class: jenkins::swarm_slave
 #
+# This class deploys swarm slave for Jenkins.
+#
+# Parameters:
+#   [*java_package*] - Java package name
+#   [*labels*] - labels of slave
+#   [*master*] - Jenkins master address
+#   [*package*] - package required to install this instance
+#   [*password*] - swarm connection password
+#   [*service*] - swarm service name
+#   [*ssl_cert_file*] - SSL certificate file path
+#   [*ssl_cert_file_contents*] - SSL certificate file contents
+#   [*swarm_service*] - swarm service name
+#   [*user*] - user to run swarm slave on
+#
 class jenkins::swarm_slave (
   $java_package            = $::jenkins::params::slave_java_package,
   $labels                  = $::jenkins::params::swarm_labels,

@@ -1,4 +1,16 @@
-# == Class zuul
+# Class zuul
+#
+# This class deploys Zuul instance.
+#
+# Parameters:
+#   [*dir*] - directory with Zuul files
+#   [*dir_group*] - directory group
+#   [*dir_owner*] - directory owner
+#   [*nginx_access_log*] - access log file path
+#   [*nginx_error_log*] - error log file path
+#   [*nginx_log_format*] - log file format
+#   [*service_fqdn*] - service FQDN
+#   [*packages*] - packages required to install instance
 #
 class zuul (
   $dir              = '/usr/share/zuul/public_html',

@@ -1,5 +1,46 @@
 # Class: jenkins::master
 #
+# Parameters:
+#   [*service_fqdn*] - FQDN of Jenkins service
+#   [*apply_firewall_rules*] - apply embedded firewall rules
+#   [*firewall_allow_sources*] - sources which are allowed to connect
+#   [*jenkins_ssh_private_key_contents*] - jenkins ssh private key contents
+#   [*jenkins_ssh_public_key_contents*] - jenkins ssh public key contents
+#   [*ssl_cert_file*] - SSL certificate file path
+#   [*ssl_cert_file_contents*] - SSL certificate file contents
+#   [*ssl_key_file*] - SSL key file path
+#   [*ssl_key_file_contents*] - SSL key file contents
+#   [*install_zabbix_item*] - install Zabbix agent items for Jenkins
+#   [*jenkins_address*] - Jenkins listening IP address
+#   [*jenkins_java_args*] - Jenkins Java arguments
+#   [*jenkins_port*] - Jenkins listening port
+#   [*jenkins_proto*] - Jenkins listening protocol
+#   [*nginx_access_log*] - access log file path
+#   [*nginx_error_log*] - error log file path
+#   [*nginx_log_format*] - log format
+#   [*www_root*] - root web directory path
+#   [*install_groovy*] - install Groovy script for Jenkins
+#   [*jenkins_cli_file*] - Jenkins cli file path
+#   [*jenkins_cli_tries*] - how many tries to run cli file
+#   [*jenkins_cli_try_sleep*] - sleep between retries
+#   [*jenkins_libdir*] - path to Jenkins lib directory
+#   [*jenkins_management_email*] - management e-mail
+#   [*jenkins_management_login*] - management login
+#   [*jenkins_management_name*] - managament name
+#   [*jenkins_management_password*] - management password
+#   [*jenkins_s2m_acl*] - Jenkins security s2m ACL entries
+#   [*ldap_access_group*] - LDAP access group
+#   [*ldap_group_search_base*] - LDAP group search base
+#   [*ldap_inhibit_root_dn*] - LDAP inhibit root DN
+#   [*ldap_manager*] - LDAP manager name
+#   [*ldap_manager_passwd*] - LDAP manager password
+#   [*ldap_overwrite_permissions*] - LDAP overwrite internal permissions
+#   [*ldap_root_dn*] - LDAP root DN
+#   [*ldap_uri*] - LDAP URI
+#   [*ldap_user_search*] - LDAP user search string
+#   [*ldap_user_search_base*] - LDAP user search base
+#   [*security_model*] - security model used in Jenkins instance
+#
 class jenkins::master (
   $service_fqdn                     = $::fqdn,
   # Firewall access

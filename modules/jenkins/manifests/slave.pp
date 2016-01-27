@@ -1,5 +1,11 @@
 # Class: jenkins::slave
 #
+# This class deploys Jenkins slave package and keys.
+#
+# Parameters:
+#   [*java_package*] - Java package name
+#   [*authorized_keys*] - keys authorized to access slave
+#
 class jenkins::slave (
   $java_package = $::jenkins::params::slave_java_package,
   $authorized_keys = $::jenkins::params::slave_authorized_keys,

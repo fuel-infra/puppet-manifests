@@ -1,5 +1,7 @@
 # Class: jenkins::params
 #
+# This class stores default values for Jenkins modules.
+#
 class jenkins::params {
   $slave_authorized_keys = {}
   case $::osfamily {
