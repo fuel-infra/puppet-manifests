@@ -1,5 +1,99 @@
 # Class: zabbix::server
 #
+# This class deploys Zabbix server instance.
+#
+# Parameters:
+#   [*alert_script_path*] - location of custom alert scripts (depends on
+#       compile-time installation variable datadir)
+#   [*allow_root*] - allow the server to run as 'root'
+#   [*apply_firewall_rules*] - apply embedded firewall rules
+#   [*cache_size*] - size of configuration cache, in bytes
+#   [*cache_update_frequency*] - how often Zabbix will perform update of
+#     configuration cache, in seconds
+#   [*config*] - Zabbix server configuration file path
+#   [*config_template*] - Zabbix server configuration file template
+#   [*db_driver*] - database driver to use
+#   [*db_host*] - database host
+#   [*db_name*] - database name
+#   [*db_password*] - database password
+#   [*db_port*] - database port
+#   [*db_socket*] - database socket
+#   [*db_user*] - database user name
+#   [*debug_level*] - specifies debug level:
+#    0 - no debug
+#    1 - critical information
+#    2 - error information
+#    3 - warnings
+#    4 - for debugging (produces lots of information)
+#   [*disable_housekeeping*] - unused option
+#   [*enable_service*] - enable Zabbix server system service
+#   [*external_scripts*] - location of external scripts (depends on compile-time
+#     installation variable datadir)
+#   [*firewall_allow_sources*] - sources allowed to connect to the service
+#   [*fping6_location*] - path to fping6 file
+#   [*fping_location*] - path to fping file
+#   [*frontend_package*] - package containing frontend files
+#   [*frontend_service_fqdn*] - frontend FQDN
+#   [*history_cache_size*] - size of history cache, in bytes
+#   [*history_text_cache_size*] - size of text history cache, in bytes
+#   [*housekeeping_frequency*] - how often Zabbix will perform housekeeping
+#     procedure (in hours).
+#   [*install_frontend*] - install Zabbix frontend
+#   [*install_ping_handler*] - install Zabbix ping handler
+#   [*listen_ip*] - list of comma delimited IP addresses that the trapper
+#     should listen on
+#   [*listen_port*] - listen port for trapper
+#   [*log_file*] - name of log file
+#   [*log_file_size*] - maximum size of log file in MB
+#   [*log_slow_queries*] - how long a database query may take before being
+#     logged (in milliseconds)
+#   [*max_housekeeper_delete*] - no more than 'MaxHousekeeperDelete' rows
+#     (corresponding to [tablename], [field], [value]) will be deleted per one
+#     task in one housekeeping cycle
+#   [*mysql_package*] - MySQL package to install
+#   [*mysql_root_password*] - MySQL server root user password
+#   [*node_id*] - unique nodeID in distributed setup
+#   [*node_no_events*] - if set to '1' local events won't be sent to master node
+#   [*node_no_history*] - if set to '1' local history won't be sent to master
+#     node
+#   [*package*] - package name with Zabbix server
+#   [*pid_file*] - Zabbix server pid file path
+#   [*sender_frequency*] - how often Zabbix will try to send unsent alerts
+#     (in seconds)
+#   [*service*] - service name for Zabbix server
+#   [*source_ip*] - source IP address for outgoing connections
+#   [*ssh_key_location*] - location of public and private keys for SSH checks
+#     and actions
+#   [*start_db_syncers*] - number of pre-forked instances of DB Syncers
+#   [*start_discoverers*] - number of pre-forked instances of discoverers
+#   [*start_http_pollers*] - number of pre-forked instances of HTTP pollers
+#   [*start_ipmi_pollers*] - number of pre-forked instances of IPMI pollers
+#   [*start_java_pollers*] - number of pre-forked instances of Java pollers
+#   [*start_pingers*] - number of pre-forked instances of ICMP pingers
+#   [*start_pollers*] - number of pre-forked instances of pollers
+#   [*start_pollers_unreachable*] - number of pre-forked instances of pollers
+#     for unreachable hosts (including IPMI)
+#   [*start_proxy_pollers*] - number of pre-forked instances of pollers for
+#     passive proxies
+#   [*start_snmp_trapper*] - if set to 1, SNMP trapper process will be started
+#   [*start_timers*] - number of pre-forked instances of timers
+#   [*start_trappers*] - number of pre-forked instances of trappers
+#   [*start_vmware_collectors*] - number of pre-forked vmware collector
+#     instances
+#   [*timeout*] - specifies how long we wait for agent, SNMP device or external
+#     check (in seconds)
+#   [*tmp_dir*] - temporary directory path
+#   [*trapper_timeout*] - specifies how many seconds trapper may spend
+#     processing new data
+#   [*trend_cache_size*] - size of trend cache, in bytes
+#   [*unavailable_delay*] - how often host is checked for availability during
+#     the unavailability period, in seconds
+#   [*unreachable_delay*] - how often host is checked for availability during
+#     the unreachability period, in seconds
+#   [*unreachable_period*] - after how many seconds of unreachability treat a
+#     host as unavailable
+#   [*value_cache_size*] - size of history value cache, in bytes
+#
 class zabbix::server (
   $alert_script_path         = $::zabbix::params::server_alert_script_path,
   $allow_root                = $::zabbix::params::server_allow_root,

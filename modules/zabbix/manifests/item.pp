@@ -1,5 +1,13 @@
 # Define: zabbix::item
 #
+# This definition is used to add an item to Zabbix item.
+#
+# Parameters:
+#   [*content*] - content of Zabbix agent item
+#   [*items*] - Userparameters entries to be declared
+#   [*raw_content*] - RAW contents of agent item
+#   [*template*] - template file to use
+#
 define zabbix::item (
   $content     = undef,
   $items       = [],

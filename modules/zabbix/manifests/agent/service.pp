@@ -1,5 +1,7 @@
 # Class: zabbix::agent::service
 #
+# This class enables Zabbix Agent service.
+#
 class zabbix::agent::service {
   include zabbix::params
 

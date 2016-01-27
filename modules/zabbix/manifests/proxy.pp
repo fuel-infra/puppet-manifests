@@ -1,5 +1,97 @@
 # Class: zabbix::proxy
 #
+# This class deploys Zabbix Proxy daemon and configures it.
+#
+# Parameters:
+#
+#   [*allow_root*] - allow the agent to run as 'root' user
+#   [*apply_firewall_rules*] - apply embedded firewall rules
+#   [*cache_size*] - size of configuration cache, in bytes
+#   [*config*] - configuration file path
+#   [*config_frequency*] - how often proxy retrieves configuration data from
+#     Zabbix server in seconds
+#   [*config_template*] - configuration file template
+#   [*data_sender_frequency*] - Proxy will send collected data to the server
+#     every N seconds
+#   [*db_driver*] - database driver
+#   [*db_host*] - database host
+#   [*db_name*] - database name
+#   [*db_password*] - database password
+#   [*db_port*] - database port
+#   [*db_socket*] - database socket
+#   [*db_user*] - database user
+#   [*debug_level*] - Zabbix proxy debug level
+#   [*enable_snmp_bulk_requests*] - enable SNMP bulk requests
+#   [*external_scripts*] - location of external scripts
+#   [*firewall_allow_sources*] - sources allowed to connect to the service
+#   [*fping6_location*] - path to fping6 file
+#   [*fping_location*] - path to fping file
+#   [*heartbeat_frequency*] - frequency of heartbeat messages in seconds
+#   [*history_cache_size*] - size of history cache, in bytes
+#   [*history_text_cache_size*] - size of text history cache, in bytes
+#   [*hostname*] - unique, case sensitive Proxy name. Make sure the proxy name
+#     is known to the server!
+#   [*hostname_item*] - item used for setting Hostname if it is undefined (this
+#     will be run on the proxy similarly as on an agent)
+#   [*housekeeping_frequency*] - How often Zabbix will perform housekeeping
+#     procedure (in hours).
+#   [*include*] - include individual files or all files in a directory in the
+#     configuration file
+#   [*java_gateway*] - IP address (or hostname) of Zabbix Java gateway
+#   [*java_gateway_port*] - port that Zabbix Java gateway listens on
+#   [*listen_ip*] - IP addresses that the trapper should listen on
+#   [*listen_port*] - listen port for trapper
+#   [*load_module*] - module to load at proxy startup
+#   [*load_module_path*] - full path to location of proxy modules
+#   [*log_file*] - name of log file
+#   [*log_file_size*] - maximum size of log file in MB
+#   [*log_slow_queries*] - how long a database query may take before being
+#     logged (in milliseconds).
+#   [*package*] - package required to install Zabbix proxy
+#   [*pid_file*] - pid file location
+#   [*proxy_local_buffer*] -  proxy will keep data locally for N hours, even if
+#     the data have already been synced with the server
+#   [*proxy_mode*] - proxy operating mode:
+#     0 - proxy in the active mode
+#     1 - proxy in the passive mode
+#   [*proxy_offline_buffer*] - proxy will keep data for N hours in case if no
+#     connectivity with Zabbix server
+#   [*server*] - IP address (or hostname) of Zabbix server
+#   [*server_port*] - port of Zabbix trapper on Zabbix server
+#   [*service*] - Zabbix proxy system service name
+#   [*snmp_trapper_file*] - temporary file used for passing data from SNMP trap
+#     daemon to the proxy
+#   [*source_ip*] - source IP address for outgoing connections
+#   [*ssh_key_location*] - location of public and private keys for SSH
+#     checks and actions
+#   [*start_db_syncers*] - number of pre-forked instances of DB Syncers
+#   [*start_discoverers*] - number of pre-forked instances of discoverers
+#   [*start_http_pollers*] - number of pre-forked instances of HTTP pollers
+#   [*start_ipmi_pollers*] - number of pre-forked instances of IPMI pollers
+#   [*start_java_pollers*] - number of pre-forked instances of Java pollers
+#   [*start_pingers*] - number of pre-forked instances of ICMP pingers
+#   [*start_pollers*] - number of pre-forked instances of pollers
+#   [*start_pollers_unreachable*] - number of pre-forked instances of pollers
+#     for unreachable hosts (including IPMI)
+#   [*start_snmp_trapper*] - if set to 1, SNMP trapper process will be started
+#   [*start_trappers*] - number of pre-forked instances of trappers
+#   [*start_vmware_collectors*] - number of pre-forked vmware collector
+#     instances
+#   [*timeout*] - specifies how long we wait for agent, SNMP device or external
+#     check (in seconds)
+#   [*tmp_dir*] - temporary directory
+#   [*trapper_timeout*] - specifies how many seconds trapper may spend
+#     processing new data
+#   [*unavailable_delay*] - how often host is checked for availability during
+#     the unavailability period, in seconds
+#   [*unreachable_delay*] - how often host is checked for availability during
+#     the unreachability period, in seconds
+#   [*unreachable_period*] - after how many seconds of unreachability treat a
+#     host as unavailable
+#   [*vmware_cache_size*] - shared memory size for storing VMware data
+#   [*vmware_frequency*] - delay in seconds between data gathering from a single
+#     VMware service
+#
 class zabbix::proxy (
   $allow_root                = $::zabbix::params::proxy_allow_root,
   $apply_firewall_rules      = $::zabbix::params::proxy_apply_firewall_rules,

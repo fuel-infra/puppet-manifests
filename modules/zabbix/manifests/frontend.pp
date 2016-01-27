@@ -1,5 +1,36 @@
 # Class: zabbix::frontend
 #
+# This class deploys Zabbix frontend powered by PHP on nginx.
+#
+# Parameters:
+#   [*apply_firewall_rules*] - apply embedded firewall rules
+#   [*config*] - configuration file path
+#   [*config_template*] - configuration file template
+#   [*db_driver*] - database driver to use
+#   [*db_host*] - database host address
+#   [*db_name*] - database name
+#   [*db_password*] - database password
+#   [*db_port*] - database port
+#   [*db_schema*] - database schema to use
+#   [*db_user*] - database user
+#   [*firewall_allow_sources*] - allow service connection from these sources
+#   [*image_format_default*] - default format of generated images
+#   [*install_ping_handler*] - install database connection checker
+#   [*nginx_access_log*] - access log file path
+#   [*nginx_config_template*] - nginx configuration file template
+#   [*nginx_error_log*] - error log file path
+#   [*nginx_log_format*] - log format
+#   [*package*] - package required to install frontend
+#   [*ping_handler_template*] - template to create ping_handler checker
+#   [*service_fqdn*] - FQDN of Zabbix frontend
+#   [*ssl_certificate*] - SSL certificate path
+#   [*ssl_certificate_content*] - SSL certificate contents
+#   [*ssl_key*] - SSL key path
+#   [*ssl_key_content*] - SSL key contents
+#   [*zabbix_server*] - Zabbix server host
+#   [*zabbix_server_name*] - Zabbix server name
+#   [*zabbix_server_port*] - Zabbix server port
+#
 class zabbix::frontend (
   $apply_firewall_rules    = $::zabbix::params::frontend_apply_firewall_rules,
   $config                  = $::zabbix::params::frontend_config,

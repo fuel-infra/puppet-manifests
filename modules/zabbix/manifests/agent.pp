@@ -1,5 +1,37 @@
 # Class: zabbix::agent
 #
+# This class configures Zabbix Agent instance.
+#
+# Parameters:
+#   [*allow_root*] - allow the agent to run as 'root' user
+#   [*apply_firewall_rules*] - apply embedded firewall rules
+#   [*debug_level*] - set debug level of Zabbix Agent
+#   [*enable_remote_commands*] - allow to run remote commands on host with Agent
+#   [*firewall_allow_sources*] - sources allowed to connect to the service
+#   [*hostname*] - unique, case sensitive hostname
+#   [*hostname_item*] - Zabbix agent item used for getting host name
+#   [*include*] - individual files or all files in a directory in the
+#     configuration file
+#   [*listen_address*] - IP addresses that the agent should listen on
+#   [*listen_port*] - listen on this port for connections from the server
+#   [*log_file*] - log file path
+#   [*log_remote_commands*] - logging of executed shell commands as warnings
+#   [*max_lines_per_second*] - maximum number of new lines the agent will send
+#     per second to Zabbix server or proxy when processing 'log' and 'eventlog'
+#     active checks
+#   [*package*] - program package with Zabbix Agent
+#   [*refresh_active_checks*] - how often list of active checks is refreshed (s)
+#   [*server_active*] - IP:port (or hostname:port) of Zabbix server or Zabbix
+#     proxy for active checks
+#   [*service*] - name of system service for Zabbix Agent
+#   [*start_agents*] - Number of pre-forked instances of zabbix_agentd that
+#     process passive check
+#   [*sudoers_template*] - template file for sudoers entries used by Zabbix
+#   [*timeout*] - spend no more than Timeout seconds on processing
+#   [*unsafe_user_parameters*] - allow all characters to be passed in arguments
+#     to user-defined parameters
+#   [*zabbix_server*] - IP addresses (or hostnames) of Zabbix servers
+#
 class zabbix::agent (
   $allow_root             = $::zabbix::params::agent_allow_root,
   $apply_firewall_rules   = $::zabbix::params::agent_apply_firewall_rules,

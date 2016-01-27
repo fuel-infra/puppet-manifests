@@ -1,5 +1,7 @@
 # Class: zabbix::params
 #
+# This class is to keep default values for various Zabbix modules.
+#
 class zabbix::params {
   #
   # Agent default configuration
