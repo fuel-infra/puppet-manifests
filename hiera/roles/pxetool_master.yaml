@@ -1,7 +1,7 @@
 classes:
 - '::fuel_project::common'
 - '::pxetool::master'
-- '::mysql::server'
+- '::mysql::server'  # optional if database is on the same host
 - '::mysql::client'
 
 supervisord:
@@ -25,6 +25,7 @@ pxetool::master::database_name: pxetool
 pxetool::master::database_host: 127.0.0.1
 pxetool::master::database_user: pxetool
 pxetool::master::database_password: pxetool
+pxetool::master::server_name: pxetool.test.local
 
 pxetool::master::ssh_id_rsa_pub: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDW65F7YhHASDtgoJfwnRcOOWVvnvcZ0eCZOPmRlg3aRIcBZ7SS7yFylcRU0Dd2gbvhxb9S9FZowokfZtJEbjW2VSxKk5OiWUmEdTxMbEmkHW+udQ3DrP1NDf2BfW8lgZS2WTdpFqEDwN4OS24CYRj/ocK2cV18aYvjF3j4ngcFu7ixggqNuMv5pls6RtIEbCeCsOZBoDt18jUjBugzCSbUgpatLOvXTlAvAroavEzthQk22/bfhi+nVMsrm60qK4Ll9WI6JUjjj2rB/LFQhMoBmGg9lTtBVQel7h6KnDppkSYk3tVyrwv13YdF75FT1B2zrXVUw4ZVXfcdpCMfR92MEw9fjGrU5V/aSZ4j8Ax8kZ6bm9szyg8Zc0LwuKSjf3q8bDNWR7bfjqXGae4n3IaPGdt8x3q3UPlvVEFRyOftPC/8c5ZRo8A+sNX3rlAwKMMHMYX7U+J+nCPnHi72oKGaCfS7X2/GhMXI8lm7OZIR5YSiygDGEHCLxrpC3LSzvxg5od3C5o2gVVre6gAhthudKEyfJAbjzwVGjgkkUnXE8DGNYzcm79Uwp/lYiAF3ucbXG40/may5S96w4yae7k9zgfJmR7he9uKD2CqTam0rT+ionHYF7ec6cdK3KPMvVPqvM6Ovo5UGKNvs5ovAVmeAxCoshaRbg19haCqNH5JtjQ== pxetool@pxe.infra.mirantis.net
 pxetool::master::ssh_id_rsa: |
@@ -80,6 +81,7 @@ pxetool::master::ssh_id_rsa: |
   NYm1NjQKYdfjqSpLkDSSxlnpgrC3YOqEE95GIQ+ZP5XHUroXaQ4YubVG4SU=
   -----END RSA PRIVATE KEY-----
 
+# MySQL server section: optional, if database is on the same host
 mysql::server::databases:
   'pxetool':
     ensure: present
