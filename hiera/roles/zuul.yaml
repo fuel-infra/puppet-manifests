@@ -3,3 +3,42 @@
     - '::fuel_project::common'
     - '::zuul'
     - '::fuel_project::zuul'
+
+zuul::layout: '/etc/zuul/layout.yaml'
+zuul::job_name_in_report: true
+zuul::no_http: true
+zuul::gerrit_server: gerrit.server.name
+zuul::gerrit_user: username
+zuul::ssh_private_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEogIBAAKCAQEA5YykwO0yIpNcmjLmW2+d/8em/+9R7k9IQBDctcMY92lB/c99
+    aqYfMPvGmy823it6NytYBrsX21fr62BPvY/7W20jHMPn1LMqAfK4DTA/UAp8C2BB
+    /wOkX55U9dvnauDO8zkbbP+8RjnybLOxRCZ6RbJOq4yvaDmR2h7ckNC6B62cvKxw
+    Gxgcq6UZ7v7+1S5YwbYnpx8Be/oUPd1Rw7PUbA3LZ5pQaDvhsXTews4SEN5mI7jw
+    OSK96lTqMUbKSUoK2WyjfJnlU78fi3V3x56WygvuWFJOpI/0TDCZqjWoeF4zA5AO
+    LE/pji5sRNb6yyYBFE6nNBpe9ewS4j6kJcz/dQIDAQABAoIBADbx9lGztQdvrH/A
+    ZUFHs1MRMBkc6MiZM5saLipXu7ck+8XMD6Iih17LNVvZ7lE5qPRhrJ1X1TsMjYz2
+    rb+bIjhdJEVzYx+XjxuORJ3riYwYJl72uHVZItQ8auu6qmb7zq2LYtQxVpicsDly
+    vaCpcSUTrB8F+sqA1TeXoYYMYCsL4FXAVqDRVTxRysIeW/9VcvmHnT7zRGlm9cpZ
+    ZVSVhhnW31txgmj+aMKJaYXfp7zGUj4w2VLiJe9bf004t4D/v6EaYd+wp7m8lCkM
+    X2YPAmJxuRRYxE+7KVv4rs1KUOOPkDT5850Hld3fcK5sFiP6ejx6W0vMz6E7THiQ
+    Xsz/HyECgYEA+rSmcUg2ycPW2keBoZSSbHfU9A8tVTk0b0xjsW1J0EXt15vtc8Qs
+    xfd4nht4s6tPRGzDTiK/j+Tc7tk33lE+LNLGrVBOmQspaShOTQ6vW1rKzQezNvdW
+    qJUZQxUEf6RtF2ySMBF3PhmKGZr1hDGEcJEbjpfIwMAw+d8/a3MEa+kCgYEA6mWe
+    n4RNu1JaguQY8zcFu2FSImZwe90D9uCMi6lReinteUP7nvZTyKE57AigO0EeBdEV
+    yjy2sDVCvNiKFmuAOsVKHgYAJB2P9BSEpw07qg4rYmUayBiMOouRKkKZMRZi7AbX
+    WDStLj81Kdn2BC9RRTMtOZKsIkO3tUl7fJBqm60CgYATfoiStnLMLZY/UuAZmFvq
+    Y0cD00pLHi+dl+sImN7sewOLiGxmXBK/MgcHBEvWbLO1Nl/Za4pJvhoP2IQnnVmg
+    UqNwRpZWADAwJRoxk7q+98hdOQQOeh0a7r0QIko/QqHY+HBFnJYRFhtO8mW06cTK
+    m/3wkIzjsA4e3+UmjcMCQQKBgBylCIqD95/hw4/lYisu2TN6BDiR/kMU0mw0KtjS
+    e1OLlirQpQpbHggRs+tlbndvUMTzNU9+tfC4wYwkhlORFZ2ZCKK8pv3C4xm3/DIS
+    Cu2QR7sBkhFL9q8c6UOZ2fDGxJYFjAGKhnN1ZADWUxtV0P+87lTv2LtjPSsZbM7f
+    MzgNAoGAECmPUiL70876Ash/fhA0VUj+5tEvDQk+uK9eyxojKWsScmXHIcRd9Nvn
+    kNl+H7wwfya+j4KyAx/C927L0aE4mnpPxlw/xmqK6/wCUfZAqeZKypJroIMa36wv
+    FpkcrUQeOR3n8gDgLPPbZKHJ495BHG4F4UGuxyt694D0LR9y+TE=
+    -----END RSA PRIVATE KEY-----
+
+fuel_project::zuul::jenkins_url: 'http://jenkins.server.name/'
+fuel_project::zuul::jenkins_job: 'some_job'
+fuel_project::zuul::update_cronjob_params:
+    ensure: 'absent'

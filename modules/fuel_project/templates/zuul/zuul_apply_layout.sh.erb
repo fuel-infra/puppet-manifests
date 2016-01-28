@@ -1,0 +1,41 @@
+#!/bin/bash
+
+ZUUL_LAYOUTDIR="$(dirname '<%= zuul_layout %>')"
+JENKINS_JOB_URL="<%= jenkins_url %>/job/<%= jenkins_job %>/lastSuccessfulBuild/artifact/build/<%= @fqdn %>"
+ZUUL_RELOAD="false"
+ZUUL_TEMP="$(mktemp -d)"
+
+diff_config() {
+    diff -u "${ZUUL_LAYOUTDIR}/${1}" "${ZUUL_TEMP}/${1}"
+}
+
+# Get configs from Jenkins
+curl -fLsS -o "${ZUUL_TEMP}/layout.yaml" "${JENKINS_JOB_URL}/layout.yaml"
+curl -fLsS -o "${ZUUL_TEMP}/external_functions.py" "${JENKINS_JOB_URL}/external_functions.py"
+
+# If files are not changed - just exit
+if diff_config layout.yaml && diff_config external_functions.py; then
+    rm -rf "${ZUUL_TEMP}"
+    exit 0
+fi
+
+# Verify configs
+if ! zuul-server -t -l "${ZUUL_TEMP}/layout.yaml"; then
+    rm -rf "${ZUUL_TEMP}"
+    exit 1
+fi
+
+# Diff and apply if needed
+if ! diff_config layout.yaml; then
+    cp "${ZUUL_TEMP}/layout.yaml" "${ZUUL_LAYOUTDIR}"
+    ZUUL_RELOAD="true"
+fi
+
+if ! diff_config external_functions.py; then
+    cp "${ZUUL_TEMP}/external_functions.py" "${ZUUL_LAYOUTDIR}"
+    ZUUL_RELOAD="true"
+fi
+
+[ "${ZUUL_RELOAD}" ] && /etc/init.d/zuul reload
+
+rm -rf "${ZUUL_TEMP}"

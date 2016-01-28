@@ -1,0 +1,5 @@
+Host <%= gerrit_server %>
+  Port                  <%= gerrit_port %>
+  User                  <%= gerrit_user %>
+  IdentityFile          <%= statedir + "/.ssh/id_rsa." + gerrit_server %>
+  UserKnownHostsFile    <%= statedir + "/.ssh/known_host." + gerrit_server %>
