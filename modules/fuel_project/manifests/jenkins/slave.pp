@@ -131,7 +131,7 @@ class fuel_project::jenkins::slave (
       ensure_packages(['python-yaml', 'python-git'])
     }
     'RedHat': {
-      ensure_packages(['pyyaml', 'gitpython'])
+      ensure_packages(['PyYAML', 'gitpython'])
     }
     default: { }
   }
@@ -317,7 +317,7 @@ class fuel_project::jenkins::slave (
           'libvirt-devel',
           'postgresql-devel',
           'python-devel',
-          'pyyaml',
+          'PyYAML',
           'gtk-vnc',
         ]
       }
@@ -497,7 +497,7 @@ class fuel_project::jenkins::slave (
           'libyaml-devel',
           'python-daemon',
           'python-devel',
-          'pyyaml',
+          'PyYAML',
           'ruby-devel',
           'syslinux-extlinux',
         ]
