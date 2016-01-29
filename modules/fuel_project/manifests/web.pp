@@ -1,5 +1,11 @@
 # Class: fuel_project::web
 #
+# This class deploys Nginx websites.
+#
+# Parameters:
+#   [*fuel_landing_page*] - deploy fuel landing page
+#   [*docs_landing_page*] - deploy docs landing page
+#
 class fuel_project::web (
   $fuel_landing_page = false,
   $docs_landing_page = false,

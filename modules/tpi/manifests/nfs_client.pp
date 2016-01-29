@@ -1,4 +1,12 @@
-# Used for TPI nfs clients
+# Class: tpi::nfs_client
+#
+# This class is used for TPI nfs clients.
+#
+# Parameters:
+#   [*nfs_servers*] - NFS servers to use
+#   [*local_home_base*] - path to local home base
+#   [*local_home_basenames*] - local home basenames
+#
 class tpi::nfs_client (
   $nfs_servers = [ 'tpi-s1', 'tpi-s2' ],
   $local_home_base = '/usr/local/home',

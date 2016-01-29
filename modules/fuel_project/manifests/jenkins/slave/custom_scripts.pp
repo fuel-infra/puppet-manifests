@@ -1,4 +1,12 @@
 # Class: fuel_project::jenkins::slave::custom_scripts
+#
+# Parameters:
+#   [*docker_package*] - package name with docker
+#   [*configs_path*] - path to script configs
+#   [*docker_user*] - user which will use docker
+#   [*known_hosts*] - known_host entries for docker_user
+#   [*packages*] - packages required on host
+#
 
 class fuel_project::jenkins::slave::custom_scripts (
   $docker_package,

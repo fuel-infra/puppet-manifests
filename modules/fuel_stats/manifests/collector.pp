@@ -1,4 +1,29 @@
-# Anonymous statistics collector
+# Class: fuel_stats::collector
+#
+# This class deploys annonymous statistics collector.
+#
+# Parameters:
+#   [*analytics_ip*] - analitics service IP
+#   [*auto_update*] - run github poller every 15 minutes
+#   [*development*] - development deployment type
+#   [*filtering_rules*] - collector filters hash
+#   [*firewall_enable*] - enable embedded firewall rules
+#   [*fuel_stats_repo*] - fuel_stats repository URL
+#   [*http_port*] - port for HTTP connections
+#   [*https_port*] - port for HTTPS connections
+#   [*nginx_access_log*] - access log file path
+#   [*nginx_error_log*] - error log file path
+#   [*nginx_limit_conn*] - maximum connections limit
+#   [*nginx_log_format*] - log file format
+#   [*psql_db*] - PostgreSQL database name
+#   [*psql_pass*] - PostgreSQL database password
+#   [*psql_user*] - PostgreSQL database user
+#   [*service_hostname*] - service hostname
+#   [*ssl_cert_file*] - SSL certificate file path
+#   [*ssl_cert_file_contents*] - SSL certificate file contents
+#   [*ssl_key_file*] - SSL key file path
+#   [*ssl_key_file_contents*] - SSL key file contents
+#
 class fuel_stats::collector (
   $analytics_ip           = $fuel_stats::params::analytics_ip,
   $auto_update            = $fuel_stats::params::auto_update,

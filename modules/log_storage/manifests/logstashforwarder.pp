@@ -1,4 +1,11 @@
-# log_storage::logstashforwarder class
+# Class: log_storage::logstashforwarder class
+#
+# This class deploys logstash forwarder.
+#
+# Parameters:
+#   [*files*] - files to be read by forwarder
+#   [*ssl_ca_file*] - SSL CA file path to verify logstash
+#   [*ssl_ca*] - SSL CA file contents
 #
 class log_storage::logstashforwarder (
   $files       = undef,

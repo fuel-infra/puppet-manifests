@@ -1,5 +1,7 @@
 # Class: fuel_project::apps::mirror_rubygems
 #
+# This class deploys Nginx powered RubyGems mirror.
+#
 # Parameters:
 #   [*cron_frequency*] - how often to synchronize
 #   [*nginx_access_log*] - access log path

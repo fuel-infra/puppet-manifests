@@ -1,4 +1,7 @@
+# Class: fuel_project::tpi::server
+#
 # Used for deployment of TPI servers
+#
 class fuel_project::tpi::server (
 ) {
   class { '::fuel_project::common' :  }

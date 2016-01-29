@@ -1,5 +1,10 @@
 # Class: fuel_project::roles::storage
 #
+# This class deploys storage role.
+#
+# Parameters:
+#   [*iso_vault_fqdn*] - ISO vault FQDN
+#
 class fuel_project::roles::storage (
   $iso_vault_fqdn = "iso.${::fqdn}",
 ) {

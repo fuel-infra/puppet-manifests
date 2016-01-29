@@ -1,5 +1,13 @@
 # Class: fuel_project::gerrit
 #
+# This class deploys Gerrit instance of fuel_project.
+#
+# Parameters:
+#
+#   [*gerrit_auth_type*] - Gerrit authorization type used
+#   [*replica_points*] - replication points
+#   [*replication_mode*] - replication mode
+#
 class fuel_project::gerrit (
   $gerrit_auth_type = undef,
   $replica_points   = undef,

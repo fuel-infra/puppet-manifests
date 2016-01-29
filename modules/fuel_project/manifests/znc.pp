@@ -1,10 +1,14 @@
 # Class: fuel_project::znc
 #
+# This class enables ZNC instance.
+#
+# Parameters:
+#   [*apply_firewall_rules*] - apply embedded firewall rules
+#   [*service_port*] - service port
 #
 class fuel_project::znc (
   $apply_firewall_rules = false,
   $service_port = 7777,
-
 ){
   class { '::fuel_project::common':
     external_host => $apply_firewall_rules,

@@ -1,4 +1,29 @@
-# log_storage::storage::nginx class
+# Class: log_storage::storage::nginx class
+#
+# This class deploys log storage Nginx frontend.
+#
+# Parameters:
+#   [*nginx_elastic_access_log*] - Elastic access log
+#   [*nginx_elastic_error_log*] - Elastic error log
+#   [*nginx_kibana_access_log*] - Kibana access log
+#   [*nginx_kibana_error_log*] - Kibana error log
+#   [*nginx_kibana_service_fqdn*] - Kibana FQDN
+#   [*nginx_log_format*] - log format
+#   [*oauth_access_file*] - OAuth access file path
+#   [*oauth_body_filter_file*] - OAuth body filter file path
+#   [*oauth_client_id*] - OAuth client ID
+#   [*oauth_client_secret*] - OAuth client password
+#   [*oauth_domain*] - OAuth domain
+#   [*oauth_token_secret*] - OAuth secret token
+#   [*ssl_elastic_certificate_file*] - Elastic SSL certificate path
+#   [*ssl_elastic_certificate*] - Elastic SSL certificate contents
+#   [*ssl_elastic_key_file*] - Elastic SSL key file path
+#   [*ssl_elastic_key*] - Elastic SSL key file contents
+#   [*ssl_kibana_certificate_file*] - Kibana SSL certificate file path
+#   [*ssl_kibana_certificate*] - Kibana SSL certificate file contents
+#   [*ssl_kibana_key_file*] - Kibana SSL key file path
+#   [*ssl_kibana_key*] - Kibana SSL key file contents
+#   [*www_root*] - www root path
 #
 class log_storage::storage::nginx (
   $nginx_elastic_access_log     = '/var/log/nginx/elasticsearch-access.log',

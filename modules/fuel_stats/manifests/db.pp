@@ -1,4 +1,15 @@
-# class fuel_stats::db
+# Class: fuel_stats::db
+#
+# This class deploys database part of fuel_stats project.
+#
+# Parameters:
+#   [*install_psql*] - install PostgreSQL server
+#   [*psql_host*] - PostgreSQL database hostname
+#   [*psql_user*] - PostgreSQL database user
+#   [*psql_pass*] - PostgreSQL database password
+#   [*psql_db*] - PostgreSQL database name
+#   [*analytics_ip*] - IP of analytics instance
+#
 class fuel_stats::db (
   $install_psql           = false,
   $psql_host              = $fuel_stats::params::psql_host,

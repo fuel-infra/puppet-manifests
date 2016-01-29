@@ -1,7 +1,17 @@
 # Class: fuel_project::roles::perestroika::publisher
 #
-# jenkins slave host for publishing of packages
-# see hiera file for list and params of used classes
+# This role deploys Jenkins slave host for publishing of packages.
+# See hiera file for list and params of used classes.
+#
+# Parameters:
+#   [*gpg_content_priv*] - GPG private key contents
+#   [*gpg_content_pub*] - GPG public key contents
+#   [*gpg_id_priv*] - GPG private key ID
+#   [*gpg_id_pub*] - GPG public key ID
+#   [*gpg_pub_key_owner*] - owner of GPG public key file
+#   [*gpg_priv_key_owner*] - owner of GPG private key file
+#   [*packages*] - packages required to publish
+#
 
 class fuel_project::roles::perestroika::publisher (
   $gpg_content_priv,

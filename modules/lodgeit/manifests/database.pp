@@ -1,4 +1,4 @@
-# Class lodgeit::database
+# Class: lodgeit::database
 #
 # This class deploys MySQL server instance for lodgeit application.
 #

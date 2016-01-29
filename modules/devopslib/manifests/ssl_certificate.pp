@@ -1,4 +1,5 @@
 # Definition: devopslib::ssl_certificate
+#
 # This definition get cerificate from hiera and creates it on destination
 # system.
 #

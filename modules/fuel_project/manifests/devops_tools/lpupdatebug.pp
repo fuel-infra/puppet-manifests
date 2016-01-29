@@ -3,7 +3,6 @@
 # This class deploys lpupdatebug package and it's configuration.
 #
 # Parameters:
-#
 #   [*access_token*] - OAuth access token
 #   [*access_secret*] - OAuth access token secret
 #   [*appname*] - application name

@@ -1,5 +1,20 @@
 # Class: fuel_project::jenkins::master
 #
+# This class deploys full Jenkins master instance.
+#
+# Parameters:
+#   [*firewall_enable*] - enable embedded firewall rules
+#   [*install_label_dumper*] - unused variable
+#   [*install_plugins*] - install Jenkins plugins package
+#   [*install_zabbix_item*] - install Jenkins items for Zabbix
+#   [*jobs_dir*] - path to directory with Jenkins jobs
+#   [*log_gzip_cron_name*] - name of cron entry
+#   [*log_gzip_cron_params*] - cron entry parameters
+#   [*log_gzip_days*] - how many days old files to compress
+#   [*log_gzip_enable*] - enable gzip process for old files
+#   [*log_gzip_threads*] - how many threads to use by pigz
+#   [*service_fqdn*] - service FQDN
+#
 class fuel_project::jenkins::master (
   $firewall_enable      = false,
   $install_label_dumper = false,

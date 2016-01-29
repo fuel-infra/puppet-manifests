@@ -1,5 +1,17 @@
 # Class: fuel_project::roles::ns
 #
+# This class deploys name server role.
+#
+# Parameters:
+#   [*dns_repo*] - DNS repository URL
+#   [*dns_branch*] - DNS repository branch to download
+#   [*dns_checkout_private_key_content*] - private key to download repository
+#   [*dns_tmpdir*] - temporary directory
+#   [*firewall_enable*] - enable embedded firewall rules
+#   [*firewall_rules*] - additional firewall rules
+#   [*role*] - DNS role to deploy
+#   [*target_path*] - target configuration directory path
+#
 class fuel_project::roles::ns (
   $dns_repo,
   $dns_branch                       = 'master',

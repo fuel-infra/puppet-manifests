@@ -1,5 +1,82 @@
 # Class: fuel_project::jenkins::slave
 #
+# This class deploys full Jenkins slave node with all the requirements.
+#
+# Parameters:
+#   [*docker_package*] - docker package name
+#   [*ruby_version*] - ruby version to install
+#   [*bind_policy*] - LDAP binding policy
+#   [*bats_tests*] - install packages for bats tests
+#   [*build_fuel_iso*] - install fuel iso building dependencies
+#   [*build_fuel_packages*] - install packages required by fuel
+#   [*build_fuel_npm_packages*] - install NPM required modules
+#   [*build_fuel_plugins*] - install packages fpr fuel-plugins
+#   [*check_tasks_graph*] - install tasks graph requirements
+#   [*docker_config*] - create configuration file for docker
+#   [*docker_config_path*] - path to docker configuration file
+#   [*docker_config_user*] - user which docker will be configured for
+#   [*docker_service*] - docker service name
+#   [*external_host*] - host on external IP address
+#   [*fuel_web_selenium*] - install packages for selenium tests
+#   [*http_share_iso*] - install dependencies for sharing ISO by HTTP
+#   [*install_docker*] - install docker on slave
+#   [*jenkins_swarm_slave*] - enable swarm slave
+#   [*known_hosts*] - known hosts to be added to known_hosts file
+#   [*known_hosts_overwrite*] - erase known_hosts file before adding to it
+#   [*libvirt_default_network*] - use default network for libvirt
+#   [*ldap*] - use LDAP authentication
+#   [*ldap_base*] - LDAP base
+#   [*ldap_ignore_users*] - users ignored for LDAP checks
+#   [*ldap_sudo_group*] - LDAP group with sudo privileges
+#   [*ldap_uri*] - LDAP URI
+#   [*local_ssh_private_key*] - Jenkins SSL private key
+#   [*local_ssh_public_key*] - Jenkins SSL public key
+#   [*nailgun_db*] - nailgun database name
+#   [*osc_apiurl*] - OSC interface URL
+#   [*osc_pass_primary*] - OSC primary password
+#   [*osc_pass_secondary*] - OSC secondary password
+#   [*osc_url_primary*] - OSC primary URL
+#   [*osc_url_secondary*] - OSC secondary URL
+#   [*osc_user_primary*] - OSC primary user name
+#   [*osc_user_secondary*] - OSC secondary user name
+#   [*osci_centos_image_name*] - OSCI Centos image to use
+#   [*osci_centos_job_dir*] - OSCI Centos RPMs destination directory
+#   [*osci_centos_remote_dir*] - OSCI Centos remote directory name
+#   [*osci_obs_jenkins_key*] - OSCI OBS Jenkins key path
+#   [*osci_obs_jenkins_key_contents*] - OSCI OBS Jenkins key contents
+#   [*osci_rsync_source_server*] - OSCI Rsync source server
+#   [*osci_test*] - Install OSCI tests requirements
+#   [*osci_trusty_image_name*] - OSCI Trusty image to use
+#   [*osci_trusty_job_dir*] - OSCI Trusty Debs destination directory
+#   [*osci_trusty_remote_dir*] - OSCI Trusty remote directory name
+#   [*osci_ubuntu_image_name*] - OSCI Ubuntu image to use
+#   [*osci_ubuntu_job_dir*] - OSCI Ubuntu Debs destination directory
+#   [*osci_ubuntu_remote_dir*] - OSCI Ubuntu remote directory name
+#   [*osci_vm_centos_jenkins_key*] - Centos SSH key path
+#   [*osci_vm_centos_jenkins_key_contents*] - Centos SSH key contents
+#   [*osci_vm_trusty_jenkins_key*] - Trusty SSH key path
+#   [*osci_vm_trusty_jenkins_key_contents*] - Trusty SSH key contents
+#   [*osci_vm_ubuntu_jenkins_key*] - Ubuntu SSH key path
+#   [*osci_vm_ubuntu_jenkins_key_contents*] - Ubuntu SSH key contents
+#   [*ostf_db*] - OSTF database name
+#   [*pam_filter*] - PAM filter for LDAP
+#   [*pam_password*] - PAM password type
+#   [*run_tests*] - dependencies to run tests
+#   [*seed_cleanup_dirs*] - directory locations with seeds to cleanup
+#   [*simple_syntax_check*] - add syntax check tools
+#   [*sudo_commands*] - sudo commands allowed for operating user
+#   [*tls_cacertdir*] - LDAP CA certs directory
+#   [*verify_fuel_astute*] - add fuel_astute verification requirements
+#   [*verify_fuel_docs*] - add fuel_docs verification requirements
+#   [*verify_fuel_pkgs_requirements*] - add fuel_pkgs verification requirements
+#   [*verify_fuel_stats*] - add fuel_status verification requirements
+#   [*verify_fuel_web*] - add fuel_web verification requirements
+#   [*verify_fuel_web_npm_packages*] - add fuel_web npm packages requirements
+#   [*verify_jenkins_jobs*] - add jenkins_jobs verification requirements
+#   [*verify_network_checker*] - add network checker verification requirements
+#   [*workspace*] - workspace directory
+#   [*x11_display_num*] - X11 display number to use in tests
+#
 class fuel_project::jenkins::slave (
   $docker_package,
   $ruby_version,

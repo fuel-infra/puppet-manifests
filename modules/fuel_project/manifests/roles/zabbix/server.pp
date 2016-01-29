@@ -1,5 +1,21 @@
 # Class: fuel_project::roles::zabbix::server
 #
+# This class deploys Zabbix server role.
+#
+# Parameters:
+#   [*mysql_replication_password*] - MySQL replication password
+#   [*mysql_replication_user*] - MySQL replication user
+#   [*mysql_slave_host*] - MySQL slave host
+#   [*maintenance_cron*] - maintanance script run Cron entries
+#   [*maintenance_script*] - maintanance script path
+#   [*maintenance_script_config*] - maintanance script MySQL config
+#   [*server_role*] - server mode
+#   [*slack_emoji_ok*] - Slack Emoji OK icon code
+#   [*slack_emoji_problem*] - Slack Emoji PROBLEM icon code
+#   [*slack_emoji_unknown*] - Slack Emoji UNKNOWN icon code
+#   [*slack_post_username*] - Slack user name for posting
+#   [*slack_web_hook_url*] - Slack web hook URL
+#
 class fuel_project::roles::zabbix::server (
   $mysql_replication_password = '',
   $mysql_replication_user     = 'repl',

@@ -3,7 +3,6 @@
 # This class setups Cron entries for Racks application.
 #
 # Parameters:
-#
 #   [*options*] - importer configuration file entries
 #     Example:
 #      'instances':

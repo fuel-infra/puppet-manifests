@@ -1,4 +1,9 @@
-# default params for fuel_stats
+# Class: fuel_stats::params
+#
+# This class stores default parameters for other fuel_stats classes.
+#
+# Please see parameters description in top modules.
+#
 class fuel_stats::params(
   $analytics_ip           = '127.0.0.1',
 

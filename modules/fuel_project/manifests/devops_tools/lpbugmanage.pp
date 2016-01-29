@@ -1,9 +1,8 @@
-#Class fuel_project::devops_tools::lpbugmanage
+# Class fuel_project::devops_tools::lpbugmanage
 #
 # This class deploys lpbugmanage package and it's configuration.
 #
 # Parameters:
-#
 #   [*id*] - unique ID used in config file
 #   [*consumer_key*] - OAuth Consumer key
 #   [*consumer_secret*] - OAuth Consumer password

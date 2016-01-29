@@ -1,12 +1,16 @@
-# == Class: obs_server::mysql
-
-
+# Class: obs_server::mysql
+#
+# This class deploys MySQL database for OBS.
+#
+# Parameters:
+#   [*db_name*] - database name
+#   [*db_user*] - database user
+#   [*db_password*] - database password
+#
 class obs_server::mysql (
-
   $db_name = 'obs',
   $db_user = 'obs',
   $db_password = 'obs',
-
 ){
 
 require mysql::server::account_security

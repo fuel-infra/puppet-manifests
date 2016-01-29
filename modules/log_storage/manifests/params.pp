@@ -1,4 +1,8 @@
-# log_storage::params class
+# Class: log_storage::params class
+#
+# This class stores default parameters for log storage.
+#
+# Please see parameters description in top modules.
 #
 class log_storage::params (
   $logstash_ssl_ca,

@@ -1,4 +1,16 @@
-# dev configuration for anonymous statistics
+# Definiton: fuel_stats::dev
+#
+# This definition sets configuration for anonymous statistics.
+#
+# Parameters:
+#   [*repo_url*] - repository URL
+#   [*dest_dir*] - destination directory
+#   [*requirements*] - Python requirements file
+#   [*pip_opts*] - PIP options
+#   [*user*] - user to use
+#   [*auto_update*] - automatically update the repository
+#   [*packages*] - packages required by this class
+#
 define fuel_stats::dev (
   $repo_url = 'https://github.com/stackforge/fuel-stats/',
   $dest_dir = "/var/www/${title}",

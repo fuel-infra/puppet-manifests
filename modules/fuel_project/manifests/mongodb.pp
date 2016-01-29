@@ -1,6 +1,14 @@
 # Class: fuel_project::mongodb
 #
-
+# This class deploys MongoDB database.
+#
+# Parameters:
+#   [*user*] - database owner name
+#   [*admin_username*] - administrator username
+#   [*password*] - database password
+#   [*admin_password*] - administrator password
+#   [*admin_database*] - administrator database name
+#
 class fuel_project::mongodb (
   $user           = 'ceilometer',
   $admin_username = 'admin',

@@ -3,7 +3,6 @@
 # This class deploys web application part of inventory application.
 #
 # Parameters:
-#
 #   [*config*] - configuration file path for application
 #   [*database_engine*] - Django database engine to use
 #   [*database_host*] - database host name

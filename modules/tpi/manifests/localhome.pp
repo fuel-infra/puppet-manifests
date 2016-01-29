@@ -1,4 +1,10 @@
-#local home that should remain visible on top of autofs
+# Definition: tpi::localhome
+#
+# This defines local home that should remain visible on top of autofs.
+#
+# Parameters:
+#   [*local_home_base*] - path to home base
+#
 define tpi::localhome($local_home_base='/usr/local/home') {
 
   validate_string($local_home_base, $name)

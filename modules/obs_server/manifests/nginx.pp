@@ -1,14 +1,22 @@
-# == Class: obs_server::nginx
-
+# Class: obs_server::nginx
+#
+# This class deploys Nginx part of OBS.
+#
+# Parameters:
+#   [*access_log_file*] - access log file path
+#   [*error_log_file*] - error log file path
+#   [*ssl_key_file*] - SSL key file path
+#   [*ssl_cert_file*] - SSL certificate file path
+#   [*ssl_key_file_contents*] - SSL key file contents
+#   [*ssl_cert_file_contents*] - SSL certificate file contents
+#
 class obs_server::nginx (
-
   $access_log_file = '/srv/www/obs/api/log/nginx-obs-api-access.log',
   $error_log_file = '/srv/www/obs/api/log/nginx-obs-api-error.log',
   $ssl_key_file = '/srv/obs/certs/server.key',
   $ssl_cert_file = '/srv/obs/certs/server.crt',
   $ssl_key_file_contents = '',
   $ssl_cert_file_contents = '',
-
 ) inherits obs_server::folders {
 
 package { 'nginx':

@@ -1,4 +1,10 @@
-#Class fuel_project::devops_tools
+# Class: fuel_project::devops_tools
+#
+# This class deploys particular devops tools on host.
+#
+# Parameters:
+#   [*lpbugmanage*] - install lpbugmanage tool
+#   [*lpupdatebug*] - install lpupdatebug tool
 #
 class fuel_project::devops_tools (
   $lpbugmanage = false,

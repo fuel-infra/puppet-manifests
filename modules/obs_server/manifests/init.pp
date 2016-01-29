@@ -1,4 +1,4 @@
-# == Class: obs_server
+# Class: obs_server
 #
 # Installs Open Build Service Server on opensuse server.
 #
@@ -10,7 +10,6 @@
 # === Variables
 #
 # All of the variables are stored in hiera
-
 class obs_server {
 
 require obs_server::repo

@@ -1,4 +1,14 @@
-# Anonymous statistics analytic
+# Class: fuel_stats::migration
+#
+# This class deploys anonymous statistics analytic part.
+#
+# Parameters:
+#   [*development*] - enable development way
+#   [*psql_host*] - PostgreSQL database hostname
+#   [*psql_user*] - PostgreSQL database user name
+#   [*psql_pass*] - PostgreSQL database password
+#   [*psql_db*] - PostgreSQL database name
+#
 class fuel_stats::migration (
   $development            = false,
   $psql_host              = $fuel_stats::params::psql_host,

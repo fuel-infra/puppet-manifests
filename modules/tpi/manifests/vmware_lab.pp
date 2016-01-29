@@ -1,4 +1,13 @@
-#VMWare Workstation lab
+# Class: tpi::vmware_lab
+#
+# This class deploys VMWare Workstation lab.
+#
+# Parameters:
+#   [*vmware_ws_installer*] - Workstation installer to use
+#   [*vmware_ws_serial*] - Workstation serial
+#   [*vmware_ws_envs*] - Workstation environments
+#   [*rsync_server*] - rsync server to use
+#
 class tpi::vmware_lab (
   $vmware_ws_installer = 'VMware-Workstation-Full-10.0.2-1744117.x86_64.bundle',
   $vmware_ws_serial = '',

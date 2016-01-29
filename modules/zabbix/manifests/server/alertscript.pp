@@ -1,5 +1,9 @@
 # Define: zabbix::server::alertscript
 #
+# This defines alertscript entries for Zabbix.
+#   [*content*] - alert file content
+#   [*template*] - alert file template
+#
 define zabbix::server::alertscript (
   $content = undef,
   $template = undef,

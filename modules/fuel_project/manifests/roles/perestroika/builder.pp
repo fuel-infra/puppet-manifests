@@ -1,7 +1,13 @@
 # Class: fuel_project::roles::perestroika::builder
 #
-# jenkins slave host for building packages
-# see hiera file for list and params of used classes
+# This class deploys Jenkins slave host for building packages.
+#
+# Parameters:
+#   [*docker_package*] - docker package name
+#   [*builder_user*] - builder user
+#   [*known_hosts*] - known_host file entries
+#   [*packages*] - packages required for builder
+#
 
 class fuel_project::roles::perestroika::builder (
   $docker_package,

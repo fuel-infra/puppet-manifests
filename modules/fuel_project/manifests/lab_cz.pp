@@ -1,4 +1,10 @@
+# Class: fuel_project::lab_cz
+#
 # Used for deploy lab-cz.vm.mirantis.net
+#
+# Parameters:
+#   [*external_host*] - service located on external IP
+#
 class fuel_project::lab_cz (
   $external_host = true,
 ) {

@@ -1,9 +1,8 @@
-# == Class: obs_server::folders
+# Class: obs_server::folders
 #
 # The folders and permissions which are required
 # but not exist after package installation
 #
-
 class obs_server::folders{
 
 file { [ '/srv/obs/','/srv/obs/certs',]:

@@ -1,4 +1,12 @@
-# Anonymous statistics test suite
+# Class: fuel_stats::tests
+#
+# This class deploys test suite for anonymous statistics.
+#
+# Parameters:
+#   [*psql_user*] - PostgreSQL database user
+#   [*psql_pass*] - PostgreSQL database password
+#   [*psql_db*] - PostgreSQL database name
+#
 class fuel_stats::tests (
   $psql_user       = $fuel_stats::params::psql_user,
   $psql_pass       = $fuel_stats::params::psql_user,

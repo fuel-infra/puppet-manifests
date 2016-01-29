@@ -1,4 +1,29 @@
-# log_storage::logstash class
+# Class: log_storage::logstash class
+#
+# This class deploys logstash instance for log storage.
+#
+# Parameters:
+#   [*logstash_filter_pattern_params*] - logstash filter patter parameters
+#   [*elasticsearch_bind_port*] - Elastic output bind port
+#   [*elasticsearch_cacert*] - Elastic output CA certificate path
+#   [*elasticsearch_cluster*] - Elastic output cluster
+#   [*elasticsearch_host*] - Elastic output host
+#   [*elasticsearch_max_retries*] - Elastic output maximum retries
+#   [*elasticsearch_protocol*] - Elastic output protocol to use
+#   [*elasticsearch_port*] - Elastic output port
+#   [*elasticsearch_retry_max_items*] - Elastic output maximum items to reply
+#   [*elasticsearch_ssl*] - Elastic output SSL connection
+#   [*elasticsearch_ssl_cert_verify*] - Elastic output certicate verification
+#   [*elasticsearch_workers*] - Elastic output workers to use
+#   [*lumberjack_host*] - Lumberjack address to bind
+#   [*lumberjack_port*] - Lumberjack port to bind
+#   [*lumberjack_type*] - Lumberjack type
+#   [*logstash_patterns_dir*] - directory path to Logstash patterns
+#   [*ssl_certificate*] - SSL certificate file contents
+#   [*ssl_certificate_file*] - SSL certificate file path
+#   [*ssl_key*] - SSL key file contents
+#   [*ssl_key_file*] - SSL key file path
+#   [*user*] - user to deploy logstash
 #
 class log_storage::logstash (
   $logstash_filter_pattern_params,

@@ -1,5 +1,10 @@
 # Class: fuel_project::mongo_common
 #
+# This class deploys MongoDB common parts.
+#
+# Parameters:
+#   [*primary*] - enable primary role
+#
 
 class fuel_project::mongo_common (
   $primary = false,

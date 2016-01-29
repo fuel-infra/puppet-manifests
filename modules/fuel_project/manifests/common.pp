@@ -1,5 +1,25 @@
 # Class: fuel_project::common
 #
+# This class deploys basic requirements for fuel_project classes.
+#
+# Parameters:
+#   [*bind_policy*] - LDAP binding policy
+#   [*external_host*] - host deployed on external IP address
+#   [*kernel_package*] - kernel package to install
+#   [*ldap*] - use LDAP authentication
+#   [*ldap_base*] - LDAP base
+#   [*ldap_ignore_users*] - users ignored for LDAP checks
+#   [*ldap_uri*] - LDAP URI
+#   [*logrotate_rules*] - log rotate rules hash
+#   [*logstash_forwarder*] - enable logstash forwarder
+#   [*pam_filter*] - PAM filter for LDAP
+#   [*pam_password*] - PAM password type
+#   [*puppet_cron*] - run Puppet agent by cron
+#   [*puppet_cron_ok*] - "YES, I KNOW WHAT I AM DOING, REALLY" - to confirm
+#   [*root_password_hash*] - root password
+#   [*root_shell*] - shell for root user
+#   [*tls_cacertdir*] - LDAP CA certs directory
+#
 class fuel_project::common (
   $bind_policy        = '',
   $external_host      = false,

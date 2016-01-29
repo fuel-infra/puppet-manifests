@@ -1,5 +1,7 @@
 # Class: fuel_project::roles::mailman
 #
+# This class deploys mailman role.
+#
 class fuel_project::roles::mailman {
   class { '::fuel_project::common' :}
   class { '::fuel_project::nginx' :}

@@ -1,3 +1,27 @@
+# Class: fuel_proect::roles::docs
+#
+# This class deploys docs role.
+#
+# Parameters:
+#   [*community_hostname*] - community service hostname
+#   [*community_ssl_cert_content*] - community SSL certificate contents
+#   [*community_ssl_cert_filename*] - community SSL certificate path
+#   [*community_ssl_key_content*] - community SSL key contents
+#   [*community_ssl_key_filename*] - community SSL key path
+#   [*docs_user*] - user to install docs
+#   [*fuel_version*] - fuel version
+#   [*hostname*] - service hostname
+#   [*nginx_access_log*] - access log
+#   [*nginx_error_log*] - error log
+#   [*nginx_log_format*] - log format
+#   [*redirect_root_to*] - redirect root to
+#   [*specs_hostname*] - specs service hostname
+#   [*ssh_auth_key*] - SSH authorized key
+#   [*ssl_cert_content*] - SSL certificate contents
+#   [*ssl_cert_filename*] - SSL certificate file path
+#   [*ssl_key_content*] - SSL key contents
+#   [*ssl_key_filename*] - SSL key file path
+#   [*www_root*] - www root path
 #
 class fuel_project::roles::docs (
   $community_hostname          = 'docs.fuel-infra.org',

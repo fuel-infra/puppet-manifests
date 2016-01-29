@@ -1,10 +1,14 @@
-# == Class: obs_server::repo
-
+# Class: obs_server::repo
+#
+# This class adds Zypper repository for OBS.
+#
+# Parameters:
+#   [*repo_url*] - repository URL
+#   [*repo_name*] - repository Name
+#
 class obs_server::repo (
-
   $repo_url = '',
   $repo_name = '',
-
 ){
 
 require zypprepo

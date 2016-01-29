@@ -1,4 +1,10 @@
-# class fuel_project::racktables
+# Class fuel_project::racktables
+#
+# This class deploys racktables.
+#
+# Parameters:
+#   [*firewall_enable*] - enable embedded firewall rules
+#
 class fuel_project::racktables (
   $firewall_enable = false,
 ) {

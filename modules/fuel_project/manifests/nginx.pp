@@ -1,5 +1,7 @@
 # Class: fuel_project::nginx
 #
+# This class deploys Nginx.
+#
 class fuel_project::nginx {
   if (!defined(Class['::nginx'])) {
     class { '::nginx' :}

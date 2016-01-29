@@ -1,5 +1,12 @@
 # Class: uwsgi
 #
+# This class deploys UWSGI base.
+#
+# Parameters:
+#   [*package*] - package name to deploy UWSGI
+#   [*service*] - UWSGI service name
+#   [*somaxconn*] - maximum number of queued connections
+#
 class uwsgi (
   $package   = $uwsgi::params::package,
   $service   = $uwsgi::params::service,
