@@ -277,7 +277,6 @@ class fuel_project::jenkins::slave (
       # dependencies
       'python-psycopg2',
       'python-virtualenv',
-      'pkg-config',
 
       # diagnostic utilities
       'htop',
@@ -304,6 +303,7 @@ class fuel_project::jenkins::slave (
           'libevent-dev',
           'libffi-dev',
           'libvirt-dev',
+          'pkg-config',
           'postgresql-server-dev-all',
           'python-dev',
           'python-yaml',
@@ -315,6 +315,7 @@ class fuel_project::jenkins::slave (
           'libevent-devel',
           'libffi-devel',
           'libvirt-devel',
+          'pkgconfig',
           'postgresql-devel',
           'python-devel',
           'PyYAML',
