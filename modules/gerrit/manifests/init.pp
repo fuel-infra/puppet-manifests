@@ -249,6 +249,7 @@ class gerrit (
       package { 'gitweb' :
         ensure  => 'present',
         require => Class['::nginx'],
+        before  => Package['gerrit'],
       }
     }
   }
