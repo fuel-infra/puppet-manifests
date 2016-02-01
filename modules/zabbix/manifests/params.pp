@@ -8,6 +8,15 @@ class zabbix::params {
   #
   $agent_allow_root             = false
   $agent_apply_firewall_rules   = false
+  case $::osfamily {
+    'Debian': {
+      $agent_config_daemon = '/etc/zabbix/zabbix_agentd.conf'
+    }
+    'RedHat': {
+      $agent_config_daemon = '/etc/zabbix_agentd.conf'
+    }
+    default: { }
+  }
   $agent_debug_level            = 3
   $agent_enable_remote_commands = true
   $agent_firewall_allow_sources = {

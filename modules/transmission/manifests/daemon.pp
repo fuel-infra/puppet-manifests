@@ -191,10 +191,20 @@ class transmission::daemon (
     }
   }
 
+  case $::osfamily {
+    'Debian': {
+      $transmission_user = 'debian-transmission'
+    }
+    'RedHat': {
+      $transmission_user = 'transmission'
+    }
+    default: { }
+  }
+
   file { $download_dir :
     ensure => 'directory',
-    owner  => 'debian-transmission',
-    group  => 'debian-transmission',
+    owner  => $transmission_user,
+    group  => $transmission_user,
   }
 
   exec { "${service}-reload" :

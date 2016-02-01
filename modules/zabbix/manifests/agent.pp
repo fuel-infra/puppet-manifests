@@ -35,6 +35,7 @@
 class zabbix::agent (
   $allow_root             = $::zabbix::params::agent_allow_root,
   $apply_firewall_rules   = $::zabbix::params::agent_apply_firewall_rules,
+  $config_daemon_file     = $::zabbix::params::agent_config_daemon,
   $debug_level            = $::zabbix::params::agent_debug_level,
   $enable_remote_commands = $::zabbix::params::agent_enable_remote_commands,
   $firewall_allow_sources = $::zabbix::params::agent_firewall_allow_sources,
@@ -65,7 +66,7 @@ class zabbix::agent (
     }
   }
 
-  file { '/etc/zabbix/zabbix_agentd.conf' :
+  file { $config_daemon_file :
     ensure  => 'present',
     owner   => 'root',
     group   => 'root',
