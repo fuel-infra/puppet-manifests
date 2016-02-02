@@ -16,9 +16,9 @@ class zuul (
   $dir              = '/usr/share/zuul/public_html',
   $dir_group        = 'www-data',
   $dir_owner        = 'www-data',
-  $nginx_access_log = '/var/log/nginx/zuul-access.log',
-  $nginx_error_log  = '/var/log/nginx/zuul-error.log',
-  $nginx_log_format = 'proxy',
+  $nginx_access_log = '/var/log/nginx/access.log',
+  $nginx_error_log  = '/var/log/nginx/error.log',
+  $nginx_log_format = undef,
   $service_fqdn     = 'zuul.local',
   $packages         = [
     'nginx',
