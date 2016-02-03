@@ -178,7 +178,7 @@ class fuel_project::common (
   #
   # Allow puppet run by CRON in testing only and with real care
   #
-  if($puppet_cron and $puppet_cron_ok == 'YES, I KNOW WHAT I AM DOING, REALLY.' and $::fqdn =~ /-tst\.infra\.mirantis\.net$/) {
+  if($puppet_cron and $puppet_cron_ok == 'YES, I KNOW WHAT I AM DOING, REALLY.') {
     create_resources(
       'cron',
       {'puppet-cron' => $puppet_cron},
