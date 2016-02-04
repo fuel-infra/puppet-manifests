@@ -29,7 +29,7 @@ apt-get dist-upgrade -y
 apt-get install -y puppet apt-transport-https
 
 mkdir -p ${HIERA_VAR_DIR}
-cp -ar ${PUPPET_ETC_DIR}/hiera/{nodes,locations,roles} ${HIERA_VAR_DIR}/
+cp -ar ${PUPPET_ETC_DIR}/hiera/{distros,nodes,locations,roles} ${HIERA_VAR_DIR}/
 cp -ar ${PUPPET_ETC_DIR}/hiera/common-example.yaml ${HIERA_VAR_DIR}/common.yaml
 
 if [[ -x "${PUPPET_ETC_DIR}/bin/install_modules.sh" ]]; then
@@ -41,14 +41,10 @@ fi
 
 EXPECT_HIERA="$(puppet apply -vd --genconfig | awk '/ hiera_config / {print $3}')"
 if [[ ! -f "${EXPECT_HIERA}" ]]; then
-    echo "File ${EXPECT_HIERA} not found!"
-    if [[ ! -f /etc/hiera.yaml ]]; then
-        ln -s ${PUPPET_ETC_DIR}/hiera/hiera-stub.yaml "${EXPECT_HIERA}"
-    else
-        echo "Found default /etc/hiera.yaml"
-        ln -s /etc/hiera.yaml "${EXPECT_HIERA}"
-    fi
+  echo "File ${EXPECT_HIERA} not found! Copying from hiera-stub.yaml example..."
+  cp ${PUPPET_ETC_DIR}/hiera/hiera-stub.yaml "${EXPECT_HIERA}"
 fi
+ln -s "${EXPECT_HIERA}" /etc/hiera.yaml
 
 FACTER_PUPPET_APPLY="true" FACTER_ROLE="puppetmaster" puppet apply -vd ${PUPPET_ETC_DIR}/manifests/site.pp
 puppet agent --enable
