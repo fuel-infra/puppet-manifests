@@ -942,6 +942,24 @@ class fuel_project::jenkins::slave (
       user     => 'ostf',
       password => 'ostf',
     }
+
+    postgresql::server::pg_hba_rule { 'Allow local TCP connections with authentication under postgres user' :
+      description => 'Allow local TCP connections with authentication under postgres user',
+      type        => 'host',
+      database    => 'all',
+      user        => 'postgres',
+      address     => '127.0.0.1/32',
+      auth_method => 'md5',
+    }
+
+    postgresql::server::pg_hba_rule { 'Allow local connections with authentication under postgres user' :
+      description => 'Allow local connections with authentication under postgres user',
+      type        => 'local',
+      database    => 'all',
+      user        => 'postgres',
+      auth_method => 'md5',
+    }
+
     file { '/var/log/nailgun' :
       ensure  => directory,
       owner   => 'jenkins',
