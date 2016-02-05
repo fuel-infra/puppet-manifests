@@ -42,7 +42,7 @@
 #   [*swift_user*] - User name to authenticate as.
 #   [*url_pattern*] - URL to externally stored logs. Used by zuul-server only.
 #   [*zuul_logconfig*] - Zuul logging configuration file.
-#   [*zuul_url*] - URL of this merger’s git repos, accessible to test workers.
+#   [*zuul_url*] - URL of this merger's git repos, accessible to test workers.
 #
 class zuul (
   $gerrit_user,
