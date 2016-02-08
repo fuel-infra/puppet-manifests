@@ -74,12 +74,6 @@ node /irc-bouncer([0-9]{2})\.fuel-infra\.org/ {
   }
 }
 
-node 'lab-cz.vm.mirantis.net' {
-  class { '::fuel_project::lab_cz' :
-    external_host => false,
-  }
-}
-
 node 'review-solr-tst01.vm.mirantis.net' {
   class { '::fuel_project::common' :}
 }

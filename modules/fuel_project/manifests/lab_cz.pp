@@ -5,15 +5,7 @@
 # Parameters:
 #   [*external_host*] - service located on external IP
 #
-class fuel_project::lab_cz (
-  $external_host = true,
-) {
-  # Used for network managment
-  class { 'common' :
-    external_host => $external_host
-  }
-
-  include ssh::ldap
+class fuel_project::lab_cz {
   class { 'libvirt' :
     qemu               => false,
     listen_tcp         => false,
