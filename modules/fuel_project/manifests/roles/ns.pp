@@ -22,9 +22,7 @@ class fuel_project::roles::ns (
   $role                             = 'master',
   $target_path                      = '/var/cache/bind',
 ) {
-  class { '::fuel_project::common' :
-    external_host => $firewall_enable,
-  }
+  class { '::fuel_project::common' :}
   class { '::bind' :}
   ::bind::server::conf { '/etc/bind/named.conf' :
     require => Class['::bind'],
@@ -107,10 +105,10 @@ class fuel_project::roles::ns (
   }
 
   if ($firewall_enable) {
-    include firewall_defaults::pre
+    class { '::fuel_project::apps::firewall' :}
     create_resources(firewall, $firewall_rules, {
       action  => 'accept',
-      require => Class['firewall_defaults::pre'],
+      require => Class['::fuel_project::apps::firewall'],
     })
   }
 }
