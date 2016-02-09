@@ -3,11 +3,14 @@ classes:
   - '::fuel_project::common'
   - '::mongodb::server'
   - '::mongodb::client'
-fuel_project::apps::mongo::server::replication_members:
-  - mongo01.local
-  - mongo02.local
-  - mongo03.local
-mongodb::server::noauth: true
+mongodb::server::replset_config:
+  'mongodb-misc':
+    ensure: present
+    members:
+      - mongo01.example.com:27017
+      - mongo02.example.com:27017
+mongodb::server::bind_ip: ['0.0.0.0']
+mongodb::server::noauth: false
 mongodb::server::port: 27017
 mongodb::server::verbose: true
 mongodb::server::replset: 'mongodb-misc'
