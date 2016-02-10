@@ -1,8 +1,8 @@
 ---
-  classes:
-    - '::fuel_project::common'
-    - '::zuul'
-    - '::fuel_project::zuul'
+classes:
+  - '::fuel_project::common'
+  - '::zuul'
+  - '::fuel_project::zuul'
 
 zuul::layout: '/etc/zuul/layout.yaml'
 zuul::job_name_in_report: true
