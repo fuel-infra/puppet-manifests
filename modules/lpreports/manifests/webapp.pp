@@ -72,39 +72,12 @@ class lpreports::webapp (
     content => $ssl_key_contents,
   }
 
-  file { '/etc/lpreports/review.json' :
-    ensure  => 'present',
-    owner   => 'lpreports',
-    group   => 'lpreports',
-    mode    => '0400',
-    content => template('lpreports/review.json.erb'),
-    require => Package['python-lp-reports'],
-  }
-
   file { '/etc/lpreports/lpreports.conf' :
     ensure  => 'present',
     owner   => 'lpreports',
     group   => 'lpreports',
     mode    => '0400',
     content => template('lpreports/lpreports.conf.erb'),
-    require => Package['python-lp-reports'],
-  }
-
-  file { '/etc/lpreports/teams.yaml' :
-    ensure  => 'present',
-    owner   => 'lpreports',
-    group   => 'lpreports',
-    mode    => '0400',
-    content => template('lpreports/teams.yaml.erb'),
-    require => Package['python-lp-reports'],
-  }
-
-  file { '/etc/lpreports/reports.yaml' :
-    ensure  => 'present',
-    owner   => 'lpreports',
-    group   => 'lpreports',
-    mode    => '0400',
-    content => template('lpreports/reports.yaml.erb'),
     require => Package['python-lp-reports'],
   }
 
