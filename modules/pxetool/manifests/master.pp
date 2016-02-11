@@ -98,9 +98,9 @@ class pxetool::master(
   # pxetool main configuration file
   file { $config :
     ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
+    mode    => '0400',
+    owner   => $user,
+    group   => $user,
     content => template('pxetool/pxetool.yaml.erb'),
   }
 
