@@ -392,6 +392,7 @@ class fuel_project::jenkins::slave (
           'libevent-devel',
           'libffi-devel',
           'libvirt-devel',
+          'openssl-devel',
           'pkgconfig',
           'postgresql-devel',
           'python-devel',
