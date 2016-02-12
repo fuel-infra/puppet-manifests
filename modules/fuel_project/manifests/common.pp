@@ -64,8 +64,16 @@ class fuel_project::common (
     facts => $facts,
   }
 
+  case $::osfamily {
+    'Debian': {
+      ensure_packages([
+        'apparmor',
+      ])
+    }
+    default: { }
+  }
+
   ensure_packages([
-    'apparmor',
     'config-zabbix-agent-dmesg-item',
     'config-zabbix-agent-oom-killer-item',
     'config-zabbix-agent-ulimit-item',
@@ -112,9 +120,10 @@ class fuel_project::common (
     }
     'RedHat': {
       class { '::yum' :}
+      class { '::yum::repos' :}
       $yum_repos_gpgkey = hiera_hash('yum::gpgkey', {})
       create_resources('::yum::gpgkey', $yum_repos_gpgkey)
-      class { '::yumrepos' :}
+      Yum::Gpgkey <| |> -> Package <| |>
     }
     default: { }
   }

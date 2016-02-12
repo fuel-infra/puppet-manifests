@@ -51,12 +51,10 @@ fi
 # licensed
 
 MODULES["ajcrowe-supervisord"]="0.6.0"
-MODULES["ceritsc-yum"]="0.9.6"
 MODULES["darin-zypprepo"]="1.0.1"
 MODULES["elasticsearch-elasticsearch"]="0.9.8"
 MODULES["elasticsearch-logstash"]="0.5.1"
 MODULES["elasticsearch-logstashforwarder"]="0.1.1"
-MODULES["gbrown-yumrepos"]="0.0.3"
 MODULES["gnubilafrance-atop"]="0.0.4"
 MODULES["golja-gnupg"]="1.2.1"
 MODULES["lesaux-kibana4"]="0.0.9"
@@ -81,6 +79,7 @@ MODULES["thias-php"]="1.1.0"
 MODULES["thias-sysctl"]="1.0.0"
 MODULES["puppetlabs-mongodb"]="0.12.0"
 
+SOURCE_MODULES["https://github.com/mescanef/puppet-yum"]="0.9.6_yumrepos"
 SOURCE_MODULES["https://github.com/monester/puppet-bacula"]="v0.4.0.1"
 SOURCE_MODULES["https://github.com/monester/puppet-libvirt"]="0.3.2-3"
 SOURCE_MODULES["https://github.com/SergK/puppet-display"]="0.5.0"

@@ -62,48 +62,6 @@ bacula::director_name_suffix: ''
 bacula::director_password: 'xxxxx'
 bacula::director_server: 'bacula.test.local'
 
-yum::gpgkey:
-  'RPM-GPG-KEY-devops':
-    path: '/etc/pki/rpm-gpg/RPM-GPG-KEY-devops'
-    content: |
-      -----BEGIN PGP PUBLIC KEY BLOCK-----
-      Version: GnuPG v2.0.19 (GNU/Linux)
-
-      mQENBFTP6O4BCAC/Ody0+dRE6ZwvB1ehsxWrtjuXvrPRQp9cJQZ5WkBV0mL5HcZz
-      LuUXeLxy2PjMhBKQ2cfdG75ceI+S2jqg0wIcf7aTHlxdPZYdXJURlftpMKdSginp
-      rX0OwFoGWML6SjiLFsUgQsPA2Z3IkN2AZmc2VgPnV8UIHUL/sdIjdCHa4wq07Wt2
-      1dXji46fayWkPpN1JK48/QlDKLAanjSghWU2jxPfIQFkmvb4YRsTW6K2jZ6wvkav
-      EjwMM2FdR4poRmD8qIgKhLx4axl1s9eZR5DTWaR4gC3ehOI30kh+XOPkB1EsYZUz
-      dvg2La3EqlHV4UyAVERRVSixy0ITrgAJOEGhABEBAAG0OnFhLWNlbnRvcyBPQlMg
-      UHJvamVjdCA8cWEtY2VudG9zQG9zY2ktb2JzLnZtLm1pcmFudGlzLm5ldD6JAT8E
-      EwECACkFAlTP6O4CGwMFCQQesAAHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAK
-      CRCl4sQAl32hdEDWB/975rJWyILqUoZQ5+qyAArBRVGIEKzs4vzImZdR/n0RHX+y
-      g0qrwryl5IEIDSGp5cITRgM7GHopPtUGc2wkpVTwj7XY9Dgm15H/4H4Ka/5hKCll
-      OooLrJUKMQ9IVnjipBCorsRdVxr8GOdNOdaZcC9w9v8mJHkOJRDAoW4IUrUSRkO3
-      2gnYw22rAOpY9h/NJoGpac1YyK9v1sShuMlKYNLnPRuDpggC3tGY2rbI3Re2sfmm
-      QrnEHbnNFlZeTnHAPUwyP0y5WF+XmElflc1753Oz1/M8mJ4QTYPx6GxndxLjrpxh
-      Gb/phGwiNgEaWHp5Z+MbQHgjWQPTGjEoiWn9T4LFiEYEExECAAYFAlTP6O4ACgkQ
-      Yr9qnB0rRaKDIgCfXmNK658oR9Wg8qVeRO1j1Q643QIAni92QIivsg+RAh+jHJU/
-      lx1Ia4TX
-      =dnbi
-      -----END PGP PUBLIC KEY BLOCK-----
-
-yumrepos::purge: true
-yumrepos::repos:
-  'base':
-    'descr': 'CentOS-$releasever - Base'
-    'baseurl': 'http://mirror.centos.org/centos/$releasever/os/$basearch/'
-    'gpgcheck': true
-  'devops':
-    'descr': 'Devops repository'
-    'baseurl': 'http://mirror.fuel-infra.org/devops/centos/'
-    'gpgcheck': true
-    'gpgkey': 'file://etc/pki/rpm-gpg/RPM-GPG-KEY-devops'
-  'updates':
-    'descr': 'CentOS-$releasever - Updates'
-    'baseurl': 'http://mirror.centos.org/centos/$releasever/updates/$basearch/'
-    'gpgcheck': true
-
 firewall:
   known_networks:
     - 10.108.0.0/16
