@@ -207,12 +207,33 @@ class transmission::daemon (
     group  => $transmission_user,
   }
 
-  exec { "${service}-reload" :
-    command     => "service ${service} stop ; \
-      cp ${config}-new ${config} ; \
-      service ${service} start",
-    refreshonly => true,
-    logoutput   => on_failure,
+  case $::osfamily {
+    'Debian': {
+      exec { "${service}-reload" :
+        command     => "service ${service} stop ; \
+          cp ${config}-new ${config} ; \
+          service ${service} start",
+        refreshonly => true,
+        logoutput   => on_failure,
+      }
+    }
+    'RedHat': {
+        service { "${service}.service":
+          ensure   => 'running',
+          enable   => true,
+          provider => 'systemd',
+          require  => Package[$packages]
+        }
+        exec { "${service}-reload" :
+        command     => "systemctl stop ${service} ; \
+          cp ${config}-new ${config} ; \
+          systemctl start ${service}",
+        refreshonly => true,
+        logoutput   => on_failure,
+        require     => Service["${service}.service"]
+      }
+    }
+    default: {}
   }
 
 
