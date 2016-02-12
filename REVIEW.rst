@@ -4,6 +4,7 @@ Puppet manifest review checklist
 Requirements
 ------------
 
+#) Puppet files encoding must be ASCII
 #) Host(s) configuration must be described in ``::fuel_project::roles::<ROLE_NAME>`` (even if it is only several lines)
 #) site.pp file must describe exact node with the class from previous item only.
 #) Each component(describes application) module must be splited into small atomic classes, independent from other ones.
