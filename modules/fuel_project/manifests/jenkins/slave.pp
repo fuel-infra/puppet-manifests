@@ -99,6 +99,7 @@ class fuel_project::jenkins::slave (
   $known_hosts                          = {},
   $known_hosts_overwrite                = false,
   $libvirt_default_network              = false,
+  $libvirt_polkit_rules_user            = 'jenkins',
   $ldap                                 = false,
   $ldap_base                            = '',
   $ldap_ignore_users                    = '',
@@ -321,6 +322,16 @@ class fuel_project::jenkins::slave (
               'LIBVIRTD_ARGS' => '--listen',
             }
           }
+          # FIXME: Temporary solution. The Libvirt 1.2.12 pkg packed by the build-team
+          # will cover this in the future.
+          file { '/etc/polkit-1/rules.d/49-org.libvirt.unix.manager.rules' :
+            ensure  => 'present',
+            owner   => 'root',
+            group   => 'root',
+            mode    => '0440',
+            content => template('fuel_project/jenkins/slave/libvirt_polkit_rules.d.erb'),
+          }
+          # /FIXME.
         }
         default: { }
       }
@@ -397,7 +408,7 @@ class fuel_project::jenkins::slave (
           'postgresql-devel',
           'python-devel',
           'PyYAML',
-          'gtk-vnc',
+          'gtk-vnc2',
         ]
       }
       default: { }
