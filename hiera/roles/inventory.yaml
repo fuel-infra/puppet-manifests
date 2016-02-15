@@ -3,47 +3,19 @@ classes:
   - '::fuel_project::common'
   - '::fuel_project::nginx'
   - '::fuel_project::apps::inventory'
-django::application::racks::apps:
-  - south
-  - security
-  - inventory
-  - reports
-django::application::racks::database:
-  engine: 'django.db.backends.mysql'
-  host: 'localhost'
-  name: 'racks'
-  port: 3306
-  user: 'racks'
-  password: '6ZHlH4EMrScuR6uKPDcHmlckRv7HJJQ2'
 
-django::application::racks::debug: true
-django::application::racks::group: 'racks'
-django::application::racks::imports:
-  - import ldap
-  - from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
-  - from django.contrib.messages import constants as messages
-django::application::racks::logging:
-  'version': 1
-  'disable_existing_loggers': false
-  'handlers':
-    'file':
-      'level': 'DEBUG'
-      'class': 'logging.FileHandler'
-      'filename': '/var/log/racks/debug.log'
-  'loggers':
-    'django.request':
-      'handlers':
-        - 'file'
-      'level': 'DEBUG'
-      'propagate': true
-django::application::racks::packages:
-  - python-django-racks
-django::application::racks::template_debug: true
-django::application::racks::user: 'racks'
-django::application::racks::uwsgi: true
-django::application::racks::uwsgi_chdir: '/usr/share/racks'
-django::application::racks::uwsgi_module: 'racks.wsgi'
-django::application::racks::uwsgi_socket: '127.0.0.1:4689'
+racks::webapp::config:
+  DCIM_URL: "http://dcim/"
+  DCIM_API: "http://dcim/api/v1/"
+  DCIM_USER: 'user'
+  DCIM_PASSWORD: 'password'
+  DCIM_SERVER_OWNER_ID: 3
+  DCIM_API_TIMEOUT: 1
+  ZABBIX_URL: 'http://localhost:80/'
+  ZABBIX_USER: 'user'
+  ZABBIX_PASSWORD: 'password'
+  SECRET_KEY: 'Test secret key'
+  DEBUG: True
 
 racks::webapp::ssl_cert_file_content: |
   -----BEGIN CERTIFICATE-----

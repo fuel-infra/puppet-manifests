@@ -3,14 +3,22 @@
 # This class deploys web application part of inventory application.
 #
 # Parameters:
-#   [*config*] - configuration file path for application
-#   [*database_engine*] - Django database engine to use
-#   [*database_host*] - database host name
-#   [*database_name*] - database name
-#   [*database_password*] - database password
-#   [*database_port*] - database port
-#   [*database_user*] - database user name
-#   [*debug*] - enable debug mode
+#   [*config*] - configuration data for application
+#   Could contain the following options:
+#
+#     DCIM_URL: "http://dcim/"
+#     DCIM_API: "http://dcim/api/v1/"
+#     DCIM_USER: 'user'
+#     DCIM_PASSWORD: 'password'
+#     DCIM_SERVER_OWNER_ID: 3
+#     DCIM_API_TIMEOUT: 1
+#     ZABBIX_URL: 'http://localhost:80/'
+#     ZABBIX_USER: 'user'
+#     ZABBIX_PASSWORD: 'password'
+#     SECRET_KEY: 'Test secret key'
+#     DEBUG: True
+#
+#   [*config_path*] - configuration file path for application
 #   [*group*] - group used to install application
 #   [*nginx_access_log*] - access log file path
 #   [*nginx_error_log*] - error log file path
@@ -25,23 +33,14 @@
 #   [*uwsgi_socket*] - uwsgi socket listening address
 #
 class racks::webapp (
-  $config                = '/etc/racks/setting.py',
-  $database_engine       = 'django.db.backends.mysql',
-  $database_host         = '127.0.0.1',
-  $database_name         = 'racks',
-  $database_password     = 'racks',
-  $database_port         = '3306',
-  $database_user         = 'racks',
-  $debug                 = False,
+  $config                = {},
+  $config_path           = '/etc/racks/settings.yaml',
   $group                 = 'racks',
   $nginx_access_log      = '/var/log/nginx/access.log',
   $nginx_error_log       = '/var/log/nginx/error.log',
-  $nginx_log_format      = 'proxy',
+  $nginx_log_format      = undef,
   $nginx_server_name     = $::fqdn,
-  $package               = [
-    'python-django-racks',
-    'python-django-racks-importer-meta-all'
-  ],
+  $package               = ['python-django-racks'],
   $ssl_cert_file         = '/etc/ssl/certs/racks.crt',
   $ssl_cert_file_content = '',
   $ssl_key_file          = '/etc/ssl/private/racks.key',
@@ -49,15 +48,27 @@ class racks::webapp (
   $user                  = 'racks',
   $uwsgi_socket          = '127.0.0.1:4689',
 ) {
-  ensure_packages($package)
+  package { $package :
+    ensure => 'latest',
+  }
 
-  django::application { 'racks' :}
+  file { $config_path :
+    ensure  => 'present',
+    owner   => $user,
+    group   => $group,
+    mode    => '0400',
+    content => inline_template("<%= require 'yaml' ; YAML.dump(@config) %>"),
+    require => Package[$package],
+  }
 
   exec { 'racks-syncdb' :
     command     => '/usr/share/racks/webapp/manage.py syncdb --noinput',
     user        => $user,
-    require     => Django::Application['racks'],
     refreshonly => true,
+    require     => [
+      Package[$package],
+      File[$config_path]
+    ],
   }
 
   exec { 'racks-migratedb' :
