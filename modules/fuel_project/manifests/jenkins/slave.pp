@@ -328,8 +328,13 @@ class fuel_project::jenkins::slave (
             ensure  => 'present',
             owner   => 'root',
             group   => 'root',
-            mode    => '0440',
+            mode    => '0444',
+            notify  => Service['polkit'],
             content => template('fuel_project/jenkins/slave/libvirt_polkit_rules.d.erb'),
+          }
+          service { 'polkit' :
+            ensure   => 'running',
+            provider => 'systemd',
           }
           # /FIXME.
         }
