@@ -25,13 +25,25 @@
 #           -----BEGIN CERTIFICATE-----
 #           abcdefghijklmnopqrstuwxyz12
 #           -----END CERTIFICATE-----
+#   [*package*] - Boolean, should we install importer package or not.
 #
 define racks::importer (
   $options = hiera_hash("racks::importer::${title}::options", {}),
   $cron = hiera_hash("racks::importer::${title}::cron", {}),
   $files = hiera_hash("racks::importer::${title}::files", {}),
+  $package = false,
 ) {
-  ensure_packages(["python-django-racks-importer-${title}"])
+  package { "python-django-racks-importer-${title}" :}
+
+  if($package) {
+    Package <| title == "python-django-racks-importer-${title}" |> {
+      ensure => 'latest',
+    }
+  } else {
+    Package <| title == "python-django-racks-importer-${title}" |> {
+      ensure => 'absent',
+    }
+  }
   file { "/etc/racks/importers/${title}.yaml" :
     ensure  => 'present',
     mode    => '0644',
