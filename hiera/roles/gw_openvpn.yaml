@@ -1,0 +1,29 @@
+---
+classes:
+  - fuel_project::common
+  - openvpn
+  - sysctl::base
+
+openvpn::servers:
+  'server_instance1':
+    country: 'CH'
+    province: 'ZH'
+    city: 'Zhengzhou'
+    organization: 'OrgName'
+    email: 'admin@example.com'
+    server: '10.210.210.0 255.255.255.0'
+    dev: 'tun0'
+    persist_key: true
+    persist_tun: true
+    keepalive: '10 60'
+    proto: 'udp'
+
+openvpn::clients:
+  'client1':
+    server: 'server_instance1'
+  'client2':
+    server: 'server_instance1'
+
+sysctl::base::values:
+  net.ipv4.ip_forward:
+    value: '1'
