@@ -140,7 +140,7 @@ class racks::webapp (
     location => '/static/',
     ssl      => true,
     ssl_only => true,
-    www_root => '/usr/share/racks/webapp',
+    www_root => '/usr/share/racks/webapp/racks',
   }
 
   ::nginx::resource::location { 'racks-docs' :
