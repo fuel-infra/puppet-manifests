@@ -48,13 +48,14 @@
 class zuul (
   $gerrit_user,
   $gerrit_server,
+  $known_hosts,
   $dir                            = '/usr/share/zuul/public_html',
   $dir_group                      = 'www-data',
   $dir_owner                      = 'www-data',
   $export_merger_repos            = false,
   $gearman_logconfig              = '/etc/zuul/gearman-logging.conf',
   $gearman_server                 = '127.0.0.1',
-  $gerrit_port                    = 29418,
+  $gerrit_port                    = '29418',
   $gerrit_baseurl                 = undef,
   $git_email                      = undef,
   $git_name                       = undef,
@@ -154,7 +155,7 @@ class zuul (
       ensure  => directory,
       owner   => 'zuul',
       group   => 'zuul',
-      mode    => '0500',
+      mode    => '0700',
       require => File[ $statedir ],
     }
 
@@ -173,14 +174,10 @@ class zuul (
       require => File[ "${statedir}/.ssh", "${statedir}/.ssh/id_rsa.${gerrit_server}" ],
     }
 
-    # Host key file should be updated when gerrit host is changed
-    exec { 'gerrit_host_ssh_key':
-      command     => "ssh-keyscan -p ${gerrit_port} ${gerrit_server} > ${statedir}/.ssh/known_host.${gerrit_server} 2> /dev/null",
-      user        => 'zuul',
-      refreshonly => true,
-      subscribe   => File[ '/etc/zuul/zuul.conf' ],
-      require     => File[ "${statedir}/.ssh" ],
-    }
+    create_resources('ssh::known_host', $known_hosts, {
+      user    => 'zuul',
+      require => File[ "${statedir}/.ssh" ],
+    })
 
   }
 

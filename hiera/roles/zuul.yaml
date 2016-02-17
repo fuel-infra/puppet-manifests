@@ -7,8 +7,10 @@ classes:
 zuul::layout: '/etc/zuul/layout.yaml'
 zuul::job_name_in_report: true
 zuul::no_http: true
-zuul::gerrit_server: gerrit.server.name
-zuul::gerrit_user: username
+zuul::gerrit_server: 'gerrit.server.name'
+zuul::gerrit_port: '29418'
+zuul::gerrit_user: 'username'
+
 zuul::ssh_private_key: |
     -----BEGIN RSA PRIVATE KEY-----
     MIIEogIBAAKCAQEA5YykwO0yIpNcmjLmW2+d/8em/+9R7k9IQBDctcMY92lB/c99
@@ -42,3 +44,8 @@ fuel_project::zuul::jenkins_url: 'http://jenkins.server.name/'
 fuel_project::zuul::jenkins_job: 'some_job'
 fuel_project::zuul::update_cronjob_params:
     ensure: 'absent'
+
+zuul::known_hosts:
+    "%{hiera('zuul::gerrit_server')}":
+        host: "%{hiera('zuul::gerrit_server')}"
+        port: "%{hiera('zuul::gerrit_port')}"
