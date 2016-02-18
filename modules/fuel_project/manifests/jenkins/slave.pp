@@ -485,7 +485,6 @@ class fuel_project::jenkins::slave (
       'lzop',
       'python-setuptools',
       'python-rpm',
-      'python-pbr',
       'reprepro',
       'ruby',
       'sbuild',
