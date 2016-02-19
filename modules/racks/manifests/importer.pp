@@ -44,8 +44,10 @@ define racks::importer (
       ensure => 'absent',
     }
   }
-  file { '/etc/racks/importers' :
-    ensure => 'directory',
+  if(!defined(File['/etc/racks/importers'])) {
+    file { '/etc/racks/importers' :
+      ensure => 'directory',
+    }
   }
   file { "/etc/racks/importers/${title}.yaml" :
     ensure  => 'present',
