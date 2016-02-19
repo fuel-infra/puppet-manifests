@@ -44,13 +44,19 @@ define racks::importer (
       ensure => 'absent',
     }
   }
+  file { '/etc/racks/importers' :
+    ensure => 'directory',
+  }
   file { "/etc/racks/importers/${title}.yaml" :
     ensure  => 'present',
-    mode    => '0644',
+    mode    => '0400',
     owner   => 'root',
     group   => 'root',
     content => template('racks/importer_config.yaml.erb'),
-    require => Package["python-django-racks-importer-${title}"]
+    require => [
+      Package["python-django-racks-importer-${title}"],
+      File['/etc/racks/importers']
+    ],
   }
 
   if ($cron) {
