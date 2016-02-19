@@ -37,4 +37,8 @@ class fuel_project::nginx {
   zabbix::item { 'nginx' :
     content => 'puppet:///modules/fuel_project/zabbix/nginx_items.conf',
   }
+
+  # FIXME: Nginx manifest installs own incorrect file fastcgi_params containing
+  # SCRIPT_FILENAME, which can't be overriden and in some cases is unusable
+  file{ "${::nginx::config::conf_dir}/fastcgi_params": mode => '0644' }
 }

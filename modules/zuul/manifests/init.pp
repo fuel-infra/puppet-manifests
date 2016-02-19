@@ -8,6 +8,7 @@
 #   [*dir*] - directory with Zuul files
 #   [*dir_group*] - directory group
 #   [*dir_owner*] - directory owner
+#   [*export_merger_repos*] - configure Nginx to serve Merger Git repositories
 #   [*gearman_logconfig*] - Gearman logging configuration file.
 #   [*gearman_server*] - Hostname or IP address of the Gearman server.
 #   [*gerrit_port*] - Optional: Gerrit server port.
@@ -50,6 +51,7 @@ class zuul (
   $dir                            = '/usr/share/zuul/public_html',
   $dir_group                      = 'www-data',
   $dir_owner                      = 'www-data',
+  $export_merger_repos            = false,
   $gearman_logconfig              = '/etc/zuul/gearman-logging.conf',
   $gearman_server                 = '127.0.0.1',
   $gerrit_port                    = 29418,
@@ -200,7 +202,7 @@ class zuul (
 
   # zuul configuration for nginx adopted from
   # https://github.com/openstack-infra/puppet-zuul/blob/master/templates/zuul.vhost.erb
-  ::nginx::resource::vhost { 'zuul_status' :
+  ::nginx::resource::vhost { 'zuul' :
     ensure      => 'present',
     www_root    => $dir,
     access_log  => $nginx_access_log,
@@ -215,7 +217,7 @@ class zuul (
   ::nginx::resource::location { 'status.json' :
     ensure   => 'present',
     location => '/status.json',
-    vhost    => 'zuul_status',
+    vhost    => 'zuul',
     proxy    => 'http://127.0.0.1:8001/status.json',
   }
 
@@ -224,8 +226,33 @@ class zuul (
   ::nginx::resource::location { 'status' :
     ensure   => 'present',
     location => '~ ^/status/(.*)',
-    vhost    => 'zuul_status',
+    vhost    => 'zuul',
     proxy    => 'http://127.0.0.1:8001/status/$1',
+  }
+
+  # To serve merger's Git repositories it's needed to use CGI program
+  # "git-http-backend" but Nginx can't be used with CGI directly.
+  if ( $export_merger_repos ) {
+
+    package{ 'fcgiwrap': ensure => present }
+
+    $git_home = $osfamily ? {
+      'Debian' => '/usr/lib/git-core',
+      'RedHat' => '/usr/libexec/git-core',
+      'Suse'   => '/usr/lib/git',
+    }
+
+    ::nginx::resource::location{ 'git-repos':
+      ensure        => present,
+      location      => '~ ^/p/(?<path_info>.*)$',
+      vhost         => 'zuul',
+      fastcgi       => 'unix:/run/fcgiwrap.socket',
+      fastcgi_param => {
+        'SCRIPT_FILENAME'     => "${git_home}/git-http-backend",
+        'PATH_TRANSLATED'     => '/var/lib/zuul/git/$path_info',
+        'GIT_HTTP_EXPORT_ALL' => '""',
+      },
+    }
   }
 
 }
