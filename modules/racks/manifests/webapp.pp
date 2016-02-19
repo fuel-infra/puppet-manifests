@@ -48,8 +48,11 @@ class racks::webapp (
   $user                  = 'racks',
   $uwsgi_socket          = '127.0.0.1:4689',
 ) {
+  class { 'uwsgi' :}
+
   package { $package :
     ensure => 'latest',
+    notify => Uwsgi::Application['racks'],
   }
 
   file { $config_path :
@@ -59,6 +62,7 @@ class racks::webapp (
     mode    => '0400',
     content => inline_template("<%= require 'yaml' ; YAML.dump(@config) %>"),
     require => Package[$package],
+    notify  => Uwsgi::Application['racks'],
   }
 
   exec { 'racks-syncdb' :
@@ -179,5 +183,17 @@ class racks::webapp (
       mode    => '0400',
       content => $ssl_key_file_content,
     }
+  }
+
+  uwsgi::application { 'racks' :
+    plugins => ['python'],
+    workers => $::processorcount,
+    uid     => $user,
+    gid     => $user,
+    socket  => $uwsgi_socket,
+    master  => true,
+    vacuum  => true,
+    chdir   => '/usr/share/racks/webapp',
+    module  => 'racks.wsgi',
   }
 }
