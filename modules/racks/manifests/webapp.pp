@@ -52,7 +52,11 @@ class racks::webapp (
 
   package { $package :
     ensure => 'latest',
-    notify => Uwsgi::Application['racks'],
+    notify => [
+      Uwsgi::Application['racks'],
+      Exec['racks-syncdb'],
+      Exec['racks-migratedb']
+    ]
   }
 
   file { $config_path :
