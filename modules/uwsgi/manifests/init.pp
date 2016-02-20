@@ -8,9 +8,9 @@
 #   [*somaxconn*] - maximum number of queued connections
 #
 class uwsgi (
-  $package   = $uwsgi::params::package,
-  $service   = $uwsgi::params::service,
-  $somaxconn = $uwsgi::params::somaxconn,
+  $package   = $::uwsgi::params::package,
+  $service   = $::uwsgi::params::service,
+  $somaxconn = $::uwsgi::params::somaxconn,
 ) inherits ::uwsgi::params {
   package { $package :
     ensure => 'present',

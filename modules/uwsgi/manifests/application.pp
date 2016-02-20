@@ -40,6 +40,8 @@ define uwsgi::application (
   $vacuum         = $::uwsgi::params::vacuum,
   $workers        = $::uwsgi::params::workers,
 ) {
+  validate_string($plugins)
+
   if (!defined(Class['::uwsgi'])) {
     class { '::uwsgi' :}
   }

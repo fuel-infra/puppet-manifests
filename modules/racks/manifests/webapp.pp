@@ -186,7 +186,7 @@ class racks::webapp (
   }
 
   uwsgi::application { 'racks' :
-    plugins => ['python'],
+    plugins => 'python',
     workers => $::processorcount,
     uid     => $user,
     gid     => $user,
