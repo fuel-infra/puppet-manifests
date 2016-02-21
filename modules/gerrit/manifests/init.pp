@@ -443,7 +443,8 @@ class gerrit (
       mode    => '0600',
       content => $ssh_dsa_key_contents,
       replace => true,
-      require => Package['gerrit']
+      require => File[$gerrit_site],
+      before  => Package['gerrit'],
     }
   }
 
@@ -454,7 +455,8 @@ class gerrit (
       mode    => '0644',
       content => $ssh_dsa_pubkey_contents,
       replace => true,
-      require => Package['gerrit'],
+      require => File[$gerrit_site],
+      before  => Package['gerrit'],
     }
   }
 
@@ -465,7 +467,8 @@ class gerrit (
       mode    => '0600',
       content => $ssh_rsa_key_contents,
       replace => true,
-      require => Package['gerrit'],
+      require => File[$gerrit_site],
+      before  => Package['gerrit'],
     }
   }
 
@@ -476,7 +479,8 @@ class gerrit (
       mode    => '0644',
       content => $ssh_rsa_pubkey_contents,
       replace => true,
-      require => Package['gerrit'],
+      require => File[$gerrit_site],
+      before  => Package['gerrit'],
     }
   }
 
