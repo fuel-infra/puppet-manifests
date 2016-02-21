@@ -126,7 +126,6 @@ class fuel_project::apps::mirror (
     user    => $syncer_username,
     require => [
       User[$syncer_username],
-      File[$plugins_dir],
       File[$syncer_homedir],
     ]})
 
