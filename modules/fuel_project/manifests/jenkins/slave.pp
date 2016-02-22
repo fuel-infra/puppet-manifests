@@ -23,6 +23,7 @@
 #   [*jenkins_swarm_slave*] - enable swarm slave
 #   [*known_hosts*] - known hosts to be added to known_hosts file
 #   [*known_hosts_overwrite*] - erase known_hosts file before adding to it
+#   [*kolla_build_tests*] - dependencies to run kolla build tests
 #   [*libvirt_default_network*] - use default network for libvirt
 #   [*ldap*] - use LDAP authentication
 #   [*ldap_base*] - LDAP base
@@ -98,6 +99,7 @@ class fuel_project::jenkins::slave (
   $jenkins_swarm_slave                  = false,
   $known_hosts                          = {},
   $known_hosts_overwrite                = false,
+  $kolla_build_tests                    = false,
   $libvirt_default_network              = false,
   $libvirt_polkit_rules_user            = 'jenkins',
   $ldap                                 = false,
@@ -284,6 +286,25 @@ class fuel_project::jenkins::slave (
       overwrite => $known_hosts_overwrite,
       require   => User['jenkins'],
     })
+  }
+
+  # Kolla build tests
+  if ($kolla_build_tests) {
+    case $::osfamily {
+      'Debian': {
+        $kolla_build_tests_packages = [
+          'python-dev',
+        ]
+      }
+      'RedHat': {
+        $kolla_build_tests_packages = [
+          'python-devel',
+        ]
+      }
+      default: { }
+    }
+
+    ensure_packages($kolla_build_tests_packages)
   }
 
   # Run system tests
