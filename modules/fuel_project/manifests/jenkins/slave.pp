@@ -41,6 +41,7 @@
 #   [*osc_user_primary*] - OSC primary user name
 #   [*osc_user_secondary*] - OSC secondary user name
 #   [*osci_centos_image_name*] - OSCI Centos image to use
+#   [*osci_centos7_image_name*] - OSCI Centos7 image to use
 #   [*osci_centos_job_dir*] - OSCI Centos RPMs destination directory
 #   [*osci_centos_remote_dir*] - OSCI Centos remote directory name
 #   [*osci_obs_jenkins_key*] - OSCI OBS Jenkins key path
@@ -118,6 +119,7 @@ class fuel_project::jenkins::slave (
   $osc_user_primary                     = '',
   $osc_user_secondary                   = '',
   $osci_centos_image_name               = 'centos6.4-x86_64-gold-master.img',
+  $osci_centos7_image_name              = 'centos-7.qcow2',
   $osci_centos_job_dir                  = '/home/jenkins/vm-centos-test-rpm',
   $osci_centos_remote_dir               = 'vm-centos-test-rpm',
   $osci_obs_jenkins_key                 = '',
@@ -831,6 +833,16 @@ class fuel_project::jenkins::slave (
 
     rsync::get { $osci_centos_image_name :
       source  => "rsync://${osci_rsync_source_server}/${osci_centos_remote_dir}/${osci_centos_image_name}",
+      path    => $osci_centos_job_dir,
+      timeout => 14400,
+      require => [
+        File[$osci_centos_job_dir],
+        User['jenkins'],
+      ],
+    }
+
+    rsync::get { $osci_centos7_image_name :
+      source  => "rsync://${osci_rsync_source_server}/${osci_centos_remote_dir}/${osci_centos7_image_name}",
       path    => $osci_centos_job_dir,
       timeout => 14400,
       require => [
