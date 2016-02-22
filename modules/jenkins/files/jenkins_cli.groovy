@@ -3,6 +3,7 @@ import hudson.model.Computer
 import hudson.model.Hudson
 import hudson.model.Run
 import hudson.model.View
+import hudson.plugins.gearman.GearmanPluginConfig
 import hudson.security.GlobalMatrixAuthorizationStrategy
 import hudson.security.AuthorizationStrategy
 import hudson.security.Permission
@@ -378,6 +379,15 @@ class Actions {
     }
     //saving changes
     jenkins.save()
+  }
+
+  //sets up gearman configuration
+  void set_gearman(String enable, String host, String port) {
+    GearmanPluginConfig config = GearmanPluginConfig.get()
+    config.enablePlugin = Boolean.parseBoolean(enable)
+    config.host = host
+    config.port = Integer.parseInt(port)
+    config.save()
   }
 
 ///////////////////////////////////////////////////////////////////////////////

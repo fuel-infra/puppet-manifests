@@ -14,6 +14,7 @@
 #   [*jenkins_address*] - Jenkins listening IP address
 #   [*jenkins_admin_email*] - global configuration of system admin email
 #   [*jenkins_java_args*] - Jenkins Java arguments
+#   [*jenkins_plugins_pkg*] - the name of the jenkins plugins package
 #   [*jenkins_port*] - Jenkins listening port
 #   [*jenkins_proto*] - Jenkins listening protocol
 #   [*$markup_formatter*] - markup formatter for Jenkins
@@ -24,9 +25,13 @@
 #   [*scm_checkout_retry_count*] - retry count for jenkins scm checkout
 #   [*www_root*] - root web directory path
 #   [*install_groovy*] - install Groovy script for Jenkins
+#   [*install_plugins*] - install Jenkins plugins package
 #   [*jenkins_cli_file*] - Jenkins cli file path
 #   [*jenkins_cli_tries*] - how many tries to run cli file
 #   [*jenkins_cli_try_sleep*] - sleep between retries
+#   [*jenkins_gearman_enable*] - enable/disable gearman plugin config
+#   [*jenkins_gearman_host*] - set the Gearman server's host name
+#   [*jenkins_gearman_port*] - set the Gearman server port
 #   [*jenkins_libdir*] - path to Jenkins lib directory
 #   [*jenkins_management_email*] - management e-mail
 #   [*jenkins_management_login*] - management login
@@ -60,10 +65,15 @@ class jenkins::master (
   $ssl_key_file_contents            = '',
   # Jenkins config parameters
   $gerrit_trigger_enabled           = false,
+  $install_plugins                  = false,
   $install_zabbix_item              = false,
   $jenkins_address                  = '0.0.0.0',
   $jenkins_admin_email              = 'jenkins@example.com',
+  $jenkins_gearman_enable           = false,
+  $jenkins_gearman_host             = '127.0.0.1',
+  $jenkins_gearman_port             = '4730',
   $jenkins_java_args                = '',
+  $jenkins_plugins_pkg              = 'jenkins-plugins',
   $jenkins_port                     = '8080',
   $jenkins_proto                    = 'http',
   $markup_formatter                 = 'plain-text',
@@ -116,6 +126,13 @@ class jenkins::master (
 
   package { 'jenkins' :
     ensure => present,
+  }
+
+  if($install_plugins) {
+    package { $jenkins_plugins_pkg :
+      ensure  => present,
+      require => Service['jenkins'],
+    }
   }
 
   service { 'jenkins' :
@@ -378,6 +395,28 @@ class jenkins::master (
         $markup_formatter,
         $number_of_executors,
         $scm_checkout_retry_count,
+    ], ' '),
+    tries     => $jenkins_cli_tries,
+    try_sleep => $jenkins_cli_try_sleep,
+    user      => 'jenkins',
+    require   => [
+      File["${jenkins_libdir}/jenkins_cli.groovy"],
+      Package['groovy'],
+      Service['jenkins'],
+      Exec['jenkins_auth_config'],
+    ],
+  }
+
+  exec { 'jenkins_gearman_config':
+    command   => join([
+        '/usr/bin/java',
+        "-jar ${jenkins_cli_file}",
+        "-s ${jenkins_proto}://${jenkins_address}:${jenkins_port}",
+        "groovy ${jenkins_libdir}/jenkins_cli.groovy",
+        'set_gearman',
+        $jenkins_gearman_enable,
+        $jenkins_gearman_host,
+        $jenkins_gearman_port,
     ], ' '),
     tries     => $jenkins_cli_tries,
     try_sleep => $jenkins_cli_try_sleep,

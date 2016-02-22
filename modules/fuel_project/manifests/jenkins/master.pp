@@ -5,7 +5,6 @@
 # Parameters:
 #   [*firewall_enable*] - enable embedded firewall rules
 #   [*install_label_dumper*] - unused variable
-#   [*install_plugins*] - install Jenkins plugins package
 #   [*install_zabbix_item*] - install Jenkins items for Zabbix
 #   [*jobs_dir*] - path to directory with Jenkins jobs
 #   [*log_gzip_cron_name*] - name of cron entry
@@ -35,12 +34,6 @@ class fuel_project::jenkins::master (
     apply_firewall_rules => $firewall_enable,
     install_zabbix_item  => $install_zabbix_item,
     service_fqdn         => $service_fqdn,
-  }
-  if($install_plugins) {
-    package { 'jenkins-plugins' :
-      ensure  => present,
-      require => Service['jenkins'],
-    }
   }
   if($log_gzip_enable) {
     ensure_packages('pigz')

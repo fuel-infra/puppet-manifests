@@ -3,7 +3,6 @@ classes:
   - '::fuel_project::jenkins::master'
 
 fuel_project::jenkins::master::install_label_dumper: true
-fuel_project::jenkins::master::install_plugins: true
 fuel_project::jenkins::master::install_zabbix_item: true
 fuel_project::jenkins::master::log_gzip_cron_params:
   hour: '5'
@@ -27,10 +26,14 @@ jenkins::master::gerrit_trigger_conf:
      jenkins_proto: "%{jenkins::master::jenkins_proto}"
 jenkins::master::gerrit_trigger_enabled: false
 jenkins::master::install_groovy: true
+jenkins::master::install_plugins: true
 jenkins::master::jenkins_admin_email: 'jenkins@example.com'
 jenkins::master::jenkins_cli_file: '/var/cache/jenkins/war/WEB-INF/jenkins-cli.jar'
 jenkins::master::jenkins_cli_tries: '6'
 jenkins::master::jenkins_cli_try_sleep: '30'
+jenkins::master::jenkins_gearman_enable: false
+jenkins::master::jenkins_gearman_host: '127.0.0.1'
+jenkins::master::jenkins_gearman_port: '4730'
 jenkins::master::jenkins_libdir: '/var/lib/jenkins'
 jenkins::master::jenkins_management_email: 'jenkin@example.com'
 jenkins::master::jenkins_management_login: 'jenkins-manager'
