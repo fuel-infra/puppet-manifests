@@ -2,7 +2,36 @@
 
 <%- if ! @cleanup_dirs.nil? and @cleanup_dirs.is_a?(Array) -%>
 <%- @cleanup_dirs.each { |dir| -%>
-/usr/bin/find <%= dir['dir'] %> -type f -mtime +<%= dir['ttl'] %> -name '<%= dir['pattern'] %>' -delete 2>&1 | /usr/bin/logger -t seed-downloads-cleanup
+# generate list of files old enough to be deleted
+CANDIDATES=$(/usr/bin/find <%= dir['dir'] %> -type f -mtime +<%= dir['ttl'] %> -name '<%= dir['pattern'] %>')
+# check if list is not empty
+if [ -n "$CANDIDATES" ]
+then
+  # sort file list using id's and skip the last occurrences
+  /bin/ls -1 -v $CANDIDATES | \
+  /usr/bin/awk \
+  '{match($0, /((([0-9]*\.[0-9]*)|[^0-9])*-)*([0-9]*)/, current)}
+  BEGIN {last_line=$0;last_name=current[1];counter=current[4];buffer=""}
+  {
+    if (last_name == current[1]) {
+      if (current[4] == counter) {
+        buffer=buffer"\n"$0
+      }
+      if (current[4] > counter) {
+        print buffer
+        buffer=$0
+        counter = current[4]
+      };
+    }
+    else
+    {
+      last_name=current[1]
+      counter=current[4]
+      buffer=$0
+    }
+  }' | \
+  xargs rm 2>&1 | /usr/bin/logger -t seed-downloads-cleanup
+fi
 <%- } -%>
 <%- end -%>
 <%- if @clean_seeds -%>
