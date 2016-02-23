@@ -123,7 +123,9 @@ class fuel_project::common (
       class { '::yum::repos' :}
       $yum_repos_gpgkey = hiera_hash('yum::gpgkey', {})
       create_resources('::yum::gpgkey', $yum_repos_gpgkey)
-      Yum::Gpgkey <| |> -> Package <| |>
+      $yum_versionlock = hiera_hash('yum::versionlock', {})
+      create_resources('::yum::versionlock', $yum_versionlock)
+      Yum::Gpgkey <| |> -> Package <| tag !='yum-plugin' |>
     }
     default: { }
   }

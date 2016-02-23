@@ -345,21 +345,10 @@ class fuel_project::jenkins::slave (
               'LIBVIRTD_ARGS' => '--listen',
             }
           }
-          # FIXME: Temporary solution. The Libvirt 1.2.12 pkg packed by the build-team
-          # will cover this in the future.
-          file { '/etc/polkit-1/rules.d/49-org.libvirt.unix.manager.rules' :
-            ensure  => 'present',
-            owner   => 'root',
-            group   => 'root',
-            mode    => '0444',
-            notify  => Service['polkit'],
-            content => template('fuel_project/jenkins/slave/libvirt_polkit_rules.d.erb'),
+          # Add a jenkins user to the kvm group
+          User <| title == 'jenkins' |> {
+            groups  +> 'kvm',
           }
-          service { 'polkit' :
-            ensure   => 'running',
-            provider => 'systemd',
-          }
-          # /FIXME.
         }
         default: { }
       }
