@@ -36,6 +36,6 @@ if ! diff_config external_functions.py; then
     ZUUL_RELOAD="true"
 fi
 
-[ "${ZUUL_RELOAD}" ] && /etc/init.d/zuul reload
+[ "${ZUUL_RELOAD}" ] && service zuul reload
 
 rm -rf "${ZUUL_TEMP}"
