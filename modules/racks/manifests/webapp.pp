@@ -66,22 +66,20 @@ class racks::webapp (
   }
 
   exec { 'racks-syncdb' :
-    command     => '/usr/share/racks/webapp/manage.py syncdb --noinput',
-    user        => $user,
-    refreshonly => true,
-    require     => [
+    command => '/usr/share/racks/webapp/manage.py syncdb --noinput',
+    user    => $user,
+    require => [
       Package[$package],
       File[$config_path]
     ],
   }
 
   exec { 'racks-migratedb' :
-    command     => '/usr/share/racks/webapp/manage.py migrate --all',
-    user        => $user,
-    require     => [
+    command => '/usr/share/racks/webapp/manage.py migrate --all',
+    user    => $user,
+    require => [
       Exec['racks-syncdb'],
     ],
-    refreshonly => true,
   }
 
   ::nginx::resource::vhost { 'racks-http' :
