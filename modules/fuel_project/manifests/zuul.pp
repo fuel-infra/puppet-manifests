@@ -14,7 +14,7 @@ class fuel_project::zuul (
   $jenkins_url = 'http://jenkins.server.name/',
   $update_cronjob_name = 'update_zuul_layout',
   $update_cronjob_params = {},
-  $zuul_layout = $::zuul::layout,
+  $zuul_layout = hiera('zuul::layout'),
 ){
   ensure_resource('class', 'zabbix::agent')
   ensure_packages('config-zabbix-agent-zuul-item')
