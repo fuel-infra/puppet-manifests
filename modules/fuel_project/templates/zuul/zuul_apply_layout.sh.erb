@@ -15,27 +15,32 @@ curl -fLsS -o "${ZUUL_TEMP}/external_functions.py" "${JENKINS_JOB_URL}/external_
 
 # If files are not changed - just exit
 if diff_config layout.yaml && diff_config external_functions.py; then
+    echo "No changes"
     rm -rf "${ZUUL_TEMP}"
     exit 0
 fi
 
 # Verify configs
-if ! zuul-server -t -l "${ZUUL_TEMP}/layout.yaml"; then
+if ! zuul-server -t -l "${ZUUL_TEMP}/layout.yaml" &>/dev/null; then
+    echo "ERROR: Syntax error"
     rm -rf "${ZUUL_TEMP}"
     exit 1
 fi
 
 # Diff and apply if needed
-if ! diff_config layout.yaml; then
+if ! diff_config layout.yaml &>/dev/null; then
     cp "${ZUUL_TEMP}/layout.yaml" "${ZUUL_LAYOUTDIR}"
     ZUUL_RELOAD="true"
 fi
 
-if ! diff_config external_functions.py; then
+if ! diff_config external_functions.py &>/dev/null; then
     cp "${ZUUL_TEMP}/external_functions.py" "${ZUUL_LAYOUTDIR}"
     ZUUL_RELOAD="true"
 fi
 
-[ "${ZUUL_RELOAD}" ] && service zuul reload
+if [ "${ZUUL_RELOAD}" ]; then
+    echo "Configuration changed, reload zuul service"
+    kill -HUP "$(/sbin/initctl status zuul | awk '{print $NF}')"
+fi
 
 rm -rf "${ZUUL_TEMP}"
