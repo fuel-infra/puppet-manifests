@@ -331,6 +331,13 @@ class fuel_project::jenkins::slave (
           }
         }
         'RedHat': {
+          # FIXME: tmp fix for libvirt group. normally this should be
+          # covered by libvirt package.
+          group { 'libvirt' :
+            ensure => 'present',
+            system => true,
+          }
+          # /FIXME.
           class { '::libvirt' :
             listen_tls         => false,
             listen_tcp         => true,
@@ -345,10 +352,6 @@ class fuel_project::jenkins::slave (
               'LIBVIRTD_ARGS' => '--listen',
             }
           }
-          # Add a jenkins user to the kvm group
-          User <| title == 'jenkins' |> {
-            groups  +> 'kvm',
-          }
         }
         default: { }
       }
@@ -360,6 +363,14 @@ class fuel_project::jenkins::slave (
       autostart => true,
       target    => '/var/lib/libvirt/images',
       require   => Class['libvirt'],
+    }
+
+    # Add a jenkins user to the kvm group
+    User <| title == 'jenkins' |> {
+      groups  +> 'kvm',
+      require => [
+        Package['libvirt'],
+      ],
     }
 
     # python-devops installation
