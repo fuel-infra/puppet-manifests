@@ -56,14 +56,19 @@ allow *
   %>path <%= path %>
 <%
   attributes.each {|name,value|
-    if value.kind_of?(Array)
-      value.each {|v|
+    if name == 'method'
+%><%= name -%> <%= value.join(',') %>
+<%
+    else
+      if value.kind_of?(Array)
+        value.each {|v|
         %><%= name -%> <%= v %>
 <%
-      }
-    else
-      %><%= name -%> <%= value -%>
+        }
+      else
+        %><%= name -%> <%= value -%>
 <%
+      end
     end
   }
 }
