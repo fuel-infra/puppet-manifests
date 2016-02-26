@@ -1,55 +1,49 @@
 ---
 classes:
   - '::fuel_project::common'
+  - '::fuel_project::apps::firewall'
   - '::fuel_project::apps::seed'
-  - '::fuel_project::apps::mirror'
-  - '::fuel_project::apps::plugins'
-  - '::fuel_project::apps::updates'
-  - '::fuel_project::apps::partnerappliance'
-  - '::fuel_project::apps::partnershare'
 
-fuel_project::common::external_host: true
-
-fuel_project::apps::seed::external_host: true
-fuel_project::apps::seed::apply_firewall_rules: true
-fuel_project::apps::seed::tracker_apply_firewall_rules: true
 fuel_project::apps::seed::seed_cleanup_dirs:
   -
     dir: '/var/www/seed/fuelweb-iso'
     ttl: 10
     pattern: 'fuel-*'
+  -
+    dir: '/var/www/partnershare'
+    ttl: 30
+    pattern: '*'
 
-fuel_project::apps::mirror::apply_firewall_rules: true
+fuel_project::apps::seed::shares:
+  mirror:
+    service_fqdn: 'mirror.example.com'
+    path: '/var/www/mirror'
+    http_ro: true
+    rsync_ro: true
+    rsync_rw: true
+    username: mirror-syncer
+  plugins:
+    service_fqdn: 'plugins.example.com'
+    path: '/var/www/plugins'
+    username: plugin-syncer
 
-fuel_project::apps::plugins::apply_firewall_rules: true
-fuel_project::apps::plugins::syncer_username: 'plugin-syncer'
-fuel_project::apps::plugins::syncer_ssh_keys:
-  'my@local':
-    type: ssh-rsa
-    key: 'MYKEY'
 rssh::users:
 #  user:umask:access bits
 #  Five binary digits, which indicate whether the user is allowed to use rsync, rdist, cvs, sftp, and scp,
 #  in that order. One means the command is allowed, zero means it is not.
 #  PS. they are six digits realy. More details:
 #   http://linux.die.net/man/5/rssh.conf
+  - "mirror-syncer:022:100000"
   - "plugin-syncer:022:100000"
 
-
-fuel_project::apps::updates::apply_firewall_rules: true
-
-fuel_project::apps::partnershare::apply_firewall_rules: true
-fuel_project::apps::partnershare::authorized_key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDYssGyYj4WMSYItC0+/4MqyQsu2xm7/JmgYSbuOp9HpvxV/+73+2QOCk9mhAAcVXf7ZMIMHTKvBtfSO7QPjt+Op5w2h/mXJQXx2YiuJh+9HIFX3fDZqId8xbqH87RQa3mqbb38zWHvuOcQXPOiZvH5YyfyTC+YSNDXiTM3rCnmyeEF2MCZni0Rgouc5SNDXF9J3vhUEZFQ4FKe6BtzZcB1nrbX3TFavYjKxgFmiebsB9jwXWAG41OGP4V6rSOJQa6erOxe4jbUpvm9Mu7jJcYFedg1+FDV5cx//nUBex5lqqihbnbhG8UtmHTKiBDgs2IggJ4oe9FG4rQ8bRQKO6k1'
-# generic_partner : ku6Oa2ei
-fuel_project::apps::partnershare::htpasswd_content: |
-    generic_partner:$apr1$rL.LZemY$eS32g9twHzR2VlB2A3vXp.
-
-fuel_project::apps::partnerappliance::authorized_keys:
-  'test@local':
-    type: ssh-rsa
-    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC63QhWE96IF/SRCFWyKJyzOyprc7WlD6RdCClw7BxKum7BDlXfV+fhQupWUdsPVnOaCMwndjG+ZrZXg5okGui4GuL7nucUFYfUhZh252IBM8TM7BkuVd7fmbZ6OD2/4uGTOJRBhO+Jrol9Z2450vaiGZwWrbvWHNPtI+bhx3/4WWxjgZ59NGll220c1cTjGQamvNgtWBWNnsEilmZxinl501EgvDPJ8uewCAS3YA3T9ut11RRJiWKfoMr4H9sFeUTiu1j6ByYlINXMJTNadPzEcV6EW06k1K9oNfJ42F6gYFfjBQK5db83iNTkyA/j4TjfqJ9tlg2cWTp+x2vy8YNV'
-fuel_project::apps::partnerappliance::service_fqdn: 'appliance.fuel-infra.org'
-fuel_project::apps::partnerappliance::home_dir: /var/www/appliance
-fuel_project::apps::partnerappliance::user: appliance
-fuel_project::apps::partnerappliance::vhost: appliance
-fuel_project::apps::partnerappliance::group: appliance
+fuel_project::apps::firewall::rules:
+  '1000 - Allow HTTP traffic':
+    source: '0.0.0.0/0'
+    dport: 80
+    proto: 'tcp'
+    action: 'accept'
+  '1000 - Allow RSYNC traffic':
+    source: '0.0.0.0'
+    dport: 873
+    proto: 'tcp'
+    action: 'accept'
