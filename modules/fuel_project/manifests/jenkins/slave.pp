@@ -464,16 +464,18 @@ class fuel_project::jenkins::slave (
 
     # Working with bridging
     # we need to load module to be sure /proc/sys/net/bridge branch will be created
-    exec { 'load_bridge_module' :
-      command   => '/sbin/modprobe bridge',
-      user      => 'root',
-      logoutput => 'on_failure',
+    $kernel = hiera('fuel_project::common::kernel_package', '')
+    if($kernel == 'linux-generic-lts-vivid') {
+      $br_module = 'br_netfilter'
+    }
+    else {
+      $br_module = 'bridge'
     }
 
     # ensure bridge module will be loaded on system start
     augeas { 'sysctl-net.bridge.bridge-nf-call-iptables' :
       context => '/files/etc/modules',
-      changes => 'clear bridge',
+      changes => "clear ${br_module}",
     }
 
     sysctl { 'net.bridge.bridge-nf-call-iptables' :
