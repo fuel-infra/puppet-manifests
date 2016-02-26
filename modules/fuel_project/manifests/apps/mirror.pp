@@ -107,12 +107,14 @@ class fuel_project::apps::mirror (
 
   $syncer_homedir = "/var/lib/${syncer_username}"
 
-  user { $syncer_username :
-    ensure     => 'present',
-    home       => $syncer_homedir,
-    shell      => '/usr/bin/rssh',
-    managehome => true,
-    system     => true,
+  if (!defined(User[$syncer_username])) {
+    user { $syncer_username :
+      ensure     => 'present',
+      home       => $syncer_homedir,
+      shell      => '/usr/bin/rssh',
+      managehome => true,
+      system     => true,
+    }
   }
 
   file { $syncer_homedir :
