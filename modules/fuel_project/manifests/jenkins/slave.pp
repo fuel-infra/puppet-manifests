@@ -331,13 +331,6 @@ class fuel_project::jenkins::slave (
           }
         }
         'RedHat': {
-          # FIXME: tmp fix for libvirt group. normally this should be
-          # covered by libvirt package.
-          group { 'libvirt' :
-            ensure => 'present',
-            system => true,
-          }
-          # /FIXME.
           class { '::libvirt' :
             listen_tls         => false,
             listen_tcp         => true,
