@@ -34,25 +34,45 @@ define puppet::config (
   $ssldir                = undef,
   $vardir                = undef,
 ) {
-  if (!defined(File["${config}.d"])) {
-    file { "${config}.d" :
-      ensure => 'directory',
+  # FIXME {
+  # Legacy cleanup:
+  # - /etc/puppet/puppet.conf.d/agent-config.conf
+  # - /etc/puppet/puppet.conf.d/master-config.conf
+  # - /etc/puppet/puppet.conf.d/
+  if(!defined(File['/etc/puppet/puppet.conf.d/agent-config.conf'])) {
+    file { '/etc/puppet/puppet.conf.d/agent-config.conf' :
+      ensure => 'absent',
+      force  => true,
+    }
+  }
+  if(!defined(File['/etc/puppet/puppet.conf.d/master-config.conf'])) {
+    file { '/etc/puppet/puppet.conf.d/master-config.conf' :
+      ensure => 'absent',
+      force  => true,
+    }
+  }
+  if(!defined(File['/etc/puppet/puppet.conf.d'])) {
+    file { '/etc/puppet/puppet.conf.d' :
+      ensure => 'absent',
+      force  => true,
+    }
+  }
+  # } FIXME
+
+  if(!defined(Concat[$config])) {
+    concat { $config :
+      ensure         => 'present',
+      owner          => 'puppet',
+      group          => 'puppet',
+      mode           => '0644',
+      order          => 'alpha',
+      ensure_newline => true,
+      warn           => true,
     }
   }
 
-  file { "${config}.d/${title}.conf" :
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'puppet',
-    group   => 'puppet',
+  concat::fragment { $title :
+    target  => $config,
     content => template($config_template),
-    notify  => Exec['puppet.conf-merge-pieces'],
-  }
-
-  if (!defined(Exec['puppet.conf-merge-pieces'])) {
-    exec { 'puppet.conf-merge-pieces' :
-      command => "cat ${config}.d/* > ${config}",
-      require => File["${config}.d/${title}.conf"],
-    }
   }
 }
