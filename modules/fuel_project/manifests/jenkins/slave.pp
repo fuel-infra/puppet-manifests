@@ -575,6 +575,21 @@ class fuel_project::jenkins::slave (
 
     case $::osfamily {
       'Debian': {
+          # FIXME: tmp workaround regarding iso building. See #1551092 for
+          # more details. To be removed after a proper fix is introduced.
+          if (!defined(Package['cpio'])) {
+            package { 'cpio' :
+              ensure => '2.11+dfsg-1ubuntu1',
+            }
+          }
+          create_resources('apt::pin', {
+            'cpio' => {
+              packages => 'cpio',
+              version  => '2.11+dfsg-1ubuntu1',
+              priority => 1000,
+            },
+          })
+          # /FIXME
           $build_fuel_iso_packages = [
             'extlinux',
             'libconfig-auto-perl',
