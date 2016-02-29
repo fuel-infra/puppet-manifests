@@ -480,7 +480,6 @@ class fuel_project::jenkins::slave (
 
     sysctl { 'net.bridge.bridge-nf-call-iptables' :
       value   => '0',
-      require => Exec['load_bridge_module'],
     }
 
     sysctl { 'vm.swappiness' :
