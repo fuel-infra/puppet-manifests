@@ -16,14 +16,14 @@ fuel_project::apps::seed::seed_cleanup_dirs:
 
 fuel_project::apps::seed::shares:
   mirror:
-    service_fqdn: 'mirror.example.com'
+    service_fqdn: ['mirror.example.com']
     path: '/var/www/mirror'
     http_ro: true
     rsync_ro: true
     rsync_rw: true
     username: mirror-syncer
   plugins:
-    service_fqdn: 'plugins.example.com'
+    service_fqdn: ['plugins.example.com']
     path: '/var/www/plugins'
     username: plugin-syncer
 

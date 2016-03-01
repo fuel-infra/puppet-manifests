@@ -1,23 +1,29 @@
 ---
 classes:
-  - fuel_project::roles::storage
-  - fuel_project::apps::firewall
-  - fuel_project::common
-  - fuel_project::nginx
-  - kibana4
-  - elasticsearch
-  - logstash
-  - logstashforwarder
-  - log_storage::logstash
-  - log_storage::logstashforwarder
-  - log_storage::params
-  - log_storage::storage::nginx
-  - log_storage::storage::zabbix
-  - java
+  - '::fuel_project::common'
+  - '::fuel_project::apps::firewall'
+  - '::fuel_project::apps::seed'
+  - '::kibana4'
+  - '::elasticsearch'
+  - '::logstash'
+  - '::logstashforwarder'
+  - '::log_storage::logstash'
+  - '::log_storage::logstashforwarder'
+  - '::log_storage::params'
+  - '::log_storage::storage::nginx'
+  - '::log_storage::storage::zabbix'
+  - '::java'
 
-fuel_project::roles::storage::iso_vault_fqdn: 'vault.fuel-infra.org'
-fuel_project::apps::mirror::sync_hosts_allow:
- - '127.0.0.1/32'
+fuel_project::apps::seed::shares:
+  mirror:
+    autoindex: true
+    service_fqdn:
+      - 'vault.example.com'
+      - "vault.%{::fqdn}"
+    path: '/var/www/iso-vault'
+    http_ro: true
+    rsync_ro: false
+    rsync_rw: false
 
 kibana4::package_provider: 'package'
 kibana4::package_ensure: '4.1.1-ubuntu3'

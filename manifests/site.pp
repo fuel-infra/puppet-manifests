@@ -142,10 +142,6 @@ node 'mongo-secondary-2.vm.mirantis.net' {
   }
 }
 
-node /storage([0-9]{2})-(msk|srt)\.devops\.mirantis\.net/ {
-  class { '::fuel_project::roles::storage' :}
-}
-
 node 'mongo-primary.vm.mirantis.net' {
   class {'::fuel_project::mongo_common':
     primary => true,

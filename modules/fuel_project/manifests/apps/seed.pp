@@ -35,9 +35,9 @@
 #     ]
 #
 class fuel_project::apps::seed (
-  $seed_acl_list,
-  $shares = {},
-  $cleanup_dirs = [],
+  $seed_acl_list = [],
+  $shares        = {},
+  $cleanup_dirs  = [],
 ) {
   ensure_resource('file', '/var/www', {
     ensure => 'directory',
@@ -56,23 +56,25 @@ class fuel_project::apps::seed (
   # Backward compability for uploading artefacts via HTTP
   # Should be refactored using rsync+ssh
   #
-  ::nginx::resource::vhost { 'seed-upload' :
-    ensure              => 'present',
-    autoindex           => 'off',
-    www_root            => '/var/www/seed',
-    listen_port         => '17333',
-    server_name         => [$::fqdn],
-    access_log          => '/var/log/nginx/access.log',
-    error_log           => '/var/log/nginx/error.log',
-    format_log          => 'proxy',
-    location_cfg_append => {
-      dav_methods          => 'PUT',
-      client_max_body_size => '5G',
-      allow                => $seed_acl_list,
-      deny                 => 'all',
-      disable_symlinks     => 'if_not_owner',
-    },
-    require             => Class['fuel_project::nginx'],
+  if($seed_acl_list != []) {
+    ::nginx::resource::vhost { 'seed-upload' :
+      ensure              => 'present',
+      autoindex           => 'off',
+      www_root            => '/var/www/seed',
+      listen_port         => '17333',
+      server_name         => [$::fqdn],
+      access_log          => '/var/log/nginx/access.log',
+      error_log           => '/var/log/nginx/error.log',
+      format_log          => 'proxy',
+      location_cfg_append => {
+        dav_methods          => 'PUT',
+        client_max_body_size => '5G',
+        allow                => $seed_acl_list,
+        deny                 => 'all',
+        disable_symlinks     => 'if_not_owner',
+      },
+      require             => Class['fuel_project::nginx'],
+    }
   }
   # } FIXME
 }
