@@ -154,6 +154,7 @@ class fuel_project::jenkins::slave (
       'pattern' => 'fuel-*',
     }
   ],
+  $selenium_firefox_package_version     = undef,
   $simple_syntax_check                  = false,
   $sudo_commands                        = ['/sbin/ebtables'],
   $tls_cacertdir                        = '',
@@ -976,6 +977,18 @@ class fuel_project::jenkins::slave (
         'xfonts-scalable',
       ]
 
+      if ($selenium_firefox_package_version) {
+        package { 'firefox' :
+          ensure => $selenium_firefox_package_version,
+        }
+        create_resources('apt::pin', {
+          'firefox' => {
+            packages => 'firefox',
+            version  => $selenium_firefox_package_version,
+            priority => 1000,
+          },
+        })
+      }
       ensure_packages($selenium_packages_common)
 
       case $::osfamily {
