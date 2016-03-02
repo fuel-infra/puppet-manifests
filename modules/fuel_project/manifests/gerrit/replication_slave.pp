@@ -33,7 +33,6 @@ class fuel_project::gerrit::replication_slave (
     ensure  => 'directory',
     owner   => 'gerrit-replicator',
     group   => 'gerrit-replicator',
-    recurse => true,
     require => [
       User['gerrit-replicator'],
       Package['gerrit'],
