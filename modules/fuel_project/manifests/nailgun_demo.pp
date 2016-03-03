@@ -46,7 +46,8 @@ class fuel_project::nailgun_demo (
   # gulp required to make compressed static
   package { 'gulp':
     provider => npm,
-    require  => Package['npm'],
+    require  => [Package['nodejs-legacy'],
+                Package['npm']],
   }
 
   # create main user
@@ -82,6 +83,7 @@ class fuel_project::nailgun_demo (
     provider => 'git',
     source   => 'https://github.com/stackforge/fuel-web',
     user     => 'nailgun',
+    revision => '70f10b39255af1e42fe5fec4ee22feaa681b5f2f',
     require  => [User['nailgun'],
                 File['/usr/share/fuel-web'],
                 Package['git']],
@@ -102,7 +104,18 @@ class fuel_project::nailgun_demo (
     require      => [
       Vcsrepo['/usr/share/fuel-web'],
       Package[$packages],
+      Package['gulp'],
     ]
+  }
+
+  venv::exec { 'venv-setup-develop' :
+    command => 'python setup.py develop',
+    cwd     => '/usr/share/fuel-web/nailgun',
+    venv    => '/home/nailgun/python',
+    user    => 'nailgun',
+    require => [Venv::Venv['venv-nailgun'],
+                Postgresql::Server::Db['nailgun']],
+    onlyif  => "test ! -f ${lock_file}",
   }
 
   venv::exec { 'venv-syncdb' :
@@ -110,8 +123,7 @@ class fuel_project::nailgun_demo (
     cwd     => '/usr/share/fuel-web/nailgun',
     venv    => '/home/nailgun/python',
     user    => 'nailgun',
-    require => [Venv::Venv['venv-nailgun'],
-                Postgresql::Server::Db['nailgun']],
+    require => Venv::Exec['venv-setup-develop'],
     onlyif  => "test ! -f ${lock_file}",
   }
 
@@ -148,7 +160,8 @@ class fuel_project::nailgun_demo (
     cwd         => '/usr/share/fuel-web/nailgun',
     environment => 'HOME=/home/nailgun',
     user        => 'nailgun',
-    require     => Venv::Exec['venv-loaddata'],
+    require     => [Venv::Exec['venv-loaddata'],
+                    Package['gulp']],
     onlyif      => "test ! -f ${lock_file}",
     timeout     => 600,
   }
@@ -158,8 +171,7 @@ class fuel_project::nailgun_demo (
     cwd         => '/usr/share/fuel-web/nailgun',
     environment => 'HOME=/home/nailgun',
     user        => 'nailgun',
-    require     => [Exec['npm-install'],
-                    Package['gulp']],
+    require     => Exec['npm-install'],
     onlyif      => "test ! -f ${lock_file}",
     timeout     => 600,
   }
