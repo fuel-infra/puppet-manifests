@@ -33,6 +33,7 @@ class uwsgi::params {
   $plugins        = undef
   $rack           = undef
   $socket         = undef
+  $subscribe      = undef
   $uid            = 'www-data'
   $vacuum         = true
   $workers        = $::processorcount

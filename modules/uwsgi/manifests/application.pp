@@ -17,6 +17,7 @@
 #   [*plugins*] - load uWSGI plugins
 #   [*rack*] - load a rack app
 #   [*socket*] - bind to the specified UNIX/TCP socket using default protocol
+#   [*subscribe*] - Resource or array of resources to notify Service['uwsgi'] on
 #   [*uid*] - user to run application as
 #   [*vacuum*] - try to remove all of the generated file/sockets
 #   [*workers*] - spawn the specified number of workers/processes
@@ -36,15 +37,16 @@ define uwsgi::application (
   $plugins        = $::uwsgi::params::plugins,
   $rack           = $::uwsgi::params::rack,
   $socket         = $::uwsgi::params::socket,
+  $subscribe      = $::uwsgi::params::subscribe,
   $uid            = $::uwsgi::params::uid,
   $vacuum         = $::uwsgi::params::vacuum,
   $workers        = $::uwsgi::params::workers,
 ) {
-  validate_string($plugins)
-
   if (!defined(Class['::uwsgi'])) {
     class { '::uwsgi' :}
   }
+
+  validate_string($plugins)
 
   ensure_packages($::uwsgi::params::plugins_packages[$plugins])
 
@@ -59,10 +61,16 @@ define uwsgi::application (
       Package[$::uwsgi::params::plugins_packages[$plugins]],
     ],
     notify  => Service[$::uwsgi::params::service],
-  }->
+  }
+
   file { "/etc/uwsgi/apps-enabled/${title}.yaml" :
-    ensure => 'link',
-    target => "/etc/uwsgi/apps-available/${title}.yaml",
-    notify => Service[$::uwsgi::params::service],
+    ensure  => 'link',
+    target  => "/etc/uwsgi/apps-available/${title}.yaml",
+    notify  => Service[$::uwsgi::params::service],
+    require => File["/etc/uwsgi/apps-available/${title}.yaml"],
+  }
+
+  if($subscribe) {
+    $subscribe ~> Service[$::uwsgi::params::service]
   }
 }

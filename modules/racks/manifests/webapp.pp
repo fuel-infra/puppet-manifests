@@ -188,14 +188,18 @@ class racks::webapp (
   }
 
   uwsgi::application { 'racks' :
-    plugins => 'python',
-    workers => $::processorcount,
-    uid     => $user,
-    gid     => $user,
-    socket  => $uwsgi_socket,
-    master  => true,
-    vacuum  => true,
-    chdir   => '/usr/share/racks/webapp',
-    module  => 'racks.wsgi',
+    plugins   => 'python',
+    workers   => $::processorcount,
+    uid       => $user,
+    gid       => $user,
+    socket    => $uwsgi_socket,
+    master    => true,
+    vacuum    => true,
+    chdir     => '/usr/share/racks/webapp',
+    module    => 'racks.wsgi',
+    subscribe => [
+      File[$config_path],
+      Package[$package],
+    ],
   }
 }
