@@ -207,6 +207,17 @@ class fuel_project::jenkins::slave (
     ensure_packages(['bats', 'xmlstarlet'])
   }
 
+  # bug: https://bugs.launchpad.net/fuel/+bug/1555460
+  case $::osfamily {
+    'Debian': {
+      ensure_packages(['sqlite3'])
+    }
+    'RedHat': {
+      ensure_packages(['sqlite'])
+    }
+    default: { }
+  }
+
   # bug: https://bugs.launchpad.net/fuel/+bug/1497275
   case $::osfamily {
     'Debian': {
