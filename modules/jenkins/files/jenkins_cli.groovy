@@ -399,8 +399,31 @@ class Actions {
     String gerrit_key_path = null,
     String gerrit_server_name = null,
     String gerrit_url = null,
-    String gerrit_username = null
+    String gerrit_username = null,
+    String cr_failed=null,
+    String cr_notbuild=null,
+    String cr_started=null,
+    String cr_successful=null,
+    String cr_unstable=null,
+    String verify_failed=null,
+    String verify_notbuild=null,
+    String verify_started=null,
+    String verify_successful=null,
+    String verify_unstable=null
   ) {
+    //jenkins-cli bug workaround, removing quotes ''
+    gerrit_server_name = gerrit_server_name.replaceAll('^\'|\'$', '')
+    cr_failed = cr_failed.replaceAll('^\'|\'$', '')
+    cr_notbuild = cr_notbuild.replaceAll('^\'|\'$', '')
+    cr_started = cr_started.replaceAll('^\'|\'$', '')
+    cr_successful = cr_successful.replaceAll('^\'|\'$', '')
+    cr_unstable = cr_unstable.replaceAll('^\'|\'$', '')
+    verify_failed = verify_failed.replaceAll('^\'|\'$', '')
+    verify_notbuild = verify_notbuild.replaceAll('^\'|\'$', '')
+    verify_started = verify_started.replaceAll('^\'|\'$', '')
+    verify_successful = verify_successful.replaceAll('^\'|\'$', '')
+    verify_unstable = verify_unstable.replaceAll('^\'|\'$', '')
+
     Config config
     if (PluginImpl.getInstance().getServer(gerrit_server_name) == null) {
         GerritServer defaultServer = new GerritServer(gerrit_server_name)
@@ -415,6 +438,19 @@ class Actions {
     config.setGerritFrontEndURL(gerrit_url)
     config.setGerritUserName(gerrit_username)
     config.setGerritAuthKeyFile(new File(gerrit_key_path))
+    //Setting Gerrit Reporting Values
+    //Verify
+    config.gerritBuildStartedVerifiedValue = Integer.parseInt(verify_started)
+    config.gerritBuildSuccessfulVerifiedValue = Integer.parseInt(verify_successful)
+    config.gerritBuildFailedVerifiedValue = Integer.parseInt(verify_failed)
+    config.gerritBuildUnstableVerifiedValue = Integer.parseInt(verify_unstable)
+    config.gerritBuildNotBuiltVerifiedValue = Integer.parseInt(verify_notbuild)
+    //Code Review
+    config.gerritBuildStartedCodeReviewValue = Integer.parseInt(cr_started)
+    config.gerritBuildSuccessfulCodeReviewValue = Integer.parseInt(cr_successful)
+    config.gerritBuildFailedCodeReviewValue = Integer.parseInt(cr_failed)
+    config.gerritBuildUnstableCodeReviewValue = Integer.parseInt(cr_unstable)
+    config.gerritBuildNotBuiltCodeReviewValue = Integer.parseInt(cr_notbuild)
     PluginImpl.getInstance().save()
     }
 }

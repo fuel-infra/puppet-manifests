@@ -19,6 +19,8 @@ jenkins::master::gerrit_trigger_conf:
      gerrit_server_name: 'gerrit-server'
      gerrit_url: 'http://gerit.example.com'
      gerrit_username: 'gerrit'
+     review_failed: '-1'
+     verify_successful: '2'
      jenkins_address: "%{jenkins::master::jenkins_address}"
      jenkins_cli_file: "%{jenkins::master::jenkins_cli_file}"
      jenkins_libdir: "%{jenkins::master::jenkins_libdir}"
