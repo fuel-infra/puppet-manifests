@@ -211,7 +211,7 @@ class fuel_project::jenkins::slave (
   # bug: https://bugs.launchpad.net/fuel/+bug/1555460
   case $::osfamily {
     'Debian': {
-      ensure_packages(['sqlite3'])
+      ensure_packages(['sqlite3', 'dutop'])
     }
     'RedHat': {
       ensure_packages(['sqlite'])

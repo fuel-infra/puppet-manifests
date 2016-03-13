@@ -21,3 +21,7 @@ sudo::config_file_replace: false
 sudo::configs:
   'tcpdump':
     'content': '%sudo ALL=(ALL) NOPASSWD: /usr/sbin/tcpdump'
+  'dutop':
+    'content': '%sudo ALL=(ALL) NOPASSWD: /usr/bin/dutop ""'
+  'dutop-libvirt':
+    'content': '%sudo ALL=(ALL) NOPASSWD: /usr/bin/dutop /var/lib/libvirt'
