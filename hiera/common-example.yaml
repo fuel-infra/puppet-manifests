@@ -899,6 +899,11 @@ log_storage::logstashforwarder::files:
       type: mysql-slow-log
 
 fuel_project::common::logstash_forwarder: false
+fuel_project::common::mounts:
+  '/':
+    'ensure': 'present'
+    'options': 'defaults,errors=remount-ro,noatime,nodiratime,barrier=0'
+
 logstashforwarder::manage_repo: false
 logstashforwarder::ssl_ca: '%{log_storage::logstashforwarder::ssl_ca_file}'
 logstashforwarder::servers:

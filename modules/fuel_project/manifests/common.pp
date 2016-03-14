@@ -12,6 +12,7 @@
 #   [*ldap_uri*] - LDAP URI
 #   [*logrotate_rules*] - log rotate rules hash
 #   [*logstash_forwarder*] - enable logstash forwarder
+#   [*mounts*] - mount hash options
 #   [*pam_filter*] - PAM filter for LDAP
 #   [*pam_password*] - PAM password type
 #   [*puppet_cron*] - run Puppet agent by cron
@@ -30,6 +31,7 @@ class fuel_project::common (
   $ldap_uri           = '',
   $logrotate_rules    = hiera_hash('logrotate::rules', {}),
   $logstash_forwarder = false,
+  $mounts             = hiera_hash('fuel_project::common::mounts', {}),
   $pam_filter         = '',
   $pam_password       = '',
   $puppet_cron        = {},
@@ -158,10 +160,7 @@ class fuel_project::common (
   }
   # /Zabbix SSL item
 
-  mount { '/' :
-    ensure  => 'present',
-    options => 'defaults,errors=remount-ro,noatime,nodiratime,barrier=0',
-  }
+  create_resources(mount, $mounts)
 
   file { '/etc/hostname' :
     ensure  => 'present',
