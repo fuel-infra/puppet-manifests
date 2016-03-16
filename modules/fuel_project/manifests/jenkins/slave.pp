@@ -303,8 +303,27 @@ class fuel_project::jenkins::slave (
     case $::osfamily {
       'Debian': {
         $kolla_build_tests_packages = [
+          'ansible',
+          'libxml2',
+          'libxml2-dev',
+          'libxslt1.1',
+          'libxslt1-dev',
+          'libyaml-dev',
+          'lxc',
           'python-dev',
+          'python-docker',
+          'python-tox',
+          'python-yaml',
+          'zlib1g-dev',
         ]
+        package { 'ansible' :
+          ensure => '1.9.5-1'
+        }
+        apt::pin { 'ansible' :
+          packages => 'ansible',
+          version  => '1.9.5-1',
+          priority => 1000,
+        }
       }
       'RedHat': {
         $kolla_build_tests_packages = [
