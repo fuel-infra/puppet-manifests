@@ -21,6 +21,13 @@
 #   [*root_shell*] - shell for root user
 #   [*tls_cacertdir*] - LDAP CA certs directory
 #
+# Additional parameters:
+#   [*facts*] - Hash, sets up custom facts through hiera. Example:
+#     $facts = {
+#       location => 'location_name',
+#       blah     => 'blah value',
+#     }
+#
 class fuel_project::common (
   $bind_policy        = '',
   $external_host      = false,
