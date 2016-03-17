@@ -28,6 +28,15 @@
 #       blah     => 'blah value',
 #     }
 #
+#   [*hosts*] - Hash, sets up custom /etc/hosts content through hiera. Default:
+#     $hosts = {
+#       "${::fqdn} ${::hostname}"              => '127.0.1.1',
+#       'localhost'                            => '127.0.0.1',
+#       'localhost ip6-localhost ip6-loopback' => '::1',
+#       'ip6-allnodes'                         => 'ff02::1',
+#       'ip6-allrouters'                       => 'ff02::2',
+#     }
+#
 class fuel_project::common (
   $bind_policy        = '',
   $external_host      = false,
@@ -51,6 +60,15 @@ class fuel_project::common (
     'location' => $::location,
     'role'     => $::role,
   })
+
+  $hosts = hiera_hash('::fuel_project::common::hosts', {
+    "${::fqdn} ${::hostname}"              => '127.0.1.1',
+    'localhost'                            => '127.0.0.1',
+    'localhost ip6-localhost ip6-loopback' => '::1',
+    'ip6-allnodes'                         => 'ff02::1',
+    'ip6-allrouters'                       => 'ff02::2',
+  })
+
   class { '::atop' :}
   if($logstash_forwarder) {
     class { '::log_storage::logstashforwarder' :}
