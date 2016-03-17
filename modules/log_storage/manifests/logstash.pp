@@ -7,11 +7,8 @@
 #   [*elasticsearch_bind_port*] - Elastic output bind port
 #   [*elasticsearch_cacert*] - Elastic output CA certificate path
 #   [*elasticsearch_cluster*] - Elastic output cluster
-#   [*elasticsearch_host*] - Elastic output host
+#   [*elasticsearch_hosts*] - Elastic output hosts list having port number specified
 #   [*elasticsearch_max_retries*] - Elastic output maximum retries
-#   [*elasticsearch_protocol*] - Elastic output protocol to use
-#   [*elasticsearch_port*] - Elastic output port
-#   [*elasticsearch_retry_max_items*] - Elastic output maximum items to reply
 #   [*elasticsearch_ssl*] - Elastic output SSL connection
 #   [*elasticsearch_ssl_cert_verify*] - Elastic output certicate verification
 #   [*elasticsearch_workers*] - Elastic output workers to use
@@ -30,11 +27,8 @@ class log_storage::logstash (
   $elasticsearch_bind_port       = undef,
   $elasticsearch_cacert          = undef,
   $elasticsearch_cluster         = undef,
-  $elasticsearch_host            = $::fqdn,
+  $elasticsearch_hosts           = "${::fqdn}:9201",
   $elasticsearch_max_retries     = undef,
-  $elasticsearch_protocol        = 'node',
-  $elasticsearch_port            = undef,
-  $elasticsearch_retry_max_items = undef,
   $elasticsearch_ssl             = undef,
   $elasticsearch_ssl_cert_verify = undef,
   $elasticsearch_workers         = 2,

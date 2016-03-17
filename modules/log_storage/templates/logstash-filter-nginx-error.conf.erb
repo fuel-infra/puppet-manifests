@@ -4,5 +4,11 @@ filter {
       match => { "message" => "%{<%= @logstash_filter_pattern_params['nginx_filter_error_message'] %>}" }
       patterns_dir => "<%= @logstash_patterns_dir %>"
     }
+    date {
+      match => [ "timestamp", "yyyy/MM/dd HH:mm:ss" ]
+    }
+    mutate {
+      remove_field => "timestamp"
+    }
   }
 }

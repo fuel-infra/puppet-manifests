@@ -2,7 +2,6 @@
 classes:
   - fuel_project::apps::firewall
   - fuel_project::common
-  - fuel_project::nginx
   - log_storage::logstash
   - log_storage::logstashforwarder
   - log_storage::params
@@ -12,13 +11,11 @@ classes:
 
 logstash::manage_repo: false
 logstash::package_pin: true
-logstash::version: '1.5.2-ubuntu2'
+logstash::version: '2.2.2-ubuntu3'
 
-log_storage::logstash::elasticsearch_host:
-  - 'storage01.test.local'
-  - 'storage02.test.local'
-log_storage::logstash::elasticsearch_port: '9201'
-log_storage::logstash::elasticsearch_protocol: 'http'
+log_storage::logstash::elasticsearch_hosts:
+  - 'storage01.test.local:9201'
+  - 'storage02.test.local:9201'
 log_storage::logstash::elasticsearch_ssl: true
 log_storage::logstash::elasticsearch_ssl_cert_verify: 'false'
 log_storage::logstash::elasticsearch_workers: '4'

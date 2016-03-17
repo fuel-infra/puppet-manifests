@@ -1,10 +1,6 @@
 output {
   elasticsearch {
-    host => <%= @elasticsearch_host %>
-    protocol => "<%= @elasticsearch_protocol %>"
-    <% if @elasticsearch_port %>
-    port => "<%= @elasticsearch_port %>"
-    <% end %>
+    hosts => <%= @elasticsearch_hosts %>
     <% if @elasticsearch_bind_port %>
     bind_port => "<%= @elasticsearch_bind_port %>"
     <% end %>
@@ -21,13 +17,10 @@ output {
     cacert => "<%= @elasticsearch_cacert %>"
     <% end %>
     <% if @elasticsearch_workers %>
-    workers => "<%= @elasticsearch_workers %>"
+    workers => <%= @elasticsearch_workers %>
     <% end %>
     <% if @elasticsearch_max_retries %>
-    max_retries => "<%= @elasticsearch_max_retries %>"
-    <% end %>
-    <% if @elasticsearch_retry_max_items %>
-    retry_max_items => "<%= @elasticsearch_retry_max_items %>"
+    max_retries => <%= @elasticsearch_max_retries %>
     <% end %>
   }
 }
