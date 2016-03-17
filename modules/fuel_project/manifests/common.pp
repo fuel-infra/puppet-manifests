@@ -10,9 +10,7 @@
 #   [*ldap_base*] - LDAP base
 #   [*ldap_ignore_users*] - users ignored for LDAP checks
 #   [*ldap_uri*] - LDAP URI
-#   [*logrotate_rules*] - log rotate rules hash
 #   [*logstash_forwarder*] - enable logstash forwarder
-#   [*mounts*] - mount hash options
 #   [*pam_filter*] - PAM filter for LDAP
 #   [*pam_password*] - PAM password type
 #   [*puppet_cron*] - run Puppet agent by cron
@@ -37,6 +35,34 @@
 #       'ip6-allrouters'                       => 'ff02::2',
 #     }
 #
+#   [*logrotate_rules*] - Hash, log rotate rules. Example:
+#     $logrotate_rules = {
+#       'upstart' => {
+#         'path'          => '/var/log/upstart/*.log',
+#         'rotate_every'  => 'day',
+#         'rotate'        => 7,
+#         'missingok'     => true,
+#         'compress'      => true,
+#         'ifempty'       => false,
+#         'create'        => false,
+#         'delaycompress' => true,
+#       }
+#     }
+#
+#     Default:
+#       $logrotate_rules = {}
+#
+#   [*mounts*] - Hash, /etc/fstab custom options. Example:
+#     $mounts = {
+#       '/' => {
+#         'ensure'  => 'present',
+#         'options' => 'defaults,errors=remount-ro,noatime,nodiratime,barrier=0',
+#       }
+#     }
+#
+#     Default:
+#       $mounts = {}
+#
 class fuel_project::common (
   $bind_policy        = '',
   $external_host      = false,
@@ -45,9 +71,7 @@ class fuel_project::common (
   $ldap_base          = '',
   $ldap_ignore_users  = '',
   $ldap_uri           = '',
-  $logrotate_rules    = hiera_hash('logrotate::rules', {}),
   $logstash_forwarder = false,
-  $mounts             = hiera_hash('fuel_project::common::mounts', {}),
   $pam_filter         = '',
   $pam_password       = '',
   $puppet_cron        = {},
@@ -68,6 +92,10 @@ class fuel_project::common (
     'ip6-allnodes'                         => 'ff02::1',
     'ip6-allrouters'                       => 'ff02::2',
   })
+
+  $logrotate_rules = hiera_hash('logrotate::rules', {})
+
+  $mounts = hiera_hash('fuel_project::common::mounts', {})
 
   class { '::atop' :}
   if($logstash_forwarder) {
