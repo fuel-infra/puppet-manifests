@@ -1,5 +1,14 @@
 filter {
   if [type] == "syslog" {
+    # Do not log passwords when they came from puppet-agent. Be case insensitive
+    # about it.
+    # Watch for mysql "access denied for user " logs, as these do not contain
+    # passwords - could be logged.
+    if [message] =~ "(?i)puppet-agent"
+     and [message] =~ "(?i)password"
+     and [message] !~ "(?i)1045, \"Access denied for user" {
+      drop {}
+    }
     grok {
       match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
       add_field => [ "received_at", "%{@timestamp}" ]
