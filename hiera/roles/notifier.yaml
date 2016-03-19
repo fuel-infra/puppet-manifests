@@ -1,0 +1,11 @@
+---
+classes:
+  - '::fuel_project::common'
+  - '::fuel_project::apps::rss2irc'
+
+fuel_project::apps::rss2irc::instances:
+  'test-redirect':
+    'rss': 'https://infra-ci.fuel-infra.org/rssAll'
+    'nick': 'fuel-test'
+    'channel': 'fuel-test'
+

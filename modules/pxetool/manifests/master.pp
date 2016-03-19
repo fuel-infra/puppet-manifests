@@ -219,11 +219,5 @@ class pxetool::master(
     socket  => '127.0.0.1:7931',
   }
 
-  class { 'supervisord':
-    service_name     => 'supervisor',
-    init_script      => '/etc/init.d/supervisor',
-    package_provider => 'apt',
-    executable       => '/usr/bin/supervisord',
-    executable_ctl   => '/usr/bin/supervisorctl',
-  }
+  include ::supervisord
 }

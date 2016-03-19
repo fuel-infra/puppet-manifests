@@ -4,10 +4,6 @@ classes:
 - '::mysql::server'  # optional if database is on the same host
 - '::mysql::client'
 
-supervisord:
-  package_name: 'supervisor'
-  package_provider: 'apt'
-
 supervisord::programs:
   'pxetool':
     command: 'celery worker -A pxetool -B -s /var/lib/pxetool/celery-schedule --loglevel=INFO'

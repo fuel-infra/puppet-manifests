@@ -6,6 +6,12 @@ bacula::director_name_suffix: ''
 bacula::director_password: 'xxxxx'
 bacula::director_server: 'bacula.test.local'
 
+supervisord::service_name: 'supervisor'
+supervisord::init_script: '/etc/init.d/supervisor'
+supervisord::package_provider: 'apt'
+supervisord::executable: '/usr/bin/supervisord'
+supervisord::executable_ctl: '/usr/bin/supervisorctl'
+
 firewall:
   known_networks:
     - 10.108.0.0/16
