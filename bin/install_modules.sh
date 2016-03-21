@@ -52,7 +52,7 @@ fi
 
 MODULES["ajcrowe-supervisord"]="0.6.0"
 MODULES["darin-zypprepo"]="1.0.1"
-MODULES["elasticsearch-elasticsearch"]="0.9.8"
+MODULES["elasticsearch-elasticsearch"]="0.10.3"
 MODULES["elasticsearch-logstash"]="0.5.1"
 MODULES["elasticsearch-logstashforwarder"]="0.1.1"
 MODULES["gnubilafrance-atop"]="0.0.4"
