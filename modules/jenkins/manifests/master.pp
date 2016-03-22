@@ -23,6 +23,8 @@
 #   [*nginx_log_format*] - log format
 #   [*number_of_executors*] - amount of executors for jenkins master node
 #   [*scm_checkout_retry_count*] - retry count for jenkins scm checkout
+#   [*theme_css_url*] - URL of Jenkins theme CSS
+#   [*theme_js_url*] - URL of Jenkins theme JS
 #   [*www_root*] - root web directory path
 #   [*install_groovy*] - install Groovy script for Jenkins
 #   [*install_plugins*] - install Jenkins plugins package
@@ -82,6 +84,8 @@ class jenkins::master (
   $nginx_log_format                 = undef,
   $number_of_executors              = '2',
   $scm_checkout_retry_count         = '0',
+  $theme_css_url                    = '',
+  $theme_js_url                     = '',
   $www_root                         = '/var/www',
   # Jenkins auth
   $install_groovy                   = 'yes',
@@ -493,5 +497,28 @@ class jenkins::master (
 
   if $gerrit_trigger_enabled == true {
     create_resources(exec_gerrit_conf, $gerrit_trigger_conf)
+  }
+
+  if ($theme_css_url != '') or ($theme_js_url != '') {
+    exec { 'jenkins_theme_config':
+      command   => join([
+          '/usr/bin/java',
+          "-jar ${jenkins_cli_file}",
+          "-s ${jenkins_proto}://${jenkins_address}:${jenkins_port}",
+          "groovy ${jenkins_libdir}/jenkins_cli.groovy",
+          'set_theme',
+          "'${theme_css_url}'",
+          "'${theme_js_url}'",
+      ], ' '),
+      tries     => $jenkins_cli_tries,
+      try_sleep => $jenkins_cli_try_sleep,
+      user      => 'jenkins',
+      require   => [
+        File["${jenkins_libdir}/jenkins_cli.groovy"],
+        Package['groovy'],
+        Service['jenkins'],
+        Exec['jenkins_auth_config'],
+      ],
+    }
   }
 }

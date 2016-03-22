@@ -25,6 +25,7 @@ import org.jenkinsci.plugins.UnsafeMarkupFormatter
 import com.sonyericsson.hudson.plugins.gerrit.trigger.config.Config
 import com.sonyericsson.hudson.plugins.gerrit.trigger.GerritServer
 import com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl
+import org.codefirst.SimpleThemeDecorator
 
 class InvalidAuthenticationStrategy extends Exception{}
 class InvalidUserCredentials extends Exception{}
@@ -453,6 +454,13 @@ class Actions {
     config.gerritBuildNotBuiltCodeReviewValue = Integer.parseInt(cr_notbuild)
     PluginImpl.getInstance().save()
     }
+
+  void set_theme(String theme_css_url=null, String theme_js_url=null) {
+    SimpleThemeDecorator std = Jenkins.getInstance().getDescriptorByType(SimpleThemeDecorator.class)
+    std.cssUrl = theme_css_url
+    std.jsUrl = theme_js_url
+    std.save()
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
