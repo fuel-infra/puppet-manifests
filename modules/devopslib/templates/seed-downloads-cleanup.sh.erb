@@ -30,7 +30,7 @@ then
       buffer=$0
     }
   }' | \
-  xargs rm 2>&1 | /usr/bin/logger -t seed-downloads-cleanup
+  xargs --no-run-if-empty rm 2>&1 | /usr/bin/logger -t seed-downloads-cleanup
 fi
 <%- } -%>
 <%- end -%>
