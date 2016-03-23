@@ -2,7 +2,8 @@
 #
 # Parameters:
 #   [*docker_package*] - package name with docker
-#   [*configs_path*] - path to script configs
+#   [*configs_dir*] - path to global custom script directory with configs
+#   [*configs_paths*] - paths to a script configs
 #   [*docker_user*] - user which will use docker
 #   [*known_hosts*] - known_host entries for docker_user
 #   [*packages*] - packages required on host
@@ -10,10 +11,11 @@
 
 class fuel_project::jenkins::slave::custom_scripts (
   $docker_package,
-  $configs_path = '/etc/custom_scripts/',
-  $docker_user  = 'jenkins',
-  $known_hosts  = undef,
-  $packages     = [
+  $configs_dir   = '/etc/custom_scripts/',
+  $configs_paths = {},
+  $docker_user   = 'jenkins',
+  $known_hosts   = undef,
+  $packages      = [
     'git',
   ],
 ) {
@@ -49,19 +51,27 @@ class fuel_project::jenkins::slave::custom_scripts (
   }
 
   if ($configs) {
-    file { $configs_path:
+    file { $configs_dir:
       ensure => 'directory',
       owner  => 'root',
       group  => 'root',
       mode   => '0700',
     }
 
+    create_resources(file, $configs_paths, {
+      ensure  => 'directory',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0700',
+      require => File[$configs_dir],
+    })
+
     create_resources(file, $configs, {
       ensure  => 'present',
       owner   => 'root',
       group   => 'root',
       mode    => '0600',
-      require => File[$configs_path],
+      require => File[$configs_dir],
     })
 
   }
