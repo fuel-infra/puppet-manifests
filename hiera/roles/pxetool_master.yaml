@@ -88,6 +88,8 @@ mysql::server::users:
 mysql::server::grants:
   'pxetool@127.0.0.1/pxetool.*':
     ensure: present
-    privileges: ['ALTER', 'CREATE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE']
+    privileges: ['ALTER', 'CREATE', 'DELETE', 'DROP', 'INDEX', 'INSERT', 'SELECT', 'UPDATE']
     table: 'pxetool.*'
     user: 'pxetool@127.0.0.1'
+
+nginx::client_max_body_size: 100m
