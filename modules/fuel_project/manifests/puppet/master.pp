@@ -51,7 +51,7 @@ class fuel_project::puppet::master (
   $manifests_branch        = 'master',
   $manifests_manifestspath = '/etc/puppet/manifests',
   $manifests_modulespath   = '/etc/puppet/modules',
-  $manifests_repo          = 'ssh://puppet-master-tst@review.fuel-infra.org:29418/fuel-infra/puppet-manifests',
+  $manifests_repo          = 'https://github.com/fuel-infra/puppet-manifests.git',
   $manifests_tmpdir        = '/tmp/puppet-manifests',
   $puppet_config           = '/etc/puppet/puppet.conf',
   $puppet_environment      = 'production',
