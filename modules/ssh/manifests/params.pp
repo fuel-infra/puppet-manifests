@@ -27,6 +27,7 @@ class ssh::params {
     'RedHat': {
       $ldap_packages = [
         'openldap',
+        'openldap-clients',
         'nss-pam-ldapd',
         'nscd',
       ]
