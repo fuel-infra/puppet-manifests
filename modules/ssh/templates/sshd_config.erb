@@ -45,11 +45,7 @@ AcceptEnv LANG LC_*
 Subsystem sftp internal-sftp
 
 UsePAM yes
-<% if @osfamily == 'Debian' %>
 AuthorizedKeysFile /etc/ssh/keys/%u .ssh/authorized_keys
-<% else %>
-AuthorizedKeysFile %h/.ssh/authorized_keys
-<% end -%>
 
 <% if @sftp_group != '' -%>
 Match Group <%= @sftp_group %>
