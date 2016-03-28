@@ -5,9 +5,7 @@ filter {
       patterns_dir => "<%= @logstash_patterns_dir %>"
     }
     date {
-      match => [ "timestamp", "dd/MMM/yyyy:HH:mm:ss Z" ]
-    }
-    mutate {
+      match => [ "timestamp", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd", "dd/MMM/yyyy:HH:mm:ss Z", "UNIX", "ISO8601" ]
       remove_field => "timestamp"
     }
   }
