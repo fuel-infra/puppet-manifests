@@ -1,0 +1,35 @@
+[loggers]
+keys=<%= logging_conf_hash['loggers']['keys'] %>
+[handlers]
+keys=<%= logging_conf_hash['handlers']['keys'] %>
+[formatters]
+keys=<%= logging_conf_hash['formatters']['keys'] %>
+[logger_root]
+level=<%= logging_conf_hash['logger_root']['level'] %>
+handlers=<%= logging_conf_hash['logger_root']['handlers'] %>
+[logger_requests]
+level=<%= logging_conf_hash['logger_requests']['level'] %>
+handlers=<%= logging_conf_hash['logger_requests']['handlers'] %>
+qualname=<%= logging_conf_hash['logger_requests']['qualname'] %>
+[logger_nodepool]
+level=<%= logging_conf_hash['logger_nodepool']['level'] %>
+handlers=<%= logging_conf_hash['logger_nodepool']['handlers'] %>
+qualname=<%= logging_conf_hash['logger_nodepool']['qualname'] %>
+[handler_console]
+level=<%= logging_conf_hash['handler_console']['level'] %>
+class=<%= logging_conf_hash['handler_console']['class'] %>
+formatter=<%= logging_conf_hash['handler_console']['formatter'] %>
+args=<%= logging_conf_hash['handler_console']['args'] %>
+[handler_debug]
+level=<%= logging_conf_hash['handler_debug']['level'] %>
+class=<%= logging_conf_hash['handler_debug']['class'] %>
+formatter=<%= logging_conf_hash['handler_debug']['formatter'] %>
+args=<%= logging_conf_hash['handler_debug']['args'] %>
+[handler_normal]
+level=<%= logging_conf_hash['handler_normal']['level'] %>
+class=<%= logging_conf_hash['handler_normal']['class'] %>
+formatter=<%= logging_conf_hash['handler_normal']['formatter'] %>
+args=<%= logging_conf_hash['handler_normal']['args'] %>
+[formatter_simple]
+format=<%= logging_conf_hash['formatter_simple']['format'] %>
+datefmt=<%= logging_conf_hash['formatter_simple']['datefmt'] %>

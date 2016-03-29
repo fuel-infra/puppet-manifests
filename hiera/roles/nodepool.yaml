@@ -1,0 +1,161 @@
+---
+classes:
+  - '::fuel_project::common'
+  - '::nginx'
+  - '::nodepool'
+  - '::mysql::server'
+
+logrotate::rules:
+  'image_logs':
+    path: '/var/www/nodepool/image/*.log'
+    rotate_every: 'day'
+    rotate: '7'
+    missingok: true
+    compress: true
+    ifempty: false
+    create: false
+    delaycompress: true
+
+mysql::server::databases:
+  'nodepool':
+    ensure: present
+    charset: utf8
+mysql::server::users:
+  'nodepool@localhost':
+    password_hash: '*712E5E2699547C823C1363E5CE74655AC55CEA51' # j4cD46v4qkNSYODLqoweSI055KjVOXYt
+mysql::server::grants:
+  'nodepool@localhost/nodepool.*':
+    ensure: present
+    privileges: ['INDEX', 'CREATE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE']
+    table: 'nodepool.*'
+    user: 'nodepool@localhost'
+mysql::server::override_options:
+  mysqld:
+    bind_address: '127.0.0.1'
+    default_storage_engine: 'InnoDB'
+    innodb_buffer_pool_size: '1G'
+    innodb_file_per_table: 1
+    innodb_file_format: 'barracuda'
+    innodb_flush_method: 'O_DIRECT'
+    join_buffer_size: '512M'
+    lock_wait_timeout: 120
+    log_queries_not_using_indexes: 1
+    max_connections: 8196
+    query_cache_size: '128M'
+    query_cache_type: 1
+    read_rnd_buffer_size: '8M'
+    slow_query_log: 1
+    slow_query_log_file: '/var/log/mysql/slow.log'
+    sort_buffer_size: '4M'
+    table_open_cache: '256M'
+    thread_cache_size: '4M'
+
+nodepool::environment:
+  'NODEPOOL_SSH_KEY':
+    'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNWgMf6IisSY0HK0mpHkgVhRxHsDom81PJ6W3jAgcSBWY1Kz/2vL98SK91ppgYmnDa2uLbchY2Xk9ciefMpm7Qq5EO6oSPKJJhADyCYAX/7YomZIy4Xu7HxEh0Z6VCLt0DymwN4tBS9JuTISvEm17BLgtis/AemA2eRIl0JAdPf9rmQps4KP5AhG60ucdtTKD0y8TFK95ateplgcq9JLRInhrdg/vnJLbKnV7lP1g5dfY1rm6bum7P+Jwf2tdTOa0b5ucK/+iWVbyPO4Z2afPpblh4Vynfe2wMzzpGAp3n5MwtH2EZmSXm/B6/CkgOFROsmWH8MzQEvNBGHhw+ONR9'
+
+nodepool::logging_conf_hash:
+  'loggers':
+    'keys': 'root,nodepool,requests'
+  'handlers':
+    'keys': 'console,debug,normal'
+  'formatters':
+    'keys': 'simple'
+  'logger_root':
+    'level': 'WARNING'
+    'handlers': 'console'
+  'logger_requests':
+    'level': 'WARNING'
+    'handlers': 'debug,normal'
+    'qualname': 'requests'
+  'logger_nodepool':
+    'level': 'DEBUG'
+    'handlers': 'debug,normal'
+    'qualname': 'nodepool'
+  'handler_console':
+    'level': 'WARNING'
+    'class': 'StreamHandler'
+    'formatter': 'simple'
+    'args': '(sys.stdout,)'
+  'handler_debug':
+    'level': 'DEBUG'
+    'class': 'logging.handlers.TimedRotatingFileHandler'
+    'formatter': 'simple'
+    'args': "('/var/log/nodepool/debug.log', 'H', 8, 30)"
+  'handler_normal':
+    'level': 'INFO'
+    'class': 'logging.handlers.TimedRotatingFileHandler'
+    'formatter': 'simple'
+    'args': "('/var/log/nodepool/nodepool.log', 'H', 8, 30)"
+  'formatter_simple':
+    'format': '%(asctime)s %(levelname)s %(name)s: %(message)s'
+    'datefmt': ''
+
+nodepool::nodepool_ssh_private_key_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpQIBAAKCAQEAvH4Y+FA345hwv1mQw7A8y6VpgVWzK66XqgmC4nHCb34DPSCH
+  2hgo0xk5UXb9L1EjlB9IaSuj/ANa8LvTeEXJ4fQcvzjgq96pnAyTsFeHvcNpgQTU
+  4+JcxXOMo8L0xvXh95J0PLVm356JqBPIKph6Df6QNuhrr6JzZPxz/uAyuTwEMq3p
+  uR6auod583/5hACiAYxNp8SUfMgbCxyne20nhTwk8ok0CU/od+it6TcIJbNbbAIn
+  IvzDKI49H4Ax4A0ucb877AHnq8+8wn3H4DUn2R6+J4sIgLaRZPtTE3OH33Fp3SqE
+  S5wTt1xk3yeSz8FMqVMIfhBc2+/Iydaohf0A9QIDAQABAoIBAQCzVcHKFwBlsTas
+  R7ndBUOCedlcrT3vtIglxjDZ42QbkafhM58tWEkXN2t6X5xZtXgFSJIrRdMaRdLz
+  MbDsQHHoYcosASB5RTrX9ntZjp3eZRpvHzqxqj+buOk5MZaT6YLZemTPEcRTw9Gy
+  sUeDh1ixEd8B7rXt/8CMd0ihWYvJAXfMoHKqsrBi1TgSpOXBF9X/dWtPiAKPHuwm
+  Gu8Ek0NtvbvYp+64hLh6rucGNz00EZK3OG9JQLMUX+Ps0BNFrPma2+oY+4VLpUvG
+  /bk0xdLUZMHA/S5fcH5r7K/6iyQaJbLCErWuZx9A7k3noWlBR87pSNffqSmCYE+T
+  Yl4jFobhAoGBAOIecvivNtB0ribjAuViwSpit0qXbUNf6fVa8nRwB+D+CCljNM5n
+  0Wf66enIT/X9QRB0lrsPSI0X02NQC8S1fmt7KDiyfAVbz8Fp/ZL+0hQBZJlpJKXW
+  dZwzfJOTsIGLt8orEIXRCaUsxTLwWs5FfrZrNc5grdz8erDaZoowxhztAoGBANVm
+  wcyBhsCp2RDyjescPJF8IBB3A5b+npHs6niMDaxPuxn8PLr+aVuX2lJIRD4zxERr
+  NwYRsTZzc1VKCZFy7mCG1f1L6vsHImj9fRkHm0CzQAQc7+LvfwYIdFtl6o0jouhY
+  oypAumwcUII2At1FC/O+ldR8QyGv2VRF9fcAvvspAoGBAKwXbH0kLN2dz+U8pLmb
+  3VO66bDVaoz6dH8NhrVjhjuQWvnUzR3CGbe/WUNZ9rFK27gAY69eRGNNnM5a33oI
+  f3yhsMzl2knhxE55skmrsosTPFMdmIy2mbAV51wR7SXLBkfRWrPdki+p0TOhhhqy
+  /WssUTkOj4Q+i8oJjjziPgVJAoGBAI9Pzt50Lfa9GdVTzxMRh2t8nFvyUSraG8uL
+  +3qxM42AjfpJds9tg3vLYwbXGV1cjnYUOoOM5iHXLqEcc4iGUqfoZVUR4uBqTiWL
+  9rMUdKLivh8E/+S7SebXTq0CqJ3YTNMUk58QkSGBcl+/vfSzJe+vEhf8y2iYG6+I
+  vEIA8kDhAoGAdsdM4Ox9uVvHC2UUOJZDsYYeTkQjCmLA+L8ZpeZ/br1Dg724nuXz
+  7t1u65QgqmJcnxgXid5YZWshak7xTxSJS8her6Sd8qNPr8tXYMXlZUK2BJp9A0xT
+  oJzQZfokXhqAQAYOQWmie7aIOwVnvj3QJ5cCbV8ktwvEbZ/go0OAH4A=
+  -----END RSA PRIVATE KEY-----
+
+nodepool::project_config_clone_ssh_key_file: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpQIBAAKCAQEAvH4Y+FA345hwv1mQw7A8y6VpgVWzK66XqgmC4nHCb34DPSCH
+  2hgo0xk5UXb9L1EjlB9IaSuj/ANa8LvTeEXJ4fQcvzjgq96pnAyTsFeHvcNpgQTU
+  4+JcxXOMo8L0xvXh95J0PLVm356JqBPIKph6Df6QNuhrr6JzZPxz/uAyuTwEMq3p
+  uR6auod583/5hACiAYxNp8SUfMgbCxyne20nhTwk8ok0CU/od+it6TcIJbNbbAIn
+  IvzDKI49H4Ax4A0ucb877AHnq8+8wn3H4DUn2R6+J4sIgLaRZPtTE3OH33Fp3SqE
+  S5wTt1xk3yeSz8FMqVMIfhBc2+/Iydaohf0A9QIDAQABAoIBAQCzVcHKFwBlsTas
+  R7ndBUOCedlcrT3vtIglxjDZ42QbkafhM58tWEkXN2t6X5xZtXgFSJIrRdMaRdLz
+  MbDsQHHoYcosASB5RTrX9ntZjp3eZRpvHzqxqj+buOk5MZaT6YLZemTPEcRTw9Gy
+  sUeDh1ixEd8B7rXt/8CMd0ihWYvJAXfMoHKqsrBi1TgSpOXBF9X/dWtPiAKPHuwm
+  Gu8Ek0NtvbvYp+64hLh6rucGNz00EZK3OG9JQLMUX+Ps0BNFrPma2+oY+4VLpUvG
+  /bk0xdLUZMHA/S5fcH5r7K/6iyQaJbLCErWuZx9A7k3noWlBR87pSNffqSmCYE+T
+  Yl4jFobhAoGBAOIecvivNtB0ribjAuViwSpit0qXbUNf6fVa8nRwB+D+CCljNM5n
+  0Wf66enIT/X9QRB0lrsPSI0X02NQC8S1fmt7KDiyfAVbz8Fp/ZL+0hQBZJlpJKXW
+  dZwzfJOTsIGLt8orEIXRCaUsxTLwWs5FfrZrNc5grdz8erDaZoowxhztAoGBANVm
+  wcyBhsCp2RDyjescPJF8IBB3A5b+npHs6niMDaxPuxn8PLr+aVuX2lJIRD4zxERr
+  NwYRsTZzc1VKCZFy7mCG1f1L6vsHImj9fRkHm0CzQAQc7+LvfwYIdFtl6o0jouhY
+  oypAumwcUII2At1FC/O+ldR8QyGv2VRF9fcAvvspAoGBAKwXbH0kLN2dz+U8pLmb
+  3VO66bDVaoz6dH8NhrVjhjuQWvnUzR3CGbe/WUNZ9rFK27gAY69eRGNNnM5a33oI
+  f3yhsMzl2knhxE55skmrsosTPFMdmIy2mbAV51wR7SXLBkfRWrPdki+p0TOhhhqy
+  /WssUTkOj4Q+i8oJjjziPgVJAoGBAI9Pzt50Lfa9GdVTzxMRh2t8nFvyUSraG8uL
+  +3qxM42AjfpJds9tg3vLYwbXGV1cjnYUOoOM5iHXLqEcc4iGUqfoZVUR4uBqTiWL
+  9rMUdKLivh8E/+S7SebXTq0CqJ3YTNMUk58QkSGBcl+/vfSzJe+vEhf8y2iYG6+I
+  vEIA8kDhAoGAdsdM4Ox9uVvHC2UUOJZDsYYeTkQjCmLA+L8ZpeZ/br1Dg724nuXz
+  7t1u65QgqmJcnxgXid5YZWshak7xTxSJS8her6Sd8qNPr8tXYMXlZUK2BJp9A0xT
+  oJzQZfokXhqAQAYOQWmie7aIOwVnvj3QJ5cCbV8ktwvEbZ/go0OAH4A=
+  -----END RSA PRIVATE KEY-----
+
+nodepool::project_config_cron_jobs:
+  periodic_project_conf_repo_sync:
+    command: '/usr/bin/flock -xn /var/lock/project_conf_repo_update.lock /usr/local/bin/project_config_sync.sh 2>&1 | logger -t project-conf-repo-update'
+    hour: '2'
+    minute: '15'
+
+nodepool::project_config_known_hosts:
+  'review.test.local':
+    host: 'review.test.local'
+    port: '29418'

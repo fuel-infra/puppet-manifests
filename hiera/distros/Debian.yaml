@@ -30,7 +30,15 @@ apt::sources:
     repos: ''
     include_src: false
     include_deb: true
-  infra:
+  infra_backports:
+    location: 'http://mirror.fuel-infra.org/infra/backports/ubuntu/'
+    release: "%{::lsbdistcodename}"
+    key: 'CA2B20483E301371'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main'
+    include_src: false
+    include_deb: true
+  infra_packages:
     location: 'http://mirror.fuel-infra.org/infra/packages/ubuntu/'
     release: 'trusty'
     key: 'CA2B20483E301371'

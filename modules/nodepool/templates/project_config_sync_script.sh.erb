@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# Script used by ::nodepool Class for cloning the project-config repo.
+#
+set -e
+
+export BRANCH=${BRANCH:-master}
+export TMPDIR=${TMPDIR:-/tmp/project-config/}
+export REPO=${REPO:-<%= @project_config_repo %>}
+export DIR=${DIR:-<%= @project_config_cfg_dir %>}
+
+echo "Clean up..."
+rm -rf "${TMPDIR}"
+
+echo "Cloning..."
+git clone "${REPO}" "${TMPDIR}"
+cd "${TMPDIR}"
+git checkout "${BRANCH}"
+
+REVISION=$(git log -1 HEAD | awk 'FNR == 1, /commit/ {print $2}')
+PREV_REVISION=$(cat /tmp/project-config-revision.txt 2>/dev/null || echo -n none)
+echo -n "${REVISION}" > /tmp/project-config-revision.txt
+
+echo "Revision: \$Id: ${REVISION}"
+echo "Previous revision: ${PREV_REVISION}"
+
+if [[ "${REVISION}" == "${PREV_REVISION}" ]]; then
+  echo "No updates found."
+  exit 0
+fi
+
+echo "Linking..."
+rm -rf "${DIR}"/{.[^.]*,*}
+mv "${TMPDIR}"/* "${DIR}"/
