@@ -18,6 +18,9 @@ export MODULESPATH=${MODULESPATH:-<%= @manifests_modulespath %>}
   git clone "${REPO}" "${TMPDIR}"
   cd "${TMPDIR}"
   git checkout "${BRANCH}"
+  git submodule init
+  git submodule sync
+  git submodule update
 
   REVISION=`git log -1 HEAD | fgrep commit | awk '{print $NF}'`
   PREV_REVISION=`cat /tmp/puppet-manifests-revision.txt 2>/dev/null || echo -n none`
@@ -41,7 +44,4 @@ export MODULESPATH=${MODULESPATH:-<%= @manifests_modulespath %>}
   mv "${TMPDIR}/bin" "${BINPATH}"
   mv "${TMPDIR}/manifests" "${MANIFESTSPATH}"
   mv "${TMPDIR}/modules" "${MODULESPATH}"
-
-  echo "Running modules update"
-  ${BINPATH}/install_modules.sh
 ) 9>/var/lock/puppet-manifests-update.lock

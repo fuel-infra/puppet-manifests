@@ -1,0 +1,164 @@
+[submodule "modules/display"]
+	path = modules/display
+	url = https://github.com/SergK/puppet-display
+	branch = b0c0996a79cba3221fab9dc1950aaef32aaac0d6
+[submodule "modules/glusterfs"]
+	path = modules/glusterfs
+	url = https://github.com/SergK/puppet-glusterfs
+	branch = de1f24898ad23caa23c8338d27ba1877d7a1020d
+[submodule "modules/sshuserconfig"]
+	path = modules/sshuserconfig
+	url = https://github.com/SergK/puppet-sshuserconfig
+	branch = 521d89452c0494c4eea377014f08452dd1806133
+[submodule "modules/znc"]
+	path = modules/znc
+	url = https://github.com/SergK/puppet-znc
+	branch = 761408debf5a1204681e4ca383f623b86feb3a57
+[submodule "modules/yum"]
+	path = modules/yum
+	url = https://github.com/mescanef/puppet-yum
+	branch = ec68669795ccce01c201f3d39b3531434e8d87c7
+[submodule "modules/bacula"]
+	path = modules/bacula
+	url = https://github.com/monester/puppet-bacula
+	branch = aca50eda4ebab557e3434c987dd7c649d5f2bfc1
+[submodule "modules/libvirt"]
+	path = modules/libvirt
+	url = https://github.com/monester/puppet-libvirt
+	branch = 859d6081b31ed715d3b5d0b11f79c77977c1d998
+[submodule "modules/bind"]
+	path = modules/bind
+	url = https://github.com/teran/puppet-bind
+	branch = 5f124641e69f4614e79c9b5f3491a506a248f1c6
+[submodule "modules/mailman"]
+	path = modules/mailman
+	url = https://github.com/teran/puppet-mailman
+	branch = 6910a97dcf65cd8706759d3fd6bf1597c85bd11b
+[submodule "modules/nginx"]
+	path = modules/nginx
+	url = https://github.com/teran/puppet-nginx
+	branch = 9219c8b4131be8918bd6bc38b5a2545c8a145c2d
+[submodule "modules/rssh"]
+	path = modules/rssh
+	url = https://github.com/teran/puppet-rssh
+	branch = 46abe08dfa69968afff932b3d5dcaa944eaf7b15
+[submodule "modules/supervisord"]
+	path = modules/supervisord
+	url = https://github.com/ajcrowe/puppet-supervisord.git
+	branch = 4fe1bf3997fb20513e7e24e3b34c80f470552eb3
+[submodule "modules/zypprepo"]
+	path = modules/zypprepo
+	url = https://github.com/deadpoint/puppet-zypprepo.git
+	branch = 64eb804e7da4bd22e153d6674caa4815daf20c41
+[submodule "modules/elasticsearch"]
+	path = modules/elasticsearch
+	url = https://github.com/elastic/puppet-elasticsearch
+	branch = f8c94f1d23be02170ce8a958e91238ee48f729d7
+[submodule "modules/logstash"]
+	path = modules/logstash
+	url = https://github.com/elastic/puppet-logstash.git
+	branch = 6023462e3d45fcdce42b9ccf8be2be2e98636bad
+[submodule "modules/logstashforwarder"]
+	path = modules/logstashforwarder
+	url = https://github.com/elastic/puppet-logstashforwarder.git
+	branch = 126b2cdff0831def0ae9501e7e6e478e7e97eb43
+[submodule "modules/atop"]
+	path = modules/atop
+	url = https://github.com/gnubila-france/puppet-atop.git
+	branch = 2b491e38e1423404c518d91fea704552fd6c65a9
+[submodule "modules/gnupg"]
+	path = modules/gnupg
+	url = https://github.com/n1tr0g/golja-gnupg.git
+	branch = 67da08ade68fd18b4f571f1c09e754fc4f8dc4c1
+[submodule "modules/kibana4"]
+	path = modules/kibana4
+	url = https://github.com/lesaux/puppet-kibana4.git
+	branch = 919ffdaa5ac86fe8414a68332477b61076e941e2
+[submodule "modules/openvpn"]
+	path = modules/openvpn
+	url = https://github.com/luxflux/puppet-openvpn.git
+	branch = 6b795a10c5a3b2ba3f1e6a3626c725bff7da374d
+[submodule "modules/rvm"]
+	path = modules/rvm
+	url = https://github.com/maestrodev/puppet-rvm.git
+	branch = 1eddcf7cf8e5ad0985012db8261af2bdbdd12627
+[submodule "modules/apache"]
+	path = modules/apache
+	url = https://github.com/puppetlabs/puppetlabs-apache.git
+	branch = 3bdf98f9e417a8e2c1038a9cab97c29e3476a75b
+[submodule "modules/apt"]
+	path = modules/apt
+	url = https://github.com/puppetlabs/puppetlabs-apt.git
+	branch = 6a95ab6156e4fb4ad339b2a6476a98aa9605c32f
+[submodule "modules/concat"]
+	path = modules/concat
+	url = https://github.com/puppetlabs/puppetlabs-concat.git
+	branch = a866804adb923156ab7fa15334dec67a77cec024
+[submodule "modules/firewall"]
+	path = modules/firewall
+	url = https://github.com/puppetlabs/puppetlabs-firewall.git
+	branch = 875fc3467ab7a7c6641624db4ecc4b0231150ece
+[submodule "modules/java"]
+	path = modules/java
+	url = https://github.com/puppetlabs/puppetlabs-java.git
+	branch = 749a735559b0bb2e9323dca12513ef6729646764
+[submodule "modules/java_ks"]
+	path = modules/java_ks
+	url = https://github.com/puppetlabs/puppetlabs-java_ks.git
+	branch = abac95473a505080f60b4d0118c82d3568063da0
+[submodule "modules/mongodb"]
+	path = modules/mongodb
+	url = https://github.com/puppetlabs/puppetlabs-mongodb.git
+	branch = 62e02d17046c2ca9182c6ea21351090b74cce833
+[submodule "modules/mysql"]
+	path = modules/mysql
+	url = https://github.com/puppetlabs/puppetlabs-mysql.git
+	branch = 906f99e1c156d64d23b35c57c4ddfb10fb2e4597
+[submodule "modules/nodejs"]
+	path = modules/nodejs
+	url = https://github.com/voxpupuli/puppet-nodejs.git
+	branch = 61f3357376c51f6f4f94784c0c146ce7746d74bd
+[submodule "modules/ntp"]
+	path = modules/ntp
+	url = https://github.com/puppetlabs/puppetlabs-ntp.git
+	branch = cc802d3285509d0a6e5982e5ecaf75765fb20359
+[submodule "modules/postgresql"]
+	path = modules/postgresql
+	url = https://github.com/puppetlabs/puppetlabs-postgresql.git
+	branch = 107af3cb8375b4f61b1c0288e8aaa5a56a1f52b7
+[submodule "modules/rsync"]
+	path = modules/rsync
+	url = https://github.com/puppetlabs/puppetlabs-rsync.git
+	branch = fc1b68b14fd88fa765121ade9e767359c5892cef
+[submodule "modules/stdlib"]
+	path = modules/stdlib
+	url = https://github.com/puppetlabs/puppetlabs-stdlib.git
+	branch = b63849c7865e4191e9df5a7651c16c072facee3d
+[submodule "modules/vcsrepo"]
+	path = modules/vcsrepo
+	url = https://github.com/puppetlabs/puppetlabs-vcsrepo.git
+	branch = 81d5cff2741a10dc9a3e2c3ba6cfcdc22da6b73b
+[submodule "modules/datacat"]
+	path = modules/datacat
+	url = https://github.com/richardc/puppet-datacat.git
+	branch = 9d2cd07b8777a559a0d5e475b0b5651d412f5ba0
+[submodule "modules/module_data"]
+	path = modules/module_data
+	url = https://github.com/ripienaar/puppet-module-data.git
+	branch = 28dafce3a70b35364d33f64d9f518e1adffef242
+[submodule "modules/logrotate"]
+	path = modules/logrotate
+	url = https://github.com/rodjek/puppet-logrotate.git
+	branch = 89ee645e2350045be48df7ac3ef86cbe4cd9b096
+[submodule "modules/sudo"]
+	path = modules/sudo
+	url = https://github.com/saz/puppet-sudo.git
+	branch = e5fe01b9df91d380f1785f4be2818913bfdaba25
+[submodule "modules/php"]
+	path = modules/php
+	url = https://github.com/thias/puppet-php.git
+	branch = f40f46cb74f35387c46821cb53e93effae6d6ce6
+[submodule "modules/sysctl"]
+	path = modules/sysctl
+	url = https://github.com/thias/puppet-sysctl.git
+	branch = fadc66807c90686b31de6009a92e32156b0d2d77

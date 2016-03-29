@@ -32,13 +32,6 @@ mkdir -p ${HIERA_VAR_DIR}
 cp -ar ${PUPPET_ETC_DIR}/hiera/{distros,nodes,locations,roles} ${HIERA_VAR_DIR}/
 cp -ar ${PUPPET_ETC_DIR}/hiera/common-example.yaml ${HIERA_VAR_DIR}/common.yaml
 
-if [[ -x "${PUPPET_ETC_DIR}/bin/install_modules.sh" ]]; then
-  ${PUPPET_ETC_DIR}/bin/install_modules.sh
-else
-  echo "Unable to install modules!"
-  exit 1
-fi
-
 EXPECT_HIERA="$(puppet apply -vd --genconfig | awk '/ hiera_config / {print $3}')"
 if [[ ! -f "${EXPECT_HIERA}" ]]; then
   echo "File ${EXPECT_HIERA} not found! Copying from hiera-stub.yaml example..."
