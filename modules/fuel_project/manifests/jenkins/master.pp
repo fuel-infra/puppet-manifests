@@ -34,6 +34,7 @@ class fuel_project::jenkins::master (
     apply_firewall_rules => $firewall_enable,
     install_zabbix_item  => $install_zabbix_item,
     service_fqdn         => $service_fqdn,
+    install_plugins      => $install_plugins,
   }
   if($log_gzip_enable) {
     ensure_packages('pigz')
