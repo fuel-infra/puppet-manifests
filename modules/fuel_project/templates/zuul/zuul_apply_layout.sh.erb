@@ -1,17 +1,24 @@
 #!/bin/bash
 
 ZUUL_LAYOUTDIR="$(dirname '<%= zuul_layout %>')"
+<% if @config_update_method == 'jenkins' -%>
 JENKINS_JOB_URL="<%= jenkins_url %>/job/<%= jenkins_job %>/lastSuccessfulBuild/artifact/build/<%= @fqdn %>"
+<% end -%>
 ZUUL_RELOAD="false"
 ZUUL_TEMP="$(mktemp -d)"
 
 diff_config() {
     diff -u "${ZUUL_LAYOUTDIR}/${1}" "${ZUUL_TEMP}/${1}"
 }
-
+<% if @config_update_method == 'jenkins' -%>
 # Get configs from Jenkins
 curl -fLsS -o "${ZUUL_TEMP}/layout.yaml" "${JENKINS_JOB_URL}/layout.yaml"
 curl -fLsS -o "${ZUUL_TEMP}/external_functions.py" "${JENKINS_JOB_URL}/external_functions.py"
+<% end -%>
+<% if @config_update_method == 'repository' -%>
+cp <%= @project_config_zuul_yaml_path %> "${ZUUL_TEMP}/layout.yaml"
+cp <%= @project_config_zuul_ext_funct_path %> "${ZUUL_TEMP}/external_functions.py"
+<% end -%>
 
 # If files are not changed - just exit
 if diff_config layout.yaml && diff_config external_functions.py; then
