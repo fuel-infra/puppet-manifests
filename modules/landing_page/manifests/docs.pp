@@ -24,7 +24,7 @@ class landing_page::docs (
   $package                = 'landing-page-docs',
 ) {
   package { $package :
-    ensure => 'present',
+    ensure => 'latest',
   }
 
   if (!defined(Class['::nginx'])) {
