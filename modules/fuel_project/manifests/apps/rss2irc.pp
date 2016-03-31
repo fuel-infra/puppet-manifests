@@ -31,8 +31,9 @@ class fuel_project::apps::rss2irc (
     $parameters = "${options} ${rss} ${server}/${channel}/${nick}"
 
     supervisord::program { $title:
-      command  => "/usr/bin/rss2irc ${parameters}",
-      priority => '100',
+      command     => "/usr/bin/rss2irc ${parameters}",
+      priority    => '100',
+      autorestart => true,
     }
   }
 
