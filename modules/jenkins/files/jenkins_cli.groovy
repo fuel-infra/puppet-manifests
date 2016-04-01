@@ -434,7 +434,7 @@ class Actions {
     } else {
         config = PluginImpl.getInstance().getServer(gerrit_server_name).getConfig()
     }
-    config.setGerritBuildCurrentPatchesOnly(true)
+    config.buildCurrentPatchesOnly.setEnabled(true)
     config.setGerritHostName(gerrit_hostname)
     config.setGerritFrontEndURL(gerrit_url)
     config.setGerritUserName(gerrit_username)
