@@ -5,9 +5,6 @@
 # Parameters:
 #   [*auto_update*] - run github poller every 15 minutes
 #   [*development*] - development deployment type
-#   [*elastic_http_port*] - Elasticsearch http port
-#   [*elastic_listen_ip*] - Elasticsearch listening ip
-#   [*elastic_tcp_port*] - Elasticsearch TCP port
 #   [*firewall_enable*] - enable embedded firewall rules
 #   [*fuel_stats_repo*] - fuel-stats repository URL
 #   [*http_port*] - http listening port
@@ -31,9 +28,6 @@
 class fuel_stats::analytic (
   $auto_update            = $fuel_stats::params::auto_update,
   $development            = $fuel_stats::params::development,
-  $elastic_http_port      = '9200',
-  $elastic_listen_ip      = '127.0.0.1',
-  $elastic_tcp_port       = '9300',
   $firewall_enable        = $fuel_stats::params::firewall_enable,
   $fuel_stats_repo        = 'https://github.com/openstack/fuel-stats/',
   $http_port              = $fuel_stats::params::http_port,
@@ -53,7 +47,11 @@ class fuel_stats::analytic (
   $ssl_key_file           = '/etc/ssl/analytic.key',
   $ssl_key_file_contents  = '',
 ) inherits fuel_stats::params {
-  ensure_packages('error-pages')
+
+  ensure_packages([
+    'error-pages',
+    'openjdk-7-jre-headless',
+  ])
 
   if ( ! defined(Class['::fuel_stats::db']) ) {
     class { '::fuel_stats::db' :
@@ -268,23 +266,26 @@ class fuel_stats::analytic (
     ],
   }
 
-  # To be removed
-  class { '::elasticsearch' :
-    manage_repo  => false,
-    java_install => true,
-    java_package => 'openjdk-7-jre-headless',
-    config       => {
-      'network.host'       => $elastic_listen_ip,
-      'http.port'          => $elastic_http_port,
-      'transport.tcp.port' => $elastic_tcp_port,
-    },
-    require      => Class['::apt'],
-    notify       => Service['elasticsearch']
+  ensure_packages ('elasticsearch', {
+    ensure => 'installed',
+    notify => Service['elasticsearch'],
+  })
+
+  file { '/etc/elasticsearch/scripts' :
+    ensure  => 'link',
+    target  => '/usr/share/elasticsearch/scripts/',
+    require => [
+      Package['elasticsearch'],
+    ]
   }
 
   service { 'elasticsearch' :
     ensure  => 'running',
     enable  => true,
-    require => Class['elasticsearch']
+    require => [
+      File['/etc/elasticsearch/scripts'],
+      Package['elasticsearch'],
+      Package['openjdk-7-jre-headless'],
+    ]
   }
 }
