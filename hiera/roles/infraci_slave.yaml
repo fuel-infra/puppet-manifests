@@ -6,10 +6,6 @@ classes:
 
 fuel_project::common::external_host: true
 fuel_project::jenkins::slave::verify_jenkins_jobs: true
-fuel_project::jenkins::slave::sudo_commands:
-  - /sbin/ebtables
-  - /usr/bin/puppet agent -vd --onetime --no-daemonize
-  - /usr/bin/puppet agent -vd --onetime --no-daemonize --noop
 
 jenkins::slave::authorized_keys:
   'jenkins@infra-ci.fuel-jenkins.org':

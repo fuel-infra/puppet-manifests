@@ -28,7 +28,6 @@
 #   [*ldap*] - use LDAP authentication
 #   [*ldap_base*] - LDAP base
 #   [*ldap_ignore_users*] - users ignored for LDAP checks
-#   [*ldap_sudo_group*] - LDAP group with sudo privileges
 #   [*ldap_uri*] - LDAP URI
 #   [*local_ssh_private_key*] - Jenkins SSL private key
 #   [*local_ssh_public_key*] - Jenkins SSL public key
@@ -66,7 +65,6 @@
 #   [*run_tests*] - dependencies to run tests
 #   [*seed_cleanup_dirs*] - directory locations with seeds to cleanup
 #   [*simple_syntax_check*] - add syntax check tools
-#   [*sudo_commands*] - sudo commands allowed for operating user
 #   [*tls_cacertdir*] - LDAP CA certs directory
 #   [*verify_fuel_astute*] - add fuel_astute verification requirements
 #   [*verify_fuel_docs*] - add fuel_docs verification requirements
@@ -106,7 +104,6 @@ class fuel_project::jenkins::slave (
   $ldap                                 = false,
   $ldap_base                            = '',
   $ldap_ignore_users                    = '',
-  $ldap_sudo_group                      = undef,
   $ldap_uri                             = '',
   $local_ssh_private_key                = undef,
   $local_ssh_public_key                 = undef,
@@ -156,7 +153,6 @@ class fuel_project::jenkins::slave (
   ],
   $selenium_firefox_package_version     = undef,
   $simple_syntax_check                  = false,
-  $sudo_commands                        = ['/sbin/ebtables'],
   $tls_cacertdir                        = '',
   $verify_fuel_astute                   = false,
   $verify_fuel_docs                     = false,
@@ -466,14 +462,6 @@ class fuel_project::jenkins::slave (
       ],
     })
 
-    file { '/etc/sudoers.d/systest' :
-      ensure  => 'present',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0440',
-      content => template('fuel_project/jenkins/slave/system_tests.sudoers.d.erb'),
-    }
-
     # Working with bridging
     # we need to load module to be sure /proc/sys/net/bridge branch will be created
     $kernel = hiera('fuel_project::common::kernel_package', '')
@@ -747,15 +735,6 @@ class fuel_project::jenkins::slave (
       default: { }
     }
     # /LP
-
-    file { 'jenkins-sudo-for-build_iso' :
-      path    => '/etc/sudoers.d/build_fuel_iso',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0440',
-      content => template('fuel_project/jenkins/slave/build_iso.sudoers.d.erb')
-    }
-
   }
 
   # FIXME: Qemu 2.4 stub to enable kvm_intel module loading {
@@ -792,16 +771,6 @@ class fuel_project::jenkins::slave (
     ]
 
     ensure_packages($osci_test_packages)
-
-    # sudo for user 'jenkins'
-    file { 'jenkins-sudo-for-osci-vm' :
-      path    => '/etc/sudoers.d/jenkins_sudo',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0440',
-      content => template('fuel_project/jenkins/slave/build_iso.sudoers.d.erb'),
-      require => User['jenkins'],
-    }
 
     # obs client settings
     file { 'oscrc' :
@@ -1316,16 +1285,6 @@ class fuel_project::jenkins::slave (
         action  => 'accept',
         require => Package[$docker_package],
       }
-    }
-  }
-
-  if($ldap_sudo_group) {
-    file { '/etc/sudoers.d/sandbox':
-      ensure  => 'present',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0440',
-      content => template('fuel_project/jenkins/slave/sandbox.sudoers.d.erb'),
     }
   }
 }
