@@ -40,7 +40,7 @@ apt::sources:
     include_deb: true
   infra_packages:
     location: 'http://mirror.fuel-infra.org/infra/packages/ubuntu/'
-    release: 'trusty'
+    release: "%{::lsbdistcodename}"
     key: 'CA2B20483E301371'
     key_server: 'keyserver.ubuntu.com'
     repos: 'main'
