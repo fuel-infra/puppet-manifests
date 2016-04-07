@@ -32,3 +32,14 @@ fi
 echo "Linking..."
 rm -rf "${DIR}"/{.[^.]*,*}
 mv "${TMPDIR}"/* "${DIR}"/
+
+if [[ -f <%= @nodepool_credentials_file_path %> ]]; then
+  echo "Setting proper credentials..."
+  source <%= @nodepool_credentials_file_path %>
+  sed -i 's~{{ DBURI }}~'\'${DBURI}\''~' <%= @project_config_nodepool_yaml_path %>
+  sed -i 's~{{ PROVIDERS_USERNAME }}~'\'${PROVIDERS_USERNAME}\''~' <%= @project_config_nodepool_yaml_path %>
+  sed -i 's~{{ PROVIDERS_PASSWORD }}~'\'${PROVIDERS_PASSWORD}\''~' <%= @project_config_nodepool_yaml_path %>
+  sed -i 's~{{ TARGETS_USERNAME }}~'\'${TARGETS_USERNAME}\''~' <%= @project_config_nodepool_yaml_path %>
+  sed -i 's~{{ TARGETS_APIKEY }}~'\'${TARGETS_APIKEY}\''~' <%= @project_config_nodepool_yaml_path %>
+  sed -i 's~{{ TARGETS_CREDENTIALSID }}~'\'${TARGETS_CREDENTIALSID}\''~' <%= @project_config_nodepool_yaml_path %>
+fi

@@ -14,6 +14,8 @@
 # [*image_log_document_root*] - Root path where to store image logs
 # [*known_hosts*] - List of hosts which ssh fingerprint key should be added into known_hosts file
 # [*logging_conf_hash*] - Hash keys used to configure nodepools logging.conf
+# [*nodepool_credentials*] - This file holds the credentials to be used with nodepool.yaml
+# [*nodepool_credentials_file_path*] - Path to the nodepools credentials file
 # [*nodepool_ssh_private_key_contents*] - Nodepools private key used for auth
 # [*project_config_cfg_dir*] - Project-config root directory
 # [*project_config_clone_ssh_key_file*] - SSH private file content for the user which has rights accessint the project-config repo.
@@ -45,8 +47,8 @@ class nodepool (
   $image_log_document_root                = '/var/www/nodepool/image',
   $known_hosts                            = undef,
   $logging_conf_hash                      = {},
-  $mysql_db_name                          = 'nodepool',
-  $mysql_host                             = '127.0.0.1',
+  $nodepool_credentials                   = undef,
+  $nodepool_credentials_file_path         = '/etc/nodepool/credentials',
   $project_config_cfg_dir                 = '/etc/project-config',
   $project_config_clone_ssh_key_file      = undef,
   $project_config_clone_ssh_key_file_path = '/var/lib/project-config-cloner/.ssh/id_rsa',
@@ -109,9 +111,7 @@ class nodepool (
       mode    => '0700',
       owner   => $project_config_user,
       group   => $project_config_user,
-      require => [
-        User[$project_config_user],
-      ],
+      require => User[$project_config_user],
     }
     if($project_config_known_hosts) {
       create_resources('ssh::known_host', $project_config_known_hosts, {
@@ -128,28 +128,42 @@ class nodepool (
     }
 
     if ($project_config_repo) {
-      vcsrepo { $project_config_cfg_dir :
-        ensure   => 'latest',
-        provider => git,
-        identity => $project_config_clone_ssh_key_file_path,
-        revision => $project_config_repo_revision,
-        source   => $project_config_repo,
-        user     => $project_config_user,
-        group    => $project_config_user,
-        owner    => $project_config_user,
-        require  => [
-          Package['git'],
-          User[$project_config_user],
-          File[$project_config_clone_ssh_key_file_path],
-        ]
+      file { $project_config_cfg_dir :
+        ensure  => 'directory',
+        mode    => '0755',
+        owner   => $project_config_user,
+        group   => $project_config_user,
+        require => User[$project_config_user],
       }
-
       file { $project_config_sync_script_path :
         ensure  => 'present',
         content => template('nodepool/project_config_sync_script.sh.erb'),
         owner   => 'root',
         group   => 'root',
         mode    => '0755',
+      }
+      if ($nodepool_credentials) {
+        file { $nodepool_credentials_file_path :
+          ensure  => 'present',
+          content => $nodepool_credentials,
+          owner   => $project_config_user,
+          group   => $project_config_user,
+          mode    => '0440',
+          require => User[$project_config_user],
+        }
+      }
+      exec { 'project-config-sync-script' :
+        cwd       => '/tmp',
+        command   => $project_config_sync_script_path,
+        logoutput => 'on_failure',
+        user      => $project_config_user,
+        require   => [
+          File[$project_config_cfg_dir],
+          File[$project_config_clone_ssh_key_file_path],
+          File[$project_config_sync_script_path],
+          User[$project_config_user],
+          Package['git'],
+        ],
       }
     }
     if($project_config_cron_jobs) {
