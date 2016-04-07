@@ -123,7 +123,13 @@ class racks::webapp (
       'error_page 403'         => '/mirantis/403.html',
       'error_page 404'         => '/mirantis/404.html',
       'error_page 500 502 504' => '/mirantis/5xx.html',
-    }
+    },
+    vhost_cfg_append    => {
+      'add_header' => [
+        "'Strict-Transport-Security' 'max-age=2592000'",
+        '\'Content-Security-Policy\' "default-src \'self\' \'unsafe-inline\' https://static.fuel-infra.org"'
+      ],
+    },
   }
 
   ::nginx::resource::location { 'racks-api' :
