@@ -93,9 +93,9 @@ class fuel_project::puppet::master (
   }
   if ($enable_update_cronjob) {
     cron { 'puppet-manifests-update' :
-      command => '/usr/bin/timeout -k80 60 /usr/local/bin/puppet-manifests-update.sh 2>&1 | logger -t puppet-manifests-update',
+      command => '/usr/bin/timeout -k340 300 /usr/local/bin/puppet-manifests-update.sh 2>&1 | logger -t puppet-manifests-update',
       user    => 'root',
-      minute  => '*/5',
+      minute  => '*/10',
       require => File['/usr/local/bin/puppet-manifests-update.sh'],
     }
   }
