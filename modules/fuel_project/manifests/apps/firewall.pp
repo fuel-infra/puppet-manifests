@@ -46,12 +46,34 @@ class fuel_project::apps::firewall {
       action  => 'accept',
     }
 
+    firewall { '0000 - accept all ICMPv6 traffic' :
+      proto    => 'ipv6-icmp',
+      action   => 'accept',
+      require  => undef,
+      provider => 'ip6tables'
+    }->
+    firewall { '0001 - accept all IPv6 traffic to lo interface' :
+      proto    => 'all',
+      iniface  => 'lo',
+      action   => 'accept',
+      provider => 'ip6tables',
+    }->
+    firewall { '0002 - accept related established rules for IPv6' :
+      proto    => 'all',
+      ctstate  => ['RELATED', 'ESTABLISHED'],
+      action   => 'accept',
+      provider => 'ip6tables',
+    }
+
     create_resources(firewall, $rules, {
       before  => Firewall['9999 - drop all'],
       require => [
         Firewall['0000 - accept all icmp'],
         Firewall['0001 - accept all to lo interface'],
         Firewall['0002 - accept related established rules'],
+        Firewall['0000 - accept all ICMPv6 traffic'],
+        Firewall['0001 - accept all IPv6 traffic to lo interface'],
+        Firewall['0002 - accept related established rules for IPv6'],
       ]
     })
 
@@ -59,6 +81,12 @@ class fuel_project::apps::firewall {
       proto  => 'all',
       action => 'drop',
       before => undef,
+    }
+    firewall { '9999 - drop all IPv6' :
+      proto    => 'all',
+      action   => 'drop',
+      before   => undef,
+      provider => 'ip6tables',
     }
   }
 }
