@@ -100,8 +100,11 @@ class docker_registry (
     $ssl_key_internal_content,
     $ssl_key_token_content,
     $anonymous = true,
-    $auth_port = 5001,
     $auth_backend_port = 5801,
+    $auth_port = 5001,
+    $config_auth = '/etc/registry/auth.yml',
+    $config_search = '/etc/registry/search.yml',
+    $config_server = '/etc/registry/server.yml',
     $expiration = 900,
     $search_backend_port = 5802,
     $search_password = 'index',
@@ -110,6 +113,8 @@ class docker_registry (
     $search_user = 'index',
     $server_backend_port = 5800,
     $server_port = 443,
+    $service_group = 'registry',
+    $service_user = 'registry',
     $ssl_certificate_global = '/etc/ssl/certs/registry.crt',
     $ssl_certificate_internal = '/etc/ssl/certs/internal.crt',
     $ssl_certificate_token = '/etc/registry/token.crt',
@@ -129,28 +134,28 @@ class docker_registry (
   ensure_packages($packages)
 
   # create config files
-  file { '/etc/registry/server.yml':
+  file { $config_server:
     ensure  => 'file',
-    owner   => 'registry',
-    group   => 'registry',
+    owner   => $service_user,
+    group   => $service_group,
     mode    => '0640',
     content => template('docker_registry/server.yml.erb'),
     require => Package[$packages],
   }
 
-  file { '/etc/registry/auth.yml':
+  file { $config_auth:
     ensure  => 'file',
-    owner   => 'registry',
-    group   => 'registry',
+    owner   => $service_user,
+    group   => $service_group,
     mode    => '0640',
     content => template('docker_registry/auth.yml.erb'),
     require => Package[$packages],
   }
 
-  file { '/etc/registry/search.yml':
+  file { $config_search:
     ensure  => 'file',
-    owner   => 'registry',
-    group   => 'registry',
+    owner   => $service_user,
+    group   => $service_group,
     mode    => '0640',
     content => template('docker_registry/search.yml.erb'),
     require => Package[$packages],
@@ -197,8 +202,8 @@ class docker_registry (
   # create certificate files for tokens
   file { $ssl_certificate_token:
     ensure  => 'file',
-    owner   => 'registry',
-    group   => 'registry',
+    owner   => $service_user,
+    group   => $service_group,
     mode    => '0640',
     content => $ssl_certificate_token_content,
     require => Package[$packages],
@@ -206,11 +211,19 @@ class docker_registry (
 
   file { $ssl_key_token:
     ensure  => 'file',
-    owner   => 'registry',
-    group   => 'registry',
+    owner   => $service_user,
+    group   => $service_group,
     mode    => '0640',
     content => $ssl_key_token_content,
     require => Package[$packages],
+  }
+
+  # schedule garbage-collector runs
+  cron { 'garbage-collect':
+    command => "/usr/bin/registry garbage-collect ${config_server}",
+    user    => $service_user,
+    hour    => 3,
+    minute  => 0,
   }
 
   # setup reverse proxies
@@ -327,8 +340,8 @@ class docker_registry (
   # setup uwsgi for registry search
   ::uwsgi::application { 'registry-search' :
     plugins        => 'python',
-    uid            => 'registry',
-    gid            => 'registry',
+    uid            => $service_user,
+    gid            => $service_group,
     socket         => "127.0.0.1:${search_backend_port}",
     enable_threads => true,
     chdir          => '/usr/lib/registry-search',
