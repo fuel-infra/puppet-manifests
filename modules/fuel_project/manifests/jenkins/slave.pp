@@ -32,6 +32,7 @@
 #   [*local_ssh_private_key*] - Jenkins SSL private key
 #   [*local_ssh_public_key*] - Jenkins SSL public key
 #   [*nailgun_db*] - nailgun database name
+#   [*nodejs_version*] - version of 'nodejs' package
 #   [*osc_apiurl*] - OSC interface URL
 #   [*osc_pass_primary*] - OSC primary password
 #   [*osc_pass_secondary*] - OSC secondary password
@@ -62,6 +63,7 @@
 #   [*ostf_db*] - OSTF database name
 #   [*pam_filter*] - PAM filter for LDAP
 #   [*pam_password*] - PAM password type
+#   [*pin_nodejs_version*] - enable or disable 'nodejs' package version pinning
 #   [*run_tests*] - dependencies to run tests
 #   [*seed_cleanup_dirs*] - directory locations with seeds to cleanup
 #   [*simple_syntax_check*] - add syntax check tools
@@ -108,6 +110,7 @@ class fuel_project::jenkins::slave (
   $local_ssh_private_key                = undef,
   $local_ssh_public_key                 = undef,
   $nailgun_db                           = ['nailgun'],
+  $nodejs_version                       = '0.10.25~dfsg2-2ubuntu1',
   $osc_apiurl                           = '',
   $osc_pass_primary                     = '',
   $osc_pass_secondary                   = '',
@@ -138,6 +141,7 @@ class fuel_project::jenkins::slave (
   $ostf_db                              = ['ostf'],
   $pam_filter                           = '',
   $pam_password                         = '',
+  $pin_nodejs_version                   = true,
   $run_tests                            = false,
   $seed_cleanup_dirs                    = [
     {
@@ -514,8 +518,6 @@ class fuel_project::jenkins::slave (
       'libparse-debcontrol-perl',
       'make',
       'mock',
-      'nodejs',
-      'nodejs-legacy',
       'npm',
       'pigz',
       'lzop',
@@ -526,6 +528,26 @@ class fuel_project::jenkins::slave (
       'ruby',
       'sbuild',
     ]
+
+    # https://bugs.launchpad.net/fuel/+bug/1569341
+    $nodejs_packages = [
+      'nodejs',
+      'nodejs-legacy',
+    ]
+
+    if ($pin_nodejs_version) {
+      ensure_packages('nodejs', {
+        ensure => $nodejs_version,
+      })
+
+      ensure_packages('nodejs-legacy', {
+        require => Package['nodejs']
+      })
+    }
+    else {
+      ensure_packages($nodejs_packages)
+    }
+    # https://bugs.launchpad.net/fuel/+bug/1569341
 
     case $::osfamily {
       'Debian': {
