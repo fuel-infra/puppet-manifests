@@ -26,6 +26,9 @@ class ssh::params {
   case $::osfamily {
     'RedHat': {
       $ldap_packages = [
+        'authconfig',
+        'oddjob',
+        'oddjob-mkhomedir',
         'openldap',
         'openldap-clients',
         'nss-pam-ldapd',

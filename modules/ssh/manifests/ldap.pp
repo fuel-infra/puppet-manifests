@@ -80,6 +80,39 @@ class ssh::ldap (
     hasrestart => false,
   }
 
+  case $::osfamily {
+    'RedHat': {
+      service { 'oddjobd' :
+        ensure   => 'running',
+        enable   => true,
+        provider => 'systemd',
+        require  => [
+          Package['oddjob'],
+          Package['oddjob-mkhomedir'],
+        ],
+      }
+      $authconfig_flags = join([
+        '--enableldap',
+        '--enableldapauth',
+        "--ldapserver=\"${ldap_uri}\"",
+        "--ldapbasedn=\"${ldap_base}\"",
+        '--enablemkhomedir',
+        '--update',
+      ], ' ')
+      $authconfig_cmd = "/usr/sbin/authconfig ${authconfig_flags}"
+      exec { 'authconfig' :
+        command   => $authconfig_cmd,
+        logoutput => on_failure,
+        require   => [
+          Package['authconfig'],
+          Package['oddjob'],
+          Package['oddjob-mkhomedir'],
+        ],
+      }
+    }
+    default: { }
+  }
+
   Class['ssh::sshd']->
     Package[$ldap_packages]->
     File['/etc/ldap.conf']->
