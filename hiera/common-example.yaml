@@ -370,7 +370,7 @@ puppet::master::firewall_allow_sources:
     source: '192.168.0.0/16'
 puppet::master::nginx_log_format: 'proxy'
 
-ssh::banner::content:: |
+ssh::banner::content: |
   Welcome to %{::fqdn}
 
 ssh::ldap::ldap_uri: 'ldap://ldap'
