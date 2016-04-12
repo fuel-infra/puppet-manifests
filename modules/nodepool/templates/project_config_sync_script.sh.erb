@@ -9,8 +9,10 @@ export TMPDIR=${TMPDIR:-/tmp/project-config/}
 export REPO=${REPO:-<%= @project_config_repo %>}
 export DIR=${DIR:-<%= @project_config_cfg_dir %>}
 
-echo "Clean up..."
-rm -rf "${TMPDIR}"
+if [[ -e "${TMPDIR}" ]]; then
+  echo "Clean up..."
+  rm -rf "${TMPDIR}"
+fi
 
 echo "Cloning..."
 git clone "${REPO}" "${TMPDIR}"
