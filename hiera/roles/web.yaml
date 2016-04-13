@@ -1,3 +1,25 @@
 ---
 classes:
-  - '::fuel_project::web'
+  - '::fuel_project::common'
+  - '::fuel_project::nginx'
+  - '::fuel_project::apps::firewall'
+  - '::landing_page'
+  - '::landing_page::docs'
+
+fuel_project::apps::firewall::rules:
+  '1000 - Allow HTTP(s) traffic':
+    source: '0.0.0.0/0'
+    dport:
+      - 80
+      - 443
+    proto: 'tcp'
+    action: 'accept'
+landing_page::config: '/etc/landing_page/settings.py'
+landing_page::nginx_server_name: 'www.example.org'
+landing_page::nginx_server_aliases:
+  - 'example.org'
+landing_page::nginx_log_format: 'proxy'
+landing_page::database_name: 'landing_page'
+landing_page::database_user: 'landing_page'
+landing_page::database_password: 'landing'
+landing_page::plugins_repository: 'http://plugins.example.org'

@@ -4,7 +4,6 @@
 #
 # Parameters:
 #   [*app_user*] - user and group used to deploy instance
-#   [*apply_firewall_rules*] - apply embedded firewall rules
 #   [*apps*] - applications to deploy
 #   [*config*] - configuration file path
 #   [*config_template*] - configuration file template
@@ -15,7 +14,6 @@
 #   [*database_port*] - database port
 #   [*database_user*] - database user
 #   [*debug*] - enable Django debug
-#   [*firewall_allow_sources*] - allow connections from these sources
 #   [*google_analytics_property_id*] - Google Analytics property_id
 #   [*nginx_access_log*] - access log
 #   [*nginx_error_log*] - error log
@@ -34,7 +32,6 @@
 #
 class landing_page (
   $app_user                     = $::landing_page::params::app_user,
-  $apply_firewall_rules         = $::landing_page::params::apply_firewall_rules,
   $apps                         = $::landing_page::params::apps,
   $config                       = $::landing_page::params::config,
   $config_template              = $::landing_page::params::config_template,
@@ -45,7 +42,6 @@ class landing_page (
   $database_port                = $::landing_page::params::database_port,
   $database_user                = $::landing_page::params::database_user,
   $debug                        = $::landing_page::params::debug,
-  $firewall_allow_sources       = $::landing_page::params::firewall_allow_sources,
   $google_analytics_property_id = $::landing_page::params::google_analytics_property_id,
   $nginx_access_log             = $::landing_page::params::nginx_access_log,
   $nginx_error_log              = $::landing_page::params::nginx_error_log,
@@ -281,14 +277,5 @@ class landing_page (
     chdir   => '/usr/share/landing_page',
     module  => 'release.wsgi',
     require => User[$app_user],
-  }
-
-  if ($apply_firewall_rules) {
-    include firewall_defaults::pre
-    create_resources(firewall, $firewall_allow_sources, {
-      dport   => [80, 443],
-      action  => 'accept',
-      require => Class['firewall_defaults::pre'],
-    })
   }
 }
