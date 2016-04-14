@@ -82,11 +82,11 @@
 class fuel_project::jenkins::slave (
   $docker_package,
   $ruby_version,
-  $bind_policy                          = '',
   $bats_tests                           = false,
+  $bind_policy                          = '',
   $build_fuel_iso                       = false,
-  $build_fuel_packages                  = false,
   $build_fuel_npm_packages              = ['grunt-cli', 'gulp'],
+  $build_fuel_packages                  = false,
   $build_fuel_plugins                   = false,
   $check_tasks_graph                    = false,
   $docker_config                        = undef,
@@ -101,12 +101,12 @@ class fuel_project::jenkins::slave (
   $known_hosts                          = {},
   $known_hosts_overwrite                = false,
   $kolla_build_tests                    = false,
-  $libvirt_default_network              = false,
-  $libvirt_polkit_rules_user            = 'jenkins',
   $ldap                                 = false,
   $ldap_base                            = '',
   $ldap_ignore_users                    = '',
   $ldap_uri                             = '',
+  $libvirt_default_network              = false,
+  $libvirt_polkit_rules_user            = 'jenkins',
   $local_ssh_private_key                = undef,
   $local_ssh_public_key                 = undef,
   $nailgun_db                           = ['nailgun'],
@@ -118,8 +118,8 @@ class fuel_project::jenkins::slave (
   $osc_url_secondary                    = '',
   $osc_user_primary                     = '',
   $osc_user_secondary                   = '',
-  $osci_centos_image_name               = 'centos6.4-x86_64-gold-master.img',
   $osci_centos7_image_name              = 'centos-7.qcow2',
+  $osci_centos_image_name               = 'centos6.4-x86_64-gold-master.img',
   $osci_centos_job_dir                  = '/home/jenkins/vm-centos-test-rpm',
   $osci_centos_remote_dir               = 'vm-centos-test-rpm',
   $osci_obs_jenkins_key                 = '',
@@ -499,10 +499,6 @@ class fuel_project::jenkins::slave (
     augeas { 'sysctl-net.bridge.bridge-nf-call-iptables' :
       context => '/files/etc/modules',
       changes => "clear ${br_module}",
-    }
-
-    sysctl { 'net.bridge.bridge-nf-call-iptables' :
-      value   => '0',
     }
 
     sysctl { 'vm.swappiness' :

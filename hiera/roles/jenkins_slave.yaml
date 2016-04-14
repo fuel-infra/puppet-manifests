@@ -2,6 +2,7 @@
 classes:
   - '::fuel_project::jenkins::slave'
   - '::sudo'
+  - '::sysctl'
 
 fuel_project::jenkins::slave::verify_network_checker: true
 fuel_project::jenkins::slave::install_docker: true
@@ -25,3 +26,7 @@ sudo::configs:
     'content': '%sudo ALL=(ALL) NOPASSWD: /usr/bin/dutop ""'
   'dutop-libvirt':
     'content': '%sudo ALL=(ALL) NOPASSWD: /usr/bin/dutop /var/lib/libvirt'
+
+sysctl::base::values:
+  net.bridge.bridge-nf-call-iptables:
+    value: '0'
