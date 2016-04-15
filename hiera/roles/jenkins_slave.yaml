@@ -2,7 +2,7 @@
 classes:
   - '::fuel_project::jenkins::slave'
   - '::sudo'
-  - '::sysctl'
+  - '::sysctl::base'
 
 fuel_project::jenkins::slave::verify_network_checker: true
 fuel_project::jenkins::slave::install_docker: true

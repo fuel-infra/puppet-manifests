@@ -3,7 +3,7 @@ classes:
   - '::fuel_project::common'
   - '::fuel_project::jenkins::slave'
   - '::fuel_project::jenkins::slave::infra'
-  - '::sysctl'
+  - '::sysctl::base'
 
 fuel_project::common::external_host: true
 fuel_project::jenkins::slave::verify_jenkins_jobs: true
