@@ -11,7 +11,6 @@ class landing_page::params {
     'security',
     'sheet'
   ]
-  $apply_firewall_rules         = false
   $config                       = '/etc/landing_page/settings.py'
   $config_template              = 'landing_page/landing_page.py.erb'
   $database_engine              = 'django.db.backends.mysql'
@@ -21,7 +20,6 @@ class landing_page::params {
   $database_port                = ''
   $database_user                = 'release'
   $debug                        = false
-  $firewall_allow_sources       = {}
   $google_analytics_property_id = undef
   $nginx_access_log             = '/var/log/nginx/access.log'
   $nginx_error_log              = '/var/log/nginx/error.log'
