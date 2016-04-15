@@ -19,12 +19,10 @@ class landing_page::docs (
   $nginx_www_root         = '/var/www/docs_landing',
   $package                = 'landing-page-docs',
 ) {
+  include ::nginx
+
   package { $package :
     ensure => 'latest',
-  }
-
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :}
   }
 
   ::nginx::resource::vhost { 'docs_landing' :

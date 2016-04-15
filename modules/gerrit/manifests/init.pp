@@ -158,11 +158,8 @@ class gerrit (
   $ssl_key_file_contents               = '', # If left empty puppet will not create file.
   $web_repo_url                        = '',
 ) {
-  include jeepyb
-
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :}
-  }
+  include ::jeepyb
+  include ::nginx
 
   ::nginx::resource::vhost { 'gerrit' :
     ensure               => 'present',

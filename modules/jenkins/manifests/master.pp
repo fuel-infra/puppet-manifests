@@ -205,9 +205,7 @@ class jenkins::master (
 
   # Setup nginx
 
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :}
-  }
+  include ::nginx
 
   ::nginx::resource::vhost { 'jenkins-http' :
     ensure              => 'present',

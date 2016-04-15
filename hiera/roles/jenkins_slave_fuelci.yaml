@@ -1,0 +1,142 @@
+---
+classes:
+  - '::docker'
+  - '::fuel_project::apps::firewall'
+  - '::fuel_project::jenkins::slave'
+  - '::fuel_project::jenkins::slave::bats_tests'
+  - '::fuel_project::jenkins::slave::build_fuel_plugins'
+  - '::fuel_project::jenkins::slave::check_tasks_graph'
+  - '::fuel_project::jenkins::slave::package_build'
+  - '::fuel_project::jenkins::slave::run_tests'
+  - '::fuel_project::jenkins::slave::simple_syntax_check'
+  - '::fuel_project::jenkins::slave::verify_fuel_astute'
+  - '::fuel_project::jenkins::slave::verify_fuel_docs'
+  - '::fuel_project::jenkins::slave::verify_fuel_pkgs_requirements'
+  - '::fuel_project::jenkins::slave::verify_fuel_web'
+  - '::fuel_project::jenkins::slave::verify_network_checker'
+  - '::sudo'
+  - '::sysctl::base'
+
+docker::package_name: lxc-docker-1.6.2
+docker::version: 1.6.2
+docker::users:
+  - jenkins
+docker::use_upstream_package_source: false
+
+devopslib::downloads_cleaner::cleanup_dirs:
+  -
+    dir: '/var/www/fuelweb-iso'
+    ttl: 10
+    pattern: 'fuel-*'
+  -
+    dir: '/srv/downloads'
+    ttl: 1
+    pattern: 'fuel-*'
+
+sudo::configs:
+  'jenkins':
+    'content': 'jenkins ALL=(ALL) NOPASSWD: /sbin/ebtables,/usr/bin/puppet agent -vd --onetime --no-daemonize,/usr/bin/puppet agent -vd --onetime --no-daemonize --noop'
+
+landing_page::updater::config: '/etc/release-updater.yaml'
+landing_page::updater::server_name: 'landing.example.org'
+landing_page::updater::updater_user: 'jenkins'
+
+postgresql::server::postgres_password: 'insecurepassword'
+
+fuel_project::apps::firewall::rules:
+  '300 - Jenkins master SSH':
+    dport: 22
+    proto: 'tcp'
+    action: 'accept'
+  '1000 - docker rule':
+    chain: 'FORWARD'
+    proto: 'all'
+    outiface: 'docker0'
+    jump: 'DOCKER'
+    require: Class[docker]
+  '1001 - docker rule':
+    chain: 'FORWARD'
+    proto: 'all'
+    ctstate:
+      - 'RELATED'
+      - 'ESTABLISHED'
+    outiface: 'docker0'
+    action: 'accept'
+    require: Class[docker]
+  '1002 - docker rule':
+    chain: 'FORWARD'
+    proto: 'all'
+    iniface: 'docker0'
+    outiface: 'docker0'
+    action: 'accept'
+    require: Class[docker]
+  '1003 - docker rule':
+    chain: 'FORWARD'
+    proto: 'all'
+    iniface: 'docker0'
+    outiface: '! docker0'
+    action: 'accept'
+    require: Class[docker]
+  '1004 - docker rule':
+    table: 'nat'
+    chain: 'PREROUTING'
+    dst_type: 'LOCAL'
+    proto: 'all'
+    jump: 'DOCKER'
+    require: Class[docker]
+  '1005 - docker rule':
+    table: 'nat'
+    chain: 'OUTPUT'
+    destination: '! 127.0.0.1/8'
+    dst_type: 'LOCAL'
+    proto: 'all'
+    jump: 'DOCKER'
+    require: Class[docker]
+  '1006 - docker rule':
+    table: 'nat'
+    chain: 'POSTROUTING'
+    proto: 'all'
+    source: '172.17.0.0/16'
+    outiface: '! docker0'
+    jump: 'MASQUERADE'
+    require: Class[docker]
+  '1000 - libvirt TCP access from system tests':
+    chain: 'INPUT'
+    proto: 'tcp'
+    dport: 16509
+    source: '10.109.0.0/16'
+    action: 'accept'
+
+jenkins::slave::known_hosts:
+  'review.openstack.org':
+    'host': 'review.openstack.org'
+    'port': 29418
+  'review.fuel-infra.org':
+    'host': 'review.fuel-infra.org'
+    'port': 29418
+
+jenkins::slave::authorized_keys:
+  'jenkins@ci.fuel-jenkins.org':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDG+n7u8G+0zhlbzzUqj3SZp6ZkzWpl3rFM2Nh+qVjqa6FGRNtMf4OIsbnzRGWe29EfdYMK8uzNP6xrv1Mlg0ZPPgdT2Etzc/Mvvif2KLEmaHIkybK33wE1LsanGnxPkJ7gd7jEEdoDcUxFtVIQBBeic+3xnb4UYgw7kun754YgEJ+rorNdgytH10OUqzySRaKUmweA9tWjyPg12zUjie5S2EQhG6vgBCt1WFmBpWPYzl3z/rPDZYpaSzSCt7hkcD07jLqDNk91eSR3vyCMIQXLcTah1hJwmGLP+xBbOiuq/wZ0bh2wcXm8RY3xPQZ6LTVGN1LLpLR82S3fWfOyehMV'
+
+libvirt::listen_addr: '0.0.0.0'
+libvirt::listen_tls: false
+
+sysctl::base::values:
+  net.bridge.bridge-nf-call-iptables:
+    value: '0'
+  net.ipv4.ip_forward:
+    value: '1'
+  net.ipv4.tcp_syncookies:
+    value: 1
+  net.ipv4.tcp_window_scaling:
+    value: 1
+  net.ipv4.tcp_congestion_control:
+    value: cubic
+  net.ipv4.tcp_no_metrics_save:
+    value: 1
+  net.ipv4.tcp_moderate_rcvbuf:
+    value: 1
+  fs.inotify.max_user_instances:
+    value: 1024

@@ -186,3 +186,7 @@
 	path = modules/memcached
 	url = https://github.com/fuel-infra/puppet-memcached.git
 	branch = bfa64e066a709cae8bed12ff95e9d630ad50af14
+[submodule "modules/docker"]
+	path = modules/docker
+	url = https://github.com/garethr/garethr-docker.git
+	branch = 68dd0024fb845de1839df95713154d8181349851

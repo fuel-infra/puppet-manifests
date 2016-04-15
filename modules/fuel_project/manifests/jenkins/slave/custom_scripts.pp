@@ -1,26 +1,22 @@
 # Class: fuel_project::jenkins::slave::custom_scripts
 #
 # Parameters:
-#   [*docker_package*] - package name with docker
 #   [*configs_dir*] - path to global custom script directory with configs
 #   [*configs_paths*] - paths to a script configs
 #   [*docker_user*] - user which will use docker
 #   [*known_hosts*] - known_host entries for docker_user
-#   [*packages*] - packages required on host
 #
 
 class fuel_project::jenkins::slave::custom_scripts (
-  $docker_package,
   $configs_dir   = '/etc/custom_scripts/',
   $configs_paths = {},
   $docker_user   = 'jenkins',
   $known_hosts   = undef,
-  $packages      = [
-    'git',
-  ],
 ) {
-
   $configs = hiera_hash('fuel_project::jenkins::slave::custom_scripts::configs', {})
+  $packages = [
+    'git',
+  ]
 
   if (!defined(Class['::fuel_project::common'])) {
     class { '::fuel_project::common' : }
@@ -30,16 +26,7 @@ class fuel_project::jenkins::slave::custom_scripts (
     class { '::jenkins::slave' : }
   }
 
-  # install required packages
   ensure_packages($packages)
-  ensure_packages($docker_package)
-
-  # ensure $docker_user in docker group
-  # docker group will be created by docker package
-  User <| title == $docker_user |> {
-    groups  +> 'docker',
-    require => Package[$docker_package],
-  }
 
   if ($known_hosts) {
     create_resources('ssh::known_host', $known_hosts, {
@@ -51,7 +38,7 @@ class fuel_project::jenkins::slave::custom_scripts (
   }
 
   if ($configs) {
-    file { $configs_dir:
+    file { $configs_dir :
       ensure => 'directory',
       owner  => 'root',
       group  => 'root',

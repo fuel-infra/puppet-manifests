@@ -193,9 +193,7 @@ class zuul (
       ],
   }
 
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :}
-  }
+  include ::nginx
 
   # zuul configuration for nginx adopted from
   # https://github.com/openstack-infra/puppet-zuul/blob/master/templates/zuul.vhost.erb

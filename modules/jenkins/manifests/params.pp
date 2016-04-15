@@ -6,7 +6,15 @@ class jenkins::params {
   $slave_authorized_keys = {}
   case $::osfamily {
     'Debian': {
-      $slave_java_package = 'openjdk-7-jre-headless'
+      case $::lsbdistcodename {
+        'trusty': {
+          $slave_java_package = 'openjdk-7-jre-headless'
+        }
+        'xenial': {
+          $slave_java_package = 'openjdk-9-jre-headless'
+        }
+        default: { }
+      }
     }
     'RedHat': {
       $slave_java_package = 'java-1.7.0-openjdk-headless'

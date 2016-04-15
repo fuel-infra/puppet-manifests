@@ -24,10 +24,8 @@ class fuel_project::apps::lodgeit (
   $nginx_log_format           = 'proxy',
   $paste_header_contents      = '<h1>Lodge It</h1>',
 ) {
-  if (! defined(Class['::nginx'])) {
-    class { '::fuel_project::nginx' :}
-  }
-  class { '::lodgeit::web' :}
+  include ::fuel_project::nginx
+  include ::lodgeit::web
 
   file { $ssl_certificate_file :
     ensure  => 'present',

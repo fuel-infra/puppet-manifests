@@ -118,9 +118,7 @@ class fuel_stats::collector (
   }
 
   # Nginx configuration
-  if ( ! defined(Class['::nginx']) ) {
-    include ::nginx
-  }
+  include ::nginx
 
   # rewrites, acl and limits configuration
   $_rewrite_to_https = { 'rewrite' => "^ https://${service_hostname}:${https_port}\$request_uri? permanent" }

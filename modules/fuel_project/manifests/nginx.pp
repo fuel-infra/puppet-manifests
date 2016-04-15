@@ -3,9 +3,9 @@
 # This class deploys Nginx.
 #
 class fuel_project::nginx {
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :}
-  }
+  include ::nginx
+
+  Class['::nginx::config'] -> Nginx::Resource::Vhost <| |>
 
   ::nginx::resource::vhost { 'stub_status' :
     ensure              => 'present',

@@ -45,12 +45,8 @@ class pxetool::master(
   $ssl_key_file_content  = '',
   $user                  = 'pxetool',
 ) {
-  if(!defined(Class['::nginx'])) {
-    class { '::nginx' :}
-  }
-  if(!defined(Class['::uwsgi'])) {
-    class { '::uwsgi' :}
-  }
+  include ::nginx
+  include ::uwsgi
 
   # installing required $packages
   $base_packages = [

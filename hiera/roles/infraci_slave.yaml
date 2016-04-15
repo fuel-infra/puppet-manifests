@@ -27,8 +27,6 @@ jenkins::slave::authorized_keys:
 sysctl::base::values:
   fs.inotify.max_user_instances:
     value: 256
-  net.bridge.bridge-nf-call-iptables:
-    value: '0'
   net.ipv4.ip_forward:
     value: '1'
   net.ipv4.tcp_syncookies:

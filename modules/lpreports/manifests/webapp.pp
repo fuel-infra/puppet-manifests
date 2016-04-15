@@ -38,9 +38,7 @@ class lpreports::webapp (
   $ssl_key_contents         = undef,
   $teams                    = {},
 ) {
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :}
-  }
+  include ::nginx
   package { $package :
     ensure => 'latest',
   }

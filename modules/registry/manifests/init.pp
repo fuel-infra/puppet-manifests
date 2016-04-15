@@ -124,6 +124,7 @@ class registry (
     $static_users = {},
     $version = '2.3.0~ds1-1',
 ) {
+  include ::nginx
 
   $packages = {
     'docker-auth' => { ensure => installed, },
@@ -249,7 +250,10 @@ class registry (
         'X-Forwarded-Proto' => '$scheme',
       },
     },
-    require             => [File[$ssl_key_global], File[$ssl_certificate_global]],
+    require             => [
+      File[$ssl_key_global],
+      File[$ssl_certificate_global]
+    ],
   }
 
   ::nginx::resource::vhost { 'registry-global' :
@@ -274,7 +278,10 @@ class registry (
         'X-Forwarded-Proto' => '$scheme',
       },
     },
-    require             => [File[$ssl_key_global], File[$ssl_certificate_global]],
+    require             => [
+      File[$ssl_key_global],
+      File[$ssl_certificate_global]
+    ],
   }
 
   ::nginx::resource::vhost { 'registry-internal' :
@@ -313,7 +320,9 @@ class registry (
       uwsgi_send_timeout     => '3m',
       uwsgi_intercept_errors => 'on',
     },
-    require             => Uwsgi::Application['registry-search'],
+    require             => [
+      Uwsgi::Application['registry-search'],
+    ]
   }
 
   # start services and set autostart

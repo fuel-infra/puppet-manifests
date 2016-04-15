@@ -1,0 +1,31 @@
+---
+classes:
+  - '::fuel_project::jenkins::slave'
+  - '::fuel_project::jenkins::slave::run_tests'
+  - '::fuel_project::jenkins::slave::build_fuel_plugins'
+
+jenkins::slave::authorized_keys:
+  'jenkins@plugin-ci.fuel-infra.org':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDjKXfSRWlFvlqSQErc5T9ZpLKLY6kPOJiKs8qmJZtqQ5yAU9nSBfQrPQaxj5lgoEscFVxzBOq6igh/MWcUU2nxDeKpHunfcA/w08Rq1jD0TGDBFjE0oyWAa9N9bGa5n/Fx/WDGz70+1BLfVkg+RFVQecTZkb0glC3eTkWOCF9sSdLYdalO6x1R1JvUQ/rp83eZzP6J09FoZUxrQPOeW6YtvF9Mh0xS2+y7zt/dVBDqucvgMkNyUOZMPKx42iUUtXemQCgrCsKWtFankRbEsCE2HGv+tWCa3HnKu9/XkFqjo5RU5Gn3z7/t7QT1AZzFFbXweBpjSW0A0y42ILvug1En'
+
+devopslib::downloads_cleaner::cleanup_dirs:
+  -
+    dir: '/var/www/fuelweb-iso'
+    ttl: 10
+    pattern: 'fuel-*'
+  -
+    dir: '/srv/downloads'
+    ttl: 1
+    pattern: 'fuel-*'
+
+fuel_project::jenkins::slave::known_hosts:
+  'review.fuel-infra.org':
+    host: 'review.fuel-infra.org'
+    port: 29418
+  'review.openstack.org':
+    host: 'review.openstack.org'
+    port: 29418
+  'gerrit.mirantis.com':
+    host: 'gerrit.mirantis.com'
+    port: 29418

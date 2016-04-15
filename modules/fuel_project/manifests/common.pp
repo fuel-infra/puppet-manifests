@@ -6,6 +6,8 @@
 #   [*bind_policy*] - LDAP binding policy
 #   [*external_host*] - host deployed on external IP address
 #   [*filebeat*] - boolean to choose if the Filebeat log shipper should be installed
+#   [*hugepages*] - Boolean,String/Integer, value for kernel hugepages parameter
+#   [*hugepagesz*] - String/Integer, value for kernel hugepagesz parameter
 #   [*kernel_package*] - kernel package to install
 #   [*ldap*] - use LDAP authentication
 #   [*ldap_base*] - LDAP base
@@ -110,6 +112,8 @@ class fuel_project::common (
   $bind_policy        = '',
   $external_host      = false,
   $filebeat           = false,
+  $hugepages          = false,
+  $hugepagesz         = undef,
   $kernel_package     = undef,
   $ldap               = false,
   $ldap_base          = '',
@@ -222,8 +226,8 @@ class fuel_project::common (
       include ::apt
     }
     'RedHat': {
-      class { '::yum' :}
-      class { '::yum::repos' :}
+      include ::yum
+      include ::yum::repos
       $yum_repos_gpgkey = hiera_hash('yum::gpgkey', {})
       create_resources('::yum::gpgkey', $yum_repos_gpgkey)
       $yum_versionlock = hiera_hash('yum::versionlock', {})
@@ -299,5 +303,32 @@ class fuel_project::common (
         command => '/usr/bin/puppet agent -tvd --noop >> /var/log/puppet.log 2>&1 && /usr/bin/puppet agent -tvd >> /var/log/puppet.log 2>&1'
       }
     )
+  }
+
+  # hugepages support (PDPE1GB flag is required)
+  if ($hugepages) {
+    # prepare mount point
+    file { 'hugepages':
+      ensure => 'directory',
+      path   => '/hugepages',
+    }
+    mount { '/hugepages':
+      ensure  => 'mounted',
+      atboot  => true,
+      device  => 'hugetlbfs',
+      fstype  => 'hugetlbfs',
+      options => 'mode=1777',
+      require => File['hugepages'],
+    }
+    # prepare kernel options
+    kernel_parameter { 'hugepagesz':
+      ensure => present,
+      value  => $hugepagesz,
+    }
+    kernel_parameter { 'hugepages':
+      ensure  => present,
+      value   => $hugepages,
+      require => Kernel_parameter['hugepagesz'],
+    }
   }
 }

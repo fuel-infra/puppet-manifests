@@ -8,6 +8,7 @@ blackduck_server
 custom_scripts_master
 custom_scripts_slave
 docs
+etherpad
 gerrit
 glusterfs_testing
 infraci_slave

@@ -14,6 +14,16 @@ fuel_project::jenkins::slave::docker_config: |
       }
     }
 
+devopslib::downloads_cleaner:
+  -
+    dir: '/var/www/fuelweb-iso'
+    ttl: 10
+    pattern: 'fuel-*'
+  -
+    dir: '/srv/downloads'
+    ttl: 1
+    pattern: 'fuel-*'
+
 # keep current sudo configuration
 sudo::purge: false
 sudo::config_file_replace: false
@@ -72,7 +82,3 @@ fuel_project::common::mounts:
     fstype: hugetlbfs
     options: mode=1777
     require: File[/hugepages]
-
-sysctl::base::values:
-  net.bridge.bridge-nf-call-iptables:
-    value: '0'

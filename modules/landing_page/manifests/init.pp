@@ -60,6 +60,7 @@ class landing_page (
   $timezone                     = $::landing_page::params::timezone,
   $uwsgi_socket                 = $::landing_page::params::uwsgi_socket,
 ) inherits ::landing_page::params {
+  include ::nginx
 
   # installing required $packages
   ensure_packages($package, {
@@ -125,10 +126,6 @@ class landing_page (
     user        => $app_user,
     require     => Exec['landing_page-syncdb'],
     refreshonly => true,
-  }
-
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :}
   }
 
   if ($ssl) {

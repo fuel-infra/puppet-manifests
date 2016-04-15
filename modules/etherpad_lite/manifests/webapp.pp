@@ -75,9 +75,7 @@ class etherpad_lite::webapp (
     content => $ssl_key_contents,
   }
 
-  if (!defined(Class['::nginx'])) {
-    class { '::nginx' :}
-  }
+  include ::nginx
 
   ::nginx::resource::vhost { 'etherpad-http' :
     ensure              => 'present',

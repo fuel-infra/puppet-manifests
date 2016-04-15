@@ -56,6 +56,7 @@ class fuel_project::apps::seed (
   # Should be refactored using rsync+ssh
   #
   if($seed_acl_list != []) {
+    include ::fuel_project::nginx
     ::nginx::resource::vhost { 'seed-upload' :
       ensure              => 'present',
       autoindex           => 'off',
@@ -72,7 +73,6 @@ class fuel_project::apps::seed (
         deny                 => 'all',
         disable_symlinks     => 'if_not_owner',
       },
-      require             => Class['fuel_project::nginx'],
     }
   }
   # } FIXME

@@ -1,0 +1,36 @@
+---
+classes:
+  - '::docker'
+  - '::fuel_project::jenkins::slave'
+  - '::fuel_project::jenkins::slave::iso_build'
+  - '::sudo'
+  - '::sysctl::base'
+
+devopslib::downloads_cleaner::cleanup_dirs:
+  -
+    dir: '/var/www/fuelweb-iso'
+    ttl: 10
+    pattern: 'fuel-*'
+  -
+    dir: '/srv/downloads'
+    ttl: 1
+    pattern: 'fuel-*'
+
+docker::package_name: lxc-docker-1.6.2
+docker::version: 1.6.2
+docker::users:
+  - jenkins
+docker::use_upstream_package_source: false
+
+sudo::purge: true
+sudo::config_file_replace: true
+
+sudo::configs:
+  'tcpdump':
+    'content': '%sudo ALL=(ALL) NOPASSWD: /usr/sbin/tcpdump'
+  'dutop':
+    'content': '%sudo ALL=(ALL) NOPASSWD: /usr/bin/dutop ""'
+  'dutop-libvirt':
+    'content': '%sudo ALL=(ALL) NOPASSWD: /usr/bin/dutop /var/lib/libvirt'
+  'jenkins':
+    'content': 'jenkins ALL=(ALL) NOPASSWD:ALL'
