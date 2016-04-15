@@ -20,6 +20,7 @@ class landing_page::params {
   $database_port                = ''
   $database_user                = 'release'
   $debug                        = false
+  $default_screen               = 'default'
   $google_analytics_property_id = undef
   $nginx_access_log             = '/var/log/nginx/access.log'
   $nginx_error_log              = '/var/log/nginx/error.log'

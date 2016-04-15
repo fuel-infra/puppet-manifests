@@ -14,6 +14,7 @@
 #   [*database_port*] - database port
 #   [*database_user*] - database user
 #   [*debug*] - enable Django debug
+#   [*default_screen*] - default screen to show in the app
 #   [*google_analytics_property_id*] - Google Analytics property_id
 #   [*nginx_access_log*] - access log
 #   [*nginx_error_log*] - error log
@@ -42,6 +43,7 @@ class landing_page (
   $database_port                = $::landing_page::params::database_port,
   $database_user                = $::landing_page::params::database_user,
   $debug                        = $::landing_page::params::debug,
+  $default_screen               = $::landing_page::params::default_screen,
   $google_analytics_property_id = $::landing_page::params::google_analytics_property_id,
   $nginx_access_log             = $::landing_page::params::nginx_access_log,
   $nginx_error_log              = $::landing_page::params::nginx_error_log,
