@@ -2,14 +2,15 @@
 classes:
   - '::fuel_project::jenkins::master'
 
+fuel_project::jenkins::master::cron_jobs:
+  'jenkins-log-compression':
+    command: "/usr/bin/flock -xn /var/lock/jenkins-log-compression.lock /usr/bin/find /var/lib/jenkins/jobs/ -name 'log' -regex '.*/builds/[0-9]+/log' -mtime +1 -exec pigz -p 1 '{}' \\; 2>&1 | logger -t jenkins-log-compression"
+    hour: '2'
+    minute: '30'
+
 fuel_project::jenkins::master::install_label_dumper: true
 fuel_project::jenkins::master::install_zabbix_item: true
-fuel_project::jenkins::master::log_gzip_cron_params:
-  hour: '5'
-  minute: '35'
-fuel_project::jenkins::master::log_gzip_days: '7'
 fuel_project::jenkins::master::log_gzip_enable: true
-fuel_project::jenkins::master::log_gzip_threads: '2'
 fuel_project::jenkins::master::service_fqdn: 'jenkins-product.test.local'
 
 jenkins::master::gerrit_trigger_conf:
