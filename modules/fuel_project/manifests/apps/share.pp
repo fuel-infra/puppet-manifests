@@ -81,14 +81,18 @@ define fuel_project::apps::share (
     }
 
     ::nginx::resource::vhost { $title :
-      ensure           => 'present',
-      access_log       => $nginx_access_log,
-      error_log        => $nginx_error_log,
-      format_log       => $nginx_log_format,
-      www_root         => $path,
-      server_name      => $service_fqdn,
-      vhost_cfg_append => $vhost_cfg_append,
-      require          => File[$path]
+      ensure              => 'present',
+      listen_port         => 80,
+      ipv6_enable         => true,
+      ipv6_listen_port    => 80,
+      ipv6_listen_options => '',
+      access_log          => $nginx_access_log,
+      error_log           => $nginx_error_log,
+      format_log          => $nginx_log_format,
+      www_root            => $path,
+      server_name         => $service_fqdn,
+      vhost_cfg_append    => $vhost_cfg_append,
+      require             => File[$path]
     }
   }
 
