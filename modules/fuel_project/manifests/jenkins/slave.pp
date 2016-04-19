@@ -315,7 +315,6 @@ class fuel_project::jenkins::slave (
     case $::osfamily {
       'Debian': {
         $kolla_build_tests_packages = [
-          'ansible',
           'libxml2',
           'libxml2-dev',
           'libxslt1.1',
