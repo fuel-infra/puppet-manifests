@@ -256,6 +256,14 @@ class fuel_project::jenkins::slave (
   }
   # /FIXME
 
+  file { '/home/jenkins' :
+    ensure  => 'directory',
+    mode    => '0755',
+    owner   => 'jenkins',
+    group   => 'jenkins',
+    require => User['jenkins'],
+  }
+
   file { '/home/jenkins/.ssh' :
     ensure  => 'directory',
     mode    => '0700',
