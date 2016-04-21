@@ -7,43 +7,26 @@
 #   [*nginx_error_log*] - error log file path
 #   [*nginx_log_format*] - log format
 #   [*puppet_master_run_with*] - 'webrick' or 'nginx+uwsgi'
-#   [*server*] - unused variable
 #
 class puppet::master (
-  $apply_firewall_rules   = $::puppet::params::apply_firewall_rules,
   $autosign               = $::puppet::params::autosign,
   $config                 = $::puppet::params::config,
   $config_template        = $::puppet::params::master_config_template,
   $environment            = $::puppet::params::environment,
   $firewall_allow_sources = $::puppet::params::firewall_allow_sources,
-  $hiera_backends         = $::puppet::params::hiera_backends,
   $hiera_config           = $::puppet::params::hiera_config,
-  $hiera_config_template  = $::puppet::params::hiera_config_template,
-  $hiera_hierarchy        = $::puppet::params::hiera_hierarchy,
-  $hiera_json_datadir     = $::puppet::params::hiera_json_datadir,
-  $hiera_logger           = $::puppet::params::hiera_logger,
-  $hiera_merge_behavior   = $::puppet::params::hiera_merge_behavior,
-  $hiera_yaml_datadir     = $::puppet::params::hiera_yaml_datadir,
+  $hiera                  = $::puppet::params::hiera,
   $nginx_access_log       = '/var/log/nginx/access.log',
   $nginx_error_log        = '/var/log/nginx/error.log',
   $nginx_log_format       = undef,
   $package                = $::puppet::params::master_package,
-  $puppet_master_run_with = 'webrick',
-  $server                 = '',
+  $puppet_master_run_with = $::puppet::params::master_run_with,
   $service                = $::puppet::params::master_service,
 ) inherits ::puppet::params {
   puppet::config { 'master-config' :
-    hiera_backends        => $hiera_backends,
-    hiera_config          => $hiera_config,
-    hiera_config_template => $hiera_config_template,
-    hiera_hierarchy       => $hiera_hierarchy,
-    hiera_json_datadir    => $hiera_json_datadir,
-    hiera_logger          => $hiera_logger,
-    hiera_merge_behavior  => $hiera_merge_behavior,
-    hiera_yaml_datadir    => $hiera_yaml_datadir,
-    config                => $config,
-    config_template       => $config_template,
-    environment           => $environment,
+    config          => $config,
+    config_template => $config_template,
+    environment     => $environment,
   }
 
   if (!defined(Package[$package])) {
@@ -52,8 +35,15 @@ class puppet::master (
     }
   }
 
-  if ($hiera_merge_behavior == 'deeper') {
+  if ($hiera['merge_behavior'] == 'deeper') {
     package { 'deep_merge' :
+      ensure   => 'present',
+      provider => 'gem',
+    }
+  }
+
+  if (has_key($hiera, 'eyaml')) {
+    package { 'hiera-eyaml' :
       ensure   => 'present',
       provider => 'gem',
     }
@@ -67,7 +57,7 @@ class puppet::master (
       hasrestart => false,
       require    => [
         Package[$package],
-        File[$puppet_config]
+        Puppet::Config['master-config'],
       ]
     }
   }
@@ -76,7 +66,7 @@ class puppet::master (
       ensure  => 'stopped',
       enable  => false,
       require => Package[$package],
-      notify  => Service[nginx],
+      notify  => Service[nginx]
     }
     if (!defined(Class['uwsgi'])) {
       class { 'uwsgi' :}
@@ -97,13 +87,18 @@ class puppet::master (
     }
 
     uwsgi::application { 'puppetmaster' :
-      plugins => 'rack',
-      rack    => '/etc/puppet/rack/config.ru',
-      chdir   => '/etc/puppet/rack',
-      env     => 'HOME=/var/lib/puppet',
-      uid     => 'puppet',
-      gid     => 'puppet',
-      socket  => '127.0.0.1:8141',
+      plugins   => 'rack',
+      rack      => '/etc/puppet/rack/config.ru',
+      chdir     => '/etc/puppet/rack',
+      env       => 'HOME=/var/lib/puppet',
+      uid       => 'puppet',
+      gid       => 'puppet',
+      socket    => '127.0.0.1:8141',
+      subscribe => [
+        File['/etc/puppet/rack/config.ru'],
+        File[$hiera_config],
+        Puppet::Config['master-config'],
+      ],
     }
 
     if (!defined(Class['nginx'])) {
@@ -144,18 +139,9 @@ class puppet::master (
     owner   => 'puppet',
     group   => 'puppet',
     mode    => '0400',
-    content => template($hiera_config_template),
+    content => inline_template("<%= require 'yaml' ; YAML.dump(@hiera) %>"),
     require => Package[$package]
   }
 
   class { 'puppet::auth' :}
-
-  if $apply_firewall_rules {
-    include firewall_defaults::pre
-    create_resources(firewall, $firewall_allow_sources, {
-      dport   => '8140',
-      action  => 'accept',
-      require => Class['firewall_defaults::pre'],
-    })
-  }
 }

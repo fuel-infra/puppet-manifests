@@ -1,5 +1,50 @@
 ---
 classes:
+  - '::fuel_project::apps::firewall'
   - '::fuel_project::puppet::master'
 
+fuel_project::apps::firewall:
+  '1000 - SSH connections':
+    source: 0.0.0.0/0
+    dport:
+      - 22
+    proto: tcp
+    action: accept
+  '1000 - allow connections to Puppet Master':
+    source: 0.0.0.0/0
+    dport: 8140
+    proto: tcp
+    action: accept
+  '1000 - zabbix agent connections from Zabbix proxy':
+    source: 'zabbix.example.com'
+    dport: 10050
+    proto: 'tcp'
+    action: 'accept'
+
 fuel_project::puppet::master::enable_update_cronjob: false
+
+puppet::master::autosign: false
+puppet::master::environment: 'production'
+puppet::master::nginx_log_format: 'proxy'
+puppet::master::hiera:
+  :backends:
+    - eyaml
+    - yaml
+  :eyaml:
+    :extension: 'yaml'
+    :datadir: /var/lib/hiera
+    :pkcs7_private_key: /etc/puppet/keys/private_key.pkcs7.pem
+    :pkcs7_public_key:  /etc/puppet/keys/public_key.pkcs7.pem
+  :yaml:
+    :datadir: /var/lib/hiera
+  :json:
+    :datadir: /var/lib/hiera
+  :hierarchy:
+    - "nodes/%%{}{::clientcert}"
+    - "roles/%%{}{::role}"
+    - "locations/%%{}{::location}"
+    - "distros/%%{}{::osfamily}"
+    - "common"
+  :logger: console
+  :merge_behavior: deeper
+puppet::master::puppet_master_run_with: 'nginx+uwsgi'

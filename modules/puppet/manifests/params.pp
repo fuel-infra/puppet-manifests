@@ -16,19 +16,7 @@
 #   [*environment*] - environment value for Puppet
 #   [*firewall_allow_sources*] - addresses to allow service connections from
 #   [*graph*] - create dot graph files for the different configuration graphs
-#   [*hiera_backends*] - supported hiera backends
 #   [*hiera_config*] - hiera configuration file path
-#   [*hiera_config_template*] - hiera configuration file template
-#   [*hiera_hierarchy*] - hiera hierarchy list
-#   [*hiera_json_datadir*] - hiera json data directory
-#   [*hiera_logger*] - hiera logger type
-#   [*hiera_merge_behavior*] - must be one of the following:
-#     native (default) - merge top-level keys only
-#     deep - merge recursively; in the event of conflicting keys, allow lower
-#       priority values to win
-#     deeper - merge recursively; in the event of a conflict, allow higher
-#       priority values to win
-#   [*hiera_yaml_datadir*] - hiera directory with yaml files
 #   [*localconfig*] - where puppet agent caches the local configuration
 #   [*logdir*] - log directory
 #   [*master_config_template*] - puppet-master config file template
@@ -61,19 +49,28 @@ class puppet::params {
   $environment            = undef
   $firewall_allow_sources = {}
   $graph                  = undef
-  $hiera_backends         = ['yaml']
-  $hiera_config           = '/etc/puppet/hiera.yaml'
-  $hiera_config_template  = 'puppet/hiera.yaml.erb'
-  $hiera_hierarchy        = ['common']
-  $hiera_json_datadir     = '/var/lib/hiera'
-  $hiera_logger           = 'console'
-  $hiera_merge_behavior   = 'deep'
-  $hiera_yaml_datadir     = '/var/lib/hiera'
+  $hiera                  = {
+    ':hiera_backends'   => ['yaml', 'json'],
+    ':hiera_hierarchy'  => ['common'],
+    ':yaml' => {
+      ':datadir' => '/var/lib/hiera',
+    },
+    ':json'             => {
+      ':datadir' => '/var/lib/hiera'
+    },
+    ':logger'           => 'console',
+    ':merge_behavior'   => 'deep',
+  }
+  $hiera_config           = '/etc/hiera.yaml'
   $localconfig            = undef
   $logdir                 = '/var/log/puppet'
   $master_config_template = 'puppet/puppet-master.conf.erb'
   $master_package         = 'puppetmaster'
-  $master_service         = 'puppetmaster'
+  $master_run_with        = 'webrick'
+  $master_service         = $master_run_with ? {
+    'nginx+uwsgi' => 'uwsgi',
+    default       => 'puppetmaster',
+  }
   $modulepath             = undef
   $parser                 = undef
   $pluginsync             = true
