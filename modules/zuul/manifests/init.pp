@@ -241,13 +241,15 @@ class zuul (
 
     ::nginx::resource::location{ 'git-repos':
       ensure        => present,
-      location      => '~ ^/p/(?<path_info>.*)$',
+      location      => '~ ^/p(/.*)',
       vhost         => 'zuul',
       fastcgi       => 'unix:/run/fcgiwrap.socket',
       fastcgi_param => {
-        'SCRIPT_FILENAME'     => "${git_home}/git-http-backend",
-        'PATH_TRANSLATED'     => '/var/lib/zuul/git/$path_info',
+        'DOCUMENT_ROOT'       => $git_home,
         'GIT_HTTP_EXPORT_ALL' => '""',
+        'GIT_PROJECT_ROOT'    => "${statedir}/git/",
+        'PATH_INFO'           => '$1',
+        'SCRIPT_FILENAME'     => "${git_home}/git-http-backend",
       },
     }
   }
