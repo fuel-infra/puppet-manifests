@@ -240,17 +240,43 @@ class zuul (
     }
 
     ::nginx::resource::location{ 'git-repos':
-      ensure        => present,
-      location      => '~ ^/p(/.*)',
-      vhost         => 'zuul',
-      fastcgi       => 'unix:/run/fcgiwrap.socket',
-      fastcgi_param => {
+      ensure         => present,
+      location       => '~ ^/p(/.*)',
+      vhost          => 'zuul',
+      fastcgi        => 'unix:/run/fcgiwrap.socket',
+      fastcgi_param  => {
         'DOCUMENT_ROOT'       => $git_home,
         'GIT_HTTP_EXPORT_ALL' => '""',
         'GIT_PROJECT_ROOT'    => "${statedir}/git/",
         'PATH_INFO'           => '$1',
         'SCRIPT_FILENAME'     => "${git_home}/git-http-backend",
+        # /FIXME: put 'standard' fastcgi_params here, and do not
+        # include any of these via 'include' as at the moment
+        # Nginx puppet module do not allow to specify ordering
+        # regarding 'include' within location.
+        'CONTENT_LENGTH'      => '$content_length',
+        'CONTENT_TYPE'        => '$content_type',
+        'DOCUMENT_URI'        => '$document_uri',
+        'GATEWAY_INTERFACE'   => 'CGI/1.1',
+        'HTTPS'               => '$https if_not_empty',
+        'QUERY_STRING'        => '$query_string',
+        'REMOTE_ADDR'         => '$remote_addr',
+        'REMOTE_PORT'         => '$remote_port',
+        'REQUEST_METHOD'      => '$request_method',
+        'REQUEST_URI'         => '$request_uri',
+        'SCRIPT_NAME'         => '$fastcgi_script_name',
+        'SERVER_ADDR'         => '$server_addr',
+        'SERVER_NAME'         => '$server_name',
+        'SERVER_PORT'         => '$server_port',
+        'SERVER_PROTOCOL'     => '$server_protocol',
+        'SERVER_SOFTWARE'     => 'nginx/$nginx_version',
       },
+      # Point to /dev/null to not include any fastcgi_params.
+      # This is required, as any location is valid - if file within path
+      # do not exist, then it will be created with default fastcgi params
+      # content.
+      fastcgi_params => '/dev/null',
+      # /FIXME.
     }
   }
 
