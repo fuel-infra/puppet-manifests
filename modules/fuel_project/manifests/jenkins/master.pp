@@ -7,6 +7,7 @@
 #   [*firewall_enable*] - enable embedded firewall rules
 #   [*install_label_dumper*] - unused variable
 #   [*install_zabbix_item*] - install Jenkins items for Zabbix
+#   [*jenkins_libdir*] - path to Jenkins lib directory
 #   [*jobs_dir*] - path to directory with Jenkins jobs
 #   [*log_gzip_enable*] - enable gzip process for old files
 #   [*service_fqdn*] - service FQDN
@@ -17,6 +18,7 @@ class fuel_project::jenkins::master (
   $install_label_dumper = false,
   $install_plugins      = false,
   $install_zabbix_item  = false,
+  $jenkins_libdir       = '/var/lib/jenkins',
   $jobs_dir             = '/var/lib/jenkins/jobs/',
   $log_gzip_enable      = false,
   $service_fqdn         = $::fqdn,
