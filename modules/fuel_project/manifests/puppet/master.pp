@@ -40,7 +40,7 @@ class fuel_project::puppet::master (
   $external_host           = false,
   $firewall_allow_sources  = {},
   $hiera_backends          = ['yaml'],
-  $hiera_config            = '/etc/hiera.yaml',
+  $hiera_config            = '/etc/puppet/hiera.yaml',
   $hiera_config_template   = 'puppet/hiera.yaml.erb',
   $hiera_hierarchy         = ['nodes/%{::clientcert}', 'roles/%{::role}', 'locations/%{::location}', 'distros/%{::osfamily}', 'common'],
   $hiera_json_datadir      = '/var/lib/hiera',

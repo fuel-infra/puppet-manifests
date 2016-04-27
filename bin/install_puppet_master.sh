@@ -37,7 +37,6 @@ if [[ ! -f "${EXPECT_HIERA}" ]]; then
   echo "File ${EXPECT_HIERA} not found! Copying from hiera-stub.yaml example..."
   cp ${PUPPET_ETC_DIR}/hiera/hiera-stub.yaml "${EXPECT_HIERA}"
 fi
-ln -s "${EXPECT_HIERA}" /etc/hiera.yaml
 
 FACTER_PUPPET_APPLY="true" FACTER_ROLE="puppetmaster" puppet apply -vd ${PUPPET_ETC_DIR}/manifests/site.pp
 puppet agent --enable

@@ -62,7 +62,7 @@ class puppet::params {
   $firewall_allow_sources = {}
   $graph                  = undef
   $hiera_backends         = ['yaml']
-  $hiera_config           = '/etc/hiera.yaml'
+  $hiera_config           = '/etc/puppet/hiera.yaml'
   $hiera_config_template  = 'puppet/hiera.yaml.erb'
   $hiera_hierarchy        = ['common']
   $hiera_json_datadir     = '/var/lib/hiera'
