@@ -325,6 +325,7 @@ class fuel_project::jenkins::slave (
           'python-docker',
           'python-tox',
           'python-yaml',
+          'sshpass',
           'zlib1g-dev',
         ]
         package { 'ansible' :
