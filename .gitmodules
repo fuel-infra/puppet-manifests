@@ -37,7 +37,7 @@
 [submodule "modules/nginx"]
 	path = modules/nginx
 	url = https://github.com/teran/puppet-nginx
-	branch = 9219c8b4131be8918bd6bc38b5a2545c8a145c2d
+	branch = 140c93d9e2093175f410420454ff758624f8b2e0
 [submodule "modules/rssh"]
 	path = modules/rssh
 	url = https://github.com/teran/puppet-rssh
