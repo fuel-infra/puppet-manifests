@@ -27,6 +27,10 @@ sudo::configs:
   'dutop-libvirt':
     'content': '%sudo ALL=(ALL) NOPASSWD: /usr/bin/dutop /var/lib/libvirt'
 
+# enable hugepages
+fuel_project::jenkins::slave::libvirt_hugepages: true
+
+
 sysctl::base::values:
   net.bridge.bridge-nf-call-iptables:
     value: '0'

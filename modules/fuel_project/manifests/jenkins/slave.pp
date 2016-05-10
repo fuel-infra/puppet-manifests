@@ -106,6 +106,7 @@ class fuel_project::jenkins::slave (
   $ldap_ignore_users                    = '',
   $ldap_uri                             = '',
   $libvirt_default_network              = false,
+  $libvirt_hugepages                    = false,
   $libvirt_polkit_rules_user            = 'jenkins',
   $local_ssh_private_key                = undef,
   $local_ssh_public_key                 = undef,
@@ -190,6 +191,32 @@ class fuel_project::jenkins::slave (
     class { '::jenkins::swarm_slave' :}
   } else {
     class { '::jenkins::slave' :}
+  }
+
+  # hugepages support (PDPE1GB flag is required)
+  if ($libvirt_hugepages) {
+    # prepare mount point
+    file { 'hugepages':
+      ensure => 'directory',
+      path   => '/hugepages',
+    }
+    mount { '/hugepages':
+      ensure  => 'mounted',
+      atboot  => true,
+      device  => 'hugetlbfs',
+      fstype  => 'hugetlbfs',
+      options => 'mode=1777',
+      require => File['hugepages'],
+    }
+    # prepare kernel options
+    kernel_parameter { 'hugepagesz':
+      ensure => present,
+      value  => '1G',
+    }
+    kernel_parameter { 'hugepages':
+      ensure => present,
+      value  => '256',
+    }
   }
 
   class {'::devopslib::downloads_cleaner' :

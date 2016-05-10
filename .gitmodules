@@ -162,3 +162,11 @@
 	path = modules/sysctl
 	url = https://github.com/thias/puppet-sysctl.git
 	branch = fadc66807c90686b31de6009a92e32156b0d2d77
+[submodule "modules/augeasproviders_grub"]
+	path = modules/augeasproviders_grub
+	url = https://github.com/hercules-team/augeasproviders_grub.git
+	branch = 3331dc317d0ea7b1a227ce83430a1b942560e6de
+[submodule "modules/augeasproviders_core"]
+	path = modules/augeasproviders_core
+	url = https://github.com/hercules-team/augeasproviders_core.git
+	branch = e1c4e3dcec8870bcb4e1a764410f9ec06d8eb607
