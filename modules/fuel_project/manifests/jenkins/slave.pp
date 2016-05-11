@@ -342,6 +342,7 @@ class fuel_project::jenkins::slave (
     case $::osfamily {
       'Debian': {
         $kolla_build_tests_packages = [
+          'bridge-utils',
           'libxml2',
           'libxml2-dev',
           'libxslt1.1',
@@ -353,6 +354,7 @@ class fuel_project::jenkins::slave (
           'python-tox',
           'python-yaml',
           'sshpass',
+          'vlan',
           'zlib1g-dev',
         ]
         package { 'ansible' :
