@@ -214,8 +214,9 @@ class fuel_project::jenkins::slave (
       value  => '1G',
     }
     kernel_parameter { 'hugepages':
-      ensure => present,
-      value  => '256',
+      ensure  => present,
+      value   => '256',
+      require => Kernel_parameter['hugepagesz'],
     }
   }
 
