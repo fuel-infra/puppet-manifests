@@ -166,3 +166,7 @@
 	path = modules/apparmor
 	url = https://github.com/teran/puppet-apparmor.git
 	branch = e31caa45104ab5bdd98b0c2050c96b5639289461
+[submodule "modules/openstackci"]
+	path = modules/openstackci
+	url = https://github.com/mescanef/puppet-openstackci
+	branch = bb207b294a19dc75d5fc9b06aac6fadcbab83ba9
