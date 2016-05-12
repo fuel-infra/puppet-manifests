@@ -30,10 +30,6 @@
 	path = modules/bind
 	url = https://github.com/teran/puppet-bind
 	branch = 5f124641e69f4614e79c9b5f3491a506a248f1c6
-[submodule "modules/mailman"]
-	path = modules/mailman
-	url = https://github.com/teran/puppet-mailman
-	branch = 6910a97dcf65cd8706759d3fd6bf1597c85bd11b
 [submodule "modules/nginx"]
 	path = modules/nginx
 	url = https://github.com/teran/puppet-nginx
@@ -82,10 +78,6 @@
 	path = modules/rvm
 	url = https://github.com/maestrodev/puppet-rvm.git
 	branch = 1eddcf7cf8e5ad0985012db8261af2bdbdd12627
-[submodule "modules/apache"]
-	path = modules/apache
-	url = https://github.com/puppetlabs/puppetlabs-apache.git
-	branch = 3bdf98f9e417a8e2c1038a9cab97c29e3476a75b
 [submodule "modules/apt"]
 	path = modules/apt
 	url = https://github.com/puppetlabs/puppetlabs-apt.git
