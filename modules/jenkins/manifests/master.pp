@@ -1,6 +1,8 @@
 # Class: jenkins::master
 #
 # Parameters:
+#   [*jenkins_package_name*] - specify Jenkins package name to install
+#   [*jenkins_package_version*] - specify Jenkins package version to install
 #   [*service_fqdn*] - FQDN of Jenkins service
 #   [*apply_firewall_rules*] - apply embedded firewall rules
 #   [*firewall_allow_sources*] - sources which are allowed to connect
@@ -53,6 +55,8 @@
 #   [*security_model*] - security model used in Jenkins instance
 #
 class jenkins::master (
+  $jenkins_package_name             = 'jenkins',
+  $jenkins_package_version          = 'latest',
   $service_fqdn                     = $::fqdn,
   # Firewall access
   $apply_firewall_rules             = false,
@@ -129,7 +133,15 @@ class jenkins::master (
   }
 
   package { 'jenkins' :
-    ensure => present,
+    ensure => $jenkins_package_version,
+  }
+
+  if ($jenkins_package_version != 'latest' and $jenkins_package_version != 'present') {
+    apt::pin { $jenkins_package_name :
+      packages => $jenkins_package_name,
+      version  => $jenkins_package_version,
+      priority => 1000,
+    }
   }
 
   if($install_plugins) {
