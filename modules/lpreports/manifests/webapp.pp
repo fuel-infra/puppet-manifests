@@ -4,12 +4,14 @@
 #
 # Parameters:
 #   [*config*] - lpreports configuration file entries
+#   [*config_path*] - String, path to the configuration settings.yaml
 #   [*logdir*] - log directory of lpreports
 #   [*managepy_path*] - path to lpreports manage.py file
 #   [*nginx_server_name*] - FQDN of service
 #   [*nginx_access_log*] - access log file path
 #   [*nginx_error_log*] - error log file path
 #   [*nginx_log_format*] - log file format
+#   [*package*] - String, package name(could contain or not contain version)
 #   [*reports*] - reports configuration file entries
 #   [*review_filters*] - reports configuration file entries
 #   [*ssl_certificate*] - ssl certificate file path
@@ -20,12 +22,14 @@
 #
 class lpreports::webapp (
   $config                   = {},
+  $config_path              = '/etc/lpreports/settings.yaml',
   $logdir                   = '/var/log/lpreports',
   $managepy_path            = '/usr/bin/lpreports',
   $nginx_server_name        = $::fqdn,
   $nginx_access_log         = '/var/log/nginx/access.log',
   $nginx_error_log          = '/var/log/nginx/error.log',
   $nginx_log_format         = undef,
+  $package                  = 'python-lpreports',
   $reports                  = {},
   $review_filters           = {},
   $ssl_certificate          = '/etc/ssl/certs/lpreports.crt',
@@ -37,8 +41,8 @@ class lpreports::webapp (
   if (!defined(Class['::nginx'])) {
     class { '::nginx' :}
   }
-  package { 'python-lp-reports' :
-    ensure => 'present',
+  package { $package :
+    ensure => 'latest',
   }
 
   user { 'lpreports' :
@@ -72,13 +76,13 @@ class lpreports::webapp (
     content => $ssl_key_contents,
   }
 
-  file { '/etc/lpreports/lpreports.conf' :
+  file { $config_path :
     ensure  => 'present',
     owner   => 'lpreports',
     group   => 'lpreports',
     mode    => '0400',
-    content => template('lpreports/lpreports.conf.erb'),
-    require => Package['python-lp-reports'],
+    content => inline_template('<%= YAML.dump(@config) %>'),
+    require => Package[$package],
   }
 
   uwsgi::application { 'lpreports' :
@@ -92,11 +96,16 @@ class lpreports::webapp (
     vacuum    => true,
     uid       => 'lpreports',
     gid       => 'lpreports',
+    chdir     => '/',
     require   => [
       User['lpreports'],
-      Package['python-lp-reports'],
+      Package[$package],
       File[$logdir],
     ],
+    subscribe => [
+      Package[$package],
+      File[$config_path]
+    ]
   }
 
   ::nginx::resource::vhost { 'lpreports-http' :
@@ -137,7 +146,7 @@ class lpreports::webapp (
     require             => [
       File[$ssl_certificate],
       File[$ssl_key],
-      Package['python-lp-reports'],
+      Package[$package],
     ],
   }
 
@@ -147,7 +156,7 @@ class lpreports::webapp (
     ssl      => true,
     ssl_only => true,
     location => '/static/',
-    www_root => '/usr/lib/python2.7/dist-packages/lpreports',
+    www_root => '/usr/share/lpreports',
   }
 
   file { '/var/lock/lpreports' :
@@ -162,7 +171,7 @@ class lpreports::webapp (
     user    => 'lpreports',
     minute  => '*/10',
     require => [
-      Package['python-lp-reports'],
+      Package[$package],
       File[$logdir],
       File['/var/lock/lpreports'],
     ],
@@ -173,7 +182,7 @@ class lpreports::webapp (
     user    => 'lpreports',
     minute  => '*/1',
     require => [
-      Package['python-lp-reports'],
+      Package[$package],
       File[$logdir],
       File['/var/lock/lpreports'],
     ],
@@ -191,12 +200,12 @@ class lpreports::webapp (
   }
 
   cron { 'lpreports-sync-cve' :
-    command => "/usr/bin/flock -xn /var/lock/lpreports/cleanup-db.lock /usr/bin/timeout -k10 60 ${managepy_path} sync-cve >> ${logdir}/sync_cve.log 2>&1",
+    command => "/usr/bin/flock -xn /var/lock/lpreports/sync-cve.lock /usr/bin/timeout -k10 60 ${managepy_path} sync-cve >> ${logdir}/sync_cve.log 2>&1",
     user    => 'lpreports',
     hour    => '*/6',
     minute  => '36',
     require => [
-      Package['python-lp-reports'],
+      Package[$package],
       File[$logdir],
       File['/var/lock/lpreports'],
     ],
