@@ -4,6 +4,10 @@
 # images from a different locations.
 #
 # Parameters:
+#   [*cron_jobs*] - Cron jobs hiera hash
+#     Example:
+#       'jenkins-importer':
+#         'minute': '*/5'
 #   [*seed_acl_list*] - Array, list of hosts to be allowed to connect to nginx
 #     upload vhost.
 #   [*shares*] - Hash, Describes the share in following form:
@@ -35,10 +39,16 @@
 #     ]
 #
 class fuel_project::apps::seed (
+  $cron_jobs     = {},
   $seed_acl_list = [],
   $shares        = {},
   $cleanup_dirs  = [],
 ) {
+
+  create_resources(cron, $cron_jobs, {
+    ensure => 'present',
+  })
+
   ensure_resource('file', '/var/www', {
     ensure => 'directory',
     owner => 'root',
