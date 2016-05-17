@@ -162,3 +162,7 @@
 	path = modules/augeasproviders_core
 	url = https://github.com/hercules-team/augeasproviders_core.git
 	branch = e1c4e3dcec8870bcb4e1a764410f9ec06d8eb607
+[submodule "modules/apparmor"]
+	path = modules/apparmor
+	url = https://github.com/artem-sidorenko/puppet-apparmor.git
+	branch = 91d8e701f7f24bf25724617a3434e3ae702c987e

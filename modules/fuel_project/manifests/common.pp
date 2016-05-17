@@ -20,6 +20,17 @@
 #   [*tls_cacertdir*] - LDAP CA certs directory
 #
 # Additional parameters:
+#
+#   [*apparmor*] = Hash, sets up custom apparmor rules.
+#     Example:
+#       $apparmor => {
+#         '/usr/sbin/libvirtd' => {
+#           ensure => 'disabled'
+#         },
+#       }
+#
+#     Default: {}
+#
 #   [*facts*] - Hash, sets up custom facts through hiera. Example:
 #     $facts = {
 #       location => 'location_name',
@@ -34,6 +45,28 @@
 #       'ip6-allnodes'                         => 'ff02::1',
 #       'ip6-allrouters'                       => 'ff02::2',
 #     }
+#
+#   [*kernel_parameters*] - Hash, paramters to be updated in GRUN for kernel.
+#     Example:
+#       $kernel_parameters = {
+#         'transparent_hugepage' => {
+#           ensure => 'present',
+#           value  => 'never',
+#         },
+#         'hugepagesz' => {
+#           ensure => 'present',
+#           value  => '1G',
+#         },
+#         'hugepages' => {
+#           ensure => 'present',
+#           value  => '256',
+#         },
+#         'default_hugepagesz' => {
+#           ensure => 'present',
+#           value  => '1G',
+#         },
+#       }
+#     Default: {}
 #
 #   [*logrotate_rules*] - Hash, log rotate rules. Example:
 #     $logrotate_rules = {
@@ -80,6 +113,8 @@ class fuel_project::common (
   $root_shell         = '/bin/bash',
   $tls_cacertdir      = '',
 ) {
+  $apparmor = hiera_hash('fuel_project::common::apparmor')
+
   $facts = hiera_hash('::fuel_project::common::facts', {
     'location' => $::location,
     'role'     => $::role,
@@ -92,6 +127,8 @@ class fuel_project::common (
     'ip6-allnodes'                         => 'ff02::1',
     'ip6-allrouters'                       => 'ff02::2',
   })
+
+  $kernel_parameters = hiera_hash('fuel_project::common::kernel_parameters')
 
   $logrotate_rules = hiera_hash('logrotate::rules', {})
 
@@ -119,14 +156,15 @@ class fuel_project::common (
     facts => $facts,
   }
 
-  case $::osfamily {
-    'Debian': {
-      ensure_packages([
-        'apparmor',
-      ])
-    }
-    default: { }
+  # install apparmor if Debian family
+  if ($apparmor and $::osfamily == 'Debian') {
+    include ::apparmor
+
+    create_resources('apparmor::profile', $apparmor, {})
   }
+
+  create_resources('kernel_parameter', $kernel_parameters, {
+    ensure => 'present'})
 
   ensure_packages([
     'config-zabbix-agent-dmesg-item',

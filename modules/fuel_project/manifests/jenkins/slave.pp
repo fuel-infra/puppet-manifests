@@ -193,32 +193,6 @@ class fuel_project::jenkins::slave (
     class { '::jenkins::slave' :}
   }
 
-  # hugepages support (PDPE1GB flag is required)
-  if ($libvirt_hugepages) {
-    # prepare mount point
-    file { 'hugepages':
-      ensure => 'directory',
-      path   => '/hugepages',
-    }
-    mount { '/hugepages':
-      ensure  => 'mounted',
-      atboot  => true,
-      device  => 'hugetlbfs',
-      fstype  => 'hugetlbfs',
-      options => 'mode=1777',
-      require => File['hugepages'],
-    }
-    # prepare kernel options
-    kernel_parameter { 'hugepagesz':
-      ensure => present,
-      value  => '1G',
-    }
-    kernel_parameter { 'hugepages':
-      ensure  => present,
-      value   => '256',
-      require => Kernel_parameter['hugepagesz'],
-    }
-  }
 
   class {'::devopslib::downloads_cleaner' :
     cleanup_dirs => $seed_cleanup_dirs,

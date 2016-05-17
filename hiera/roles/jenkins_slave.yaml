@@ -27,9 +27,32 @@ sudo::configs:
   'dutop-libvirt':
     'content': '%sudo ALL=(ALL) NOPASSWD: /usr/bin/dutop /var/lib/libvirt'
 
-# enable hugepages
-fuel_project::jenkins::slave::libvirt_hugepages: true
+# apparmor rules
+fuel_project::common::apparmor:
+  /usr/sbin/libvirtd:
+    ensure: disabled
+  /usr/lib/libvirt/virt-aa-helper:
+    ensure: disabled
 
+
+# enable hugepages
+fuel_project::common::kernel_parameters:
+  transparent_hugepage:
+    value: never
+  hugepagesz:
+    value: 1G
+  hugepages:
+    value: 256
+  default_hugepagesz:
+    value: 1G
+
+fuel_project::common::mounts:
+  /hugepages:
+    ensure: mounted
+    atboot: true
+    device: hugetlbfs
+    fstype: hugetlbfs
+    options: mode=1777
 
 sysctl::base::values:
   net.bridge.bridge-nf-call-iptables:
