@@ -132,7 +132,7 @@ class jenkins::master (
     }
   }
 
-  package { 'jenkins' :
+  package { $jenkins_package_name :
     ensure => $jenkins_package_version,
   }
 
