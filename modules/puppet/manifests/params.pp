@@ -20,7 +20,7 @@
 #   [*localconfig*] - where puppet agent caches the local configuration
 #   [*logdir*] - log directory
 #   [*master_config_template*] - puppet-master config file template
-#   [*master_package*] - puppet-master package name
+#   [*master_packages*] - puppet-master package name
 #   [*master_service*] - puppet-master service name
 #   [*modulepath*] - search path for modules
 #   [*parser*] - parser variable value for config file
@@ -61,11 +61,11 @@ class puppet::params {
     ':logger'           => 'console',
     ':merge_behavior'   => 'deep',
   }
-  $hiera_config           = '/etc/hiera.yaml'
+  $hiera_config           = '/etc/puppet/hiera.yaml'
   $localconfig            = undef
   $logdir                 = '/var/log/puppet'
   $master_config_template = 'puppet/puppet-master.conf.erb'
-  $master_package         = 'puppetmaster'
+  $master_packages        = [ 'puppetmaster', 'hiera' ]
   $master_run_with        = 'webrick'
   $master_service         = $master_run_with ? {
     'nginx+uwsgi' => 'uwsgi',

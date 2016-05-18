@@ -19,7 +19,7 @@ class puppet::master (
   $nginx_access_log       = '/var/log/nginx/access.log',
   $nginx_error_log        = '/var/log/nginx/error.log',
   $nginx_log_format       = undef,
-  $package                = $::puppet::params::master_package,
+  $packages               = $::puppet::params::master_packages,
   $puppet_master_run_with = $::puppet::params::master_run_with,
   $service                = $::puppet::params::master_service,
 ) inherits ::puppet::params {
@@ -29,11 +29,7 @@ class puppet::master (
     environment     => $environment,
   }
 
-  if (!defined(Package[$package])) {
-    package { $package :
-      ensure => 'present',
-    }
-  }
+  ensure_packages($packages)
 
   if ($hiera['merge_behavior'] == 'deeper') {
     package { 'deep_merge' :
@@ -56,7 +52,7 @@ class puppet::master (
       hasstatus  => true,
       hasrestart => false,
       require    => [
-        Package[$package],
+        Package[$packages],
         Puppet::Config['master-config'],
       ]
     }
@@ -65,7 +61,7 @@ class puppet::master (
     service { $service :
       ensure  => 'stopped',
       enable  => false,
-      require => Package[$package],
+      require => Package[$packages],
       notify  => Service[nginx]
     }
     if (!defined(Class['uwsgi'])) {
@@ -140,7 +136,7 @@ class puppet::master (
     group   => 'puppet',
     mode    => '0400',
     content => inline_template("<%= require 'yaml' ; YAML.dump(@hiera) %>"),
-    require => Package[$package]
+    require => Package[$packages]
   }
 
   class { 'puppet::auth' :}

@@ -39,5 +39,6 @@ if [[ ! -f "${EXPECT_HIERA}" ]]; then
 fi
 
 FACTER_PUPPET_APPLY="true" FACTER_ROLE="puppetmaster" puppet apply -vd ${PUPPET_ETC_DIR}/manifests/site.pp
+
 puppet agent --enable
 puppet agent -vd --no-daemonize --onetime
