@@ -164,5 +164,5 @@
 	branch = e1c4e3dcec8870bcb4e1a764410f9ec06d8eb607
 [submodule "modules/apparmor"]
 	path = modules/apparmor
-	url = https://github.com/artem-sidorenko/puppet-apparmor.git
-	branch = 91d8e701f7f24bf25724617a3434e3ae702c987e
+	url = https://github.com/teran/puppet-apparmor.git
+	branch = e31caa45104ab5bdd98b0c2050c96b5639289461
