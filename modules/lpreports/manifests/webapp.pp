@@ -182,7 +182,18 @@ class lpreports::webapp (
     command => "/usr/bin/flock -xn /var/lock/lpreports/cleanup-db.lock /usr/bin/timeout -k10 8400 ${managepy_path} cleanup-db >> ${logdir}/cleanup-db.log 2>&1",
     user    => 'lpreports',
     hour    => '22',
-    minute  => '0',
+    minute  => '24',
+    require => [
+      Package['python-lp-reports'],
+      File[$logdir],
+    ],
+  }
+
+  cron { 'lpreports-sync-cve' :
+    command => "/usr/bin/flock -xn /var/lock/lpreports/cleanup-db.lock /usr/bin/timeout -k10 60 ${managepy_path} sync-cve >> ${logdir}/sync_cve.log 2>&1",
+    user    => 'lpreports',
+    hour    => '*/6',
+    minute  => '36',
     require => [
       Package['python-lp-reports'],
       File[$logdir],
