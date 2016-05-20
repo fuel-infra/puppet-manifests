@@ -9,19 +9,27 @@
 #   [*install_zabbix_item*] - install Jenkins items for Zabbix
 #   [*jenkins_libdir*] - path to Jenkins lib directory
 #   [*jobs_dir*] - path to directory with Jenkins jobs
+#   [*known_hosts*] - known hosts to be added to known_hosts file
+#     Example:
+#       'review.test.local':
+#         'host': 'review.test.local'
+#         'port': 29418
+#   [*known_hosts_overwrite*] - erase known_hosts file before adding to it
 #   [*log_gzip_enable*] - enable gzip process for old files
 #   [*service_fqdn*] - service FQDN
 #
 class fuel_project::jenkins::master (
-  $cron_jobs            = undef,
-  $firewall_enable      = false,
-  $install_label_dumper = false,
-  $install_plugins      = false,
-  $install_zabbix_item  = false,
-  $jenkins_libdir       = '/var/lib/jenkins',
-  $jobs_dir             = '/var/lib/jenkins/jobs/',
-  $log_gzip_enable      = false,
-  $service_fqdn         = $::fqdn,
+  $cron_jobs             = undef,
+  $firewall_enable       = false,
+  $install_label_dumper  = false,
+  $install_plugins       = false,
+  $install_zabbix_item   = false,
+  $jenkins_libdir        = '/var/lib/jenkins',
+  $jobs_dir              = '/var/lib/jenkins/jobs/',
+  $known_hosts           = {},
+  $known_hosts_overwrite = false,
+  $log_gzip_enable       = false,
+  $service_fqdn          = $::fqdn,
 ) {
   class { '::fuel_project::common':
     external_host => $firewall_enable,
@@ -77,6 +85,15 @@ class fuel_project::jenkins::master (
       ensure  => 'present',
       user    => 'jenkins',
       require => User['jenkins'],
+    })
+  }
+
+  # 'known_hosts' manage
+  if ($known_hosts) {
+    create_resources('ssh::known_host', $known_hosts, {
+      user      => 'jenkins',
+      overwrite => $known_hosts_overwrite,
+      require   => User['jenkins'],
     })
   }
 
