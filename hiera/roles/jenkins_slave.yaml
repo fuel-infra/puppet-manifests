@@ -40,10 +40,13 @@ fuel_project::common::kernel_parameters:
     value: never
   hugepagesz:
     value: 1G
+    require: Kernel_parameter[transparent_hugepage]
   hugepages:
     value: 256
+    require: Kernel_parameter[hugepagesz]
   default_hugepagesz:
     value: 1G
+    require: Kernel_parameter[hugepages]
 
 fuel_project::common::files:
   /hugepages:
