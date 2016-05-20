@@ -37,6 +37,16 @@
 #       blah     => 'blah value',
 #     }
 #
+#   [*files*] - Hash, file create options. Example:
+#     $files = {
+#       '/hugepages' => {
+#         'ensure'  => 'directory',
+#       }
+#     }
+#
+#     Default:
+#       $mounts = {}
+#
 #   [*hosts*] - Hash, sets up custom /etc/hosts content through hiera. Default:
 #     $hosts = {
 #       "${::fqdn} ${::hostname}"              => '127.0.1.1',
@@ -46,7 +56,7 @@
 #       'ip6-allrouters'                       => 'ff02::2',
 #     }
 #
-#   [*kernel_parameters*] - Hash, paramters to be updated in GRUN for kernel.
+#   [*kernel_parameters*] - Hash, paramters to be updated in GRUB for kernel.
 #     Example:
 #       $kernel_parameters = {
 #         'transparent_hugepage' => {
@@ -128,10 +138,10 @@ class fuel_project::common (
     'ip6-allrouters'                       => 'ff02::2',
   })
 
+
+  $files = hiera_hash('fuel_project::common::files', {})
   $kernel_parameters = hiera_hash('fuel_project::common::kernel_parameters', {})
-
   $logrotate_rules = hiera_hash('logrotate::rules', {})
-
   $mounts = hiera_hash('fuel_project::common::mounts', {})
 
   class { '::atop' :}
@@ -251,6 +261,7 @@ class fuel_project::common (
   }
   # /Zabbix SSL item
 
+  create_resources(file, $files)
   create_resources(mount, $mounts)
 
   file { '/etc/hostname' :

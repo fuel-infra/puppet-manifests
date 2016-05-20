@@ -34,7 +34,6 @@ fuel_project::common::apparmor:
   /usr/lib/libvirt/virt-aa-helper:
     ensure: disabled
 
-
 # enable hugepages
 fuel_project::common::kernel_parameters:
   transparent_hugepage:
@@ -46,6 +45,10 @@ fuel_project::common::kernel_parameters:
   default_hugepagesz:
     value: 1G
 
+fuel_project::common::files:
+  /hugepages:
+    ensure: directory
+
 fuel_project::common::mounts:
   /hugepages:
     ensure: mounted
@@ -53,6 +56,7 @@ fuel_project::common::mounts:
     device: hugetlbfs
     fstype: hugetlbfs
     options: mode=1777
+    require: File[/hugepages]
 
 sysctl::base::values:
   net.bridge.bridge-nf-call-iptables:
