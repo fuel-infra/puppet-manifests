@@ -113,14 +113,14 @@ class fuel_project::common (
   $root_shell         = '/bin/bash',
   $tls_cacertdir      = '',
 ) {
-  $apparmor = hiera_hash('::fuel_project::common::apparmor', {})
+  $apparmor = hiera_hash('fuel_project::common::apparmor', {})
 
-  $facts = hiera_hash('::fuel_project::common::facts', {
+  $facts = hiera_hash('fuel_project::common::facts', {
     'location' => $::location,
     'role'     => $::role,
   })
 
-  $hosts = hiera_hash('::fuel_project::common::hosts', {
+  $hosts = hiera_hash('fuel_project::common::hosts', {
     "${::fqdn} ${::hostname}"              => '127.0.1.1',
     'localhost'                            => '127.0.0.1',
     'localhost ip6-localhost ip6-loopback' => '::1',
@@ -128,11 +128,11 @@ class fuel_project::common (
     'ip6-allrouters'                       => 'ff02::2',
   })
 
-  $kernel_parameters = hiera_hash('::fuel_project::common::kernel_parameters', {})
+  $kernel_parameters = hiera_hash('fuel_project::common::kernel_parameters', {})
 
-  $logrotate_rules = hiera_hash('::logrotate::rules', {})
+  $logrotate_rules = hiera_hash('logrotate::rules', {})
 
-  $mounts = hiera_hash('::fuel_project::common::mounts', {})
+  $mounts = hiera_hash('fuel_project::common::mounts', {})
 
   class { '::atop' :}
   if($logstash_forwarder) {
