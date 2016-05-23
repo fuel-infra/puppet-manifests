@@ -149,34 +149,44 @@ class lpreports::webapp (
     www_root => '/usr/lib/python2.7/dist-packages/lpreports',
   }
 
+  file { '/var/lock/lpreports' :
+    ensure => 'directory',
+    owner  => 'lpreports',
+    group  => 'lpreports',
+    mode   => '0644',
+  }
+
   cron { 'lpreports-syncdb' :
-    command => "${managepy_path} syncdb >> ${logdir}/syncdb.log 2>&1",
+    command => "/usr/bin/flock -xn /var/lock/lpreports/syncdb.lock /usr/bin/timeout -k10 240 ${managepy_path} syncdb >> ${logdir}/syncdb.log 2>&1",
     user    => 'lpreports',
     minute  => '*/10',
     require => [
       Package['python-lp-reports'],
       File[$logdir],
+      File['/var/lock/lpreports'],
     ],
   }
 
   cron { 'lpreports-collect-assignees' :
-    command => "${managepy_path} collect-assignees >> ${logdir}/collect-assignees.log 2>&1",
+    command => "/usr/bin/flock -xn /var/lock/lpreports/collect-assignees.lock /usr/bin/timeout -k10 60 ${managepy_path} collect-assignees >> ${logdir}/collect-assignees.log 2>&1",
     user    => 'lpreports',
     minute  => '*/1',
     require => [
       Package['python-lp-reports'],
       File[$logdir],
+      File['/var/lock/lpreports'],
     ],
   }
 
   cron { 'lpreports-cleanup-db' :
-    command => "${managepy_path} cleanup-db >> ${logdir}/cleanup-db.log 2>&1",
+    command => "/usr/bin/flock -xn /var/lock/lpreports/cleanup-db.lock /usr/bin/timeout -k10 8400 ${managepy_path} cleanup-db >> ${logdir}/cleanup-db.log 2>&1",
     user    => 'lpreports',
     hour    => '22',
     minute  => '0',
     require => [
       Package['python-lp-reports'],
       File[$logdir],
+      File['/var/lock/lpreports'],
     ],
   }
 }
