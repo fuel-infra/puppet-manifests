@@ -21,7 +21,7 @@
 class lpreports::webapp (
   $config                   = {},
   $logdir                   = '/var/log/lpreports',
-  $managepy_path            = '/usr/lib/python2.7/dist-packages/lpreports/manage.py',
+  $managepy_path            = '/usr/bin/lpreports',
   $nginx_server_name        = $::fqdn,
   $nginx_access_log         = '/var/log/nginx/access.log',
   $nginx_error_log          = '/var/log/nginx/error.log',
