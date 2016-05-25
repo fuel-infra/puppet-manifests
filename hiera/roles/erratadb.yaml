@@ -1,4 +1,0 @@
----
-classes:
-  - fuel_project::common
-  - errata::database
