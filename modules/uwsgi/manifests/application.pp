@@ -31,6 +31,7 @@ define uwsgi::application (
   $env            = $::uwsgi::params::env,
   $gid            = $::uwsgi::params::gid,
   $home           = $::uwsgi::params::home,
+  $lazy_apps      = $::uwsgi::params::lazy_apps,
   $listen         = $::uwsgi::params::listen,
   $master         = $::uwsgi::params::master,
   $module         = $::uwsgi::params::module,

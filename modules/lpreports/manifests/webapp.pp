@@ -82,16 +82,17 @@ class lpreports::webapp (
   }
 
   uwsgi::application { 'lpreports' :
-    plugins  => 'python',
-    module   => 'lpreports.wsgi',
-    callable => 'app',
-    master   => true,
-    workers  => $::processorcount,
-    socket   => '127.0.0.1:6776',
-    vacuum   => true,
-    uid      => 'lpreports',
-    gid      => 'lpreports',
-    require  => [
+    plugins   => 'python',
+    module    => 'lpreports.wsgi',
+    callable  => 'app',
+    master    => true,
+    lazy_apps => true,
+    workers   => $::processorcount,
+    socket    => '127.0.0.1:6776',
+    vacuum    => true,
+    uid       => 'lpreports',
+    gid       => 'lpreports',
+    require   => [
       User['lpreports'],
       Package['python-lp-reports'],
       File[$logdir],

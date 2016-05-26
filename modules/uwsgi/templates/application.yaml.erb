@@ -4,6 +4,7 @@ uwsgi:
     <% if @uid %>uid: <%= @uid -%><% end %>
     <% if @gid %>gid: <%= @gid -%><% end %>
     <% if @socket %>socket: <%= @socket -%><% end %>
+    <% if @lazy_apps %>lazy-apps: <%= @lazy_apps -%><% end %>
     <% if @listen %>listen: <%= @listen -%><% end %>
     <% if @chmod %>chmod: <%= @chmod -%><% end %>
     <% if @master %>master: <%= @master -%><% end %>

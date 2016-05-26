@@ -27,6 +27,7 @@ class uwsgi::params {
   $env            = undef
   $gid            = 'www-data'
   $home           = undef
+  $lazy_apps      = undef
   $listen         = 1000
   $master         = true
   $module         = undef
