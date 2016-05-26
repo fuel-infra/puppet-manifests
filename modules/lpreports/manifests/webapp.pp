@@ -194,8 +194,9 @@ class lpreports::webapp (
     hour    => '22',
     minute  => '24',
     require => [
-      Package['python-lp-reports'],
+      Package[$package],
       File[$logdir],
+      File['/var/lock/lpreports'],
     ],
   }
 
