@@ -987,7 +987,6 @@ class fuel_project::jenkins::slave (
       $selenium_packages_common = [
         'chromium-browser',
         'chromium-chromedriver',
-        'firefox',
         'imagemagick',
         'xfonts-100dpi',
         'xfonts-75dpi',
@@ -1007,6 +1006,12 @@ class fuel_project::jenkins::slave (
           },
         })
       }
+      else {
+        package { 'firefox' :
+          ensure => 'latest',
+        }
+      }
+
       ensure_packages($selenium_packages_common)
 
       case $::osfamily {
