@@ -168,5 +168,5 @@
 	branch = e31caa45104ab5bdd98b0c2050c96b5639289461
 [submodule "modules/openstackci"]
 	path = modules/openstackci
-	url = https://github.com/mescanef/puppet-openstackci
-	branch = bb207b294a19dc75d5fc9b06aac6fadcbab83ba9
+	url = https://github.com/fuel-infra/puppet-openstackci
+	branch = 131b852477e49820c421aa915dd4762598d791c0
