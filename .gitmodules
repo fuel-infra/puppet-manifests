@@ -170,3 +170,7 @@
 	path = modules/openstackci
 	url = https://github.com/fuel-infra/puppet-openstackci.git
 	branch = 131b852477e49820c421aa915dd4762598d791c0
+[submodule "modules/file_concat"]
+	path = modules/file_concat
+	url = https://github.com/electrical/puppet-lib-file_concat.git
+	branch = 813132b5d776204e1da169a93e4bc6a1e253f75c
