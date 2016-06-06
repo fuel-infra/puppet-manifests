@@ -7,8 +7,8 @@ mongodb::server::replset_config:
   'mongodb-misc':
     ensure: present
     members:
-      - mongo01.example.com:27017
-      - mongo02.example.com:27017
+      - mongo01.test.local:27017
+      - mongo02.test.local:27017
 mongodb::server::bind_ip: ['0.0.0.0']
 mongodb::server::noauth: false
 mongodb::server::port: 27017

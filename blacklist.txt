@@ -18,7 +18,6 @@ jenkins_slave
 lab
 loganalyze
 mongo_testing
-mongo
 nailgun_demo
 npm_mirror
 pasteweb
