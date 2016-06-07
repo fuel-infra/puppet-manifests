@@ -191,7 +191,7 @@ class lpreports::webapp (
   cron { 'lpreports-cleanup-db' :
     command => "/usr/bin/flock -xn /var/lock/lpreports/cleanup-db.lock /usr/bin/timeout -k10 8400 ${managepy_path} cleanup-db >> ${logdir}/cleanup-db.log 2>&1",
     user    => 'lpreports',
-    hour    => '22',
+    hour    => '*/6',
     minute  => '24',
     require => [
       Package[$package],
