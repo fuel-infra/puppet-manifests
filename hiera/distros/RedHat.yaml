@@ -1,4 +1,7 @@
 ---
+selinux::mode: 'permissive'
+selinux::type: 'targeted'
+
 yum::gpgkey:
   'RPM-GPG-KEY-devops':
     path: '/etc/pki/rpm-gpg/RPM-GPG-KEY-devops'

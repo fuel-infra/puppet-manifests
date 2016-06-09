@@ -170,6 +170,9 @@ class fuel_project::jenkins::slave (
   $workspace                            = '/home/jenkins/workspace',
   $x11_display_num                      = 99,
 ) {
+  if($::osfamily == 'RedHat') {
+    include ::selinux
+  }
 
   if (!defined(Class['::fuel_project::common'])) {
     class { '::fuel_project::common' :

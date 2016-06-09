@@ -174,3 +174,7 @@
 	path = modules/file_concat
 	url = https://github.com/electrical/puppet-lib-file_concat.git
 	branch = 813132b5d776204e1da169a93e4bc6a1e253f75c
+[submodule "modules/selinux"]
+	path = modules/selinux
+	url = https://github.com/jfryman/puppet-selinux.git
+	branch = 7e92817301c8dea3560738db0d59803259980327
