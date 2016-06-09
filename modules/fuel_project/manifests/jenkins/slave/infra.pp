@@ -9,6 +9,9 @@ class fuel_project::jenkins::slave::infra {
     'libldap2-dev',
     'libsasl2-dev',
     'libssl-dev',
+    'python-dev',
+    'python3-dev',
+    'nodejs',
   ]
 
   ensure_packages($packages)
