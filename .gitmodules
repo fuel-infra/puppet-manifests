@@ -30,10 +30,6 @@
 	path = modules/bind
 	url = https://github.com/teran/puppet-bind
 	branch = 5f124641e69f4614e79c9b5f3491a506a248f1c6
-[submodule "modules/nginx"]
-	path = modules/nginx
-	url = https://github.com/teran/puppet-nginx
-	branch = 140c93d9e2093175f410420454ff758624f8b2e0
 [submodule "modules/rssh"]
 	path = modules/rssh
 	url = https://github.com/teran/puppet-rssh
@@ -178,3 +174,7 @@
 	path = modules/selinux
 	url = https://github.com/jfryman/puppet-selinux.git
 	branch = 7e92817301c8dea3560738db0d59803259980327
+[submodule "modules/nginx"]
+	path = modules/nginx
+	url = https://github.com/teran/puppet-nginx.git
+	branch = 140c93d9e2093175f410420454ff758624f8b2e0
