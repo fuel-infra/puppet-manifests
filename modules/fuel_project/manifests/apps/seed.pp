@@ -28,21 +28,11 @@
 #
 #     For more parameters please refer to ::fuel_project::apps::share
 #
-#   [*cleanup_dirs*] - Array, list of hashes contains dirs to clean up
-#     pereodically in the following form:
-#     $cleanup_dirs = [
-#       {
-#         'dir'     => '/var/www/dir',
-#         'ttl'     => '10' # in days
-#         'pattern' => '*.txt'
-#       }
-#     ]
 #
 class fuel_project::apps::seed (
   $cron_jobs     = {},
   $seed_acl_list = [],
   $shares        = {},
-  $cleanup_dirs  = [],
 ) {
 
   create_resources(cron, $cron_jobs, {
@@ -56,9 +46,8 @@ class fuel_project::apps::seed (
     mode => '0755',
   })
 
-  class {'::devopslib::downloads_cleaner' :
-    cleanup_dirs => $cleanup_dirs,
-  }
+  # include cleaner and get cleanup directories from hiera
+  include ::devopslib::downloads_cleaner
 
   create_resources('::fuel_project::apps::share', $shares, {})
 

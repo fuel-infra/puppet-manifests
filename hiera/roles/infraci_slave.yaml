@@ -8,6 +8,17 @@ classes:
 fuel_project::common::external_host: true
 fuel_project::jenkins::slave::verify_jenkins_jobs: true
 
+devopslib::downloads_cleaner::clean_seeds: true
+devopslib::downloads_cleaner::cleanup_dirs:
+  -
+    dir: '/var/www/seed/fuelweb-iso'
+    ttl: 10
+    pattern: 'fuel-*'
+  -
+    dir: '/srv/downloads'
+    ttl: 1
+    pattern: '*'
+
 jenkins::slave::authorized_keys:
   'jenkins@infra-ci.fuel-jenkins.org':
     type: ssh-rsa

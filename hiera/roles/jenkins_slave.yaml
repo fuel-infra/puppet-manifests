@@ -27,6 +27,18 @@ sudo::configs:
   'dutop-libvirt':
     'content': '%sudo ALL=(ALL) NOPASSWD: /usr/bin/dutop /var/lib/libvirt'
 
+
+devopslib::downloads_cleaner::clean_seeds: true
+devopslib::downloads_cleaner::cleanup_dirs:
+  -
+    dir: '/var/www/seed/fuelweb-iso'
+    ttl: 10
+    pattern: 'fuel-*'
+  -
+    dir: '/srv/downloads'
+    ttl: 1
+    pattern: '*'
+
 # apparmor rules
 fuel_project::common::apparmor:
   /usr/sbin/libvirtd:

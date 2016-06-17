@@ -65,7 +65,6 @@
 #   [*pam_password*] - PAM password type
 #   [*pin_nodejs_version*] - enable or disable 'nodejs' package version pinning
 #   [*run_tests*] - dependencies to run tests
-#   [*seed_cleanup_dirs*] - directory locations with seeds to cleanup
 #   [*simple_syntax_check*] - add syntax check tools
 #   [*tls_cacertdir*] - LDAP CA certs directory
 #   [*verify_fuel_astute*] - add fuel_astute verification requirements
@@ -144,18 +143,6 @@ class fuel_project::jenkins::slave (
   $pam_password                         = '',
   $pin_nodejs_version                   = true,
   $run_tests                            = false,
-  $seed_cleanup_dirs                    = [
-    {
-      'dir'     => '/var/www/fuelweb-iso', # directory to poll
-      'ttl'     => 10, # time to live in days
-      'pattern' => 'fuel-*', # pattern to filter files in directory
-    },
-    {
-      'dir'     => '/srv/downloads',
-      'ttl'     => 1,
-      'pattern' => 'fuel-*',
-    }
-  ],
   $selenium_firefox_package_version     = undef,
   $simple_syntax_check                  = false,
   $tls_cacertdir                        = '',
@@ -196,11 +183,8 @@ class fuel_project::jenkins::slave (
     class { '::jenkins::slave' :}
   }
 
-
-  class {'::devopslib::downloads_cleaner' :
-    cleanup_dirs => $seed_cleanup_dirs,
-    clean_seeds  => true,
-  }
+  # include cleaner and get cleanup directories from hiera
+  include ::devopslib::downloads_cleaner
 
   ensure_packages([
     'git',

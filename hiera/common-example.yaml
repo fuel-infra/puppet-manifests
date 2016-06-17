@@ -145,7 +145,7 @@ fuel_project::jenkins::slave::nailgun_db:
   - 'nailgun6'
   - 'nailgun7'
 
-fuel_project::jenkins::slave::seed_cleanup_dirs:
+devopslib::downloads_cleaner::cleanup_dirs:
   -
     dir: '/var/www/fuelweb-iso'
     ttl: 10

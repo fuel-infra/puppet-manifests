@@ -9,7 +9,7 @@ bacula::director_name_suffix: ''
 bacula::director_password: 'xxxxx'
 bacula::director_server: 'bacula.test.local'
 
-fuel_project::apps::seed::seed_cleanup_dirs:
+devopslib::downloads_cleaner::cleanup_dirs:
   -
     dir: '/var/www/seed/fuelweb-iso'
     ttl: 10
