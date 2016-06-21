@@ -1,7 +1,7 @@
 # image:ci-xenial-server-cloudimg-amd64
 ---
 classes:
-  - '::docker_registry'
+  - '::registry'
   - '::fuel_project::apps::firewall'
   - '::fuel_project::common'
   - '::fuel_project::nginx'
@@ -29,7 +29,7 @@ classes:
 #EQ==
 #-----END CERTIFICATE-----
 
-docker_registry::ssl_certificate_global_content: |
+registry::ssl_certificate_global_content: |
   -----BEGIN CERTIFICATE-----
   MIIDJDCCAgwCCQDohwnnHTSTFTANBgkqhkiG9w0BAQsFADBFMQswCQYDVQQGEwJB
   VTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0
@@ -50,7 +50,7 @@ docker_registry::ssl_certificate_global_content: |
   r2VpjTv0bctoZFEr6r3bl0ra6RdcT67NBOWuqq3fn7Nfe9H4gxWxyQ==
   -----END CERTIFICATE-----
 
-docker_registry::ssl_key_global_content: |
+registry::ssl_key_global_content: |
   -----BEGIN RSA PRIVATE KEY-----
   MIIEpAIBAAKCAQEA3r4WZNCAdvKtecfgrw15FZ4cml5QOr4lymixDrasUwP9cNHm
   5rL/UUZew7nRDWnhxyXL8WVUaCNKkeThtEb6Jtz4PSlk6QsoMZbATwxrrWQAt1Tm
@@ -79,7 +79,7 @@ docker_registry::ssl_key_global_content: |
   Vd7HVflyET4iKVH5q+vLP+ED7LwpKaVC4WCtRmdno0l0tZUqMvKMzw==
   -----END RSA PRIVATE KEY-----
 
-docker_registry::ssl_certificate_token_content: |
+registry::ssl_certificate_token_content: |
   -----BEGIN CERTIFICATE-----
   MIIDmTCCAoGgAwIBAgIJAJGc54yYKZs8MA0GCSqGSIb3DQEBCwUAMGMxCzAJBgNV
   BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
@@ -103,7 +103,7 @@ docker_registry::ssl_certificate_token_content: |
   hBrtuTHuW16PtQHgeQ==
   -----END CERTIFICATE-----
 
-docker_registry::ssl_key_token_content: |
+registry::ssl_key_token_content: |
   -----BEGIN PRIVATE KEY-----
   MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCljjVs7uttgbRM
   YqUxBUJ3s0RD8dKfWZmO1DJZ1TKiuHtGlI3qDtDlz12Iua/b53NsnM2V0v3+vmGI
@@ -133,21 +133,21 @@ docker_registry::ssl_key_token_content: |
   IMjK3YBsHDrVQ9xjRF5NhF5Z
   -----END PRIVATE KEY-----
 
-docker_registry::service_fqdn: "registry.test.local"
+registry::service_fqdn: "registry.test.local"
 
-docker_registry::oauth_client_id: 'EXAMPLE.apps.googleusercontent.com'
-docker_registry::oauth_client_secret: 'EXAMPLESECRET'
-docker_registry::oauth_domain: 'example.com'
+registry::oauth_client_id: 'EXAMPLE.apps.googleusercontent.com'
+registry::oauth_client_secret: 'EXAMPLESECRET'
+registry::oauth_domain: 'example.com'
 
 # admin: Aa7quaew
 # index: index
 # jenkins: bu7ORe6o
-docker_registry::static_users:
+registry::static_users:
   'admin': '$2y$05$ab6e4vb/.rR8R0nip0oro.VMrgq29Rl32WCEDE/fgHemeA22jARnq'
   'index': '$2y$05$SAHQikfd8Ku6WYf9Ok4Fz.m7MUVHWHIunEctOcahhpwWpl4rgyNx2'
   'jenkins': '$2y$05$XaoxJINyRxHkrmRkV9NVjuLBSLJ5EGwG16bpusObEDi8eD4pegCsy'
 
-docker_registry::acls:
+registry::acls:
   # Admin has full access to everything.
   'account: "admin"': '*'
   # Jenkins has full access to everything.
@@ -171,7 +171,7 @@ fuel_project::apps::firewall::rules:
     proto: tcp
     action: accept
   '1000 - allow connections to SSH':
-    source: '10.108.0.0/24'
+    source: '0.0.0.0/0'
     dport: 22
     proto: tcp
     action: accept

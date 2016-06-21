@@ -1,4 +1,4 @@
-# Class: docker_registry
+# Class: registry
 #
 # This class deploys fully functional Docker Registry instance with multiple
 # additional features:
@@ -87,7 +87,7 @@
 #     'index': '$2y$05$SAHQikfd8Ku6WYf9Ok4Fz.m7MUVHWHIunEctOcahhpwWpl4rgyNx2'
 #     'jenkins': '$2y$05$XaoxJINyRxHkrmRkV9NVjuLBSLJ5EGwG16bpusObEDi8eD4pegCsy'
 #
-class docker_registry (
+class registry (
     $acls,
     $oauth_client_id,
     $oauth_client_secret,
@@ -102,9 +102,9 @@ class docker_registry (
     $anonymous = true,
     $auth_backend_port = 5801,
     $auth_port = 5001,
-    $config_auth = '/etc/registry/auth.yml',
-    $config_search = '/etc/registry/search.yml',
-    $config_server = '/etc/registry/server.yml',
+    $config_auth = '/etc/docker/registry/auth.yml',
+    $config_search = '/etc/docker/registry/search.yml',
+    $config_server = '/etc/docker/registry/server.yml',
     $expiration = 900,
     $search_backend_port = 5802,
     $search_password = 'index',
@@ -113,25 +113,25 @@ class docker_registry (
     $search_user = 'index',
     $server_backend_port = 5800,
     $server_port = 443,
-    $service_group = 'registry',
-    $service_user = 'registry',
+    $service_group = 'docker-registry',
+    $service_user = 'docker-registry',
     $ssl_certificate_global = '/etc/ssl/certs/registry.crt',
     $ssl_certificate_internal = '/etc/ssl/certs/internal.crt',
-    $ssl_certificate_token = '/etc/registry/token.crt',
+    $ssl_certificate_token = '/etc/docker/registry/token.crt',
     $ssl_key_global = '/etc/ssl/private/registry.key',
     $ssl_key_internal = '/etc/ssl/private/internal.key',
-    $ssl_key_token = '/etc/registry/token.key',
+    $ssl_key_token = '/etc/docker/registry/token.key',
     $static_users = {},
+    $version = '2.3.0~ds1-1',
 ) {
 
-  # install requirements
-  $packages = [
-    'docker-registry',
-    'docker-auth',
-    'docker-search',
-  ]
+  $packages = {
+    'docker-auth' => { ensure => installed, },
+    'docker-search' => { ensure => installed, },
+    'docker-registry' => { ensure => $version, },
+  }
 
-  ensure_packages($packages)
+  create_resources('package', $packages)
 
   # create config files
   file { $config_server:
@@ -139,8 +139,8 @@ class docker_registry (
     owner   => $service_user,
     group   => $service_group,
     mode    => '0640',
-    content => template('docker_registry/server.yml.erb'),
-    require => Package[$packages],
+    content => template('registry/server.yml.erb'),
+    require => Package['docker-registry'],
   }
 
   file { $config_auth:
@@ -148,8 +148,8 @@ class docker_registry (
     owner   => $service_user,
     group   => $service_group,
     mode    => '0640',
-    content => template('docker_registry/auth.yml.erb'),
-    require => Package[$packages],
+    content => template('registry/auth.yml.erb'),
+    require => Package['docker-auth'],
   }
 
   file { $config_search:
@@ -157,8 +157,8 @@ class docker_registry (
     owner   => $service_user,
     group   => $service_group,
     mode    => '0640',
-    content => template('docker_registry/search.yml.erb'),
-    require => Package[$packages],
+    content => template('registry/search.yml.erb'),
+    require => Package['docker-search'],
   }
 
   # create certificate files for global Nginx
@@ -168,7 +168,7 @@ class docker_registry (
     group   => 'root',
     mode    => '0640',
     content => $ssl_certificate_global_content,
-    require => Package[$packages],
+    require => Package['nginx-full'],
   }
 
   file { $ssl_key_global:
@@ -177,7 +177,7 @@ class docker_registry (
     group   => 'root',
     mode    => '0640',
     content => $ssl_key_global_content,
-    require => Package[$packages],
+    require => Package['nginx-full'],
   }
 
   # create certificate files for internal Nginx
@@ -187,7 +187,7 @@ class docker_registry (
     group   => 'root',
     mode    => '0640',
     content => $ssl_certificate_internal_content,
-    require => Package[$packages],
+    require => Package['nginx-full'],
   }
 
   file { $ssl_key_internal:
@@ -196,7 +196,7 @@ class docker_registry (
     group   => 'root',
     mode    => '0640',
     content => $ssl_key_internal_content,
-    require => Package[$packages],
+    require => Package['nginx-full'],
   }
 
   # create certificate files for tokens
@@ -206,7 +206,7 @@ class docker_registry (
     group   => $service_group,
     mode    => '0640',
     content => $ssl_certificate_token_content,
-    require => Package[$packages],
+    require => Package['nginx-full'],
   }
 
   file { $ssl_key_token:
@@ -215,7 +215,7 @@ class docker_registry (
     group   => $service_group,
     mode    => '0640',
     content => $ssl_key_token_content,
-    require => Package[$packages],
+    require => Package['nginx-full'],
   }
 
   # schedule garbage-collector runs
@@ -321,20 +321,20 @@ class docker_registry (
     ensure  => 'running',
     name    => 'docker-registry',
     enable  => true,
-    require => [File['/etc/registry/server.yml'],
+    require => [File[$config_server],
                 File[$ssl_key_token],
                 File[$ssl_certificate_token],
-                Package[$packages]],
+                Package['docker-registry']],
   }
 
   service { 'service-auth':
     ensure  => 'running',
     name    => 'docker-auth',
     enable  => true,
-    require => [File['/etc/registry/auth.yml'],
+    require => [File[$config_auth],
                 File[$ssl_key_token],
                 File[$ssl_certificate_token],
-                Package[$packages]],
+                Package['docker-auth']],
   }
 
   # setup uwsgi for registry search
@@ -346,6 +346,6 @@ class docker_registry (
     enable_threads => true,
     chdir          => '/usr/lib/registry-search',
     module         => 'application',
-    require        => Package[$packages],
+    require        => Package['docker-search'],
   }
 }

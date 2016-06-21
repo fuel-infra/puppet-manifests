@@ -1,6 +1,6 @@
 ---
 
-docker_registry::ssl_certificate_internal_content: |
+registry::ssl_certificate_internal_content: |
   -----BEGIN CERTIFICATE-----
   MIIDJjCCAg4CCQDohwnnHTSTFzANBgkqhkiG9w0BAQsFADBFMQswCQYDVQQGEwJB
   VTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0
@@ -21,7 +21,7 @@ docker_registry::ssl_certificate_internal_content: |
   XvOQZYeL7SjdAri+OiOO3Sozb8cJsSqyi8q3WXBK4Q5PoVpEawtwsGSY
   -----END CERTIFICATE-----
 
-docker_registry::ssl_key_internal_content: |
+registry::ssl_key_internal_content: |
   -----BEGIN RSA PRIVATE KEY-----
   MIIEpAIBAAKCAQEAtXzEo5P5wVsDob6ICN8d92jIrYM1zKcYFPA1+Klnt68QUkob
   waCUZxu0v4IGbl5aqZMqiNN3PZ/ppoX7OzNXDf9FdX6iDOt7sG2+gzEMJaiAveFS
@@ -50,3 +50,29 @@ docker_registry::ssl_key_internal_content: |
   K7atiOIs7sw6hR2L1zSIXXjdpH7lcMzDFbWyAGVe735I4HnwGAdR5w==
   -----END RSA PRIVATE KEY-----
 
+# overwrite default APT sources to allow Xenial deployment
+apt::sources:
+  mirror:
+    location: 'http://cz.archive.ubuntu.com/ubuntu/'
+    release: "%{::lsbdistcodename}"
+    key: 'C0B21F32'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main restricted universe multiverse'
+    include_src: false
+    include_deb: true
+  mirror_updates:
+    location: 'http://cz.archive.ubuntu.com/ubuntu/'
+    release: "%{::lsbdistcodename}-updates"
+    key: 'C0B21F32'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main restricted universe multiverse'
+    include_src: false
+    include_deb: true
+  devops:
+    location: 'http://mirror.fuel-infra.org/devops/ubuntu/'
+    release: '/'
+    key: '62BF6A9C1D2B45A2'
+    key_server: 'keyserver.ubuntu.com'
+    repos: ''
+    include_src: false
+    include_deb: true
