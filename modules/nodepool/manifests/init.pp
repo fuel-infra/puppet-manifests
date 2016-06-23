@@ -55,7 +55,7 @@ class nodepool (
   $project_config_cron_jobs               = undef,
   $project_config_known_hosts             = undef,
   $project_config_nodepool_yaml_path      = '/etc/project-config/nodepool/nodepool.yaml',
-  $project_config_repo                    = 'https://git.example.com/project-config',
+  $project_config_repo                    = undef,
   $project_config_repo_revision           = 'master',
   $project_config_sync_script_path        = '/usr/local/bin/project_config_sync.sh',
   $project_config_user                    = 'project-config-cloner',
@@ -194,7 +194,6 @@ class nodepool (
     target  => $project_config_nodepool_yaml_path,
     owner   => $user,
     group   => $user,
-    mode    => '0400',
     require => [
       File[$config_dir],
       User[$user],
@@ -203,29 +202,27 @@ class nodepool (
 
   if ($scripts_dir) {
     file { "${config_dir}/scripts" :
-      ensure  => 'directory',
+      ensure  => 'link',
+      target  => $scripts_dir,
       owner   => $user,
       group   => $user,
-      mode    => '0755',
-      recurse => true,
-      purge   => true,
-      force   => true,
-      require => File[$config_dir],
-      source  => $scripts_dir,
+      require => [
+        File[$config_dir],
+        User[$user],
+      ],
     }
   }
 
   if ($elements_dir) {
     file { "${config_dir}/elements" :
-      ensure  => 'directory',
+      ensure  => 'link',
+      target  => $elements_dir,
       owner   => $user,
       group   => $user,
-      mode    => '0755',
-      recurse => true,
-      purge   => true,
-      force   => true,
-      require => File[$config_dir],
-      source  => $elements_dir
+      require => [
+        File[$config_dir],
+        User[$user],
+      ],
     }
   }
 

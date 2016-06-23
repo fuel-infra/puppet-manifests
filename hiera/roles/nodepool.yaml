@@ -155,11 +155,6 @@ nodepool::project_config_cron_jobs:
     hour: '2'
     minute: '15'
 
-nodepool::project_config_known_hosts:
-  'review.test.local':
-    host: 'review.test.local'
-    port: '29418'
-
 nodepool::nodepool_credentials: |
   DBURI="mysql://user:password@127.0.0.1/db_name"
   PROVIDERS_USERNAME="provider_user"
