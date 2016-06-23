@@ -28,6 +28,7 @@ class log_storage::logstash (
   $elasticsearch_cacert          = undef,
   $elasticsearch_cluster         = undef,
   $elasticsearch_hosts           = "${::fqdn}:9201",
+  $elasticsearch_index           = 'logstash-%{+YYYY.MM.dd}-%{IndexType}',
   $elasticsearch_max_retries     = undef,
   $elasticsearch_ssl             = undef,
   $elasticsearch_ssl_cert_verify = undef,

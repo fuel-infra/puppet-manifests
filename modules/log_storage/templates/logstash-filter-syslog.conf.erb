@@ -18,5 +18,8 @@ filter {
     date {
       match => <%= @logstash_filter_pattern_params['syslog_filter_match'] %>
     }
+    mutate {
+      add_field => [ "IndexType", "syslog" ]
+    }
   }
 }
