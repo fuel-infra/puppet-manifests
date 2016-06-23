@@ -1,3 +1,4 @@
+# image:ci-xenial-server-cloudimg-amd64
 ---
 classes:
   - '::docker_registry'
