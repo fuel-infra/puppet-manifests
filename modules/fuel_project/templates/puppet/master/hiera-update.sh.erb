@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+
+export BRANCH=${BRANCH:-<%= @hiera_branch %>}
+export TMPDIR=${TMPDIR:-<%= @hiera_tmpdir %>}
+export REPO=${REPO:-<%= @hiera_repo %>}
+export DATAPATH=${DATAPATH:-<%= @hiera_datapath %>}
+
+(
+  flock -n 9 || exit 1
+  echo "Clean up..."
+  rm -rf "${TMPDIR}"
+
+  echo "Cloning..."
+  git clone "${REPO}" "${TMPDIR}"
+  cd "${TMPDIR}"
+  git checkout "${BRANCH}"
+
+  REVISION=`git log -1 HEAD | fgrep commit | awk '{print $NF}'`
+  PREV_REVISION=`cat /tmp/hiera-revision.txt 2>/dev/null || echo -n none`
+  echo -n "${REVISION}" > /tmp/hiera-revision.txt
+
+  echo "Revision: \$Id: ${REVISION} \$"
+  echo "Previous revision: ${PREV_REVISION}"
+
+  if [[ "${REVISION}" == "${PREV_REVISION}" ]]; then
+    echo "No updates found."
+    exit 0
+  fi
+
+  echo "Linking..."
+  rm -rf "${DATAPATH}"
+
+  cp -r "${TMPDIR}" "${DATAPATH}"
+) 9>/var/lock/hiera-update.lock

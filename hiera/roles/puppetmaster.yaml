@@ -22,6 +22,38 @@ fuel_project::apps::firewall:
     action: 'accept'
 
 fuel_project::puppet::master::enable_update_cronjob: false
+fuel_project::puppet::master::hiera_branch: 'master'
+fuel_project::puppet::master::hiera_datapath: '/var/lib/hiera'
+fuel_project::puppet::master::hiera_repo: 'ssh://user@gerrit.test.local:29418/hiera'
+fuel_project::puppet::master::hiera_user_private_key: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpAIBAAKCAQEAxCKO0i7Ry9tWFCbwl6UATZGZjvX33CcS4pi2f20z9jT2NOQy
+  +739rdQvCT5m2f3mTk1TlCs5V3rYg0LVvOgeoefzJT+q1lzgHO1Mrbd5CTWc8/9X
+  4wyJfGx9zYI1AWUoT21XmUHRX7MKJ/U8PrAFaHLmRlrIuamw+JBo1nNHT3xZu2QK
+  k75dvSg64lbNyNutgfSpFiACO+dzS2uCgMrjk2Ht9XuvPMlCZt9/uU5rCZMmSnPK
+  Gfy/e+qM3yuHD77HfTZSqtdb+8o75ir19cNqT3HoV1nttEcBZwKNu4SuX+xKLcP5
+  Z/GO36FsFEmvO+i84rGnRLSfIY35KHGT2lbYlQIDAQABAoIBACLuZLFaVVMRRUth
+  hAf+AwfNnqOveu1iqCJjQF2BfXekBxV0bwAW3k9PMvFag8bfSV04uGHzMMs7vcPi
+  614xmQMM5GkF5c83y1JbkQR/YLcbLVDncSem2/Wk/OLVBcux0HQU7T0GU9vPb0ee
+  jZQ8lTn8/LYbBRTL/BDI52MKNPEazA53o6u00/Eqw1WB7ijpwTO6H6TaYq5VE81C
+  Zs7sREcITuu2KD6shtvMzWbadDcDHBaiXBZlnFu2Lh3tF8HeRnnLqmFglw/DI8vg
+  7Ip8auXM/6fFRK8fAalM1DkoqaEfFEC4DWBy4CNOuSI3MPy+zxwDOyyuRV/LJVUd
+  lEhtHSECgYEA/gUCBL9dAwsoUWhXnsqyjVqMlrmTNINdKag27DZQLulO236jwGYP
+  nLjKS8hrob7hyOLLIQ8SoEoBjoPGIl/GGp9LHFksovS96fJhDjpuEBRS+cnw87hT
+  NUAiYsFS0bR2WQ6y27pZf3McxzfXKSQmTwL+KkAYjfuSW5GqgBiMqvcCgYEAxaoE
+  +w2R9xOV1XfGmqodrJRLv5DLGmHd77/YYUWspHMN2mdKmUhSALzqtu5uvPormCWL
+  H3acgcalk2kDAnN63Gpq236FKgSLGgBRh1P3As1IkoFe4J8NOO6V03cxRkJX0eS4
+  Bc3foto1D99sT/bG6BwCSfXWzUlqOFdfLDCmydMCgYAjuoyYIlpwzSb0nFqGqTgI
+  Dc5sfNmprzhxXYmsG8+XaZV/5gYeT7yubId3tU7+Rxz25n9vvPD/vqkNZJd/yjzR
+  DcrAyAIxQX9c4oyoNau5c0Jgg/jyLuD1QnoTreF6QYnL6PdbVJC2DnjjxITs8nq4
+  7lDVnIJXpiTl4E09Czbt7QKBgQCRgqDaA9phTeyuUddFglgH9L9yjW/GwybzWII8
+  0WLPSNd44TMcdg3P90K+WfXxbiTrgy/QgKukKY04YETT6BkY68owPQpgrSmNgZCD
+  E/+x81cqasxihRPhxllLa+I9O5eUr0/9DdpE82e+gJYmo583vW697ZksVJA6W693
+  Q3V0+wKBgQCBBH6rCfJ65wRLIoOyT6pGDQ4dnIbWM+jC1clr15f6OeWYoR5mFzNo
+  2Sn65HuiCSinHvCK7B6MUKnG8IyaswYc+4mQHsUWfEm6bbica7BYIfVW4joMN/T/
+  HkKsgAdD3m+TkksO8xzx5NkMFEYmJbfw+9rNUrWBlmfuygSjzO3cuw==
+  -----END RSA PRIVATE KEY-----
+fuel_project::puppet::master::hiera_tmpdir: '/tmp/hiera'
 
 puppet::master::autosign: false
 puppet::master::environment: 'production'
