@@ -3,15 +3,14 @@ classes:
   - fuel_project::apps::firewall
   - fuel_project::common
   - log_storage::logstash
-  - log_storage::logstashforwarder
+  - log_storage::filebeat
   - log_storage::params
   - logstash
-  - logstashforwarder
   - java
 
 logstash::manage_repo: false
 logstash::package_pin: true
-logstash::version: '2.2.2-ubuntu3'
+logstash::version: '2.3.3-1'
 
 log_storage::logstash::elasticsearch_hosts:
   - 'storage01.test.local:9201'
@@ -21,13 +20,44 @@ log_storage::logstash::elasticsearch_ssl_cert_verify: 'false'
 log_storage::logstash::elasticsearch_workers: '4'
 log_storage::logstash::lumberjack_host: '0.0.0.0'
 
-logstashforwarder::servers:
-  - '%{::fqdn}:5000'
-  - 'storage-proxy.test.local:5000'
+log_storage::logstash::beats_host: '0.0.0.0'
+log_storage::logstash::beats_port: 5044
+log_storage::logstash::beats_ssl: true
+log_storage::logstash::beats_type: 'logs'
+log_storage::logstash::beats_ssl_verify_mode: 'peer'
+log_storage::logstash::beats_ssl_key_file: '/etc/logstash/beats_ssl.key'
+log_storage::logstash::beats_ssl_certificate_file: '/etc/logstash/beats_ssl.crt'
+log_storage::logstash::beats_ssl_ca_file: '/etc/logstash/beats_ssl.ca'
+
+log_storage::logstash::configfiles:
+  'logstash-input-lumberjack':
+    'template': 'log_storage/logstash-input-lumberjack.conf.erb'
+    'order': 10
+  'logstash-input-beats':
+    'template': 'log_storage/logstash-input-beats.conf.erb'
+    'order': 10
+  'logstash-filter-syslog':
+    'template': 'log_storage/logstash-filter-syslog.conf.erb'
+    'order': 20
+  'logstash-filter-nginx-access':
+    'template': 'log_storage/logstash-filter-nginx-access.conf.erb'
+    'order': 21
+  'logstash-filter-nginx-error':
+    'template': 'log_storage/logstash-filter-nginx-error.conf.erb'
+    'order': 22
+  'logstash-filter-mysql-slow-log':
+    'template': 'log_storage/logstash-filter-mysql-slow-log.conf.erb'
+    'order': 23
+  'logstash-filter-libvirt-qemu-env-log':
+    'template': 'log_storage/logstash-filter-libvirt-qemu-env-log.conf.erb'
+    'order': 24
+  'logstash-output-elasticsearch':
+    'template': 'log_storage/logstash-output-elasticsearch.conf.erb'
+    'order': 50
 
 # firewall configuration
 fuel_project::apps::firewall::rules:
-   '1000 - allow connections from 1.1.1.0/23 - SRT location':
+  '1000 - allow connections from 1.1.1.0/23 - SRT location':
     source: 1.1.1.0/23
     dport:
       - 22
@@ -90,14 +120,14 @@ fuel_project::apps::firewall::rules:
       - 5000
     proto: tcp
     action: accept
-  '1000 - allow connections from 1.1.13.0/32 - SanJose DC'
+  '1000 - allow connections from 1.1.13.0/32 - SanJose DC':
     source: 1.1.13.0/28
     dport:
       - 22
       - 5000
     proto: tcp
     action: accept
-  '1000 - allow connections from 1.1.14.0/24 - BUD DC'
+  '1000 - allow connections from 1.1.14.0/24 - BUD DC':
     source: 1.1.14.0/24
     dport:
       - 22

@@ -16,7 +16,6 @@ jenkins_master
 jenkins_slave
 lab
 loganalyze
-log_storage_proxy
 mongo_testing
 mongo
 nailgun_demo

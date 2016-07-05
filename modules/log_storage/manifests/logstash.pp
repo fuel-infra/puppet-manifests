@@ -4,6 +4,17 @@
 #
 # Parameters:
 #   [*logstash_filter_pattern_params*] - logstash filter patter parameters
+#   [*beats_host *] - Beats address to bind
+#   [*beats_port *] - Beats port to bind
+#   [*beats_ssl *] - Enable SSL for Beats
+#   [*beats_ssl_ca *] - CA cert content for Beats
+#   [*beats_ssl_ca_file *] - CA cert file path for Beats
+#   [*beats_certificate *] - Certificate content for Beats
+#   [*beats_certificate_file *] - Certificate file path for Beats
+#   [*beats_ssl_key*] - Keys file content for Beats
+#   [*beats_ssl_key_file*] - Keys file path for Beats
+#   [*beats_ssl_verify_mode*] - SSL verify mode for Beats
+#   [*beats_type*] - Beats type
 #   [*elasticsearch_bind_port*] - Elastic output bind port
 #   [*elasticsearch_cacert*] - Elastic output CA certificate path
 #   [*elasticsearch_cluster*] - Elastic output cluster
@@ -24,6 +35,17 @@
 #
 class log_storage::logstash (
   $logstash_filter_pattern_params,
+  $beats_host                    = $::fqdn,
+  $beats_port                    = 5044,
+  $beats_ssl                     = true,
+  $beats_ssl_ca                  = $log_storage::params::logstash_beats_ssl_ca,
+  $beats_ssl_ca_file             = '/etc/logstash/beats_ssl.ca',
+  $beats_ssl_certificate         = $log_storage::params::logstash_beats_ssl_certificate,
+  $beats_ssl_certificate_file    = '/etc/logstash/beats_ssl.crt',
+  $beats_ssl_key                 = $log_storage::params::logstash_beats_ssl_key,
+  $beats_ssl_key_file            = '/etc/logstash/beats_ssl.key',
+  $beats_ssl_verify_mode         = 'peer',
+  $beats_type                    = 'logs',
   $elasticsearch_bind_port       = undef,
   $elasticsearch_cacert          = undef,
   $elasticsearch_cluster         = undef,
@@ -33,14 +55,18 @@ class log_storage::logstash (
   $elasticsearch_ssl             = undef,
   $elasticsearch_ssl_cert_verify = undef,
   $elasticsearch_workers         = 2,
+  # FIXME: to be removed when Lumberjack will get replaced by Filebeat
   $lumberjack_host               = $::fqdn,
   $lumberjack_port               = '5000',
   $lumberjack_type               = 'logs',
+  # /FIXME.
   $logstash_patterns_dir         = '/etc/logstash/patterns',
+  # FIXME: to be removed when Lumberjack will get replaced by Filebeat
   $ssl_certificate               = $log_storage::params::logstash_ssl_certificate,
   $ssl_certificate_file          = '/etc/logstash/ssl.crt',
   $ssl_key                       = $log_storage::params::logstash_ssl_key,
   $ssl_key_file                  = '/etc/logstash/ssl.key',
+  # /FIXME.
   $user                          = 'logstash',
 ) inherits log_storage::params {
 
@@ -51,47 +77,15 @@ class log_storage::logstash (
     }
   )
 
-  logstash::configfile { 'logstash-input-lumberjack' :
-    content => template('log_storage/logstash-input-lumberjack.conf.erb'),
-    order   => 10,
-  }
-
-  logstash::configfile { 'logstash-filter-syslog':
-    content => template('log_storage/logstash-filter-syslog.conf.erb'),
-    order   => 20,
-  }
-
-  logstash::configfile { 'logstash-filter-nginx-access' :
-    content => template('log_storage/logstash-filter-nginx-access.conf.erb'),
-    order   => 21,
-  }
-
-  logstash::configfile { 'logstash-filter-nginx-error' :
-    content => template('log_storage/logstash-filter-nginx-error.conf.erb'),
-    order   => 22,
-  }
-
-  logstash::configfile { 'logstash-filter-mysql-slow-log' :
-    content => template('log_storage/logstash-filter-mysql-slow-log.conf.erb'),
-    order   => 23,
-  }
-
-  logstash::configfile { 'logstash-filter-libvirt-qemu-env-log' :
-    content => template('log_storage/logstash-filter-libvirt-qemu-env-log.conf.erb'),
-    order   => 24,
-  }
-
-  logstash::configfile { 'logstash-output-elasticsearch' :
-    content => template('log_storage/logstash-output-elasticsearch.conf.erb'),
-    order   => 40,
-  }
+  $logstash_configs = hiera('log_storage::logstash::configfiles', {})
+  create_resources('logstash::configfile', $logstash_configs)
 
   file { "${logstash_patterns_dir}/nginx-access" :
+    ensure  => 'present',
     owner   => $user,
     group   => $user,
     mode    => '0664',
     content => template('log_storage/logstash-pattern-nginx-access.erb'),
-    replace => true,
     require => [
       File[$logstash_patterns_dir],
       User[$user],
@@ -99,18 +93,20 @@ class log_storage::logstash (
   }
 
   file { "${logstash_patterns_dir}/nginx-error" :
+    ensure  => 'present',
     owner   => $user,
     group   => $user,
     mode    => '0664',
     content => template('log_storage/logstash-pattern-nginx-error.erb'),
-    replace => true,
     require => [
       File[$logstash_patterns_dir],
       User[$user],
     ]
   }
 
+  # FIXME: deprecated, to be removed when Lumberjack will get replaced by Filebeat.
   file { "${logstash_patterns_dir}/mysql-slow-log" :
+    ensure  => 'present',
     owner   => $user,
     group   => $user,
     mode    => '0444',
@@ -122,6 +118,7 @@ class log_storage::logstash (
   }
 
   file { "${logstash_patterns_dir}/libvirt-qemu-env-log" :
+    ensure  => 'present',
     owner   => $user,
     group   => $user,
     mode    => '0444',
@@ -132,28 +129,75 @@ class log_storage::logstash (
     ]
   }
 
-  file { $ssl_certificate_file :
-    owner   => $user,
-    group   => $user,
-    mode    => '0400',
-    content => $ssl_certificate,
-    replace => true,
-    require => [
-      File['/etc/logstash/'],
-      User[$user],
-    ]
+  if($ssl_certificate and $ssl_certificate_file) {
+    file { $ssl_certificate_file :
+      ensure  => 'present',
+      owner   => $user,
+      group   => $user,
+      mode    => '0400',
+      content => $ssl_certificate,
+      require => [
+        File['/etc/logstash/'],
+        User[$user],
+      ]
+    }
   }
 
-  file { $ssl_key_file :
-    owner   => $user,
-    group   => $user,
-    mode    => '0400',
-    content => $ssl_key,
-    replace => true,
-    require => [
-      File['/etc/logstash/'],
-      User[$user],
-    ]
+  if($ssl_key_file and $ssl_key) {
+    file { $ssl_key_file :
+      ensure  => 'present',
+      owner   => $user,
+      group   => $user,
+      mode    => '0400',
+      content => $ssl_key,
+      require => [
+        File['/etc/logstash/'],
+        User[$user],
+      ]
+    }
+  }
+  # /FIXME.
+
+  if ($beats_ssl_ca and $beats_ssl_ca_file) {
+    file { $beats_ssl_ca_file :
+      ensure  => 'present',
+      owner   => $user,
+      group   => $user,
+      mode    => '0400',
+      content => $beats_ssl_ca,
+      require => [
+        File['/etc/logstash/'],
+        User[$user],
+      ]
+    }
+  }
+
+  if ($beats_ssl_certificate and $beats_ssl_certificate_file) {
+    file { $beats_ssl_certificate_file :
+      ensure  => 'present',
+      owner   => $user,
+      group   => $user,
+      mode    => '0400',
+      content => $beats_ssl_certificate,
+      require => [
+        File['/etc/logstash/'],
+        User[$user],
+      ]
+    }
+  }
+
+  if ($beats_ssl_key and $beats_ssl_key_file) {
+    file { $beats_ssl_key_file :
+      ensure  => 'present',
+      owner   => $user,
+      group   => $user,
+      mode    => '0400',
+      content => $beats_ssl_key,
+      require => [
+        File['/etc/logstash/'],
+        User[$user],
+      ]
+    }
   }
 
 }

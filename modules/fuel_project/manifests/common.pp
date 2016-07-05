@@ -5,12 +5,12 @@
 # Parameters:
 #   [*bind_policy*] - LDAP binding policy
 #   [*external_host*] - host deployed on external IP address
+#   [*filebeat*] - boolean to choose if the Filebeat log shipper should be installed
 #   [*kernel_package*] - kernel package to install
 #   [*ldap*] - use LDAP authentication
 #   [*ldap_base*] - LDAP base
 #   [*ldap_ignore_users*] - users ignored for LDAP checks
 #   [*ldap_uri*] - LDAP URI
-#   [*logstash_forwarder*] - enable logstash forwarder
 #   [*pam_filter*] - PAM filter for LDAP
 #   [*pam_password*] - PAM password type
 #   [*puppet_cron*] - run Puppet agent by cron
@@ -109,12 +109,12 @@
 class fuel_project::common (
   $bind_policy        = '',
   $external_host      = false,
+  $filebeat           = false,
   $kernel_package     = undef,
   $ldap               = false,
   $ldap_base          = '',
   $ldap_ignore_users  = '',
   $ldap_uri           = '',
-  $logstash_forwarder = false,
   $pam_filter         = '',
   $pam_password       = '',
   $puppet_cron        = {},
@@ -145,8 +145,8 @@ class fuel_project::common (
   $mounts = hiera_hash('fuel_project::common::mounts', {})
 
   class { '::atop' :}
-  if($logstash_forwarder) {
-    class { '::log_storage::logstashforwarder' :}
+  if($filebeat) {
+    class { '::log_storage::filebeat' :}
   }
   class { '::ntp' :}
   class { '::puppet::agent' :}

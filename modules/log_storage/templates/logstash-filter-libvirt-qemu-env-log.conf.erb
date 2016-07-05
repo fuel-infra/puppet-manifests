@@ -1,10 +1,5 @@
 filter {
   if [type] == "<%= @logstash_filter_pattern_params['libvirt_qemu_env_log_filter_access_type'] %>" {
-    multiline {
-      what => next
-      pattern => "(.*): shutting down"
-      negate => true
-    }
     grok {
       match => { "message" => [
              "%{<%= @logstash_filter_pattern_params['libvirt_qemu_env_log_filter_message'] %>}"

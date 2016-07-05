@@ -3,11 +3,6 @@ filter {
     if [message] =~ "^# Time:" {
       drop {}
     }
-    multiline {
-      what => previous
-      pattern => "^# User@Host:"
-      negate => true
-    }
     grok {
       match => { "message" => [
           "%{<%= @logstash_filter_pattern_params['mysql_slow_log_filter_user_host_message'] %>}",

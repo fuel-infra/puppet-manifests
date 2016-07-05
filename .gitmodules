@@ -178,3 +178,7 @@
 	path = modules/nginx
 	url = https://github.com/teran/puppet-nginx.git
 	branch = 140c93d9e2093175f410420454ff758624f8b2e0
+[submodule "modules/filebeat"]
+	path = modules/filebeat
+	url = https://github.com/fuel-infra/puppet-filebeat.git
+	branch = 5f08c82bc8508f165be8fb42b40dfb7efed7f886

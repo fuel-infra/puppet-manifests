@@ -1,0 +1,16 @@
+input {
+  beats {
+    port => "<%= @beats_port %>"
+    host => "<%= @beats_host %>"
+    type => "<%= @beats_type %>"
+    ssl => "<%= @beats_ssl %>"
+    <% if @beats_ssl %>
+    ssl_certificate => "<%= @beats_ssl_certificate_file %>"
+    <% if @beats_ssl_ca_file %>
+    ssl_certificate_authorities => "<%= @beats_ssl_ca_file %>"
+    <% end %>
+    ssl_key => "<%= @beats_ssl_key_file %>"
+    ssl_verify_mode => "<%= @beats_ssl_verify_mode %>"
+    <% end %>
+  }
+}
