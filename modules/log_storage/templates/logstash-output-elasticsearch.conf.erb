@@ -22,6 +22,6 @@ output {
     <% if @elasticsearch_max_retries %>
     max_retries => <%= @elasticsearch_max_retries %>
     <% end %>
-    index => <%= @elasticsearch_index %>
+    index => "<%= @elasticsearch_index %>"
   }
 }
