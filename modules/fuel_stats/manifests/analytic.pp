@@ -109,7 +109,7 @@ class fuel_stats::analytic (
   if ($development) {
     $www_root = '/var/www/analytics/analytics/static'
   } else {
-    $www_root = '/usr/share/fuel-stats-static/static'
+    $www_root = '/usr/share/fuel-stats-static/'
   }
 
   # Nginx configuration
