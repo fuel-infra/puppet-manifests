@@ -219,7 +219,7 @@ class fuel_project::common (
 
   case $::osfamily {
     'Debian': {
-      class { '::apt' :}
+      include ::apt
     }
     'RedHat': {
       class { '::yum' :}
