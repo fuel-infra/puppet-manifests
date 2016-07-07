@@ -28,6 +28,8 @@ puppetmaster
 pxetool_master
 pxetool_smart_proxy
 pypi_mirror
+registry01
+registry02
 rubygems_mirror
 seed
 slave_custom_ci
