@@ -267,7 +267,7 @@ class fuel_stats::analytic (
   }
 
   ensure_packages ('elasticsearch', {
-    ensure => 'installed',
+    ensure => '1.6.2',
     notify => Service['elasticsearch'],
   })
 
@@ -287,5 +287,11 @@ class fuel_stats::analytic (
       Package['elasticsearch'],
       Package['openjdk-7-jre-headless'],
     ]
+  }
+
+  apt::pin { 'elasticsearch':
+    packages => 'elasticsearch',
+    priority => 1001,
+    version  => '1.6.2*',
   }
 }
