@@ -8,34 +8,40 @@
 #     server_name
 #   [*path*] - String, local directory path to serve
 #   [*autoindex*] - Boolean, Enables or disables nginx's autoindex operation
+#   [*directory_mode*] - String, local directory path to serve mode
+#   [*htpasswd*] - String, Enables or disables Basic auth nginx's feature.
+#     If not empty should contain htpasswd file content
 #   [*http_ro*] - Boolean, Enables or disables nginx configuration
+#   [*incoming_mode*] - String, mode which files uploaded by rsync have
 #   [*nginx_access_log*] - String, nginx access log path
 #   [*nginx_error_log*] - String, nginx error log path
 #   [*nginx_log_format*] - String, nginx log format name
-#   [*sync_hosts_allow*] - Array, list of hosts to allow rsync connections from
-#     if $rsync_rw is enabled
+#   [*outgoing_mode*] - String, mode which files downloaded by rsync have
 #   [*rsync_ro*] - Boolean, Enables or disables rsync read-only module
 #   [*rsync_rw*] - Boolean, Enables or disables rsync writable module
 #   [*ssh_authorized_keys*] - Hash, Hash of keys(to pass to create_resources()
 #     function)
+#   [*sync_hosts_allow*] - Array, list of hosts to allow rsync connections from
+#     if $rsync_rw is enabled
 #   [*username*] - String, System user name to use as share owner
-#   [*htpasswd*] - String, Enables or disables Basic auth nginx's feature.
-#     If not empty should contain htpasswd file content
 #
 define fuel_project::apps::share (
   $service_fqdn,
   $path,
   $autoindex           = false,
+  $directory_mode      = '0755',
+  $htpasswd            = '',
   $http_ro             = true,
+  $incoming_mode       = '0755',
   $nginx_access_log    = '/var/log/nginx/access.log',
   $nginx_error_log     = '/var/log/nginx/error.log',
   $nginx_log_format    = 'proxy',
-  $sync_hosts_allow    = [],
+  $outgoing_mode       = '0644',
   $rsync_ro            = false,
   $rsync_rw            = false,
   $ssh_authorized_keys = {},
+  $sync_hosts_allow    = [],
   $username            = $title,
-  $htpasswd            = '',
 ) {
   include ::rssh
 
@@ -51,7 +57,7 @@ define fuel_project::apps::share (
     ensure  => 'directory',
     owner   => $username,
     group   => $username,
-    mode    => '0755',
+    mode    => $directory_mode,
     require => User[$username],
   }
 
@@ -122,8 +128,8 @@ define fuel_project::apps::share (
       gid             => $username,
       hosts_allow     => $sync_hosts_allow,
       hosts_deny      => ['*'],
-      incoming_chmod  => '0755',
-      outgoing_chmod  => '0644',
+      incoming_chmod  => $incoming_mode,
+      outgoing_chmod  => $outgoing_mode,
       list            => 'yes',
       lock_file       => "/var/run/rsync-${title}-sync.lock",
       max_connections => 100,
