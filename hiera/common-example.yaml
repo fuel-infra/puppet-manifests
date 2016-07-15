@@ -12,6 +12,9 @@ supervisord::package_provider: 'apt'
 supervisord::executable: '/usr/bin/supervisord'
 supervisord::executable_ctl: '/usr/bin/supervisorctl'
 
+# don't touch existing sudoers.d cloud-init files
+sudo::purge_ignore: '90-cloud-init-users'
+
 firewall:
   known_networks:
     - 10.108.0.0/16
