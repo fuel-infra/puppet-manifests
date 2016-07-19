@@ -182,3 +182,7 @@
 	path = modules/filebeat
 	url = https://github.com/fuel-infra/puppet-filebeat.git
 	branch = 5f08c82bc8508f165be8fb42b40dfb7efed7f886
+[submodule "modules/memcached"]
+	path = modules/memcached
+	url = https://github.com/fuel-infra/puppet-memcached.git
+	branch = bfa64e066a709cae8bed12ff95e9d630ad50af14
