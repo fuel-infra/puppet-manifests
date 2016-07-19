@@ -61,6 +61,9 @@ define fuel_project::gerrit::replication (
       group  => 'gerrit',
       mode   => '0644',
       order  => 'numeric',
+      require => [
+        Package['gerrit'],
+      ],
   })
 
   # add header with link to docs (to replication file)
