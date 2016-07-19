@@ -45,12 +45,15 @@ define fuel_project::apps::share (
 ) {
   include ::rssh
 
-  user { $username :
-    ensure     => 'present',
-    home       => $path,
-    managehome => true,
-    shell      => '/usr/bin/rssh',
-    system     => true,
+  # only create dedicated share user if it does not exists yet
+  if ! defined(User[$username]) {
+    user { $username :
+      ensure     => 'present',
+      home       => $path,
+      managehome => true,
+      shell      => '/usr/bin/rssh',
+      system     => true,
+    }
   }
 
   file { $path :

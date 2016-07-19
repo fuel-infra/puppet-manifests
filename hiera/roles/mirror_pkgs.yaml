@@ -1,7 +1,8 @@
 ---
 classes:
-  - '::fuel_project::apps::seed'
   - '::fuel_project::jenkins::slave'
+  - '::fuel_project::apps::seed'
+
 fuel_project::apps::seed::shares:
   mirror:
     service_fqdn:
@@ -11,6 +12,6 @@ fuel_project::apps::seed::shares:
     http_ro: true
     rsync_ro: true
     rsync_rw: true
-    username: mirror-syncer
+    username: jenkins
 
 rsync::server::use_xinetd: false
