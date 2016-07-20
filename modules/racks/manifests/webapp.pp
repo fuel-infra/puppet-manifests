@@ -50,6 +50,14 @@ class racks::webapp (
 ) {
   class { 'uwsgi' :}
 
+  user { $user :
+    ensure     => 'present',
+    managehome => true,
+    home       => "/var/lib/${user}",
+    system     => true,
+    shell      => '/usr/sbin/nologin',
+  }
+
   package { $package :
     ensure => 'latest',
     notify => [
@@ -65,7 +73,10 @@ class racks::webapp (
     group   => $group,
     mode    => '0400',
     content => inline_template("<%= require 'yaml' ; YAML.dump(@config) %>"),
-    require => Package[$package],
+    require => [
+      Package[$package],
+      User[$user],
+    ],
     notify  => Uwsgi::Application['racks'],
   }
 
@@ -73,6 +84,7 @@ class racks::webapp (
     command => '/usr/share/racks/webapp/manage.py syncdb --noinput',
     user    => $user,
     require => [
+      User[$user],
       Package[$package],
       File[$config_path]
     ],
@@ -82,6 +94,7 @@ class racks::webapp (
     command => '/usr/share/racks/webapp/manage.py migrate --all',
     user    => $user,
     require => [
+      User[$user],
       Exec['racks-syncdb'],
     ],
   }
@@ -204,6 +217,7 @@ class racks::webapp (
     chdir     => '/usr/share/racks/webapp',
     module    => 'racks.wsgi',
     subscribe => [
+      User[$user],
       File[$config_path],
       Package[$package],
     ],
