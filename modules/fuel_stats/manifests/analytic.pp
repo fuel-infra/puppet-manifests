@@ -50,7 +50,6 @@ class fuel_stats::analytic (
 
   ensure_packages([
     'error-pages',
-    'openjdk-7-jre-headless',
   ])
 
   if ( ! defined(Class['::fuel_stats::db']) ) {
@@ -187,16 +186,6 @@ class fuel_stats::analytic (
     location_cfg_append => $location_cfg_append_firewall_limit,
   }
 
-  ::nginx::resource::location { 'analytics-elastic' :
-    ensure              => 'present',
-    vhost               => 'analytics',
-    location            => '~ ^(/fuel)?(/[0-9A-Za-z_]+)?/(_count|_search)',
-    ssl                 => $ssl,
-    ssl_only            => $ssl,
-    proxy               => 'http://127.0.0.1:9200',
-    location_cfg_append => $location_cfg_append_firewall_limit,
-  }
-
   if ($development) {
     # development configuration
     fuel_stats::dev { 'analytics':
@@ -264,32 +253,4 @@ class fuel_stats::analytic (
     ],
   }
 
-  ensure_packages ('elasticsearch', {
-    ensure => '1.6.2',
-    notify => Service['elasticsearch'],
-  })
-
-  file { '/etc/elasticsearch/scripts' :
-    ensure  => 'link',
-    target  => '/usr/share/elasticsearch/scripts/',
-    require => [
-      Package['elasticsearch'],
-    ]
-  }
-
-  service { 'elasticsearch' :
-    ensure  => 'running',
-    enable  => true,
-    require => [
-      File['/etc/elasticsearch/scripts'],
-      Package['elasticsearch'],
-      Package['openjdk-7-jre-headless'],
-    ]
-  }
-
-  apt::pin { 'elasticsearch':
-    packages => 'elasticsearch',
-    priority => 1001,
-    version  => '1.6.2*',
-  }
 }
