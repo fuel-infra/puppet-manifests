@@ -211,4 +211,16 @@ class lpreports::webapp (
       File['/var/lock/lpreports'],
     ],
   }
+
+  cron { 'lpreports-sync-milestones' :
+    command => "/usr/bin/flock -xn /var/lock/lpreports/sync-milestones.lock /usr/bin/timeout -k10810 10800 ${managepy_path} sync-milestones >> ${logdir}/sync_milestones.log 2>&1",
+    user    => 'lpreports',
+    hour    => '*',
+    minute  => '*/30',
+    require => [
+      Package[$package],
+      File[$logdir],
+      File['/var/lock/lpreports'],
+    ],
+  }
 }
