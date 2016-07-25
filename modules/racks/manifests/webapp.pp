@@ -90,8 +90,17 @@ class racks::webapp (
     ],
   }
 
+  case $::lsbdistcodename {
+    'xenial': {
+      $migrate_command = '/usr/share/racks/webapp/manage.py migrate'
+    }
+    default: {
+      $migrate_command = '/usr/share/racks/webapp/manage.py migrate --all'
+    }
+  }
+
   exec { 'racks-migratedb' :
-    command => '/usr/share/racks/webapp/manage.py migrate --all',
+    command => $migrate_command,
     user    => $user,
     require => [
       User[$user],
