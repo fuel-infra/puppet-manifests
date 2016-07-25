@@ -107,13 +107,13 @@ fuel_project::apps::firewall::rules:
     source: '10.109.0.0/16'
     action: 'accept'
 
-jenkins::slave::known_hosts:
-  'review.openstack.org':
-    'host': 'review.openstack.org'
-    'port': 29418
-  'review.fuel-infra.org':
-    'host': 'review.fuel-infra.org'
-    'port': 29418
+fuel_project::common::known_hosts:
+  'jenkins':
+    hosts:
+     'review.fuel-infra.org':
+       port: 29418
+     'review.openstack.org':
+       port: 29418
 
 jenkins::slave::authorized_keys:
   'jenkins@ci.fuel-jenkins.org':

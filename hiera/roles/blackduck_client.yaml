@@ -23,10 +23,13 @@ fuel_project::roles::blackduck::client::google_creds:
     auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
     client_x509_cert_url: 'put_here_your_client_x509_cert_url'
 
-fuel_project::roles::blackduck::client::known_hosts:
-  'blackduck.test.local':
-    host: 'blackduck.test.local'
-    port: 22
+
+fuel_project::common::known_hosts:
+  'jenkins':
+    hosts:
+     'blackduck.test.local':
+       port: 22
+
 fuel_project::roles::blackduck::client::known_hosts_overwrite: false
 
 fuel_project::roles::blackduck::client::sdk_dst: '/home/jenkins/'
