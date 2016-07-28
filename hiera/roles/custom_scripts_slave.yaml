@@ -60,10 +60,11 @@ fuel_project::jenkins::slave::custom_scripts::configs:
 fuel_project::jenkins::slave::custom_scripts::docker_user: 'jenkins'
 fuel_project::jenkins::slave::custom_scripts::docker_package: 'lxc-docker-1.6.1'
 fuel_project::jenkins::slave::custom_scripts::install_docker: true
-fuel_project::jenkins::slave::custom_scripts::known_hosts:
-  'review.openstack.org':
-    host: 'review.openstack.org'
-    port: 29418
-  'review.fuel-infra.org':
-    host: 'review.fuel-infra.org'
-    port: 29418
+
+fuel_project::common::known_hosts:
+  'jenkins':
+    hosts:
+     'review.fuel-infra.org':
+       port: 29418
+     'review.openstack.org':
+       port: 29418

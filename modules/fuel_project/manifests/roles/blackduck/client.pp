@@ -15,12 +15,6 @@
 #     token_uri: 'https://accounts.google.com/o/oauth2/token'
 #     auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
 #     client_x509_cert_url: 'put_here_your_client_x509_cert_url'
-#    [*known_hosts*] - set of hosts to add them into known_hosts file.
-#    Set in the following form:
-#     'user@server.test.local':
-#       host: 'user@server.test.local'
-#       port: 22
-#    [*known_hosts_overwrite*] - boolean, if we should overwrite known_hosts file
 #    [*sdk_dst*] - string, path to directory where SDK should be unpacked
 #    [*sdk_path*] - string, path to director where SDK's distr is placed
 #    [*ssh_private_key*] - string, value of private ssh-key
@@ -28,8 +22,6 @@
 #
 class fuel_project::roles::blackduck::client (
   $google_creds          = hiera_hash('fuel_project::roles::blackduck::client::google_creds', undef),
-  $known_hosts           = {},
-  $known_hosts_overwrite = false,
   $sdk_dst               = '/home/jenkins/',
   $sdk_path              = '/mnt/Export-SDK.zip',
   $ssh_private_key       = undef,
@@ -96,14 +88,6 @@ class fuel_project::roles::blackduck::client (
     require => [
       File['/etc/blackduck'],
     ]
-  }
-
-  if ($known_hosts) {
-    create_resources('::ssh::known_host', $known_hosts, {
-      user      => 'jenkins',
-      overwrite => $known_hosts_overwrite,
-      require   => User['jenkins'],
-    })
   }
 
 }

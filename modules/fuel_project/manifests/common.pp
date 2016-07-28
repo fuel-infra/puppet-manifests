@@ -6,8 +6,8 @@
 #   [*bind_policy*] - LDAP binding policy
 #   [*external_host*] - host deployed on external IP address
 #   [*filebeat*] - boolean to choose if the Filebeat log shipper should be installed
-#   [*hugepages*] - Boolean,String/Integer, value for kernel hugepages parameter
-#   [*hugepagesz*] - String/Integer, value for kernel hugepagesz parameter
+#   [*hugepages*] - boolean/string/integer, value for kernel hugepages parameter
+#   [*hugepagesz*] - string/integer, value for kernel hugepagesz parameter
 #   [*kernel_package*] - kernel package to install
 #   [*ldap*] - use LDAP authentication
 #   [*ldap_base*] - LDAP base
@@ -20,6 +20,21 @@
 #   [*root_password_hash*] - root password
 #   [*root_shell*] - shell for root user
 #   [*tls_cacertdir*] - LDAP CA certs directory
+#
+# Hiera parameters:
+#   [*known_hosts*] - hash, variables which are passed to ssh::known_host via
+#                     create_resources to manage known_hosts file
+#     Example:
+#      fuel_project::common::known_hosts:
+#        'user':
+#          home: '/some/special/directory'
+#          overwrite: false
+#          hosts:
+#           'www.example.com':
+#             port: 2233
+#             home: '/even/more/special/directory'
+#           'www.google.com':
+#             port: 22
 #
 # Additional parameters:
 #
@@ -115,6 +130,7 @@ class fuel_project::common (
   $hugepages          = false,
   $hugepagesz         = undef,
   $kernel_package     = undef,
+  $known_hosts        = {},
   $ldap               = false,
   $ldap_base          = '',
   $ldap_ignore_users  = '',
@@ -188,6 +204,11 @@ class fuel_project::common (
     'screen',
     'tmux',
   ])
+
+  # 'known_hosts' manage
+  if ($known_hosts) {
+    create_resources('ssh::known_host', $known_hosts)
+  }
 
   # install the exact version of kernel package
   # please note, that reboot must be done manually

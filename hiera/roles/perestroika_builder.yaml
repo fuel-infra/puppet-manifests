@@ -6,13 +6,13 @@ classes:
 
 fuel_project::common::kernel_package: 'linux-image-extra-3.19.0-26-generic'
 fuel_project::roles::perestroika::builder::docker_package: 'lxc-docker-1.6.1'
-fuel_project::roles::perestroika::builder::known_hosts:
-  'review.openstack.org':
-    host: 'review.openstack.org'
-    port: 29418
-  'review.fuel-infra.org':
-    host: 'review.fuel-infra.org'
-    port: 29418
-  'gerrit.mirantis.com':
-    host: 'gerrit.mirantis.com'
-    port: 29418
+
+fuel_project::common::known_hosts:
+  'jenkins':
+    hosts:
+     'review.fuel-infra.org':
+       port: 29418
+     'review.openstack.org':
+       port: 29418
+     'gerrit.mirantis.com':
+       port: 29418

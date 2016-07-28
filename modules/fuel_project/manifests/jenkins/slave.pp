@@ -180,15 +180,6 @@ class fuel_project::jenkins::slave (
     }
   }
 
-  # 'known_hosts' manage
-  if ($known_hosts) {
-    create_resources('ssh::known_host', $known_hosts, {
-      user      => 'jenkins',
-      overwrite => $known_hosts_overwrite,
-      require   => User['jenkins'],
-    })
-  }
-
   # FIXME: Legacy compability LP #1418927
   cron { 'devops-env-cleanup' :
     ensure => 'absent',
