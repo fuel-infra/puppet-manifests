@@ -123,6 +123,13 @@
 #     Default:
 #       $mounts = {}
 #
+#   [*tune2fs*] - Hash, options to pass to tune2fs class
+#     $tune2fs = {
+#       '/dev/vda1' => {
+#         'action' => 'reserved_percentage',
+#         'value'  => '0.5',
+#     }
+#
 class fuel_project::common (
   $bind_policy        = '',
   $external_host      = false,
@@ -142,6 +149,7 @@ class fuel_project::common (
   $root_password_hash = 'r00tme',
   $root_shell         = '/bin/bash',
   $tls_cacertdir      = '',
+  $tune2fs            = {},
 ) {
   $apparmor = hiera_hash('fuel_project::common::apparmor', {})
 
@@ -351,5 +359,9 @@ class fuel_project::common (
       value   => $hugepages,
       require => Kernel_parameter['hugepagesz'],
     }
+  }
+
+  class { '::tune2fs' :
+    tune2fs => $tune2fs,
   }
 }
