@@ -68,6 +68,9 @@
 #   [*anonymous*] - create anonymous account
 #   [*auth_port*] - authorization service port
 #   [*auth_backend_port*] - authorization service backend port
+#   [*config_auth*] - path to auth server configuration file
+#   [*config_search*] - path to search server configuration file
+#   [*config_server*] - path to docker registry server configuration file
 #   [*expiration*] - token expiration time (in seconds)
 #   [*search_backend_port*] - search service backend port
 #   [*search_password*] - docker registry account password used by search daemon to index
@@ -104,7 +107,7 @@ class registry (
     $auth_port = 5001,
     $config_auth = '/etc/docker/registry/auth.yml',
     $config_search = '/etc/docker/registry/search.yml',
-    $config_server = '/etc/docker/registry/server.yml',
+    $config_server = '/etc/docker/registry/config.yml',
     $expiration = 900,
     $search_backend_port = 5802,
     $search_password = 'index',
@@ -140,7 +143,7 @@ class registry (
     owner   => $service_user,
     group   => $service_group,
     mode    => '0640',
-    content => template('registry/server.yml.erb'),
+    content => template('registry/config.yml.erb'),
     require => Package['docker-registry'],
   }
 
