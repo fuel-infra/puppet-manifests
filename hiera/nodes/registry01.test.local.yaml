@@ -68,11 +68,19 @@ apt::sources:
     repos: 'main restricted universe multiverse'
     include_src: false
     include_deb: true
-  devops:
-    location: 'http://mirror.fuel-infra.org/devops/ubuntu/'
-    release: '/'
-    key: '62BF6A9C1D2B45A2'
+  infra_backports:
+    location: "http://mirror.fuel-infra.org/infra/backports/%{::lsbdistcodename}/"
+    release: "%{::lsbdistcodename}"
+    key: 'CA2B20483E301371'
     key_server: 'keyserver.ubuntu.com'
-    repos: ''
+    repos: 'main'
+    include_src: false
+    include_deb: true
+  infra_packages:
+    location: "http://mirror.fuel-infra.org/infra/packages/%{::lsbdistcodename}/"
+    release: "%{::lsbdistcodename}"
+    key: 'CA2B20483E301371'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main'
     include_src: false
     include_deb: true
