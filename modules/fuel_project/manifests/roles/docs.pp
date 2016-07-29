@@ -191,6 +191,18 @@ class fuel_project::roles::docs (
     },
   }
 
+  # Disable mirantis fuel docs on community site
+  ::nginx::resource::location { "${community_hostname}/openstack/" :
+    vhost               => $community_hostname,
+    location            => '~ \/openstack\/.*',
+    www_root            => $www_root,
+    ssl                 => $community_ssl,
+    ssl_only            => $community_ssl,
+    location_cfg_append => {
+      return => 404,
+    },
+  }
+
   ::nginx::resource::location { "${community_hostname}/fuel-dev" :
     vhost          => $community_hostname,
     location       => '/fuel-dev',
