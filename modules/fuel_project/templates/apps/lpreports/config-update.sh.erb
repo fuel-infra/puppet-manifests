@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -e
+
+export BRANCH=${BRANCH:-<%= @config_branch %>}
+export TMPDIR=${TMPDIR:-<%= @config_tmpdir %>}
+export REPO=${REPO:-<%= @config_repo %>}
+export TARGET=${TARGET:-<%= @config_target %>}
+
+(
+  flock -n 9 || exit 1
+  echo "Clean up..."
+  rm -rf "${TMPDIR}"
+
+  echo "Cloning..."
+  git clone "${REPO}" "${TMPDIR}"
+  cd "${TMPDIR}"
+  git checkout "${BRANCH}"
+
+  REVISION=`git log -1 HEAD | fgrep commit | awk '{print $NF}'`
+  PREV_REVISION=`cat /tmp/config-revision.txt 2>/dev/null || echo -n none`
+  echo -n "${REVISION}" > /tmp/config-revision.txt
+
+  echo "Revision: \$Id: ${REVISION} \$"
+  echo "Previous revision: ${PREV_REVISION}"
+
+  if [[ "${REVISION}" == "${PREV_REVISION}" ]]; then
+    echo "No updates found."
+    exit 0
+  fi
+
+  echo "Linking..."
+  mv "${TMPDIR}/config/*" "${TARGET}/"
+) 9>/var/lock/config-update.lock

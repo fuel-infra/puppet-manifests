@@ -1,0 +1,102 @@
+# image:ci-xenial-server-cloudimg-amd64
+---
+classes:
+  - '::fuel_project::apps::lpreports'
+  - '::fuel_project::common'
+  - '::fuel_project::nginx'
+
+apt::sources:
+  mirror:
+    location: 'http://cz.archive.ubuntu.com/ubuntu/'
+    release: "%{::lsbdistcodename}"
+    key: 'C0B21F32'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main restricted universe multiverse'
+    include_src: false
+    include_deb: true
+  mirror_updates:
+    location: 'http://cz.archive.ubuntu.com/ubuntu/'
+    release: "%{::lsbdistcodename}-updates"
+    key: 'C0B21F32'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main restricted universe multiverse'
+    include_src: false
+    include_deb: true
+  devops:
+    location: 'http://mirror.fuel-infra.org/devops/ubuntu/'
+    release: '/'
+    key: '62BF6A9C1D2B45A2'
+    key_server: 'keyserver.ubuntu.com'
+    repos: ''
+    include_src: false
+    include_deb: true
+  infra_backports:
+    location: 'http://mirror.fuel-infra.org/infra/backports/ubuntu/'
+    release: "%{::lsbdistcodename}"
+    key: 'CA2B20483E301371'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main'
+    include_src: false
+    include_deb: true
+  infra_packages:
+    location: 'http://mirror.fuel-infra.org/infra/packages/ubuntu/'
+    release: "%{::lsbdistcodename}"
+    key: 'CA2B20483E301371'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main'
+    include_src: false
+    include_deb: true
+
+fuel_project::apps::lpreports::config_repo: 'ssh://lpreports@review.fuel-infra.org/tools/lpreports'
+fuel_project::apps::lpreports::ssh_key_contents: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEowIBAAKCAQEA1bg7U9h93FRFFzRjfMNb2hQLytHxVUNrNvM+LD0sgyJc65CG
+  aZg3LLG871xfbWEa+Lpld1Tr5mPA9Kd2xNWJFG3kxtjMbBeUibLf9pzxFvSeEI8E
+  squC5gfL0z0OXUWguaqbHqNk0dye1tKSNZx+oj63lGIYEjE+JDzeVu+NRkCxeBDs
+  aM9eqjXmE/n9fRmsgwLAUXePv/O+RLy5PSzYHQTZSm0mZ85Fu8945GeR9dRfzbK0
+  XRNsafY3f97A7MudRxi1hVHkR3xV43n3bsRDMrDb3lWPhi2d4HWqQ0E8k9wD+5Km
+  igXjGvDzHBrz03iPsjO4OmRVVEsMqvypmyJGEwIDAQABAoIBAFKLNV7M3s+aPJUZ
+  xtMJIRC5bVSIgY1M3Lv8dqbfebGsM/dHeqKOB8FbZH2OT80PFDu8wjO0uOfi30Oe
+  6mBbmPYq+5FRaqLU+Km2TIoTU4pqMCJ1GntngscVe8O6cTHVEp6jJgZPVUE41KBj
+  89SA/OftETpeKK3eFwIoADfTjdzzquf0QmTHW9VaDXRsWGfXU6wBTMH9o+XY9lY6
+  VshnX5Hmoaw+DfIuoX/Zv2poU+f5ghcrpLhlfY29zaLYpncHQYbayGpi9iM5R1yP
+  KapXMeaj3Kf3vW0DXpv9LS0Hfu0dcS2BGJgrGcrfecWlzITw6UgF/FtyIWRQL1UK
+  edAqrwECgYEA6x/sg7onqq2AYA0qQgxGpRS5PTISsYoULVbfUBh/byTw6/y4YMq4
+  fVJls1FZ7J0fXit5uIogvWsk5ePa7he/pE85XUxY0qZwNN5AvGHwi1kljPSpvBmo
+  KO72MWpiNzI3RvOEOq6m6LQ5Yh64uIoz6gCGgxRKIDDVeJ94oTN1lD0CgYEA6LHM
+  mPmkIwd91DOJX1KRDTj/eLubgPdxPj9A9eY7uz3r69FuRufhekSQ8JOfTSa7DcNr
+  MIlg0rma/m1Y2NKke5OUwLTP9g6bEjxWnnk88IJDwBFF0w1c4lcp8Crd7d7t5gXt
+  /tuoQ1JlUIiNvUf/5DpsHImjI8Iwca+qEn312I8CgYEAjnvrFSyjSyAXUp3HxPyx
+  duqnErmccHBvp8YkT+J4nz7wrOGaTjWrNW7QaKlc6DGTR7rq6XTzQDaExrec/Xnw
+  zb6g0bQpg4YPK0qgSkjDv35HbjL6BR47NIsTMID6gd5xdxKtR+59ATnuKFLbuCEw
+  Mpcc7KRIA1f0lUN2k6GemDUCgYBHzpZUnrUIGke6NC0wPUqFyhEMMNjL84/+pYZm
+  W6YTIgirvPVK7EOod4BCvUtrg4g1txhc4gf+/0fVO+ku/9HCUMiWrzV9uQQhnH0e
+  aktj7M77dlkVyAnhzwQiGRhjT2gak7nd6+sA22xobbtPrehJhb3XEKJHZqWMb6kM
+  C9LSAQKBgGTNpYWdvgmAboxbClwllmEluaga9vJA2oXi3z93wKRv+frnI2cYGQvY
+  OjI0MatW4vD7Z46Bv0+r9FoRYugd8cOQKegMu9ECVx5fPChPbttnA46s8KH5OpEj
+  K9rn3wvcclXbYWphPdKpF8HK+vR+1TFSarfhFfrUHyCBol4Bt3lT
+  -----END RSA PRIVATE KEY-----
+
+fuel_project::common::puppet_cron:
+  hour: '*'
+  minute: '15'
+fuel_project::common::puppet_cron_ok: 'YES, I KNOW WHAT I AM DOING, REALLY.'
+lpreports::webapp::config:
+  SECRET_KEY: 'SECRET_KEY'
+  GOOGLE_ID: 'GOOGLE_ID'
+  GOOGLE_SECRET: 'GOOGLE_SECRET'
+  LP_CONSUMER_KEY: 'LP_CONSUMER_KEY'
+  LP_TOKEN: 'LP_TOKEN'
+  LP_SIGNATURE: 'LP_SIGNATURE'
+  MONGO_BUGS_URI: 'mongodb://127.0.0.1/lpreports?journal=true'
+  MONGO_AREA_TAGS_URI: 'mongodb://127.0.0.1/lpreports?journal=true'
+  MONGO_ASSIGNEES_URI: 'mongodb://127.0.0.1/lpreports?journal=true'
+  MONGO_USERS_URI: 'mongodb://127.0.0.1/lpreports?journal=true'
+  MONGO_SECURITY_URI: 'mongodb://127.0.0.1/lpreports?journal=true'
+  MONGO_CVE_URI: 'mongodb://127.0.0.1/lpreports?journal=true'
+  MONGO_BUGS_CONNECT: false
+  MONGO_AREA_TAGS_CONNECT: false
+  MONGO_ASSIGNEES_CONNECT: false
+  MONGO_USERS_CONNECT: false
+  MONGO_SECURITY_CONNECT: false
+  MONGO_CVE_CONNECT: false

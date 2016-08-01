@@ -12,13 +12,10 @@
 #   [*nginx_error_log*] - error log file path
 #   [*nginx_log_format*] - log file format
 #   [*package*] - String, package name(could contain or not contain version)
-#   [*reports*] - reports configuration file entries
-#   [*review_filters*] - reports configuration file entries
 #   [*ssl_certificate*] - ssl certificate file path
 #   [*ssl_certificate_contents*] - ssl certificate file contents
 #   [*ssl_key*] - ssl key file path
 #   [*ssl_key_contents*] - ssl key file contents
-#   [*teams*] - team configuration file entries
 #
 class lpreports::webapp (
   $config                   = {},
@@ -30,13 +27,10 @@ class lpreports::webapp (
   $nginx_error_log          = '/var/log/nginx/error.log',
   $nginx_log_format         = undef,
   $package                  = 'python-lpreports',
-  $reports                  = {},
-  $review_filters           = {},
   $ssl_certificate          = '/etc/ssl/certs/lpreports.crt',
   $ssl_certificate_contents = undef,
   $ssl_key                  = '/etc/ssl/private/lpreports.key',
   $ssl_key_contents         = undef,
-  $teams                    = {},
 ) {
   include ::nginx
   package { $package :
