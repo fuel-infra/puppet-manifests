@@ -6,6 +6,7 @@ export BRANCH=${BRANCH:-<%= @config_branch %>}
 export TMPDIR=${TMPDIR:-<%= @config_tmpdir %>}
 export REPO=${REPO:-<%= @config_repo %>}
 export TARGET=${TARGET:-<%= @config_target %>}
+export SSH_KEY=${SSH_KEY:-<%= @ssh_key %>}
 
 (
   flock -n 9 || exit 1
@@ -13,7 +14,7 @@ export TARGET=${TARGET:-<%= @config_target %>}
   rm -rf "${TMPDIR}"
 
   echo "Cloning..."
-  git clone "${REPO}" "${TMPDIR}"
+  GIT_SSH_COMMAND="ssh -i ${SSH_KEY}" git clone "${REPO}" "${TMPDIR}"
   cd "${TMPDIR}"
   git checkout "${BRANCH}"
 

@@ -16,6 +16,7 @@ class fuel_project::apps::lpreports (
   $config_branch    = 'master',
   $config_target    = '/etc/lpreports',
   $config_tmpdir    = '/tmp/lpreports-config',
+  $ssh_key          = '/var/lib/lpreports/.ssh/id_rsa',
   $ssh_key_contents = undef,
 ) {
   include ::lpreports::webapp
