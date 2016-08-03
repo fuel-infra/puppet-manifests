@@ -31,5 +31,8 @@ export SSH_KEY=${SSH_KEY:-<%= @ssh_key %>}
   fi
 
   echo "Linking..."
-  mv "${TMPDIR}/config/*" "${TARGET}/"
+  mv ${TMPDIR}/config/* ${TARGET}/
+
+  echo "Restarting uwsgi"
+  invoke-rc.d uwsgi restart
 ) 9>/var/lock/config-update.lock
