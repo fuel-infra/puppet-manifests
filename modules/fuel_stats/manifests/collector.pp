@@ -6,6 +6,7 @@
 #   [*analytics_ip*] - analitics service IP
 #   [*auto_update*] - run github poller every 15 minutes
 #   [*development*] - development deployment type
+#   [*email_list*] - String, list of emails to send statistic
 #   [*filtering_rules*] - collector filters hash
 #   [*firewall_enable*] - enable embedded firewall rules
 #   [*fuel_stats_repo*] - fuel_stats repository URL
@@ -18,6 +19,7 @@
 #   [*psql_db*] - PostgreSQL database name
 #   [*psql_pass*] - PostgreSQL database password
 #   [*psql_user*] - PostgreSQL database user
+#   [*script_path*] - String, the path where the script is located
 #   [*service_hostname*] - service hostname
 #   [*ssl_cert_file*] - SSL certificate file path
 #   [*ssl_cert_file_contents*] - SSL certificate file contents
@@ -28,6 +30,7 @@ class fuel_stats::collector (
   $analytics_ip           = $fuel_stats::params::analytics_ip,
   $auto_update            = $fuel_stats::params::auto_update,
   $development            = $fuel_stats::params::development,
+  $email_list             = 'root@localhost',
   $filtering_rules        = {},
   $firewall_enable        = $fuel_stats::params::firewall_enable,
   $fuel_stats_repo        = $fuel_stats::params::fuel_stats_repo,
@@ -40,6 +43,7 @@ class fuel_stats::collector (
   $psql_db                = $fuel_stats::params::psql_db,
   $psql_pass              = $fuel_stats::params::psql_pass,
   $psql_user              = $fuel_stats::params::psql_user,
+  $script_path            = '/usr/bin/mn_geo',
   $service_hostname       = $::fqdn,
   $ssl_cert_file          = '/etc/ssl/analytic.crt',
   $ssl_cert_file_contents = '',
@@ -168,6 +172,10 @@ class fuel_stats::collector (
     }
   }
 
+  package { 'python-logparser' :
+    ensure => 'latest',
+  }
+
   if ($development) {
     # development configuration
     fuel_stats::dev { 'collector':
@@ -241,5 +249,22 @@ class fuel_stats::collector (
     mode   => '0644',
     owner  => 'collector',
     group  => 'collector',
+  }
+
+  file { '/var/lock/python-logparser' :
+    ensure => 'directory',
+    owner  => 'collector',
+    group  => 'collector',
+    mode   => '0644',
+  }
+
+  cron { 'python-logparser' :
+    command  => "/usr/bin/flock -xn /var/lock/python-logparser/mn_geo.lock  /usr/bin/timeout -k10 600 ${script_path} -m `date --date=yesterday \+%m` -l /var/log/nginx -e ${email_list} 2>&1 | tee -a /var/log/logparser/logparser.log",
+    user     => 'root',
+    monthday => '1',
+    require  => [
+      Package['python-logparser'],
+      File['/var/lock/python-logparser'],
+    ],
   }
 }
