@@ -13,6 +13,7 @@ class fuel_project::jenkins::slave::kolla_build_tests {
         'libxslt1-dev',
         'libyaml-dev',
         'lxc',
+        'mariadb-client-core-5.5',
         'python-dev',
         'python-docker',
         'python-gdbm',
