@@ -109,6 +109,7 @@ class registry (
     $config_search = '/etc/docker/registry/search.yml',
     $config_server = '/etc/docker/registry/config.yml',
     $expiration = 900,
+    $rw_addresses = ['0.0.0.0/0'],
     $search_backend_port = 5802,
     $search_password = 'index',
     $search_port = 5002,
@@ -273,6 +274,7 @@ class registry (
     ssl_stapling_verify => true,
     proxy               => "http://127.0.0.1:${server_backend_port}",
     proxy_read_timeout  => 120,
+    location_raw_append => template('registry/limits.erb'),
     location_cfg_append => {
       client_max_body_size => '8G',
       proxy_redirect       => 'off',
@@ -301,6 +303,7 @@ class registry (
     ssl_stapling_verify => true,
     proxy               => "http://127.0.0.1:${server_backend_port}",
     proxy_read_timeout  => 120,
+    location_raw_append => template('registry/limits.erb'),
     location_cfg_append => {
       client_max_body_size => '8G',
       proxy_redirect       => 'off',
