@@ -258,6 +258,13 @@ class fuel_stats::collector (
     mode   => '0644',
   }
 
+  file { '/var/log/logparser' :
+    ensure => 'directory',
+    owner  => 'collector',
+    group  => 'collector',
+    mode   => '0644',
+  }
+
   cron { 'python-logparser' :
     command  => "/usr/bin/flock -xn /var/lock/python-logparser/mn_geo.lock  /usr/bin/timeout -k10 600 ${script_path} -m `date --date=yesterday \+%m` -l /var/log/nginx -e ${email_list} 2>&1 | tee -a /var/log/logparser/logparser.log",
     user     => 'root',
@@ -265,6 +272,7 @@ class fuel_stats::collector (
     require  => [
       Package['python-logparser'],
       File['/var/lock/python-logparser'],
+      File['/var/log/logparser'],
     ],
   }
 }
