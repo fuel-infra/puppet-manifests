@@ -20,6 +20,7 @@ class fuel_project::jenkins::slave::kolla_build_tests {
         'python-tox',
         'python3-dev',
         'sshpass',
+        'unzip',
         'vlan',
         'zlib1g-dev',
       ]

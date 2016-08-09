@@ -97,7 +97,7 @@
 [submodule "modules/mongodb"]
 	path = modules/mongodb
 	url = https://github.com/puppetlabs/puppetlabs-mongodb.git
-	branch = 62e02d17046c2ca9182c6ea21351090b74cce833
+	branch = 7c198d1abeb8ca93f9aab90e769df7a0410f2305
 [submodule "modules/mysql"]
 	path = modules/mysql
 	url = https://github.com/puppetlabs/puppetlabs-mysql.git
