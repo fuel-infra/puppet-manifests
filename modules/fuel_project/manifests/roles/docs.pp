@@ -204,11 +204,16 @@ class fuel_project::roles::docs (
   }
 
   ::nginx::resource::location { "${community_hostname}/fuel-dev" :
-    vhost          => $community_hostname,
-    location       => '/fuel-dev',
-    location_alias => "${www_root}/fuel-dev-docs/fuel-dev-master",
-    ssl            => $community_ssl,
-    ssl_only       => $community_ssl,
+    vhost               => $community_hostname,
+    location            => '/fuel-dev',
+    location_alias      => "${www_root}/fuel-dev-docs/fuel-dev-master",
+    ssl                 => $community_ssl,
+    ssl_only            => $community_ssl,
+    location_cfg_append => {
+      'rewrite' => {
+        '^/fuel-dev/(.*)$' => 'http://docs.openstack.org/developer/fuel-docs',
+      }
+    },
   }
 
   # Bug: https://bugs.launchpad.net/fuel/+bug/1473440
