@@ -230,13 +230,14 @@ class fuel_project::roles::docs (
     format_log          => $nginx_log_format,
     location_cfg_append => {
       'rewrite' => {
-        '^/$'                => $redirect_root_to,
-        '^/fuel-dev/?(.*)$'  => "http://${community_hostname}/fuel-dev/\$1",
-        '^/express/?$'       => '/openstack/express/latest',
-        '^/(express/.+)'     => '/openstack/$1',
-        '^/fuel/?$'          => "/openstack/fuel/fuel-${fuel_version}",
-        '^/(fuel/.+)'        => '/openstack/$1',
-        '^/openstack/fuel/$' => "/openstack/fuel/fuel-${fuel_version}",
+        '^/$'                                        => $redirect_root_to,
+        '^/fuel-dev/?(.*)$'                          => "http://${community_hostname}/fuel-dev/\$1",
+        '^/express/?$'                               => '/openstack/express/latest',
+        '^/(express/.+)'                             => '/openstack/$1',
+        '^/fuel/?$'                                  => "/openstack/fuel/fuel-${fuel_version}",
+        '^/(fuel/.+)'                                => '/openstack/$1',
+        '^/openstack/fuel/$'                         => "/openstack/fuel/fuel-${fuel_version}",
+        '^/openstack/fuel/fuel-9.0/operations.html$' => '/openstack/fuel/fuel-8.0/operations.html',
       },
     },
     vhost_cfg_append    => {
