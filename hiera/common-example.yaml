@@ -992,3 +992,38 @@ fuel_project::common::mounts:
     'ensure': 'present'
     'options': 'defaults,errors=remount-ro,noatime,nodiratime,barrier=0'
 
+ssh::client::configs:
+  root:
+    connections:
+      gerrit:
+        host: 'review.fuel-infra.org'
+        port: '29418'
+        user: 'fake-gerrit-user'
+        private_key_contents: |
+          -----BEGIN RSA PRIVATE KEY-----
+          MIIEpAIBAAKCAQEAnx03Ht3zbxnc5QRtkG92R8Qnyj+oNemGg9Q/IqbkS3u8+9A/
+          0EOnMn9ecr/dYn+MhwrttNiTI3q6lMjeaL/dfIGvhfRQmbt5We5/5h0txXhK920g
+          KRq9cXh9Evi76W8vBbAzTWL4iMgk2+7fd4rK4nytcm66aEudgSp4bwQAc1wMdBz9
+          ZAS8Bl4PQJVvc28ueU7I2I4UvYloQcgri+w1BaBZVSqO4dKZtU1QgD0sQfl1NgQY
+          dTVFz+6kE3HPaswCY5rtcwYVKSuLDHC5Mb4vUdbuvTN/7g1DtbfEIrnzr1E76NPV
+          Cov1Aaw0mH2NUavZtBHssI9sGptMuNu6TR8k4QIDAQABAoIBAQCQx7OtKYZlVKIz
+          3WiYoWN9/9W46V102O3mLI3aSQO4T3pxo1c9eSG9CDp3rW+TPb4v7tjG0r5n7Tez
+          RGdj5xlxPkvpVpq0l+re0u6cA3bvlPqZ0zkNTeCNTHZ6ecv6p4mg4mh8BQ9i3sLz
+          QJMkIi1kEtB8LJb/abaCnpOBaKHEVND0SK1k1u/wm8FN2J2oa5J3Xwx+QzVFUpMb
+          PPyyUEqHamOrw8mHoM+dh6rOy4mzOH56Fqgm95dazAENtGCDCNLDtc5s7fyLRci8
+          elAAxpJVHQVvfHA/HTh+urkh2799opUjabKLsPjej4tWaFNM4VXloGYe4N4F+EE5
+          CthlnkgBAoGBANMDK9k8naQj2OBD7pw/8Gte1+JZAgAQfZbM5ytiOLXTrmk8KjlB
+          2DtHtJCsRRaEUQXlNg/8s4m2J31aYKZojRqEgl1xvsC8/HH+2CQvm4UGQ/cN3bJv
+          PcZ7QU2/nM83oDNB+pC9izSJpc14h0AZXgTmp1anjYHJJRbX0GTnje9BAoGBAMEJ
+          fh0aS4Q5GezY+B4yykZw/Y2HwsZObBOcgJCMwq1kfGxIYV7YJkNSNOPgxOPBTCn7
+          fsfGDz/pzY6UH+NmyfRXEnl9X1i+lLqBLbQN7PS6MDk9b5HriRC/Efy0vFku2mj0
+          eEOYV2+72xILJ9+Qm1UXo8cKwlDoLTRDf3fbvW2hAoGAE8neWNcIaZY7Bn0YaWrN
+          nyQb1sxGFb92J6g7naPucY7ScmgEBa6ZGqYU1uRw7jWma4kdUs59/9InTegl3DU9
+          1ljK6Px7yRNwETi3CF22lfkKcqbIPa2U+4Ifk6z+hahPy77KQryjy1+FPwmolWhL
+          muYOl1/LM3qrkcLXdj8I3oECgYB0t5KjciS6+/Oq+716NOeNFACbNL0WPpCmgvhR
+          bmq/gISizFjjifoIton4Rw2FUHkG4WPU0vKhiHKbhQCK9LmjnYo0HxQpioJPCpBh
+          0BG4H2PNGFJ/flTP5Vew3m8L1YKF91tIM7KagpGBJXGkgcEKAFMspFq9pMTAVxeZ
+          lynAQQKBgQChfE5igOgsg4kqW54TwZl1qkT418QCFVrKLbr5HxME3yd7SijxqKM8
+          B4e7zZbT+aov6uI4wUqbNJngEG1Wj/BKYv6oeQPL6kkNcdxozH5ZijTM6BFKLICA
+          w4OA1o++q62PPIloYwJEHF7LHgR3EPYBXd5ycSlM/JSCBWP2eR19zg==
+          -----END RSA PRIVATE KEY-----
