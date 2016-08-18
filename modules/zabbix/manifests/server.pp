@@ -50,8 +50,6 @@
 #   [*max_housekeeper_delete*] - no more than 'MaxHousekeeperDelete' rows
 #     (corresponding to [tablename], [field], [value]) will be deleted per one
 #     task in one housekeeping cycle
-#   [*mysql_package*] - MySQL package to install
-#   [*mysql_root_password*] - MySQL server root user password
 #   [*node_id*] - unique nodeID in distributed setup
 #   [*node_no_events*] - if set to '1' local events won't be sent to master node
 #   [*node_no_history*] - if set to '1' local history won't be sent to master
@@ -129,8 +127,6 @@ class zabbix::server (
   $log_file_size             = $::zabbix::params::server_log_file_size,
   $log_slow_queries          = $::zabbix::params::server_log_slow_queries,
   $max_housekeeper_delete    = $::zabbix::params::server_max_housekeeper_delete,
-  $mysql_package             = $::zabbix::params::mysql_package,
-  $mysql_root_password       = $::zabbix::params::mysql_root_password,
   $node_id                   = $::zabbix::params::server_node_id,
   $node_no_events            = $::zabbix::params::server_node_no_events,
   $node_no_history           = $::zabbix::params::server_node_no_history,
@@ -175,54 +171,6 @@ class zabbix::server (
     }
   }
 
-  class { '::mysql::server' :
-    users     => {
-      'zabbix@localhost' => {
-        password_hash => mysql_password($db_password),
-      },
-      'zabbix@127.0.0.1' => {
-        password_hash => mysql_password($db_password),
-      }
-    },
-    databases => {
-      'zabbix' => {
-        charset => 'utf8',
-      }
-    },
-    grants    => {
-      'zabbix@localhost/zabbix.*' => {
-        options    => ['GRANT'],
-        privileges => ['ALTER', 'CREATE', 'INDEX', 'SELECT', 'INSERT', 'UPDATE', 'DELETE'],
-        table      => 'zabbix.*',
-        user       => 'zabbix@localhost',
-      }
-    }
-  }
-
-  exec { 'import-zabbix-fixtures' :
-    command  => "zcat /usr/share/zabbix-server-mysql/schema.sql.gz | \
-    mysql -h'${db_host}' -u'${db_user}' -p'${db_password}' '${db_name}'",
-    provider => 'shell',
-    creates  => '/etc/zabbix/zabbix_server_installed.flag',
-    require  => [Class['::mysql::server'], Package[$package]]
-  }->
-  exec { 'load-zabbix-images' :
-    command  => "zcat /usr/share/zabbix-server-mysql/images.sql.gz | \
-    mysql -h'${db_host}' -u'${db_user}' -p'${db_password}' '${db_name}'",
-    provider => 'shell',
-    creates  => '/etc/zabbix/zabbix_server_installed.flag',
-  }->
-  exec { 'load-zabbix-initial-data' :
-    command  => "zcat /usr/share/zabbix-server-mysql/data.sql.gz | \
-    mysql -h'${db_host}' -u'${db_user}' -p'${db_password}' '${db_name}'",
-    provider => 'shell',
-    creates  => '/etc/zabbix/zabbix_server_installed.flag',
-  }->
-  exec { 'flag-installation-complete' :
-    command  => 'touch /etc/zabbix/zabbix_server_installed.flag',
-    provider => 'shell',
-    notify   => Service[$service],
-  }
 
   file { '/etc/default/zabbix-server' :
     ensure  => 'present',
@@ -232,7 +180,6 @@ class zabbix::server (
 
   package { $package :
     ensure  => 'present',
-    require => Class['::mysql::server']
   }
 
   if ($apply_firewall_rules) {
