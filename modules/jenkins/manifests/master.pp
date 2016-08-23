@@ -3,6 +3,9 @@
 # Parameters:
 #   [*jenkins_package_name*] - specify Jenkins package name to install
 #   [*jenkins_package_version*] - specify Jenkins package version to install
+#   [*jenkins_plugins_package_name*] - specify Jenkins package name to install
+#   [*jenkins_plugins_package_version*] - specify Jenkins package version to install
+#   [*install_plugins*] - install Jenkins plugins package
 #   [*service_fqdn*] - FQDN of Jenkins service
 #   [*apply_firewall_rules*] - apply embedded firewall rules
 #   [*firewall_allow_sources*] - sources which are allowed to connect
@@ -16,7 +19,6 @@
 #   [*jenkins_address*] - Jenkins listening IP address
 #   [*jenkins_admin_email*] - global configuration of system admin email
 #   [*jenkins_java_args*] - Jenkins Java arguments
-#   [*jenkins_plugins_pkg*] - the name of the jenkins plugins package
 #   [*jenkins_port*] - Jenkins listening port
 #   [*jenkins_proto*] - Jenkins listening protocol
 #   [*$markup_formatter*] - markup formatter for Jenkins
@@ -29,7 +31,6 @@
 #   [*theme_js_url*] - URL of Jenkins theme JS
 #   [*www_root*] - root web directory path
 #   [*install_groovy*] - install Groovy script for Jenkins
-#   [*install_plugins*] - install Jenkins plugins package
 #   [*jenkins_cli_file*] - Jenkins cli file path
 #   [*jenkins_cli_tries*] - how many tries to run cli file
 #   [*jenkins_cli_try_sleep*] - sleep between retries
@@ -57,6 +58,10 @@
 class jenkins::master (
   $jenkins_package_name             = 'jenkins',
   $jenkins_package_version          = 'latest',
+  $jenkins_plugins_package_name     = 'jenkins-plugins',
+  $jenkins_plugins_package_version  = 'latest',
+  $install_plugins                  = false,
+
   $service_fqdn                     = $::fqdn,
   # Firewall access
   $apply_firewall_rules             = false,
@@ -71,7 +76,6 @@ class jenkins::master (
   $ssl_key_file_contents            = '',
   # Jenkins config parameters
   $gerrit_trigger_enabled           = false,
-  $install_plugins                  = false,
   $install_zabbix_item              = false,
   $jenkins_address                  = '0.0.0.0',
   $jenkins_admin_email              = 'jenkins@example.com',
@@ -79,7 +83,6 @@ class jenkins::master (
   $jenkins_gearman_host             = '127.0.0.1',
   $jenkins_gearman_port             = '4730',
   $jenkins_java_args                = '',
-  $jenkins_plugins_pkg              = 'jenkins-plugins',
   $jenkins_port                     = '8080',
   $jenkins_proto                    = 'http',
   $markup_formatter                 = 'plain-text',
@@ -145,9 +148,19 @@ class jenkins::master (
   }
 
   if($install_plugins) {
-    package { $jenkins_plugins_pkg :
-      ensure  => present,
+    package { $jenkins_plugins_package_name :
+      ensure  => $jenkins_plugins_package_version,
       require => Service['jenkins'],
+    }
+
+    if ($jenkins_plugins_package_version != 'absent' and
+    $jenkins_plugins_package_version != 'latest' and
+    $jenkins_plugins_package_version != 'present') {
+      apt::pin { $jenkins_plugins_package_name :
+        packages => $jenkins_plugins_package_name,
+        version  => $jenkins_plugins_package_version,
+        priority => 1000,
+      }
     }
   }
 
