@@ -211,7 +211,7 @@ class fuel_project::common (
     'facter-facts',
     'screen',
     'tmux',
-  ])
+  ], { ensure  => latest })
 
   # 'known_hosts' manage
   if ($known_hosts) {
@@ -253,6 +253,7 @@ class fuel_project::common (
   case $::osfamily {
     'Debian': {
       include ::apt
+      Apt::Source <| |> -> Package <| |>
     }
     'RedHat': {
       include ::yum
@@ -262,6 +263,7 @@ class fuel_project::common (
       $yum_versionlock = hiera_hash('yum::versionlock', {})
       create_resources('::yum::versionlock', $yum_versionlock)
       Yum::Gpgkey <| |> -> Package <| tag !='yum-plugin' |>
+      Yumrepo <| |> -> Package <| |>
     }
     default: { }
   }

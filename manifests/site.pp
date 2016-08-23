@@ -9,10 +9,6 @@ File {
   replace => true,
 }
 
-if($::osfamily == 'Debian') {
-  Exec['apt_update'] -> Package <| |>
-}
-
 stage { 'pre' :
   before => Stage['main'],
 }
