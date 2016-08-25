@@ -23,26 +23,28 @@
 #   [*workers*] - spawn the specified number of workers/processes
 #
 define uwsgi::application (
-  $buffer_size    = $::uwsgi::params::buffer_size,
-  $callable       = $::uwsgi::params::callable,
-  $chdir          = $::uwsgi::params::chdir,
-  $chmod          = $::uwsgi::params::chmod,
-  $enable_threads = $::uwsgi::params::enable_threads,
-  $env            = $::uwsgi::params::env,
-  $gid            = $::uwsgi::params::gid,
-  $home           = $::uwsgi::params::home,
-  $lazy_apps      = $::uwsgi::params::lazy_apps,
-  $listen         = $::uwsgi::params::listen,
-  $master         = $::uwsgi::params::master,
-  $module         = $::uwsgi::params::module,
-  $plugins        = $::uwsgi::params::plugins,
-  $rack           = $::uwsgi::params::rack,
-  $socket         = $::uwsgi::params::socket,
-  $subscribe      = $::uwsgi::params::subscribe,
-  $uid            = $::uwsgi::params::uid,
-  $vacuum         = $::uwsgi::params::vacuum,
-  $workers        = $::uwsgi::params::workers,
+  $buffer_size    = 65535,
+  $callable       = undef,
+  $chdir          = '/',
+  $chmod          = 644,
+  $enable_threads = true,
+  $env            = undef,
+  $gid            = 'www-data',
+  $home           = undef,
+  $lazy_apps      = undef,
+  $listen         = 1000,
+  $master         = true,
+  $module         = undef,
+  $plugins        = undef,
+  $rack           = undef,
+  $socket         = undef,
+  $subscribe      = undef,
+  $uid            = 'www-data',
+  $vacuum         = true,
+  $workers        = $::processorcount,
 ) {
+  include ::uwsgi::params
+
   if (!defined(Class['::uwsgi'])) {
     class { '::uwsgi' :}
   }
