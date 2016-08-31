@@ -12,7 +12,6 @@ class fuel_project::jenkins::slave::run_tests {
     'sysstat',
     'dstat',
     'tcpdump',
-    'screen',
     'reprepro',
     'createrepo',
     'config-zabbix-agent-reverted-counter-item',
