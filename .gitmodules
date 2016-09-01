@@ -190,3 +190,7 @@
 	path = modules/docker
 	url = https://github.com/garethr/garethr-docker.git
 	branch = 68dd0024fb845de1839df95713154d8181349851
+[submodule "modules/zuul"]
+	path = modules/zuul
+	url = https://review.fuel-infra.org/fuel-infra/puppet-zuul.git
+	branch = 1c8cf3d6836a56ea40937f390589bd71aa3c9d08
