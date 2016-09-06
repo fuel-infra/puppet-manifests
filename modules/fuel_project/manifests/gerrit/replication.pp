@@ -79,19 +79,6 @@ define fuel_project::gerrit::replication (
       order   => '01'
   })
 
-  # add host to known_hosts
-  # we can have ${host}-known-hosts multiple times but with different users,
-  # so need to be sure for NO DUPLICATION ERROR
-  ensure_resource(
-    'ssh::known_host',
-    "${host}-known-hosts",
-    {
-      host      => $host,
-      user      => 'gerrit',
-      overwrite => false,
-      require   => User['gerrit'],
-  })
-
   # add ssh key-pare for replication
   # we can have ${user}-${name}-${host} multiple times but with different pathes,
   # so need to be sure for NO DUPLICATION ERROR

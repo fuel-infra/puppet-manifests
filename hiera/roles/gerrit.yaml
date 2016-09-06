@@ -142,6 +142,12 @@ gerrit::ssh_replication_rsa_key_contents: |
     mCchIgIWJkTGVvJE5s3ZgvOcyun3wOvPhJDO0kmod1EzvRiRvUT5
     -----END RSA PRIVATE KEY-----
 
+fuel_project::common::known_hosts:
+  'gerrit':
+    hosts:
+      'gerrit-slave.test.local':
+        port: 22
+
 # use development mode on test environment
 fuel_project::gerrit::gerrit_auth_type: 'DEVELOPMENT_BECOME_ANY_ACCOUNT'
 
