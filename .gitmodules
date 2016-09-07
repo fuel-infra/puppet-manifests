@@ -202,3 +202,7 @@
 	path = modules/project_config
 	url = https://github.com/openstack-infra/puppet-project_config.git
 	branch = db5cb799fb408bdc764c889acc3b30d7673543b6
+[submodule "modules/os_client_config"]
+	path = modules/os_client_config
+	url = https://review.fuel-infra.org/fuel-infra/puppet-os_client_config.git
+	branch = fdbceb59a1d750f133aca4043014c35535be012b
