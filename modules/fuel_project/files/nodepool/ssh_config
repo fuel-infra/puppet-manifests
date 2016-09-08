@@ -1,0 +1,5 @@
+Host *
+  ConnectTimeout        30
+  StrictHostKeyChecking no
+  UserKnownHostsFile    /dev/null
+  LogLevel              error

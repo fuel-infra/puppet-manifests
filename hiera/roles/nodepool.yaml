@@ -1,97 +1,71 @@
 ---
 classes:
   - '::fuel_project::common'
-  - '::nginx'
   - '::nodepool'
-  - '::mysql::server'
+  - '::os_client_config'
+  - '::fuel_project::nodepool'
 
-logrotate::rules:
-  'image_logs':
-    path: '/var/www/nodepool/image/*.log'
-    rotate_every: 'day'
-    rotate: '7'
-    missingok: true
-    compress: true
-    ifempty: false
-    create: false
-    delaycompress: true
+# Enable periodic puppet agent run to update Nodepool configuration
+fuel_project::common::puppet_cron_ok: 'YES, I KNOW WHAT I AM DOING, REALLY.'
+fuel_project::common::puppet_cron:
+  hour: '*'
+  minute: '15'
 
-mysql::server::databases:
-  'nodepool':
-    ensure: present
-    charset: utf8
-mysql::server::users:
-  'nodepool@localhost':
-    password_hash: '*712E5E2699547C823C1363E5CE74655AC55CEA51' # j4cD46v4qkNSYODLqoweSI055KjVOXYt
-mysql::server::grants:
-  'nodepool@localhost/nodepool.*':
-    ensure: present
-    privileges: ['INDEX', 'CREATE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE']
-    table: 'nodepool.*'
-    user: 'nodepool@localhost'
-mysql::server::override_options:
-  mysqld:
-    bind_address: '127.0.0.1'
-    default_storage_engine: 'InnoDB'
-    innodb_buffer_pool_size: '1G'
-    innodb_file_per_table: 1
-    innodb_file_format: 'barracuda'
-    innodb_flush_method: 'O_DIRECT'
-    join_buffer_size: '512M'
-    lock_wait_timeout: 120
-    log_queries_not_using_indexes: 1
-    max_connections: 8196
-    query_cache_size: '128M'
-    query_cache_type: 1
-    read_rnd_buffer_size: '8M'
-    slow_query_log: 1
-    slow_query_log_file: '/var/log/mysql/slow.log'
-    sort_buffer_size: '4M'
-    table_open_cache: '256M'
-    thread_cache_size: '4M'
+# General parameters
+# Not required for nodepool module, but used by other modules
+nodepool::nodepool_user: 'nodepool'
+nodepool::nodepool_group: 'nodepool'
+nodepool::nodepool_home: '/var/lib/nodepool'
 
 nodepool::environment:
   'NODEPOOL_SSH_KEY':
     'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNWgMf6IisSY0HK0mpHkgVhRxHsDom81PJ6W3jAgcSBWY1Kz/2vL98SK91ppgYmnDa2uLbchY2Xk9ciefMpm7Qq5EO6oSPKJJhADyCYAX/7YomZIy4Xu7HxEh0Z6VCLt0DymwN4tBS9JuTISvEm17BLgtis/AemA2eRIl0JAdPf9rmQps4KP5AhG60ucdtTKD0y8TFK95ateplgcq9JLRInhrdg/vnJLbKnV7lP1g5dfY1rm6bum7P+Jwf2tdTOa0b5ucK/+iWVbyPO4Z2afPpblh4Vynfe2wMzzpGAp3n5MwtH2EZmSXm/B6/CkgOFROsmWH8MzQEvNBGHhw+ONR9'
 
-nodepool::logging_conf_hash:
-  'loggers':
-    'keys': 'root,nodepool,requests'
-  'handlers':
-    'keys': 'console,debug,normal'
-  'formatters':
-    'keys': 'simple'
-  'logger_root':
-    'level': 'WARNING'
-    'handlers': 'console'
-  'logger_requests':
-    'level': 'WARNING'
-    'handlers': 'debug,normal'
-    'qualname': 'requests'
-  'logger_nodepool':
-    'level': 'DEBUG'
-    'handlers': 'debug,normal'
-    'qualname': 'nodepool'
-  'handler_console':
-    'level': 'WARNING'
-    'class': 'StreamHandler'
-    'formatter': 'simple'
-    'args': '(sys.stdout,)'
-  'handler_debug':
-    'level': 'DEBUG'
-    'class': 'logging.handlers.TimedRotatingFileHandler'
-    'formatter': 'simple'
-    'args': "('/var/log/nodepool/debug.log', 'H', 8, 30)"
-  'handler_normal':
-    'level': 'INFO'
-    'class': 'logging.handlers.TimedRotatingFileHandler'
-    'formatter': 'simple'
-    'args': "('/var/log/nodepool/nodepool.log', 'H', 8, 30)"
-  'formatter_simple':
-    'format': '%(asctime)s %(levelname)s %(name)s: %(message)s'
-    'datefmt': ''
+# Clouds configuration
+os_client_config::cloud_configs:
+  global_profiles:
+    profiles: true
+    clouds:
+      some-profile:
+        auth:
+          auth_url: 'http://keystone.domain.tld:5000/v3'
+        identity_api_version: '3'
+  nodepool_clouds:
+    user: "%{hiera('nodepool::nodepool_user')}"
+    home: "%{hiera('nodepool::nodepool_home')}"
+    cache:
+      expiration_time: 3600
+    clouds:
+      some-cloud:
+        profile: 'some-profile'
+        region_name: 'RegionOne'
+  nodepool_private:
+    user: "%{hiera('nodepool::nodepool_user')}"
+    home: "%{hiera('nodepool::nodepool_home')}"
+    secure: true
+    clouds:
+      some-cloud:
+        auth:
+          username: 'cloud-user'
+          password: 'cloud-password'
+          project_name: 'nodepool'
+          domain_id: 'default'
 
-nodepool::nodepool_ssh_private_key_contents: |
+# Database
+fuel_project::nodepool::db_name: 'nodepool'
+fuel_project::nodepool::db_user: 'nodepool'
+fuel_project::nodepool::db_pass: 'N0depoo1'
+
+# Jenkins(-es)
+fuel_project::nodepool::jenkins_targets:
+  jenkins-server:
+    url: 'https://jenkins.donain.tld/'
+    user: 'jenkins'
+    apikey: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+    credentials: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
+
+# SSH private key to be used for accessing VMs
+fuel_project::nodepool::vm_ssh_private_key_contents: |
   -----BEGIN RSA PRIVATE KEY-----
   MIIEpQIBAAKCAQEAvH4Y+FA345hwv1mQw7A8y6VpgVWzK66XqgmC4nHCb34DPSCH
   2hgo0xk5UXb9L1EjlB9IaSuj/ANa8LvTeEXJ4fQcvzjgq96pnAyTsFeHvcNpgQTU
@@ -120,7 +94,11 @@ nodepool::nodepool_ssh_private_key_contents: |
   oJzQZfokXhqAQAYOQWmie7aIOwVnvj3QJ5cCbV8ktwvEbZ/go0OAH4A=
   -----END RSA PRIVATE KEY-----
 
-nodepool::project_config_clone_ssh_key_file: |
+# project-config parameters
+project_config::url: 'ssh://user@gerrit.domain.tld:29418/openstack-infra/project-config'
+project_config::revision: 'some-branch'
+
+fuel_project::nodepool::project_config_ssh_private_key_contents: |
   -----BEGIN RSA PRIVATE KEY-----
   MIIEpQIBAAKCAQEAvH4Y+FA345hwv1mQw7A8y6VpgVWzK66XqgmC4nHCb34DPSCH
   2hgo0xk5UXb9L1EjlB9IaSuj/ANa8LvTeEXJ4fQcvzjgq96pnAyTsFeHvcNpgQTU
@@ -148,17 +126,3 @@ nodepool::project_config_clone_ssh_key_file: |
   7t1u65QgqmJcnxgXid5YZWshak7xTxSJS8her6Sd8qNPr8tXYMXlZUK2BJp9A0xT
   oJzQZfokXhqAQAYOQWmie7aIOwVnvj3QJ5cCbV8ktwvEbZ/go0OAH4A=
   -----END RSA PRIVATE KEY-----
-
-nodepool::project_config_cron_jobs:
-  periodic_project_conf_repo_sync:
-    command: '/usr/bin/flock -xn /var/lock/project_conf_repo_update.lock /usr/local/bin/project_config_sync.sh 2>&1 | logger -t project-conf-repo-update'
-    hour: '2'
-    minute: '15'
-
-nodepool::nodepool_credentials: |
-  DBURI="mysql://user:password@127.0.0.1/db_name"
-  PROVIDERS_USERNAME="provider_user"
-  PROVIDERS_PASSWORD="provider_pass"
-  TARGETS_USERNAME="target_user"
-  TARGETS_APIKEY="target_apikey"
-  TARGETS_CREDENTIALSID="target_credentialsid"

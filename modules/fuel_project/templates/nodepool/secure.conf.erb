@@ -1,0 +1,16 @@
+[database]
+dburi=<%= @_dburi %>
+<% @jenkins_targets.each do |jenkins_name, jenkins_settings| -%>
+
+[jenkins "<%= jenkins_name %>"]
+url=<%= jenkins_settings['url'] %>
+<% if jenkins_settings['user'] -%>
+user=<%= jenkins_settings['user'] %>
+<% end -%>
+<% if jenkins_settings['apikey'] -%>
+apikey=<%= jenkins_settings['apikey'] %>
+<% end -%>
+<% if jenkins_settings['credentials'] -%>
+credentials=<%= jenkins_settings['credentials'] %>
+<% end -%>
+<% end -%>
