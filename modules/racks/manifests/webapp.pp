@@ -62,8 +62,7 @@ class racks::webapp (
     ensure => 'latest',
     notify => [
       Uwsgi::Application['racks'],
-      Exec['racks-syncdb'],
-      Exec['racks-migratedb']
+      Exec['racks-migrate']
     ]
   }
 
@@ -80,27 +79,8 @@ class racks::webapp (
     notify  => Uwsgi::Application['racks'],
   }
 
-  exec { 'racks-syncdb' :
-    command => '/usr/share/racks/webapp/manage.py syncdb --noinput',
-    user    => $user,
-    require => [
-      User[$user],
-      Package[$package],
-      File[$config_path]
-    ],
-  }
-
-  case $::lsbdistcodename {
-    'xenial': {
-      $migrate_command = '/usr/share/racks/webapp/manage.py migrate'
-    }
-    default: {
-      $migrate_command = '/usr/share/racks/webapp/manage.py migrate --all'
-    }
-  }
-
-  exec { 'racks-migratedb' :
-    command => $migrate_command,
+  exec { 'racks-migrate' :
+    command => '/usr/bin/racks migrate',
     user    => $user,
     require => [
       User[$user],
@@ -223,7 +203,6 @@ class racks::webapp (
     socket    => $uwsgi_socket,
     master    => true,
     vacuum    => true,
-    chdir     => '/usr/share/racks/webapp',
     module    => 'racks.wsgi',
     subscribe => [
       User[$user],
