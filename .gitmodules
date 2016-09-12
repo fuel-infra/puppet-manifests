@@ -206,3 +206,7 @@
 	path = modules/os_client_config
 	url = https://review.fuel-infra.org/fuel-infra/puppet-os_client_config.git
 	branch = fdbceb59a1d750f133aca4043014c35535be012b
+[submodule "modules/gearman"]
+	path = modules/gearman
+	url = https://github.com/saz/puppet-gearman
+	branch = d5d57a817017d1e498f806b3565e4beda13c85a2
