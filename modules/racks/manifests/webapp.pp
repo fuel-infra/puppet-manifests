@@ -40,7 +40,7 @@ class racks::webapp (
   $nginx_error_log       = '/var/log/nginx/error.log',
   $nginx_log_format      = undef,
   $nginx_server_name     = $::fqdn,
-  $package               = ['python-django-racks'],
+  $package               = ['python-django-racks', 'python-django-racks-doc'],
   $ssl_cert_file         = '/etc/ssl/certs/racks.crt',
   $ssl_cert_file_content = '',
   $ssl_key_file          = '/etc/ssl/private/racks.key',
@@ -153,7 +153,7 @@ class racks::webapp (
     location => '/static/',
     ssl      => true,
     ssl_only => true,
-    www_root => '/usr/share/racks/webapp/racks',
+    www_root => '/usr/share/racks',
   }
 
   ::nginx::resource::location { 'racks-docs' :
@@ -162,7 +162,7 @@ class racks::webapp (
     location => '/docs/',
     ssl      => true,
     ssl_only => true,
-    www_root => '/usr/share/racks',
+    alias    => '/usr/share/doc/python-django-racks/html',
   }
 
   ::nginx::resource::location { 'racks-error-pages' :
