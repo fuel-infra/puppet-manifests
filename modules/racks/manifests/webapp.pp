@@ -157,12 +157,12 @@ class racks::webapp (
   }
 
   ::nginx::resource::location { 'racks-docs' :
-    ensure   => 'present',
-    vhost    => 'racks',
-    location => '/docs/',
-    ssl      => true,
-    ssl_only => true,
-    alias    => '/usr/share/doc/python-django-racks/html',
+    ensure         => 'present',
+    vhost          => 'racks',
+    location       => '/docs/',
+    ssl            => true,
+    ssl_only       => true,
+    location_alias => '/usr/share/doc/python-django-racks/html',
   }
 
   ::nginx::resource::location { 'racks-error-pages' :
