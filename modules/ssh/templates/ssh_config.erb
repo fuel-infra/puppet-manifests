@@ -1,0 +1,25 @@
+# Note! This file is managed by Puppet, and you may lose your changes
+
+<% @connections.each do |connection_name, connection_settings| -%>
+Host <%= connection_name %> <%= connection_settings['host'] %>
+<% if connection_name != '*' -%>
+  HostName       <%= connection_settings['host'] || connection_name %>
+<% end -%>
+<% if connection_settings['port'] -%>
+<% _port_part = "_#{connection_settings['port']}" -%>
+  Port           <%= connection_settings['port'] %>
+<% end -%>
+<% if connection_settings['user'] -%>
+<% _user_part = "#{connection_settings['user']}\@" -%>
+  User           <%= connection_settings['user'] %>
+<% end -%>
+<% if connection_settings['private_key_contents'] -%>
+<% if connection_name == '*' -%>
+  IdentityFile   ~/.ssh/id_rsa
+<% else -%>
+  IdentityFile   <%= '~/.ssh/id_rsa.' + String( _user_part ) + ( connection_settings['host'] || connection_name ) + String( _port_part ) %>
+  IdentitiesOnly yes
+<% end -%>
+<% end -%>
+
+<% end -%>
