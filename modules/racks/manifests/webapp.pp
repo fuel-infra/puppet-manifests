@@ -84,7 +84,6 @@ class racks::webapp (
     user    => $user,
     require => [
       User[$user],
-      Exec['racks-syncdb'],
     ],
   }
 
