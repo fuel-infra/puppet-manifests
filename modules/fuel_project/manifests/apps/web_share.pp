@@ -13,6 +13,7 @@
 #   [*nginx_server_name*] - hostname for http service
 #   [*share_root*] - share directory path
 #   [*user*] - user for sftp access
+#   [*shell*] - shell for user
 #
 class fuel_project::apps::web_share (
   $authorized_keys,
@@ -24,6 +25,7 @@ class fuel_project::apps::web_share (
   $nginx_server_name = $::fqdn,
   $share_root        = '/var/www/share_logs',
   $user              = 'jenkins',
+  $shell             = '/usr/sbin/nologin',
 ) {
 
   ensure_resource('file', '/var/www', {
@@ -70,7 +72,7 @@ class fuel_project::apps::web_share (
     system     => true,
     managehome => false,
     home       => "/var/lib/${user}",
-    shell      => '/usr/sbin/nologin',
+    shell      => $shell,
   }
 
   create_resources(ssh_authorized_key, $authorized_keys, {
