@@ -68,6 +68,7 @@ class fuel_project::zuul (
     if($project_config_known_hosts) {
       create_resources('ssh::known_host', $project_config_known_hosts, {
         user    => $project_config_user,
+        home    => $project_config_user_home_dir,
         require => File[ "${project_config_user_home_dir}/.ssh" ],
       })
     }
