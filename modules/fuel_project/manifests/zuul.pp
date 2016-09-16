@@ -10,16 +10,16 @@
 #   [*project_config_clone_ssh_key_file*] - SSH private file content for the user which has rights accessint the project-config repo.
 #   [*project_config_clone_ssh_key_file_path*] - Path to ssh private key which stores key used for accessing the project-config repo.
 #   [*project_config_cron_jobs*] - hash for creating cron jobs
-#   [*project_config_known_hosts*] - List of hosts which ssh fingerprint key should be added into known_hosts file
 #   [*project_config_repo*] - Url to the project-config repo
 #   [*project_config_repo_revision*] - Revision to use during the project-repo cloning
 #   [*project_config_sync_script_path*] - Path to the script which fetches project-config's repository
 #   [*project_config_user*] - Username to use when cloning project-config repo
+#   [*project_config_user_home_dir*] - Path to project-config-cloner user home directory.
 #   [*project_config_zuul_ext_funct_path*] - Path to the external_functions.py file
 #   [*project_config_zuul_yaml_path*] - Zuul layout file path in project-config dir
-#   [*zuul_layout* ] - Path to Zuul layout file.
 #   [*update_cronjob_name*] - Name of cron job updating zuul layout.
 #   [*update_cronjob_params*] - Hash containing parameters of cron job.
+#   [*zuul_layout* ] - Path to Zuul layout file.
 #
 class fuel_project::zuul (
   $config_update_method                   = 'jenkins',
@@ -29,11 +29,11 @@ class fuel_project::zuul (
   $project_config_clone_ssh_key_file      = undef,
   $project_config_clone_ssh_key_file_path = '/var/lib/project-config-cloner/.ssh/id_rsa',
   $project_config_cron_jobs               = undef,
-  $project_config_known_hosts             = undef,
   $project_config_repo                    = undef,
   $project_config_repo_revision           = 'master',
   $project_config_sync_script_path        = '/usr/local/bin/project_config_sync.sh',
   $project_config_user                    = 'project-config-cloner',
+  $project_config_user_home_dir           = '/var/lib/project-config-cloner',
   $project_config_zuul_ext_funct_path     = '/etc/project-config/zuul/external_functions.py',
   $project_config_zuul_yaml_path          = '/etc/project-config/zuul/layout.yaml',
   $update_cronjob_name                    = 'update_zuul_layout',
@@ -42,8 +42,6 @@ class fuel_project::zuul (
 ){
   ensure_resource('class', 'zabbix::agent')
   ensure_packages('config-zabbix-agent-zuul-item')
-
-  $project_config_user_home_dir = '/var/lib/project-config-cloner'
 
   if($project_config_clone_ssh_key_file) {
     group { $project_config_user :
@@ -64,13 +62,6 @@ class fuel_project::zuul (
       owner   => $project_config_user,
       group   => $project_config_user,
       require => User[$project_config_user],
-    }
-    if($project_config_known_hosts) {
-      create_resources('ssh::known_host', $project_config_known_hosts, {
-        user    => $project_config_user,
-        home    => $project_config_user_home_dir,
-        require => File[ "${project_config_user_home_dir}/.ssh" ],
-      })
     }
     file { $project_config_clone_ssh_key_file_path :
       owner   => $project_config_user,
