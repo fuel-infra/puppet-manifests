@@ -197,7 +197,7 @@
 [submodule "modules/nodepool"]
 	path = modules/nodepool
 	url = https://review.fuel-infra.org/fuel-infra/puppet-nodepool.git
-	branch = 03b8b88344453cbdfec8a7890c2168a4e341ac2c
+	branch = 39710d3b2aadb19eec7a4819e86c2a7a97d5b3a0
 [submodule "modules/project_config"]
 	path = modules/project_config
 	url = https://github.com/openstack-infra/puppet-project_config.git
