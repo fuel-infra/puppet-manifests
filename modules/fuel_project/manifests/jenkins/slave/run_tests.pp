@@ -6,15 +6,15 @@ class fuel_project::jenkins::slave::run_tests {
   include ::landing_page::updater
 
   $packages = [
+    'config-zabbix-agent-reverted-counter-item',
+    'createrepo',
+    'dstat',
+    'htop',
     'python-psycopg2',
     'python-virtualenv',
-    'htop',
-    'sysstat',
-    'dstat',
-    'tcpdump',
     'reprepro',
-    'createrepo',
-    'config-zabbix-agent-reverted-counter-item',
+    'sysstat',
+    'tcpdump',
   ]
 
   case $::osfamily {
@@ -22,6 +22,8 @@ class fuel_project::jenkins::slave::run_tests {
       $additional_packages = [
         'libevent-dev',
         'libffi-dev',
+        'libldap2-dev',
+        'libsasl2-dev',
         'libvirt-dev',
         'pkg-config',
         'postgresql-server-dev-all',
