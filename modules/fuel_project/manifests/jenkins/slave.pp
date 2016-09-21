@@ -9,7 +9,7 @@
 #   [*build_fuel_plugins*] - install packages fpr fuel-plugins
 #   [*check_tasks_graph*] - install tasks graph requirements
 #   [*fuel_web_selenium*] - install packages for selenium tests
-#   [*kolla_build_tests*] - dependencies to run kolla build tests
+#   [*run_k8s*] - dependencies to run k8s
 #   [*run_tests*] - dependencies to run tests
 #   [*simple_syntax_check*] - add syntax check tools
 #   [*verify_fuel_astute*] - add fuel_astute verification requirements
@@ -27,7 +27,7 @@ class fuel_project::jenkins::slave (
   $build_fuel_plugins                   = false,
   $check_tasks_graph                    = false,
   $fuel_web_selenium                    = false,
-  $kolla_build_tests                    = false,
+  $run_k8s                              = false,
   $run_tests                            = false,
   $simple_syntax_check                  = false,
   $verify_fuel_astute                   = false,
@@ -105,8 +105,8 @@ class fuel_project::jenkins::slave (
     include ::fuel_project::jenkins::slave::verify_fuel_web
   }
 
-  if ($kolla_build_tests) {
-    include ::fuel_project::jenkins::slave::kolla_build_tests
+  if ($run_k8s) {
+    include ::fuel_project::jenkins::slave::run_k8s
   }
   # } Partial compability layer
 
