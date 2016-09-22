@@ -14,10 +14,12 @@ define ssh::client_config (
   $_user_home = getvar( "home_${owner}" )
   validate_absolute_path( $_user_home )
 
-  file { "${_user_home}/.ssh":
-    ensure => directory,
-    owner  => $_config_owner,
-    mode   => '0700',
+  if ( ! defined( File["${nodepool_home}/.ssh"] ) ) {
+    file { "${_user_home}/.ssh":
+      ensure => directory,
+      owner  => $_config_owner,
+      mode   => '0700',
+    }
   }
 
   create_resources( ssh::private_key, $connections, {
