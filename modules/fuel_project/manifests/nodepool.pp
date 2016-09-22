@@ -113,11 +113,6 @@ class fuel_project::nodepool (
       mode    => '0600',
       content => $vm_ssh_private_key_contents,
     }
-    file { "${nodepool_home}/.ssh/config":
-      ensure => present,
-      owner  => $nodepool_user,
-      source => 'puppet:///modules/fuel_project/nodepool/ssh_config',
-    }
   }
 
   ## Create (builder-)logging.conf
