@@ -103,9 +103,11 @@ class fuel_project::nodepool (
 
   ## Configure SSH client for acessing VMs
   if ( $vm_ssh_private_key_contents ) {
-    file { "${nodepool_home}/.ssh":
-      ensure => directory,
-      owner  => $nodepool_user,
+    if ( ! defined( File["${nodepool_home}/.ssh"] ) ) {
+      file { "${nodepool_home}/.ssh":
+        ensure => directory,
+        owner  => $nodepool_user,
+      }
     }
     file { "${nodepool_home}/.ssh/id_rsa":
       ensure  => present,
