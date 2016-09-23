@@ -21,12 +21,14 @@ class puppet::master (
   $nginx_log_format       = undef,
   $packages               = $::puppet::params::master_packages,
   $puppet_master_run_with = $::puppet::params::master_run_with,
+  $report                 = $::puppet::params::report,
   $service                = $::puppet::params::master_service,
 ) inherits ::puppet::params {
   puppet::config { 'master-config' :
     config          => $config,
     config_template => $config_template,
     environment     => $environment,
+    report          => $report,
   }
 
   ensure_packages($packages)
