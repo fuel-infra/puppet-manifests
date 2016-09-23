@@ -4,21 +4,24 @@
 #
 # Parameters:
 #   [*hosts*] - hash, contains a hash of hosts which will be affected
+#   [*hash_hosts*] - bool, wheither to hash hostnames and addresses
 #   [*home*] - string, directory where .ssh directory is located
 #   [*overwrite*] - bool, delete existing entries in known_hosts file first
 #   [*user*] - string, user who owns .ssh directory and known_hosts file
 #
 define ssh::known_host (
   $hosts,
-  $home = "/home/${title}",
-  $overwrite = true,
-  $user = $title,
+  $hash_hosts = true,
+  $home       = "/home/${title}",
+  $overwrite  = true,
+  $user       = $title,
 ) {
 
   # declare defaults for add_host resources
   $defaults = {
-    home => $home,
-    user => $user,
+    home       => $home,
+    user       => $user,
+    hash_hosts => $hash_hosts,
   }
 
   # create .ssh directory
