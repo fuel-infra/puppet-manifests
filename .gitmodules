@@ -193,7 +193,7 @@
 [submodule "modules/zuul"]
 	path = modules/zuul
 	url = https://review.fuel-infra.org/fuel-infra/puppet-zuul.git
-	branch = 44a65f37762f92d66f5237e91a700b642756fa61
+	branch = 3d537f9f3c300770b2fa937d3272ee803a816ad6
 [submodule "modules/nodepool"]
 	path = modules/nodepool
 	url = https://review.fuel-infra.org/fuel-infra/puppet-nodepool.git
