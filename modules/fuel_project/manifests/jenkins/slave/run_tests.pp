@@ -1,8 +1,13 @@
 # Class: fuel_project::jenkins::slave::run_tests
 #
-# Class sets up run_tests role
+# Class sets up run_tests role.
 #
-class fuel_project::jenkins::slave::run_tests {
+# Parameters:
+#   [*ksm*] - enable KSM on server on Ubuntu harware host
+#
+class fuel_project::jenkins::slave::run_tests (
+  $ksm = false,
+) {
   include ::landing_page::updater
 
   $packages = [
@@ -171,6 +176,12 @@ class fuel_project::jenkins::slave::run_tests {
       File[$workspace],
     ],
   })
+
+  # Kernel same-page merging (KSM)
+  # https://review.fuel-infra.org/27136 - KSM init.d package
+  if ($ksm) {
+    ensure_packages('ksm')
+  }
 
   # Working with bridging
   # we need to load module to be sure /proc/sys/net/bridge branch will be created
