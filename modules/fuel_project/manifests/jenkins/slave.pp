@@ -117,6 +117,7 @@ class fuel_project::jenkins::slave (
         'python-git',
         'python-pip',
         'python-seed-client',
+        'python-tox',
         'python-yaml',
         'sqlite3',
       ]
