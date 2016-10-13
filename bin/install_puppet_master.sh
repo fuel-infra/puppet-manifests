@@ -25,7 +25,6 @@ if [[ -d "${HIERA_VAR_DIR}" ]]; then
 fi
 
 apt-get update
-apt-get dist-upgrade -y
 apt-get install -y puppet apt-transport-https
 
 mkdir -p ${HIERA_VAR_DIR}
