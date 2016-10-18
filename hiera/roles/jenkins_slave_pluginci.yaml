@@ -4,6 +4,8 @@ classes:
   - '::fuel_project::jenkins::slave::run_tests'
   - '::fuel_project::jenkins::slave::build_fuel_plugins'
 
+fuel_project::common::ssh_keys_group: 'ci_team'
+
 jenkins::slave::authorized_keys:
   'jenkins@plugin-ci.fuel-infra.org':
     type: ssh-rsa

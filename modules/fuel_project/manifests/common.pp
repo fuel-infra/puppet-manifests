@@ -19,6 +19,7 @@
 #   [*puppet_cron_ok*] - "YES, I KNOW WHAT I AM DOING, REALLY" - to confirm
 #   [*root_password_hash*] - root password
 #   [*root_shell*] - shell for root user
+#   [*ssh_keys_group*] - SSH key group to apply
 #   [*tls_cacertdir*] - LDAP CA certs directory
 #
 # Hiera parameters:
@@ -148,6 +149,7 @@ class fuel_project::common (
   $puppet_cron_ok     = '',
   $root_password_hash = 'r00tme',
   $root_shell         = '/bin/bash',
+  $ssh_keys_group     = '',
   $tls_cacertdir      = '',
   $tune2fs            = {},
 ) {
@@ -179,6 +181,18 @@ class fuel_project::common (
   class { '::ntp' :}
   class { '::puppet::agent' :}
   class { '::ssh::authorized_keys' :}
+
+  # if ssh_keys_group is provided - apply SSH keys group
+  if($ssh_keys_group) {
+    $keys = hiera_hash("common::infra::${ssh_keys_group}::ssh_keys", {})
+    create_resources(ssh_authorized_key,
+      $keys, {
+        ensure => present,
+        user => 'root'
+      }
+    )
+  }
+
   class { '::ssh::sshd' :
     apply_firewall_rules => $external_host,
   }

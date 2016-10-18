@@ -6,6 +6,8 @@ classes:
   - '::sudo'
   - '::sysctl::base'
 
+fuel_project::common::ssh_keys_group: 'ci_team'
+
 devopslib::downloads_cleaner::cleanup_dirs:
   -
     dir: '/var/www/fuelweb-iso'
