@@ -14,6 +14,7 @@ class fuel_project::jenkins::slave::infra {
     'nodejs',
     'python-dev',
     'python3-dev',
+    'python-mosdocstheme',
     'zlib1g-dev',
   ]
 
