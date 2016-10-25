@@ -18,7 +18,9 @@ jenkins_slave
 lab
 loganalyze
 lpreports
-mongo
+mongo01
+mongo02
+mongo03
 mongo_testing
 nailgun_demo
 nodepool

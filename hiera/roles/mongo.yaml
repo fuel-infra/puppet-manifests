@@ -3,14 +3,21 @@ classes:
   - '::fuel_project::common'
   - '::mongodb::server'
   - '::mongodb::client'
+
 mongodb::server::replset_config:
   'mongodb-misc':
     ensure: present
     members:
       - mongo01.test.local:27017
       - mongo02.test.local:27017
+      - mongo03.test.local:27017
+
 mongodb::server::bind_ip: ['0.0.0.0']
+mongodb::server::dbpath: '/var/lib/mongodb'
+mongodb::server::directoryperdb: true
 mongodb::server::noauth: false
+mongodb::server::nohttpinterface: true
 mongodb::server::port: 27017
-mongodb::server::verbose: true
 mongodb::server::replset: 'mongodb-misc'
+mongodb::server::rest: false
+mongodb::server::verbose: true
