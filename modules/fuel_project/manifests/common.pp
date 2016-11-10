@@ -13,6 +13,7 @@
 #   [*ldap_base*] - LDAP base
 #   [*ldap_ignore_users*] - users ignored for LDAP checks
 #   [*ldap_uri*] - LDAP URI
+#   [*network_detection*] - autodetect network settings using DNS query
 #   [*pam_filter*] - PAM filter for LDAP
 #   [*pam_password*] - PAM password type
 #   [*puppet_cron*] - run Puppet agent by cron
@@ -143,6 +144,7 @@ class fuel_project::common (
   $ldap_base          = '',
   $ldap_ignore_users  = '',
   $ldap_uri           = '',
+  $network_detection  = false,
   $pam_filter         = '',
   $pam_password       = '',
   $puppet_cron        = {},
@@ -173,6 +175,17 @@ class fuel_project::common (
   $kernel_parameters = hiera_hash('fuel_project::common::kernel_parameters', {})
   $logrotate_rules = hiera_hash('logrotate::rules', {})
   $mounts = hiera_hash('fuel_project::common::mounts', {})
+
+  # setup static network configuration if requested
+  if($network_detection and $autonetwork_interface) {
+    file { '/etc/network/interfaces' :
+      ensure  => 'present',
+      mode    => '0644',
+      owner   => 'root',
+      group   => 'root',
+      content => template('fuel_project/common/interfaces.erb'),
+    }
+  }
 
   class { '::atop' :}
   if($filebeat) {

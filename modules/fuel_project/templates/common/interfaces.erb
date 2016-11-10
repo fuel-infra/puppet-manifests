@@ -1,0 +1,10 @@
+auto lo
+iface lo inet loopback
+
+auto <%= @autonetwork_interface %>
+iface <%= @autonetwork_interface %> inet static
+ address <%= @autonetwork_address %>
+ netmask <%= @autonetwork_netmask %>
+ gateway <%= @autonetwork_gateway %>
+ dns-nameservers <%= @autonetwork_nameservers %>
+ dns-search <%= @autonetwork_search %>
