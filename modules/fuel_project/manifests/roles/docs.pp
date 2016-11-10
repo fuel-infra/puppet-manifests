@@ -243,7 +243,7 @@ class fuel_project::roles::docs (
         '^/(fuel/.+)'                                   => '/openstack/$1',
         '^/openstack/fuel/$'                            => "/openstack/fuel/fuel-${fuel_version}",
         '^/openstack/fuel/fuel-9.0/operations.html$'    => '/openstack/fuel/fuel-8.0/operations.html permanent',
-        '^/openstack/fuel/fuel-master/operations.html$' => '/openstack/fuel/fuel-master/operations/index.html permanent',
+        '^/openstack/fuel/fuel-master/operations?(.*)$' => '/openstack/fuel/fuel-master/index.html permanent',
       },
     },
     vhost_cfg_append    => {
