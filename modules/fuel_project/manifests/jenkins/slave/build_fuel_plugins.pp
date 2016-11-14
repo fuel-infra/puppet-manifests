@@ -3,7 +3,6 @@
 # Class sets up build_fuel_plugins role
 #
 class fuel_project::jenkins::slave::build_fuel_plugins {
-  include ::rvm
 
   $packages = [
     'cmake',
@@ -21,7 +20,6 @@ class fuel_project::jenkins::slave::build_fuel_plugins {
     'python-virtualenv',
     'rpm',
   ]
-  $ruby_version = '2.1.5'
 
   case $::osfamily {
     'Debian': {
@@ -49,12 +47,9 @@ class fuel_project::jenkins::slave::build_fuel_plugins {
 
   ensure_packages(concat($packages, $additional_packages))
 
-  ensure_resource('rvm_system_ruby', "ruby-${ruby_version}", {
-    ensure      => 'present',
-    default_use => true,
-    require     => Class['rvm'],
-  })
-
+  # install additional Ruby dependencies
+  include ::rvm
+  $ruby_version = hiera('fuel_project::common::ruby_version')
   rvm_gem { 'fpm' :
     ensure       => 'present',
     ruby_version => "ruby-${ruby_version}",

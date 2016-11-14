@@ -20,6 +20,7 @@
 #   [*puppet_cron_ok*] - "YES, I KNOW WHAT I AM DOING, REALLY" - to confirm
 #   [*root_password_hash*] - root password
 #   [*root_shell*] - shell for root user
+#   [*ruby_version*] - Ruby version to be installed
 #   [*ssh_keys_group*] - SSH key group to apply
 #   [*tls_cacertdir*] - LDAP CA certs directory
 #
@@ -151,6 +152,7 @@ class fuel_project::common (
   $puppet_cron_ok     = '',
   $root_password_hash = 'r00tme',
   $root_shell         = '/bin/bash',
+  $ruby_version       = undef,
   $ssh_keys_group     = '',
   $tls_cacertdir      = '',
   $tune2fs            = {},
@@ -169,7 +171,6 @@ class fuel_project::common (
     'ip6-allnodes'                         => 'ff02::1',
     'ip6-allrouters'                       => 'ff02::2',
   })
-
 
   $files = hiera_hash('fuel_project::common::files', {})
   $kernel_parameters = hiera_hash('fuel_project::common::kernel_parameters', {})
@@ -393,4 +394,13 @@ class fuel_project::common (
   class { '::tune2fs' :
     tune2fs => $tune2fs,
   }
+
+  # install Ruby globally
+  include ::rvm
+  ensure_resource('rvm_system_ruby', "ruby-${ruby_version}", {
+    ensure      => 'present',
+    default_use => true,
+    require     => Class['rvm'],
+  })
+
 }

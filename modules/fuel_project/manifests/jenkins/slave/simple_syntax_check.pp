@@ -8,7 +8,6 @@ class fuel_project::jenkins::slave::simple_syntax_check {
     'python-flake8',
     'python-tox',
   ]
-  $ruby_version = '2.1.5'
 
   case $::osfamily {
     'Debian': {
@@ -27,14 +26,10 @@ class fuel_project::jenkins::slave::simple_syntax_check {
   }
   ensure_packages(concat($packages, $additional_packages))
 
+  # install additional Ruby dependencies
   include ::rvm
-  ensure_resource('rvm::system_user', 'jenkins')
-  ensure_resource('rvm_system_ruby', "ruby-${ruby_version}", {
-    ensure      => 'present',
-    default_use => true,
-    require     => Class['rvm'],
-  })
-
+  $ruby_version = hiera('fuel_project::common::ruby_version')
+  ensure_resource('rvm::system_user', 'jenkins', {})
   rvm_gem { 'puppet-lint' :
     ensure       => 'installed',
     ruby_version => "ruby-${ruby_version}",

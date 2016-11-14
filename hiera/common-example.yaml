@@ -233,7 +233,7 @@ fuel_project::updates::sync_hosts_allow:
   - 10.108.0.0/16
   - 192.168.1.1/24
 
-fuel_project::jenkins::slave::ruby_version: '2.1.5'
+fuel_project::common::ruby_version: '2.1.5'
 
 jenkins::slave::authorized_keys:
   'jenkins@mytestserver':
