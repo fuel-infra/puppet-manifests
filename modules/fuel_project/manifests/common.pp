@@ -237,6 +237,7 @@ class fuel_project::common (
     'config-zabbix-agent-oom-killer-item',
     'config-zabbix-agent-ulimit-item',
     'facter-facts',
+    'facter-facts-network-detection',
     'screen',
     'tmux',
   ], { ensure  => latest })
