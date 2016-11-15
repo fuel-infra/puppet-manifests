@@ -41,7 +41,7 @@ apt::sources:
     include_src: false
     include_deb: true
   docker:
-    location: 'https://get.docker.io/ubuntu'
+    location: 'https://get.docker.com/ubuntu'
     release: 'docker'
     key: 'A88D21E9'
     key_server: 'keyserver.ubuntu.com'

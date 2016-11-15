@@ -18,6 +18,7 @@
 #   [*pam_password*] - PAM password type
 #   [*puppet_cron*] - run Puppet agent by cron
 #   [*puppet_cron_ok*] - "YES, I KNOW WHAT I AM DOING, REALLY" - to confirm
+#   [*reboot_allowed*] - reboot node when required
 #   [*root_password_hash*] - root password
 #   [*root_shell*] - shell for root user
 #   [*ruby_version*] - Ruby version to be installed
@@ -150,6 +151,7 @@ class fuel_project::common (
   $pam_password       = '',
   $puppet_cron        = {},
   $puppet_cron_ok     = '',
+  $reboot_allowed     = false,
   $root_password_hash = 'r00tme',
   $root_shell         = '/bin/bash',
   $ruby_version       = undef,
@@ -179,12 +181,15 @@ class fuel_project::common (
 
   # setup static network configuration if requested
   if($network_detection and $autonetwork_interface) {
+    ensure_packages('facter-facts-network-detection', { ensure  => latest })
     file { '/etc/network/interfaces' :
       ensure  => 'present',
       mode    => '0644',
       owner   => 'root',
       group   => 'root',
       content => template('fuel_project/common/interfaces.erb'),
+      notify  => Reboot['after_run'],
+      require => Package['facter-facts-network-detection'],
     }
   }
 
@@ -237,7 +242,6 @@ class fuel_project::common (
     'config-zabbix-agent-oom-killer-item',
     'config-zabbix-agent-ulimit-item',
     'facter-facts',
-    'facter-facts-network-detection',
     'screen',
     'tmux',
   ], { ensure  => latest })
@@ -250,7 +254,9 @@ class fuel_project::common (
   # install the exact version of kernel package
   # please note, that reboot must be done manually
   if($kernel_package) {
-    ensure_packages($kernel_package)
+    ensure_packages($kernel_package, {
+        notify => Reboot['after_run'],
+      })
   }
 
   if($ldap) {
@@ -404,4 +410,11 @@ class fuel_project::common (
     require     => Class['rvm'],
   })
 
+  # reboot when required
+  if ($reboot_allowed) {
+    reboot { 'after_run':
+      apply => 'finished',
+      when  => 'refreshed',
+    }
+  }
 }
