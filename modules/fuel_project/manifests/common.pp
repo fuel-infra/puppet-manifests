@@ -179,7 +179,6 @@ class fuel_project::common (
 
   # setup static network configuration if requested
   if($network_detection and $autonetwork_interface) {
-    ensure_packages('facter-facts-network-detection', { ensure  => latest })
     file { '/etc/network/interfaces' :
       ensure  => 'present',
       mode    => '0644',
@@ -239,6 +238,7 @@ class fuel_project::common (
     'config-zabbix-agent-oom-killer-item',
     'config-zabbix-agent-ulimit-item',
     'facter-facts',
+    'facter-facts-network-detection',
     'screen',
     'tmux',
   ], { ensure  => latest })
@@ -407,13 +407,20 @@ class fuel_project::common (
 
   # reboot when required
   if ($reboot) {
+    if defined(File['/etc/network/interfaces']) {
+      $_subscribe = [
+        File['/etc/network/interfaces'],
+        Package[$kernel_package],
+      ]
+    } else {
+      $_subscribe = [
+        Package[$kernel_package],
+      ]
+    }
     reboot { 'after_run':
       apply     => 'finished',
       when      => 'refreshed',
-      subscribe => [
-        File['/etc/network/interfaces'],
-        Package[$kernel_package],
-      ],
+      subscribe => $_subscribe,
     }
   }
 }
