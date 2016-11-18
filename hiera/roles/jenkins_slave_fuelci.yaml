@@ -117,7 +117,6 @@ fuel_project::common::known_hosts:
 
 fuel_project::common::kernel_package: 'linux-virtual-lts-vivid'
 fuel_project::common::network_detection: true
-fuel_project::common::reboot_allowed: true
 
 jenkins::slave::authorized_keys:
   'jenkins@ci.fuel-jenkins.org':

@@ -186,7 +186,6 @@ class fuel_project::common (
       owner   => 'root',
       group   => 'root',
       content => template('fuel_project/common/interfaces.erb'),
-      notify  => Reboot['after_run'],
       require => Package['facter-facts-network-detection'],
     }
   }
@@ -252,9 +251,7 @@ class fuel_project::common (
   # install the exact version of kernel package
   # please note, that reboot must be done manually
   if($kernel_package) {
-    ensure_packages($kernel_package, {
-        notify => Reboot['after_run'],
-      })
+    ensure_packages($kernel_package)
   }
 
   if($ldap) {
@@ -411,8 +408,12 @@ class fuel_project::common (
   # reboot when required
   if ($reboot) {
     reboot { 'after_run':
-      apply => 'finished',
-      when  => 'refreshed',
+      apply     => 'finished',
+      when      => 'refreshed',
+      subscribe => [
+        File['/etc/network/interfaces'],
+        Package[$kernel_package],
+      ],
     }
   }
 }
