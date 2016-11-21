@@ -225,7 +225,7 @@ class registry (
 
   # schedule garbage-collector runs
   cron { 'garbage-collect':
-    command => "/usr/bin/registry garbage-collect ${config_server}",
+    command => "/usr/bin/docker-registry garbage-collect ${config_server}",
     user    => $service_user,
     hour    => 3,
     minute  => 0,
