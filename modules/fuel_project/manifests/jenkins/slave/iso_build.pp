@@ -100,10 +100,7 @@ class fuel_project::jenkins::slave::iso_build {
     }
   }
 
-  ensure_packages(
-    concat($packages, $additional_packages),
-    {require => Exec['apt_update']}
-  )
+  ensure_packages(concat($packages, $additional_packages))
 
   ensure_resource('group', 'mock', {
     ensure => 'present',
