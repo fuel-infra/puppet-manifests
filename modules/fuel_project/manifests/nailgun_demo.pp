@@ -34,8 +34,7 @@ class fuel_project::nailgun_demo (
   # http://docs.mirantis.com/fuel-dev/develop/nailgun/development/env.html
   $packages = [
     'git',
-    'npm',
-    'nodejs-legacy',
+    'nodejs',
     'postgresql-server-dev-all',
   ]
 
@@ -46,8 +45,7 @@ class fuel_project::nailgun_demo (
   # gulp required to make compressed static
   package { 'gulp':
     provider => npm,
-    require  => [Package['nodejs-legacy'],
-                Package['npm']],
+    require  => Package['nodejs'],
   }
 
   # create main user
@@ -105,7 +103,7 @@ class fuel_project::nailgun_demo (
       Vcsrepo['/usr/share/fuel-web'],
       Package[$packages],
       Package['gulp'],
-    ]
+    ],
   }
 
   venv::exec { 'venv-setup-develop' :
@@ -155,15 +153,23 @@ class fuel_project::nailgun_demo (
     onlyif  => "test ! -f ${lock_file}",
   }
 
+  exec { 'npm-update' :
+    command => 'npm update -g',
+    user    => 'root',
+    require => [Venv::Exec['venv-loaddata'],
+                    Package['gulp']],
+    onlyif  => "test ! -f ${lock_file}",
+    timeout => 300,
+  }
+
   exec { 'npm-install' :
     command     => 'npm install',
     cwd         => '/usr/share/fuel-web/nailgun',
     environment => 'HOME=/home/nailgun',
     user        => 'nailgun',
-    require     => [Venv::Exec['venv-loaddata'],
-                    Package['gulp']],
+    require     => Exec['npm-update'],
     onlyif      => "test ! -f ${lock_file}",
-    timeout     => 600,
+    timeout     => 900,
   }
 
   exec { 'compress-static' :
@@ -173,7 +179,6 @@ class fuel_project::nailgun_demo (
     user        => 'nailgun',
     require     => Exec['npm-install'],
     onlyif      => "test ! -f ${lock_file}",
-    timeout     => 600,
   }
 
   # at the end of setup process create lock file
@@ -191,7 +196,10 @@ class fuel_project::nailgun_demo (
     require => Vcsrepo['/usr/share/fuel-web'],
   }
 
-  nginx::resource::vhost { 'demo-redirect' :
+  # WORKAROUND: https://bugs.launchpad.net/bugs/1578766
+  Class['::nginx::config'] -> Nginx::Resource::Vhost <| |>
+
+  nginx::resource::vhost { 'demo_redirect' :
     ensure              => 'present',
     listen_port         => 80,
     server_name         => [$server_name],
@@ -219,7 +227,7 @@ class fuel_project::nailgun_demo (
     }
   }
 
-  nginx::resource::location { 'demo-static' :
+  nginx::resource::location { 'demo_static' :
     ensure              => 'present',
     vhost               => 'demo',
     location            => '/static/',
@@ -246,7 +254,7 @@ class fuel_project::nailgun_demo (
     content => $ssl_key_content,
   }
 
-  nginx::resource::vhost { 'demo-ssl' :
+  nginx::resource::vhost { 'demo_ssl' :
     ensure              => 'present',
     listen_port         => 8443,
     ssl_port            => 8443,
@@ -271,7 +279,7 @@ class fuel_project::nailgun_demo (
                             File[$ssl_key]],
   }
 
-  nginx::resource::location { 'demo-ssl-static' :
+  nginx::resource::location { 'demo_ssl_static' :
     ensure              => 'present',
     vhost               => 'demo-ssl',
     location            => '/static/',

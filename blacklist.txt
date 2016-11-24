@@ -22,7 +22,6 @@ mongo01
 mongo02
 mongo03
 mongo_testing
-nailgun_demo
 nodepool
 npm_mirror
 pasteweb

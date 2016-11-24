@@ -8,6 +8,7 @@
 #   [*packages*] - packages required by virtualenv
 #   [*pip_opts*] - additional pip command options
 #   [*requirements*] - file with venv requirements
+#   [*timeout*] - timeout to run processes in this class
 #   [*user*] - user to run virtualenv command
 #
 define venv::venv (
@@ -16,6 +17,7 @@ define venv::venv (
   $packages     = [],
   $pip_opts     = '',
   $requirements = '',
+  $timeout      = 300,
   $user         = 'root',
 ) {
 
@@ -37,6 +39,7 @@ define venv::venv (
     require   => [
       Package['python-virtualenv'],
     ],
+    timeout   => $timeout,
   }
 
   if $requirements {
@@ -50,6 +53,7 @@ define venv::venv (
         Exec["virtualenv ${options} ${path}"],
         Package[$packages],
       ],
+      timeout   => $timeout,
     }
   }
 }
