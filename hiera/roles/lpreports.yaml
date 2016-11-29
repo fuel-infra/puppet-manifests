@@ -4,48 +4,9 @@ classes:
   - '::fuel_project::apps::lpreports'
   - '::fuel_project::common'
   - '::fuel_project::nginx'
-
-apt::sources:
-  mirror:
-    location: 'http://cz.archive.ubuntu.com/ubuntu/'
-    release: "%{::lsbdistcodename}"
-    key: 'C0B21F32'
-    key_server: 'keyserver.ubuntu.com'
-    repos: 'main restricted universe multiverse'
-    include_src: false
-    include_deb: true
-  mirror_updates:
-    location: 'http://cz.archive.ubuntu.com/ubuntu/'
-    release: "%{::lsbdistcodename}-updates"
-    key: 'C0B21F32'
-    key_server: 'keyserver.ubuntu.com'
-    repos: 'main restricted universe multiverse'
-    include_src: false
-    include_deb: true
-  devops:
-    location: 'http://mirror.fuel-infra.org/devops/ubuntu/'
-    release: '/'
-    key: '62BF6A9C1D2B45A2'
-    key_server: 'keyserver.ubuntu.com'
-    repos: ''
-    include_src: false
-    include_deb: true
-  infra_backports:
-    location: 'http://mirror.fuel-infra.org/infra/backports/ubuntu/'
-    release: "%{::lsbdistcodename}"
-    key: 'CA2B20483E301371'
-    key_server: 'keyserver.ubuntu.com'
-    repos: 'main'
-    include_src: false
-    include_deb: true
-  infra_packages:
-    location: 'http://mirror.fuel-infra.org/infra/packages/ubuntu/'
-    release: "%{::lsbdistcodename}"
-    key: 'CA2B20483E301371'
-    key_server: 'keyserver.ubuntu.com'
-    repos: 'main'
-    include_src: false
-    include_deb: true
+  - '::lpreports::webapp'
+  - '::mongodb::client'
+  - '::mongodb::server'
 
 fuel_project::apps::lpreports::config_repo: 'ssh://lpreports@review.fuel-infra.org/tools/lpreports'
 fuel_project::apps::lpreports::ssh_key_contents: |
@@ -77,10 +38,6 @@ fuel_project::apps::lpreports::ssh_key_contents: |
   K9rn3wvcclXbYWphPdKpF8HK+vR+1TFSarfhFfrUHyCBol4Bt3lT
   -----END RSA PRIVATE KEY-----
 
-fuel_project::common::puppet_cron:
-  hour: '*'
-  minute: '15'
-fuel_project::common::puppet_cron_ok: 'YES, I KNOW WHAT I AM DOING, REALLY.'
 lpreports::webapp::config:
   SECRET_KEY: 'SECRET_KEY'
   GOOGLE_ID: 'GOOGLE_ID'
@@ -100,3 +57,72 @@ lpreports::webapp::config:
   MONGO_USERS_CONNECT: false
   MONGO_SECURITY_CONNECT: false
   MONGO_CVE_CONNECT: false
+
+lpreports::webapp::nginx_log_format: 'proxy'
+lpreports::webapp::nginx_server_name: 'lpreports.test.local'
+lpreports::webapp::ssl_certificate_contents: |
+  -----BEGIN CERTIFICATE-----
+  MIIDmTCCAoGgAwIBAgIJAJGc54yYKZs8MA0GCSqGSIb3DQEBCwUAMGMxCzAJBgNV
+  BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
+  aWRnaXRzIFB0eSBMdGQxHDAaBgNVBAMME3JlZ2lzdHJ5LnRlc3QubG9jYWwwHhcN
+  MTUwODIwMDgxMDMwWhcNMTYwODE5MDgxMDMwWjBjMQswCQYDVQQGEwJBVTETMBEG
+  A1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkg
+  THRkMRwwGgYDVQQDDBNyZWdpc3RyeS50ZXN0LmxvY2FsMIIBIjANBgkqhkiG9w0B
+  AQEFAAOCAQ8AMIIBCgKCAQEApY41bO7rbYG0TGKlMQVCd7NEQ/HSn1mZjtQyWdUy
+  orh7RpSN6g7Q5c9diLmv2+dzbJzNldL9/r5hiA5zz/7qnWUNU9+9Kl6JRq7RWUoy
+  aMoqtOjx+qUQSuYV966ZbIygcQb2iT20gVogGQTb0qx72mXj7YVD1WDgkl2MpUyt
+  8R9b7SfulBodK4mO3G+N5Ym2Ebo/EkaBhUPo9ErHFbKu1gQNq+tvDfVi2Aqwtiue
+  5FHezU1v6BsFgp+/W4Ojw+69WUt1TZhI5sqlhPLGZDpEgFBJnBz03p2gZJ70HPWZ
+  SwUMtmhct7qH4wT8khGtPrmHDFB7f+l84YBHrHMBSNM09wIDAQABo1AwTjAdBgNV
+  HQ4EFgQUQLMQy8btaVq/Zjpn2qZ4/5H6VFcwHwYDVR0jBBgwFoAUQLMQy8btaVq/
+  Zjpn2qZ4/5H6VFcwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAK3Ms
+  cJh0eSYNYZ6CnIFWwfuECdpeqhyK/JfnpILQ8lXhxGDxKmjELyy7NFcB+z+cLOju
+  42X4VG1XERNS2kk+SaD25nybUi6dm57kMwe6e43kaxrFxu8BGVOMmseyJV5VgM60
+  nMkSOCGOOi13WuZZ5E3/dmEVqRmEZr5HZdhGftXZO6MASpteTSnwrSlFJq9FTyhH
+  NaY5XIlgajAtAsO2PvZ/nK8CQaR4NELXP2g+iGydlvgkpz3ZZw1ZGNuScLW5tk3y
+  LACfM+QTWd1JlWInSAcpJ/5oyeiPghF+RyewE7Q5ohAPi1dJBTOHFBaGc7guSJvn
+  hBrtuTHuW16PtQHgeQ==
+  -----END CERTIFICATE-----
+
+lpreports::webapp::ssl_key_contents: |
+  -----BEGIN PRIVATE KEY-----
+  MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCljjVs7uttgbRM
+  YqUxBUJ3s0RD8dKfWZmO1DJZ1TKiuHtGlI3qDtDlz12Iua/b53NsnM2V0v3+vmGI
+  DnPP/uqdZQ1T370qXolGrtFZSjJoyiq06PH6pRBK5hX3rplsjKBxBvaJPbSBWiAZ
+  BNvSrHvaZePthUPVYOCSXYylTK3xH1vtJ+6UGh0riY7cb43libYRuj8SRoGFQ+j0
+  SscVsq7WBA2r628N9WLYCrC2K57kUd7NTW/oGwWCn79bg6PD7r1ZS3VNmEjmyqWE
+  8sZkOkSAUEmcHPTenaBknvQc9ZlLBQy2aFy3uofjBPySEa0+uYcMUHt/6XzhgEes
+  cwFI0zT3AgMBAAECggEABa0didGbQtLqop/TOB4NDFuaIJY++XWx/SKrY0cbCFc4
+  6s+XGgpOAUMd2t06+VgzLesmZVepm71dTLPqJpx/4MuhLFoEe1pobIL77IrNtagQ
+  1MkT2tsj9t1yrV5QJlef/KAXfdcexDyZ0yHGg6+kQ3Ww3ejuzXcX3AzXEKfTYuv5
+  NSD4MxFomkA64+IcCI49IXsXFshk3oL0LiWhaWgHWzA0RyhLwndyXyVMiCl99uVP
+  ZAN7U965mv+AtsaChg/1K87AR7e6+ZxfmKuTAoJCU4xcgMVUntC1nXigDok+9IAa
+  Pfx4k5JoaFz7wjyxui1qWtKaPnq5d4JhtSdBTIrwGQKBgQDSOzMk2Ul2XYm3omag
+  kGAOFW+bdvRdYrnUA54ycQDLELhXN7mOypIBNMe72q+oU8Y5BmPgJS5iGIXORWK6
+  BluCsRZJwJsG8Hv5X4NEPNk21TSJeCdUNcyEzNPUVInQ/oZrsP908w27CwjpU6oW
+  Wh9vsngZbyy1oAGvwwO+BcmFywKBgQDJmRlvm2pELizTrpXA8DCkQf3JGqOj+Yt7
+  68v2Kbbt/+fbcJj96XljZKNDh75BfHZsjCOgeBEKqpK9cdEDprv9RpQtbyN1iI2m
+  5obmhDOAE2O/jkZb8XdlZhe9GfXPKdp8U17Qv+RJR+7YblFDZasBkDHPbbUms8iC
+  UXToXnfIBQKBgQCST+cxTxREj6boKdt5BeIEC0EolqpNUAd6maYA/wqJSTKyaLL4
+  wNzKgBw+Dl3QLbW4PE1IUzgrx1tgioPCaehIVczoOWbrdnUhwiqOVDbsZYfx4LCm
+  d+bFyfPnQ4rC7FFLI902XG4C7hQepz6p3cEhMLlLIkeghCKIW5YAKvDs7wKBgCry
+  zPJz/72qwK4QQaMrCJHV5UVUwYwLe+XYpEk7Ndeab0DWyiE9/jholkeqwaOd6nTR
+  nj1vluHY2Q43Ezpd6SraQHM1fC5r+xGVhyPRAk/E0blbjC3GUZNunpwQzcdmuT9H
+  W6nJV88s3fuJ9RIQtM/Ocm4ohzFJl+v7gpaGmaopAoGBAIGV5cMTHADemhoPPGsC
+  EkkuUTgT14WteC+s/ks0k3j/Ya3LxodukZ++gLlp+XDC8dU1U6+34zXFapAzs5AY
+  FrGQnprUJC2djN9JPlOxa/X2Bl4OEJUkTWALFY5uLXQyKA8fH2nkxiypXnil41Rd
+  IMjK3YBsHDrVQ9xjRF5NhF5Z
+  -----END PRIVATE KEY-----
+
+mongodb::server::bind_ip: ['127.0.0.1']
+mongodb::server::dbpath: '/var/lib/mongodb'
+mongodb::server::directoryperdb: true
+mongodb::server::keyfile:
+mongodb::server::keyfile_content:
+mongodb::server::noauth: true
+mongodb::server::nohttpinterface: true
+mongodb::server::port: 27017
+mongodb::server::rest: false
+mongodb::server::verbose: true
+
+uwsgi::application::buffer_size: 65535
