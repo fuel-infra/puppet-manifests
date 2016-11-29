@@ -152,7 +152,7 @@ class fuel_project::common (
   $puppet_cron_ok     = '',
   $root_password_hash = 'r00tme',
   $root_shell         = '/bin/bash',
-  $ruby_version       = undef,
+  $ruby_version       = '',
   $ssh_keys_group     = '',
   $tls_cacertdir      = '',
   $tune2fs            = {},
@@ -397,13 +397,15 @@ class fuel_project::common (
     tune2fs => $tune2fs,
   }
 
-  # install Ruby globally
-  include ::rvm
-  ensure_resource('rvm_system_ruby', "ruby-${ruby_version}", {
-    ensure      => 'present',
-    default_use => true,
-    require     => Class['rvm'],
-  })
+  # install Ruby if version specified
+  if ($ruby_version) {
+    include ::rvm
+    ensure_resource('rvm_system_ruby', "ruby-${ruby_version}", {
+      ensure      => 'present',
+      default_use => true,
+      require     => Class['rvm'],
+    })
+  }
 
   # reboot when required
   if ($reboot) {
