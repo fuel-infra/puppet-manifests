@@ -18,7 +18,7 @@
 	url = https://github.com/monester/puppet-bacula
 [submodule "modules/libvirt"]
 	path = modules/libvirt
-	url = https://github.com/monester/puppet-libvirt
+	url = https://github.com/pjbrzozowski/puppet-libvirt
 [submodule "modules/bind"]
 	path = modules/bind
 	url = https://github.com/teran/puppet-bind
