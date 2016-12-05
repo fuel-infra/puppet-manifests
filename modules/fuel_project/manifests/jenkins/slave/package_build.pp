@@ -1,38 +1,30 @@
-#
 # Class: fuel_project::jenkins::slave::package_build
 #
-# Class describes configuration for Fuel ISO build node
-#
-# Parameters:
-#   [*packages*] Array, List of packages to install
-#   [*pins*] Hash, Hash to be passed to create_resources with pins in the form
-#     of:
-#     $pins = {
-#       'package' => {
-#         'version': 1.0
-#       }
-#     }
+# Class describes configuration for package building.
 #
 class fuel_project::jenkins::slave::package_build {
   include ::docker
   include ::fuel_project::nginx
 
   $packages = [
+    'createrepo',
     'devscripts',
+    'git',
     'libparse-debcontrol-perl',
+    'lzop',
     'make',
     'mock',
-    'npm',
-    'nodejs=0.10.25~dfsg2-2ubuntu1',
     'nodejs-legacy=0.10.25~dfsg2-2ubuntu1',
+    'nodejs=0.10.25~dfsg2-2ubuntu1',
+    'npm',
     'pigz',
-    'lzop',
-    'python-setuptools',
-    'python-rpm',
     'python-pbr',
+    'python-rpm',
+    'python-setuptools',
     'reprepro',
     'ruby',
     'sbuild',
+    'yum-utils',
   ]
 
   case $::osfamily {
