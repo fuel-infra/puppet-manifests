@@ -3,43 +3,146 @@ selinux::mode: 'permissive'
 selinux::type: 'targeted'
 
 yum::gpgkey:
-  'RPM-GPG-KEY-devops':
-    path: '/etc/pki/rpm-gpg/RPM-GPG-KEY-devops'
+  'RPM-GPG-KEY-infra':
+    path: '/etc/pki/rpm-gpg/RPM-GPG-KEY-infra'
     content: |
       -----BEGIN PGP PUBLIC KEY BLOCK-----
-      Version: GnuPG v2.0.19 (GNU/Linux)
+      Version: GnuPG v1
 
-      mQENBFTP6O4BCAC/Ody0+dRE6ZwvB1ehsxWrtjuXvrPRQp9cJQZ5WkBV0mL5HcZz
-      LuUXeLxy2PjMhBKQ2cfdG75ceI+S2jqg0wIcf7aTHlxdPZYdXJURlftpMKdSginp
-      rX0OwFoGWML6SjiLFsUgQsPA2Z3IkN2AZmc2VgPnV8UIHUL/sdIjdCHa4wq07Wt2
-      1dXji46fayWkPpN1JK48/QlDKLAanjSghWU2jxPfIQFkmvb4YRsTW6K2jZ6wvkav
-      EjwMM2FdR4poRmD8qIgKhLx4axl1s9eZR5DTWaR4gC3ehOI30kh+XOPkB1EsYZUz
-      dvg2La3EqlHV4UyAVERRVSixy0ITrgAJOEGhABEBAAG0OnFhLWNlbnRvcyBPQlMg
-      UHJvamVjdCA8cWEtY2VudG9zQG9zY2ktb2JzLnZtLm1pcmFudGlzLm5ldD6JAT8E
-      EwECACkFAlTP6O4CGwMFCQQesAAHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAK
-      CRCl4sQAl32hdEDWB/975rJWyILqUoZQ5+qyAArBRVGIEKzs4vzImZdR/n0RHX+y
-      g0qrwryl5IEIDSGp5cITRgM7GHopPtUGc2wkpVTwj7XY9Dgm15H/4H4Ka/5hKCll
-      OooLrJUKMQ9IVnjipBCorsRdVxr8GOdNOdaZcC9w9v8mJHkOJRDAoW4IUrUSRkO3
-      2gnYw22rAOpY9h/NJoGpac1YyK9v1sShuMlKYNLnPRuDpggC3tGY2rbI3Re2sfmm
-      QrnEHbnNFlZeTnHAPUwyP0y5WF+XmElflc1753Oz1/M8mJ4QTYPx6GxndxLjrpxh
-      Gb/phGwiNgEaWHp5Z+MbQHgjWQPTGjEoiWn9T4LFiEYEExECAAYFAlTP6O4ACgkQ
-      Yr9qnB0rRaKDIgCfXmNK658oR9Wg8qVeRO1j1Q643QIAni92QIivsg+RAh+jHJU/
-      lx1Ia4TX
-      =dnbi
+      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
+      f/U=
+      =YOOE
+      -----END PGP PUBLIC KEY BLOCK-----
+
+  'RPM-GPG-KEY-base':
+    path: '/etc/pki/rpm-gpg/RPM-GPG-KEY-base'
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      Version: GnuPG v1.2.6 (GNU/Linux)
+
+      mQINBErgSTsBEACh2A4b0O9t+vzC9VrVtL1AKvUWi9OPCjkvR7Xd8DtJxeeMZ5eF
+      0HtzIG58qDRybwUe89FZprB1ffuUKzdE+HcL3FbNWSSOXVjZIersdXyH3NvnLLLF
+      0DNRB2ix3bXG9Rh/RXpFsNxDp2CEMdUvbYCzE79K1EnUTVh1L0Of023FtPSZXX0c
+      u7Pb5DI5lX5YeoXO6RoodrIGYJsVBQWnrWw4xNTconUfNPk0EGZtEnzvH2zyPoJh
+      XGF+Ncu9XwbalnYde10OCvSWAZ5zTCpoLMTvQjWpbCdWXJzCm6G+/hx9upke546H
+      5IjtYm4dTIVTnc3wvDiODgBKRzOl9rEOCIgOuGtDxRxcQkjrC+xvg5Vkqn7vBUyW
+      9pHedOU+PoF3DGOM+dqv+eNKBvh9YF9ugFAQBkcG7viZgvGEMGGUpzNgN7XnS1gj
+      /DPo9mZESOYnKceve2tIC87p2hqjrxOHuI7fkZYeNIcAoa83rBltFXaBDYhWAKS1
+      PcXS1/7JzP0ky7d0L6Xbu/If5kqWQpKwUInXtySRkuraVfuK3Bpa+X1XecWi24JY
+      HVtlNX025xx1ewVzGNCTlWn1skQN2OOoQTV4C8/qFpTW6DTWYurd4+fE0OJFJZQF
+      buhfXYwmRlVOgN5i77NTIJZJQfYFj38c/Iv5vZBPokO6mffrOTv3MHWVgQARAQAB
+      tDNSZWQgSGF0LCBJbmMuIChyZWxlYXNlIGtleSAyKSA8c2VjdXJpdHlAcmVkaGF0
+      LmNvbT6JAjYEEwECACAFAkrgSTsCGwMGCwkIBwMCBBUCCAMEFgIDAQIeAQIXgAAK
+      CRAZni+R/UMdUWzpD/9s5SFR/ZF3yjY5VLUFLMXIKUztNN3oc45fyLdTI3+UClKC
+      2tEruzYjqNHhqAEXa2sN1fMrsuKec61Ll2NfvJjkLKDvgVIh7kM7aslNYVOP6BTf
+      C/JJ7/ufz3UZmyViH/WDl+AYdgk3JqCIO5w5ryrC9IyBzYv2m0HqYbWfphY3uHw5
+      un3ndLJcu8+BGP5F+ONQEGl+DRH58Il9Jp3HwbRa7dvkPgEhfFR+1hI+Btta2C7E
+      0/2NKzCxZw7Lx3PBRcU92YKyaEihfy/aQKZCAuyfKiMvsmzs+4poIX7I9NQCJpyE
+      IGfINoZ7VxqHwRn/d5mw2MZTJjbzSf+Um9YJyA0iEEyD6qjriWQRbuxpQXmlAJbh
+      8okZ4gbVFv1F8MzK+4R8VvWJ0XxgtikSo72fHjwha7MAjqFnOq6eo6fEC/75g3NL
+      Ght5VdpGuHk0vbdENHMC8wS99e5qXGNDued3hlTavDMlEAHl34q2H9nakTGRF5Ki
+      JUfNh3DVRGhg8cMIti21njiRh7gyFI2OccATY7bBSr79JhuNwelHuxLrCFpY7V25
+      OFktl15jZJaMxuQBqYdBgSay2G0U6D1+7VsWufpzd/Abx1/c3oi9ZaJvW22kAggq
+      dzdA27UUYjWvx42w9menJwh/0jeQcTecIUd0d0rFcw/c1pvgMMl/Q73yzKgKYw==
+      =zbHE
       -----END PGP PUBLIC KEY BLOCK-----
 
 yum::repos::purge: true
 yum::repos::repos:
+  'infra-packages':
+    'descr': 'Devops/Infra packages repository'
+    'baseurl': 'http://perestroika-repo-tst.infra.mirantis.net/infra/packages/centos7/os/x86_64/'
+    'gpgcheck':  true
+    'gpgkey': 'file://etc/pki/rpm-gpg/RPM-GPG-KEY-infra'
+  'infra-backports':
+    'descr': 'Devops/Infra backports repository'
+    'baseurl': 'http://perestroika-repo-tst.infra.mirantis.net/infra/backports/centos7/os/x86_64/'
+    'gpgcheck':  true
+    'gpgkey': 'file://etc/pki/rpm-gpg/RPM-GPG-KEY-infra'
   'base':
-    'descr': 'CentOS-$releasever - Base'
-    'baseurl': 'http://mirror.centos.org/centos/$releasever/os/$basearch/'
+    'descr': 'RHEL-$releasever - Base'
+    'baseurl': 'http://osci-mirror-msk.msk.mirantis.net/mirrors/rhel7.2'
     'gpgcheck': true
-  'devops':
-    'descr': 'Devops repository'
-    'baseurl': 'http://mirror.fuel-infra.org/devops/centos/'
-    'gpgcheck': true
-    'gpgkey': 'file://etc/pki/rpm-gpg/RPM-GPG-KEY-devops'
-  'updates':
-    'descr': 'CentOS-$releasever - Updates'
-    'baseurl': 'http://mirror.centos.org/centos/$releasever/updates/$basearch/'
-    'gpgcheck': true
+    'gpgkey': 'file://etc/pki/rpm-gpg/RPM-GPG-KEY-base'
+
+yum::versionlock:
+  '0:libvirt-python-1.2.16-1.el7.*':
+    'ensure': 'present'
+  '0:libvirt-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-client-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-config-nwfilter-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-config-network-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-driver-nwfilter-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-driver-interface-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-driver-lxc-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-driver-network-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-driver-nodedev-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-driver-nwfilter-1.2.12-4.el7':
+    'ensure': 'present'
+  '0:libvirt-daemon-driver-qemu-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-driver-secret-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-daemon-driver-storage-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-devel-1.2.12-4.el7.*':
+    'ensure': 'present'
+  '0:libvirt-docs-1.2.12-4.el7.*':
+    'ensure': 'present'

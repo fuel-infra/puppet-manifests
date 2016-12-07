@@ -5,6 +5,9 @@ apt::purge_sources_list: true
 apt::purge_sources_list_d: true
 apt::purge_preferences_d: true
 apt::update_timeout: 300
+
+fuel_project::common::kernel_package: 'linux-generic'
+
 apt::sources:
   mirror:
     location: 'http://archive.ubuntu.com/ubuntu/'
@@ -46,19 +49,48 @@ apt::sources:
     repos: 'main'
     include_src: false
     include_deb: true
+  docker_engine:
+    location: 'https://apt.dockerproject.org/repo'
+    release: "ubuntu-%{::lsbdistcodename}"
+    key: 'F76221572C52609D'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'main'
+    include_src: false
+    include_deb: true
   jenkins:
-    location: 'http://pkg.jenkins-ci.org/debian-stable/'
-    release: 'binary/'
-    key: 'D50582E6'
+    location: 'http://mirror.fuel-infra.org/mirrors/jenkins/debian-stable'
+    release: '/'
+    key: 'F76221572C52609D'
     key_server: 'keyserver.ubuntu.com'
     repos: ''
     include_src: false
     include_deb: true
-  elasticsearch:
-    location: 'http://packages.elasticsearch.org/elasticsearch/1.3/debian'
-    release: 'stable'
-    repos: 'main'
-    key: 'D88E42B4'
-    key_server: 'keyserver.ubuntu.com'
-    include_src: false
-    include_deb: true
+
+# fix logrotate zipping problems
+logrotate::rules:
+  upstart:
+    path: '/var/log/upstart/*.log'
+    rotate_every: 'day'
+    rotate: '7'
+    missingok: true
+    compress: true
+    ifempty: false
+    create: false
+    delaycompress: true
+  nginx:
+    path: '/var/log/nginx/*.log'
+    create: true
+    create_mode: '0644'
+    create_owner: 'www-data'
+    create_group: 'adm'
+    rotate_every: 'day'
+    rotate: '30'
+    missingok: true
+    compress: true
+    ifempty: false
+    delaycompress: false
+    sharedscripts: true
+    prerotate: >
+      if [ -d /etc/logrotate.d/httpd-prerotate ]; then run-parts /etc/logrotate.d/httpd-prerotate; fi
+    postrotate: >
+      invoke-rc.d nginx rotate >/dev/null 2>&1

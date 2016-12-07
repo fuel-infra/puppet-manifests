@@ -1,0 +1,2 @@
+---
+zabbix::agent::zabbix_server: 'zbxproxy01-scc.infra.mirantis.net'
