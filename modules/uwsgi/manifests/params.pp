@@ -11,6 +11,9 @@ class uwsgi::params {
     'python' => [
       'uwsgi-plugin-python',
     ],
+    'python3' => [
+      'uwsgi-plugin-python3',
+    ],
     'rack' => [
       'uwsgi-plugin-rack-ruby1.9.1',
       'ruby-rack',

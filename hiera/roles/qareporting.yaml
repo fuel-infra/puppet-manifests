@@ -1,0 +1,69 @@
+---
+classes:
+  - '::qa_reporting::application'
+  - '::fuel_project::common'
+  - '::fuel_project::nginx'
+  - '::mongodb::server'
+
+
+apt::sources:
+  # This repository is added here as workaround on time while we have no a backport for MongoDB
+  mongo:
+    location: 'http://repo.mongodb.org/apt/ubuntu'
+    release: "xenial/mongodb-org/3.2"
+    key: 'EA312927'
+    key_server: 'keyserver.ubuntu.com'
+    repos: 'multiverse'
+    include_src: false
+    include_deb: true
+
+mongodb::server::bind_ip: ['127.0.0.1']
+mongodb::server::dbpath: '/var/lib/mongodb'
+mongodb::server::directoryperdb: true
+mongodb::server::noauth: true
+mongodb::server::nohttpinterface: true
+# The following variable added here as workaround on time while we have no a backport for MongoDB
+mongodb::server::package_name: 'mongodb-org-server'
+mongodb::server::port: 27017
+mongodb::server::rest: false
+# The following variable added here as workaround on time while we have no a backport for MongoDB
+mongodb::server::service_name : 'mongod'
+mongodb::server::service_provider: 'systemd'
+mongodb::server::verbose: true
+
+qa_reporting::application::admin_password: 'test'
+qa_reporting::application::admin_users: 'test@localhost'
+
+qa_reporting::application::google_app_domain: 'example.com'
+qa_reporting::application::google_key: 'key'
+qa_reporting::application::google_secret: 'secret'
+
+qa_reporting::application::jira_user: 'qa-reporting'
+qa_reporting::application::jira_password: 'password'
+
+qa_reporting::application::launchpad_consumer_key: 'consumer_key'
+qa_reporting::application::launchpad_oauth_access_token: 'token'
+qa_reporting::application::launchpad_oauth_access_token_secret: 'token_secret'
+
+qa_reporting::application::lpreports_api_url: 'http://lp-reports.test.local/api/v1.0'
+qa_reporting::application::lpreports_auth_token: 'token'
+
+qa_reporting::application::mail_username:  'qa-reporting@localhost'
+qa_reporting::application::mail_password: 'password'
+
+qa_reporting::application::testrail_baseurl: 'https://testrail.com/'
+qa_reporting::application::testrail_password: 'password'
+qa_reporting::application::testrail_user: 'user@localhost'
+
+qa_reporting::application::static_folder: '/usr/lib/python3/dist-packages/qareporting/static/'
+qa_reporting::application::webpack_manifest_path: '/usr/share/qareporting/manifest.json'
+
+qa_reporting::application::gzip_types: 'text/css application/json application/javascript text/javascript'
+qa_reporting::application::modules_path: '/usr/share/qareporting'
+qa_reporting::application::nginx_log_format: 'proxy'
+qa_reporting::application::nginx_server_name: 'qa.test.local'
+qa_reporting::application::ssl_certificate_contents: 'cert_content'
+qa_reporting::application::ssl_key_contents: 'key_content'
+qa_reporting::application::static_path: '/usr/lib/python3/dist-packages/qareporting/static/build'
+qa_reporting::application::uwsgi_chdir: '/usr/lib/python3/dist-packages/qareporting'
+
