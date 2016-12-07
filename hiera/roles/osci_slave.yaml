@@ -1,0 +1,72 @@
+---
+classes:
+  - '::docker'
+  - '::fuel_project::common'
+  - '::fuel_project::jenkins::slave'
+  - '::fuel_project::jenkins::slave::iso_build'
+  - '::fuel_project::jenkins::slave::osci_test'
+  - '::sysctl::base'
+
+# docker configuration
+docker::package_name: docker-engine
+docker::version: 1.12.1-0~trusty
+docker::docker_users:
+  - jenkins
+docker::use_upstream_package_source: false
+
+# common configuration
+fuel_project::common::known_hosts:
+  'jenkins':
+    hosts:
+     'review.fuel-infra.org':
+       port: 29418
+     'review.openstack.org':
+       port: 29418
+     'gerrit.mirantis.com':
+       port: 29418
+fuel_project::common::ldap: true
+
+# jenkins slave configuration
+jenkins::slave::authorized_keys:
+  'jenkins@osci-jenkins.srt.server.net':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC9IeLxfNFJVr49UGRGvl2L8XAoQDgtJupf+Q1nkjc1Dd6LCYOLbQtIXGLVd4pIX1qz2prxvMCSZyRNYJihN+6ld92aDnOxV/GEWWV1mXR8iZvAx8IKbHetDPbk/YLM14OOU+L58U5CTWHK01gstY82dhoLTGG5O5CabmqYnQDWsUkvi03Y8E7xRhR3V5wxZEt5A+r1LqzoOFV5FLKOTFrEG6LYZvOUMxixfDZhJ8B+LFHFP8tKLPe+IfywyPJHG1zZ5FeTcgzcjQn0jc8ItqfDl/MK0L9tKNEmcAK7lj7fTHYjBs4nXLEfymtkDZk50m13xFHY6EQrxi7ZDjSiv8wj'
+  'jenkins@packaging-ci.infra.server.net':
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDrzRwMdPEzyDSrvbgW2cbX2/eh3/pnKa4sxcYkJ/luF66l/MkP4Z1nLzB8K6oR/Eq0s71kH3DFHhCYLK5pXLxC0FHeXhcOx36e/6qokkZf7fLK4+nmTLcagEY5e4rTNOV3YtdLTaeyS7h+hDw2ugHgWNUku/ZLQMnM2x+Z1csmKWLk3iX/TZ0tGLrgrE677ZkKzzHtTY0wiVmUkxx1oNvlTQXfsQ/yTsI7Dh0V/FeN65w5DhYD8oOpOYKrvAl/8PRWnyuKpm1wTTEK2G5/NhKikCZF4Rh3EEzG/de3jtBs4BKthJdt235DQ4LmmwDcLgIAj8hbGdA55e74xgQj2mgX'
+fuel_project::jenkins::slave::osci_test::osc_apiurl: 'https://some.server.net:444'
+fuel_project::jenkins::slave::osci_test::osc_user_primary: 'Admin'
+fuel_project::jenkins::slave::osci_test::osc_user_secondary: 'Admin'
+fuel_project::jenkins::slave::osci_test::osc_url_primary: 'https://some.server.net:444'
+fuel_project::jenkins::slave::osci_test::osc_url_secondary: 'https://some.server.net'
+fuel_project::jenkins::slave::osci_test::osc_pass_primary: 'dummy'
+fuel_project::jenkins::slave::osci_test::osc_pass_secondary: 'dummy'
+fuel_project::jenkins::slave::osci_test::osci_dhcp_start: '192.168.122.2'
+fuel_project::jenkins::slave::osci_test::osci_dhcp_end: '192.168.122.254'
+fuel_project::jenkins::slave::osci_test::osci_ip_address: '192.168.122.1'
+fuel_project::jenkins::slave::osci_test::osci_ip_netmask: '255.255.255.0'
+fuel_project::jenkins::slave::osci_test::osci_libvirt_dev: 'virbr0'
+fuel_project::jenkins::slave::osci_test::osci_rsync_source_server: 'some.server.net'
+fuel_project::jenkins::slave::osci_test::osci_ubuntu_image_name: 'ubuntu-deb-test.qcow2'
+fuel_project::jenkins::slave::osci_test::osci_centos_image_name: 'centos6.4-x86_64-gold-master.img'
+fuel_project::jenkins::slave::osci_test::osci_ubuntu_job_dir: '/home/jenkins/vm-ubuntu-test-deb'
+fuel_project::jenkins::slave::osci_test::osci_centos_job_dir: '/home/jenkins/vm-centos-test-rpm'
+fuel_project::jenkins::slave::osci_test::osci_ubuntu_remote_dir: 'vm-ubuntu-test-deb'
+fuel_project::jenkins::slave::osci_test::osci_centos_remote_dir: 'vm-centos-test-rpm'
+fuel_project::jenkins::slave::osci_test::osci_obs_jenkins_key: '/home/jenkins/.ssh/oct'
+fuel_project::jenkins::slave::osci_test::osci_obs_jenkins_key_contents: 'dummy'
+fuel_project::jenkins::slave::osci_test::osci_vm_ubuntu_jenkins_key: '/home/jenkins/vm-ubuntu-test-deb/precise64.key'
+fuel_project::jenkins::slave::osci_test::osci_vm_ubuntu_jenkins_key_contents: 'dummy'
+fuel_project::jenkins::slave::osci_test::osci_vm_centos_jenkins_key: '/home/jenkins/vm-centos-test-rpm/centos6.4-x86_64-gold-master.key'
+fuel_project::jenkins::slave::osci_test::osci_vm_centos_jenkins_key_contents: 'dummy'
+fuel_project::jenkins::slave::osci_test::osci_vm_trusty_jenkins_key: '/home/jenkins/vm-trusty-test-deb/trusty.key'
+fuel_project::jenkins::slave::osci_test::osci_vm_trusty_jenkins_key_contents: 'dummy'
+
+# sysctl configuration
+sysctl::base::values:
+  net.bridge.bridge-nf-call-iptables:
+    value: '0'
+
+# other settings
+libvirt::default_network: true
+ssh::banner::content: "%{hiera('common::cislave::motd')}"
