@@ -3,7 +3,7 @@
 # Class sets up run_tests role.
 #
 # Parameters:
-#   [*ksm*] - enable KSM on server on Ubuntu harware host
+#   [*ksm*] - enable KSM on server on Ubuntu hardware host
 #
 class fuel_project::jenkins::slave::run_tests (
   $ksm = false,
@@ -14,6 +14,7 @@ class fuel_project::jenkins::slave::run_tests (
     'config-zabbix-agent-reverted-counter-item',
     'createrepo',
     'dstat',
+    'ebtables',
     'htop',
     'python-psycopg2',
     'python-virtualenv',
