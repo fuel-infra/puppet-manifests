@@ -160,3 +160,6 @@
 [submodule "modules/reboot"]
 	path = modules/reboot
 	url = https://github.com/puppetlabs/puppetlabs-reboot.git
+[submodule "modules/zookeeper"]
+	path = modules/zookeeper
+	url = https://github.com/deric/puppet-zookeeper
