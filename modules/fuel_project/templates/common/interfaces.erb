@@ -7,4 +7,6 @@ iface <%= @autonetwork_interface %> inet static
  netmask <%= @autonetwork_netmask %>
  gateway <%= @autonetwork_gateway %>
  dns-nameservers <%= @autonetwork_nameservers %>
+<% if @autonetwork_search -%>
  dns-search <%= @autonetwork_search %>
+<% end -%>
