@@ -407,7 +407,7 @@ class qa_reporting::application (
   }
 
   cron { 'testrail full job':
-    command => "/usr/bin/flock -n -x /var/lock/qareport-testrail.lock /usr/bin/timeout -k10 1800 ${python_path} ${app_path}/manage.py --config production sync_testrail 2>&1 | logger -t qareporting-testrail",
+    command => "/usr/bin/flock -n -x /var/lock/qareport-testrail.lock /usr/bin/timeout -k10 9000 ${python_path} ${app_path}/manage.py --config production sync_testrail 2>&1 | logger -t qareporting-testrail",
     user    => $app_user,
     hour    => 0,
     minute  => 0,
