@@ -51,6 +51,16 @@
 #
 #     Default: {}
 #
+#   [*cronjobs*] - Hash, cron jobs definition
+#     $cronjobs = {
+#       'my_cool_cron_job' => {
+#         user    => 'cronjob_owner',
+#         command => '/usr/local/bin/do_something.sh',
+#       }
+#     }
+#
+#     Default: {}
+#
 #   [*facts*] - Hash, sets up custom facts through hiera. Example:
 #     $facts = {
 #       location => 'location_name',
@@ -172,6 +182,7 @@ class fuel_project::common (
     'ip6-allrouters'                       => 'ff02::2',
   })
 
+  $cronjobs = hiera_hash('fuel_project::common::cronjobs', {})
   $files = hiera_hash('fuel_project::common::files', {})
   $kernel_parameters = hiera_hash('fuel_project::common::kernel_parameters', {})
   $logrotate_rules = hiera_hash('logrotate::rules', {})
@@ -326,6 +337,7 @@ class fuel_project::common (
   }
   # /Zabbix SSL item
 
+  create_resources(cron, $cronjobs)
   create_resources(file, $files)
   create_resources(mount, $mounts)
 
