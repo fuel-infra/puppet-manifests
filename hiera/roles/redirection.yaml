@@ -1,0 +1,6 @@
+---
+classes:
+ - '::fuel_project::redirection'
+
+fuel_project::redirection::server_name: 'sitea.test.local'
+fuel_project::redirection::redirect_link: 'http://siteb.test.local'
