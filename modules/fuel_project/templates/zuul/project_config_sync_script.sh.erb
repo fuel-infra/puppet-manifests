@@ -5,32 +5,33 @@
 set -e
 
 export BRANCH=${BRANCH:-<%= @project_config_repo_revision %>}
-export TMPDIR=${TMPDIR:-/tmp/project-config/}
-export REPO=${REPO:-<%= @project_config_repo %>}
-export DIR=${DIR:-<%= @project_config_cfg_dir %>}
+export REPODIR=${REPODIR:-~/project-config/}
+export GITREPO=${GITREPO:-<%= @project_config_repo %>}
+export DESTDIR=${DESTDIR:-<%= @project_config_cfg_dir %>}
 
-if [[ -e "${TMPDIR}" ]]; then
-  echo "Clean up..."
-  rm -rf "${TMPDIR}"
+if [ -d "${REPODIR}" ]; then
+  echo "Updating repo ..."
+  cd "${REPODIR}"
+  PREV_REVISION=$(git rev-parse HEAD)
+  git fetch
+  git reset --hard "origin/${BRANCH}"
+  REVISION=$(git rev-parse HEAD)
+else
+  echo "Cloning repo ..."
+  git clone "${GITREPO}" "${REPODIR}"
+  cd "${REPODIR}"
+  git checkout "${BRANCH}"
+  PREV_REVISION='empty'
+  REVISION=$(git rev-parse HEAD)
 fi
 
-echo "Cloning..."
-git clone "${REPO}" "${TMPDIR}"
-cd "${TMPDIR}"
-git checkout "${BRANCH}"
-
-REVISION=$(git log -1 HEAD | awk 'FNR == 1, /commit/ {print $2}')
-PREV_REVISION=$(cat /tmp/project-config-revision.txt 2>/dev/null || echo -n none)
-echo -n "${REVISION}" > /tmp/project-config-revision.txt
-
-echo "Revision: \$Id: ${REVISION}"
 echo "Previous revision: ${PREV_REVISION}"
+echo "Current revision:  ${REVISION}"
 
-if [[ "${REVISION}" == "${PREV_REVISION}" ]]; then
-  echo "No updates found."
+if [ "${REVISION}" = "${PREV_REVISION}" ]; then
+  echo "No updates found. Exiting."
   exit 0
 fi
 
-echo "Linking..."
-rm -rf "${DIR}"/{.[^.]*,*}
-mv "${TMPDIR}"/* "${DIR}"/
+echo "Updating ${DESTDIR} ..."
+rsync -rlt --delete --delete-excluded --exclude='/.git*' "${REPODIR}/" "${DESTDIR}/"

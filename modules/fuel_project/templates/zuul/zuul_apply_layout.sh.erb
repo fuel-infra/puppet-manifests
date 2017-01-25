@@ -8,20 +8,26 @@ ZUUL_RELOAD="false"
 ZUUL_TEMP="$(mktemp -d)"
 
 diff_config() {
+    [ -f "${ZUUL_LAYOUTDIR}/${1}" ] || return 1
     diff -u "${ZUUL_LAYOUTDIR}/${1}" "${ZUUL_TEMP}/${1}"
 }
+
 <% if @config_update_method == 'jenkins' -%>
 # Get configs from Jenkins
+# FIXME(aevseev) Hardcoded value for Packaging CI
+FUNCTIONS_FILENAME='external_functions.py'
 curl -fLsS -o "${ZUUL_TEMP}/layout.yaml" "${JENKINS_JOB_URL}/layout.yaml"
-curl -fLsS -o "${ZUUL_TEMP}/external_functions.py" "${JENKINS_JOB_URL}/external_functions.py"
+curl -fLsS -o "${ZUUL_TEMP}/${FUNCTIONS_FILENAME}" "${JENKINS_JOB_URL}/${FUNCTIONS_FILENAME}"
 <% end -%>
 <% if @config_update_method == 'repository' -%>
+FUNCTIONS_FILEPATH='<%= @project_config_zuul_ext_funct_path %>'
+FUNCTIONS_FILENAME=${FUNCTIONS_FILEPATH##*/}
 cp <%= @project_config_zuul_yaml_path %> "${ZUUL_TEMP}/layout.yaml"
-cp <%= @project_config_zuul_ext_funct_path %> "${ZUUL_TEMP}/external_functions.py"
+cp <%= @project_config_zuul_ext_funct_path %> "${ZUUL_TEMP}/${FUNCTIONS_FILENAME}"
 <% end -%>
 
 # If files are not changed - just exit
-if diff_config layout.yaml && diff_config external_functions.py; then
+if diff_config layout.yaml && diff_config ${FUNCTIONS_FILENAME}; then
     echo "No changes"
     rm -rf "${ZUUL_TEMP}"
     exit 0
@@ -41,13 +47,22 @@ if ! diff_config layout.yaml &>/dev/null; then
 fi
 
 if ! diff_config external_functions.py &>/dev/null; then
-    cp "${ZUUL_TEMP}/external_functions.py" "${ZUUL_LAYOUTDIR}"
+    cp "${ZUUL_TEMP}/${FUNCTIONS_FILENAME}" "${ZUUL_LAYOUTDIR}"
     ZUUL_RELOAD="true"
 fi
 
 if [ "${ZUUL_RELOAD}" ]; then
     echo "Configuration changed, reload zuul service"
-    kill -HUP "$(/sbin/initctl status zuul | awk '{print $NF}')"
+    SYSINIT=$(cat /proc/1/comm)
+    case "${SYSINIT}" in
+        init)
+            ZUUL_PID=$(/sbin/initctl status zuul | awk '{print $NF}')
+        ;;
+        systemd)
+            ZUUL_PID=$(/bin/systemctl show zuul.service | awk -F= '$1 == "ExecMainPID" {print $2}')
+        ;;
+    esac
+    kill -HUP ${ZUUL_PID:?}
 fi
 
 rm -rf "${ZUUL_TEMP}"
