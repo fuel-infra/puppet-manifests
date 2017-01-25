@@ -97,10 +97,7 @@ class qa_reporting::application (
     'python3-dev',
     'python3-holidays',
     'python3-mongoengine',
-    # The following two packages are installed as workaround on time,
-    # while we have no backported MongoDB
-    'mongodb-org-shell',
-    'mongodb-org-tools',
+    'mongo-tools',
   ], {
     ensure  => 'latest',
     require => [
@@ -369,7 +366,7 @@ class qa_reporting::application (
     ],
   }
 
-  # configuraing of a set of cronjob to get data from different sources (Jira, Google, Testrail and so on)
+  # configuring of a set of cronjob to get data from different sources (Jira, Google, Testrail and so on)
   cron { 'jira job':
     command => "/usr/bin/flock -n -x /var/lock/qareport-jira.lock /usr/bin/timeout -k10 1800 ${python_path} ${app_path}/manage.py --config production sync_jira 2>&1 | logger -t qareporting-jira",
     user    => $app_user,

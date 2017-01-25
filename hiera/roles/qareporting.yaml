@@ -6,28 +6,18 @@ classes:
   - '::mongodb::server'
 
 
-apt::sources:
-  # This repository is added here as workaround on time while we have no a backport for MongoDB
-  mongo:
-    location: 'http://repo.mongodb.org/apt/ubuntu'
-    release: "xenial/mongodb-org/3.2"
-    key: 'EA312927'
-    key_server: 'keyserver.ubuntu.com'
-    repos: 'multiverse'
-    include_src: false
-    include_deb: true
-
+mongodb::server::auth: false
+mongodb::server::noauth: true
 mongodb::server::bind_ip: ['127.0.0.1']
 mongodb::server::dbpath: '/var/lib/mongodb'
-mongodb::server::directoryperdb: true
-mongodb::server::noauth: true
+mongodb::server::directoryperdb: false
+mongodb::server::keyfile:
+mongodb::server::keyfile_content:
 mongodb::server::nohttpinterface: true
-# The following variable added here as workaround on time while we have no a backport for MongoDB
-mongodb::server::package_name: 'mongodb-org-server'
 mongodb::server::port: 27017
 mongodb::server::rest: false
-# The following variable added here as workaround on time while we have no a backport for MongoDB
-mongodb::server::service_name : 'mongod'
+mongodb::server::replset: false
+mongodb::server::set_parameter: false
 mongodb::server::service_provider: 'systemd'
 mongodb::server::verbose: true
 
