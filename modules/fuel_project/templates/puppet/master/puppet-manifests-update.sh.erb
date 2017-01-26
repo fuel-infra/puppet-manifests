@@ -45,4 +45,8 @@ export MODULESPATH=${MODULESPATH:-<%= @manifests_modulespath %>}
   mv "${TMPDIR}/bin" "${BINPATH}"
   mv "${TMPDIR}/manifests" "${MANIFESTSPATH}"
   mv "${TMPDIR}/modules" "${MODULESPATH}"
+
+  echo "Restarting UWSGI service to clear Puppet cache..."
+  /usr/sbin/service uwsgi restart
+
 ) 9>/var/lock/puppet-manifests-update.lock
