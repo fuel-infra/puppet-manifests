@@ -49,4 +49,5 @@ export MODULESPATH=${MODULESPATH:-<%= @manifests_modulespath %>}
   echo "Restarting UWSGI service to clear Puppet cache..."
   /usr/sbin/service uwsgi restart
 
+  flock -u 9
 ) 9>/var/lock/puppet-manifests-update.lock

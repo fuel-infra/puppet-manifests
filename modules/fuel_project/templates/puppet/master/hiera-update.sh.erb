@@ -17,17 +17,18 @@ export DATAPATH=${DATAPATH:-<%= @hiera_datapath %>}
   cd "${TMPDIR}"
   git checkout "${BRANCH}"
 
-  REVISION=`git log -1 HEAD | fgrep commit | awk '{print $NF}'`
-  PREV_REVISION=`cat /tmp/hiera-revision.txt 2>/dev/null || echo -n none`
-  echo -n "${REVISION}" > /tmp/hiera-revision.txt
+  REVISION=`git rev-parse HEAD`
+  PREV_REVISION=`cat /var/lib/hiera/revision.txt 2>/dev/null || echo -n none`
 
-  echo "Revision: \$Id: ${REVISION} \$"
+  echo "Revision: ${REVISION}"
   echo "Previous revision: ${PREV_REVISION}"
 
   if [[ "${REVISION}" == "${PREV_REVISION}" ]]; then
     echo "No updates found."
     exit 0
   fi
+
+  echo -n "${REVISION}" > /var/lib/hiera/revision.txt
 
   echo "Linking..."
   rm -rf "${DATAPATH}"
