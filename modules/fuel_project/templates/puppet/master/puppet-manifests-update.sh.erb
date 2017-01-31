@@ -20,7 +20,7 @@ export MODULESPATH=${MODULESPATH:-<%= @manifests_modulespath %>}
   git checkout "${BRANCH}"
 
   REVISION=`git rev-parse HEAD`
-  PREV_REVISION=`cat /var/lib/puppet/revision.txt 2>/dev/null || echo -n none`
+  PREV_REVISION=`cat /var/lib/puppet/manifests-revision.txt 2>/dev/null || echo -n none`
 
   echo "Revision: ${REVISION}"
   echo "Previous revision: ${PREV_REVISION}"
@@ -30,7 +30,7 @@ export MODULESPATH=${MODULESPATH:-<%= @manifests_modulespath %>}
     exit 0
   fi
 
-  echo -n "${REVISION}" > /var/lib/puppet/revision.txt
+  echo -n "${REVISION}" > /var/lib/puppet/manifests-revision.txt
   sed -i 's~\$Id\$~\$Id: '${REVISION}' \$~' "${TMPDIR}/manifests/site.pp"
 
   git submodule init

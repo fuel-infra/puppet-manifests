@@ -18,7 +18,7 @@ export DATAPATH=${DATAPATH:-<%= @hiera_datapath %>}
   git checkout "${BRANCH}"
 
   REVISION=`git rev-parse HEAD`
-  PREV_REVISION=`cat /var/lib/hiera/revision.txt 2>/dev/null || echo -n none`
+  PREV_REVISION=`cat /var/lib/puppet/hiera-revision.txt 2>/dev/null || echo -n none`
 
   echo "Revision: ${REVISION}"
   echo "Previous revision: ${PREV_REVISION}"
@@ -28,7 +28,7 @@ export DATAPATH=${DATAPATH:-<%= @hiera_datapath %>}
     exit 0
   fi
 
-  echo -n "${REVISION}" > /var/lib/hiera/revision.txt
+  echo -n "${REVISION}" > /var/lib/puppet/hiera-revision.txt
 
   echo "Linking..."
   rm -rf "${DATAPATH}"
