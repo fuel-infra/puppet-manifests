@@ -3,7 +3,7 @@
 # This class deploys webapp part of ci_status application.
 #
 # Parameters:
-#   [*config*] - ci_status configuration file entries
+#   [*config*] - ci_status configuration (template) file entries
 #   [*config_dir*] - string, path to the configuration directory
 #   [*logdir*] - log directory of ci_status
 #   [*managepy_path*] - path to ci_status manage.py file
@@ -12,6 +12,7 @@
 #   [*nginx_error_log*] - error log file path
 #   [*nginx_log_format*] - log file format
 #   [*package*] - String, package name(could contain or not contain version)
+#   [*settings*] - ci_status settings (django) file entries
 #   [*ssl_certificate*] - ssl certificate file path
 #   [*ssl_certificate_contents*] - ssl certificate file contents
 #   [*ssl_key*] - ssl key file path
@@ -19,8 +20,8 @@
 #   [*user*] - user used to run application
 #
 class ci_status::webapp (
-  $config                   = {},
-  $config_dir              = '/etc/ci-status',
+  $config                   = undef,
+  $config_dir               = '/etc/ci-status',
   $logdir                   = '/var/log/ci_status',
   $managepy_path            = '/usr/bin/ci_status',
   $nginx_server_name        = $::fqdn,
@@ -28,6 +29,7 @@ class ci_status::webapp (
   $nginx_error_log          = '/var/log/nginx/error.log',
   $nginx_log_format         = undef,
   $package                  = 'python-django-ci-status',
+  $settings                 = undef,
   $ssl_certificate          = '/etc/ssl/certs/ci_status.crt',
   $ssl_certificate_contents = undef,
   $ssl_key                  = '/etc/ssl/private/ci_status.key',
@@ -35,7 +37,6 @@ class ci_status::webapp (
   $user                     = 'ci_status'
 ) {
   include ::nginx
-  include ::supervisord
 
   $_requirements = [
     $package,
@@ -85,12 +86,24 @@ class ci_status::webapp (
     mode   => '0755',
   }
 
-  file { "${config_dir}/settings.yaml" :
+  file { "${config_dir}/config.yaml" :
     ensure  => 'present',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
     content => inline_template('<%= YAML.dump(@config) %>'),
+    require => [
+      Package[$_requirements],
+      File[$config_dir],
+    ]
+  }
+
+  file { "${config_dir}/settings.yaml" :
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => inline_template('<%= YAML.dump(@settings) %>'),
     require => [
       Package[$_requirements],
       File[$config_dir],
@@ -107,17 +120,60 @@ class ci_status::webapp (
       Package[$_requirements],
       User[$user],
       File["${config_dir}/settings.yaml"],
-    ]
+    ],
+    notify      => Service['uwsgi'],
   }
 
-  exec { 'ci_status-migratedb' :
+  exec { 'ci_status-migrate' :
     command     => 'django-admin migrate',
     environment => [
       'DJANGO_SETTINGS_MODULE=ci_dashboard.settings',
     ],
     user        => $user,
     require     => Exec['ci_status-syncdb'],
-    notify      => Service['uwsgi'],
+  }
+
+  exec { 'ci_status-staff_group' :
+    command     => 'django-admin staff_group',
+    environment => [
+      'DJANGO_SETTINGS_MODULE=ci_dashboard.settings',
+    ],
+    user        => $user,
+    require     => Exec['ci_status-migrate'],
+  }
+
+  exec { 'ci_status-import_config' :
+    command     => "django-admin import_config ${config_dir}/config.yaml",
+    environment => [
+      'DJANGO_SETTINGS_MODULE=ci_dashboard.settings',
+    ],
+    user        => $user,
+    require     => Exec['ci_status-staff_group'],
+  }
+
+  exec { 'ci_status-update' :
+    command     => 'django-admin update',
+    environment => [
+      'DJANGO_SETTINGS_MODULE=ci_dashboard.settings',
+    ],
+    user        => $user,
+    require     => Exec['ci_status-import_config'],
+  }
+
+  class { 'supervisord':
+    config_file    => '/etc/supervisor/supervisord.conf',
+    config_include => '/etc/supervisor/conf.d',
+  }
+
+  supervisord::program { 'ci_status':
+    command             => 'celery worker -A ci_dashboard -B --loglevel=INFO -s /var/lib/ci_status/celery-schedule',
+    user                => 'ci_status',
+    autostart           => true,
+    autorestart         => true,
+    program_environment => {
+      'DJANGO_SETTINGS_MODULE' => 'ci_dashboard.settings',
+    },
+    require             => User[$user],
   }
 
   uwsgi::application { 'ci_status' :

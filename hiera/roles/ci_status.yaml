@@ -5,7 +5,8 @@ classes:
   - '::mysql::server'
   - '::ci_status::webapp'
 
-ci_status::webapp::config:
+# django config
+ci_status::webapp::settings:
   DEBUG: False
   SECRET_KEY: 'CHANGEME'
   ALLOWED_HOSTS:
@@ -33,6 +34,52 @@ ci_status::webapp::config:
   AUTH_LDAP_USER_DN_TEMPLATE: 'uid=%(user)s,ou=people,o=acme,dc=acme,dc=net'
   AUTH_LDAP_USERS_BASE_DN: 'ou=people,o=acme,dc=acme,dc=net'
   AUTH_LDAP_GROUP_CACHE_TIMEOUT: 3600
+
+# application config
+ci_status::webapp::config:
+  dashboards:
+    products:
+      - version: '11.0'
+        sections:
+          - title: Community 11.0
+            key: community-11.0
+      - version: '10.0'
+        sections:
+          - title: Community 10.0
+            key: community-10.0
+      - version: '9.x'
+        sections:
+          - title: Community 9.x
+            key: community-9.x
+    ci_systems:
+      - title: Fuel CI
+        key: fuel-ci
+  sources:
+    jenkins:
+      - url: https://ci.fuel-infra.org/
+        query:
+          jobs:
+            - names:
+                - '11.0-community.main.ubuntu.bvt_2'
+              filter:
+                triggered_by: Any
+              dashboards:
+                - community-11.0
+                - fuel-ci
+            - names:
+                - '10.0-community.main.ubuntu.bvt_2'
+              filter:
+                triggered_by: Any
+              dashboards:
+                - community-10.0
+                - fuel-ci
+            - names:
+                - '9.0-community.main.ubuntu.bvt_2'
+              filter:
+                triggered_by: Any
+              dashboards:
+                - community-9.x
+                - fuel-ci
 
 ci_status::webapp::nginx_log_format: 'proxy'
 ci_status::webapp::nginx_server_name: 'ci_status.test.local'
@@ -90,6 +137,10 @@ ci_status::webapp::ssl_key_contents: |
   IMjK3YBsHDrVQ9xjRF5NhF5Z
   -----END PRIVATE KEY-----
 
+# set default package for mysql submodule
+mysql::client::package_name:
+mysql::server::package_name:
+
 mysql::server::databases:
   'ci_status':
     ensure: present
@@ -100,19 +151,8 @@ mysql::server::users:
 mysql::server::grants:
   'ci_status@localhost/ci_status.*':
     ensure: present
-    privileges: ['ALTER', 'CREATE', 'DELETE', 'DROP', 'INDEX', 'INSERT', 'SELECT', 'UPDATE']
+    privileges: ['ALTER', 'CREATE', 'DELETE', 'DROP', 'INDEX', 'INSERT', 'REFERENCES', 'SELECT', 'UPDATE']
     table: 'ci_status.*'
     user: 'ci_status@localhost'
-
-supervisord::config_file: '/etc/supervisor/supervisord.conf'
-supervisord::config_include: '/etc/supervisor/conf.d'
-supervisord::programs:
-  'ci_status':
-    command: 'celery worker -A ci_dashboard -B --loglevel=INFO -s /var/lib/ci_status/celery-schedule'
-    user: 'ci_status'
-    autostart: yes
-    autorestart: 'true'
-    program_environment:
-      DJANGO_SETTINGS_MODULE: 'ci_dashboard.settings'
 
 uwsgi::application::buffer_size: 65535
