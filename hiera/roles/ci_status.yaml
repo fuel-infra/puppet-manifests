@@ -11,7 +11,7 @@ ci_status::webapp::settings:
   DEBUG: False
   SECRET_KEY: 'CHANGEME'
   ALLOWED_HOSTS:
-    - 'ci-status.test.local'
+    - '*'
   DATABASES:
     default:
       ENGINE: 'django.db.backends.mysql'
