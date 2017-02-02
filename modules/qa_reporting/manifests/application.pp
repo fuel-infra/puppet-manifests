@@ -416,19 +416,6 @@ class qa_reporting::application (
     ],
   }
 
-  cron { 'mail job 18:10':
-    command => "/usr/bin/flock -n -x /var/lock/qareport-mail.lock /usr/bin/timeout -k10 1800 ${python_path} ${app_path}/manage.py --config production send_mail -m 35 2>&1 | logger -t qareporting-mail",
-    user    => $app_user,
-    hour    => 18,
-    minute  => 10,
-    require => [
-      Package['python3-qa-reporting'],
-      User[$app_user],
-      File[$credential_file],
-      Exec['run npm build'],
-    ],
-  }
-
   cron { 'mail job 18:12':
     command => "/usr/bin/flock -n -x /var/lock/qareport-mail.lock /usr/bin/timeout -k10 1800 ${python_path} ${app_path}/manage.py --config production send_mail -m 22 2>&1 | logger -t qareporting-mail",
     user    => $app_user,
