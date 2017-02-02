@@ -115,10 +115,11 @@ class fuel_project::zuul (
     content => template('fuel_project/zuul/zuul_apply_layout.sh.erb'),
   }
   create_resources('cron', { "${update_cronjob_name}" => $update_cronjob_params }, {
-    ensure  => 'absent',
-    command => '/usr/bin/flock -xn /var/lock/update_zuul_layout.lock /usr/local/bin/zuul_apply_layout.sh 2>&1 | logger -t update-zuul-layout',
-    user    => 'zuul',
-    minute  => '*/30',
+    ensure      => 'absent',
+    environment => 'PATH=/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin',
+    command     => '/usr/bin/flock -xn /var/lock/update_zuul_layout.lock /usr/local/bin/zuul_apply_layout.sh 2>&1 | logger -t update-zuul-layout',
+    user        => 'zuul',
+    minute      => '*/30',
   })
 
 }
