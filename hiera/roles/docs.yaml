@@ -2,6 +2,15 @@ classes:
 - '::fuel_project::common'
 - '::fuel_project::nginx'
 - '::fuel_project::roles::docs'
+- '::fuel_project::robots'
+
+fuel_project::robots::rules:
+  'robots.txt':
+    path: '/var/www/robots.txt'
+    content: |
+      User-Agent: *
+      Disallow: /fuel/
+      Allow: /
 
 fuel_project::roles::docs::community_hostname: 'docs.fuel-infra.org'
 fuel_project::roles::docs::community_ssl_cert_content: |
