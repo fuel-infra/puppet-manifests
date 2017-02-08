@@ -4,7 +4,7 @@
 #
 class fuel_project::jenkins::slave::gather_jobs_resources {
   $packages = [
-    'python-2.7',
+    'python2.7',
     'python-jenkins',
     'python-mysqldb',
     'python-requests',
