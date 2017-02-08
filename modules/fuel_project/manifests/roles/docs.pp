@@ -280,15 +280,6 @@ class fuel_project::roles::docs (
     }
   }
 
-  file { "${www_root}/robots.txt" :
-    ensure  => 'present',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => template('fuel_project/fuel_docs/robots.txt.erb'),
-    require => File[$www_root],
-  }
-
   ::nginx::resource::vhost { $specs_hostname :
     server_name         => [$specs_hostname],
     access_log          => $nginx_access_log,
