@@ -6,6 +6,7 @@ classes:
   - '::fuel_project::jenkins::slave::iso_build'
   - '::fuel_project::jenkins::slave::package_build'
   - '::fuel_project::jenkins::slave::run_tests'
+  - '::fuel_project::jenkins::slave::gather_jobs_resources'
   - '::sudo'
   - '::sysctl::base'
 
