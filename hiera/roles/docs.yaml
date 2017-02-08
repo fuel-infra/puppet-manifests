@@ -82,3 +82,12 @@ fuel_project::roles::docs::ssl_key_content: |
 
 fuel_project::roles::docs::ssl_key_filename: '/etc/ssl/docs.key'
 fuel_project::roles::docs::www_root: '/var/www'
+
+fuel_project::roles::docs::restrict_location:
+ 'docs':
+    vhost: 'docs.test.local'
+    location: '~ ^\/docs\/'
+    location_allow:
+      - '10.0.0.1/32'
+    location_deny:
+      - 'all'

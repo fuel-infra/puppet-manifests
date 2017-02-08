@@ -291,4 +291,13 @@ class fuel_project::roles::docs (
       },
     },
   }
+
+  #method to restrict access to specified location
+  $restrict_location=hiera_hash('fuel_project::roles::docs::restrict_location')
+
+  create_resources(::nginx::resource::location, $restrict_location, {
+    ssl            => true,
+    ssl_only       => true,
+    www_root       => $www_root,
+  })
 }
