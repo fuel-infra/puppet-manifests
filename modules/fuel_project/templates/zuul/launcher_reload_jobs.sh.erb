@@ -1,0 +1,15 @@
+#!/bin/bash
+
+LAUNCHER_JOBDIR="${LAUNCHER_JOBDIR:-<%= launcher_jobdir %>}"
+PROJCONFIG_JOBDIR="${PROJCONFIG_JOBDIR:-/etc/project-config/jenkins/jobs}"
+
+if [ ! -d "${LAUNCHER_JOBDIR}" ]; then
+    mkdir "${LAUNCHER_JOBDIR}"
+fi
+
+if diff -ru "${LAUNCHER_JOBDIR}/" "${PROJCONFIG_JOBDIR}/"; then
+    echo "No changes"
+else
+    rsync -rlt --delete "${PROJCONFIG_JOBDIR}/" "${LAUNCHER_JOBDIR}/"
+    zuul-launcher reconfigure
+fi

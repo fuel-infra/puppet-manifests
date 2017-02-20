@@ -25,6 +25,7 @@ class fuel_project::zuul (
   $config_update_method                   = 'jenkins',
   $jenkins_job                            = 'zuul-maintainer',
   $jenkins_url                            = 'http://jenkins.server.name/',
+  $launcher_jobdir                        = hiera('zuul::launcher_jobs'),
   $project_config_cfg_dir                 = '/etc/project-config',
   $project_config_clone_ssh_key_file      = undef,
   $project_config_clone_ssh_key_file_path = '/var/lib/project-config-cloner/.ssh/id_rsa',
@@ -114,6 +115,12 @@ class fuel_project::zuul (
     mode    => '0755',
     content => template('fuel_project/zuul/zuul_apply_layout.sh.erb'),
   }
+
+  file { '/usr/local/bin/launcher_reload_jobs.sh':
+    mode    => '0755',
+    content => template('fuel_project/zuul/launcher_reload_jobs.sh.erb'),
+  }
+
   create_resources('cron', { "${update_cronjob_name}" => $update_cronjob_params }, {
     ensure      => 'absent',
     environment => 'PATH=/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin',
