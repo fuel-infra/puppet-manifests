@@ -1,0 +1,9 @@
+# whitelist IPs or require authentication
+satisfy any;
+<% @rw_addresses.each do |val| -%>
+allow <%= val %>;
+<% end -%>
+deny all;
+
+auth_basic "Registry realm";
+auth_basic_user_file "<%= @htpasswd_path %>";

@@ -1,6 +1,0 @@
-limit_except GET HEAD OPTIONS {
-<% @rw_addresses.each do |val| -%>
-  allow <%= val %>;
-<% end -%>
-  deny all;
-}
