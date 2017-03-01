@@ -54,7 +54,7 @@ class registry (
     $config_server = '/etc/docker/registry/config.yml',
     $expiration = 900,
     $htpasswd_path = '/etc/nginx/conf.d/registry.htpasswd',
-    $rw_addresses = [],
+    $rw_addresses = ['0.0.0.0/0'],
     $search_backend_port = 5802,
     $search_password = 'index',
     $search_port = 5002,

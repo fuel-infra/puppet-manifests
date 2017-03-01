@@ -139,9 +139,9 @@ registry::service_fqdn: "registry.test.local"
 # index: index
 # jenkins: bu7ORe6o
 registry::htpasswd_content: |
-  admin:$2y$05$ab6e4vb/.rR8R0nip0oro.VMrgq29Rl32WCEDE/fgHemeA22jARnq
-  index:$2y$05$SAHQikfd8Ku6WYf9Ok4Fz.m7MUVHWHIunEctOcahhpwWpl4rgyNx2
-  jenkins:$2y$05$XaoxJINyRxHkrmRkV9NVjuLBSLJ5EGwG16bpusObEDi8eD4pegCsy
+  admin:$apr1$2B9XmUWR$tN5.iPMFOtOYUUtxiDI6E/
+  index:$apr1$WsND7.SA$F.lw2ZNHJQOTcII2gZvRC1
+  jenkins:$apr1$2niYKGAB$Esb3a6PTDQdcoS75MBqVc1
 
 # firewall configuration
 fuel_project::apps::firewall::rules:

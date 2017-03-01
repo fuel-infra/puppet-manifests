@@ -1,5 +1,4 @@
-# whitelist IPs or require authentication
-satisfy any;
+# whitelist IPs and require authentication
 <% @rw_addresses.each do |val| -%>
 allow <%= val %>;
 <% end -%>
