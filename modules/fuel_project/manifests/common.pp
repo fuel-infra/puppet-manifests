@@ -163,7 +163,7 @@ class fuel_project::common (
   $root_password_hash = 'r00tme',
   $root_shell         = '/bin/bash',
   $ruby_version       = '',
-  $ssh_keys_group     = '',
+  $ssh_keys_groups    = [],
   $tls_cacertdir      = '',
   $tune2fs            = {},
 ) {
@@ -206,17 +206,9 @@ class fuel_project::common (
   }
   class { '::ntp' :}
   class { '::puppet::agent' :}
-  class { '::ssh::authorized_keys' :}
 
-  # if ssh_keys_group is provided - apply SSH keys group
-  if($ssh_keys_group) {
-    $keys = hiera_hash("common::infra::${ssh_keys_group}::ssh_keys", {})
-    create_resources(ssh_authorized_key,
-      $keys, {
-        ensure => present,
-        user => 'root'
-      }
-    )
+  if($ssh_keys_groups) {
+    ssh::key_group {$ssh_keys_groups :}
   }
 
   class { '::ssh::sshd' :
