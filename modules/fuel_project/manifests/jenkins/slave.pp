@@ -120,6 +120,7 @@ class fuel_project::jenkins::slave (
         'python-tox',
         'python-yaml',
         'sqlite3',
+        'jq'
       ]
     }
     'RedHat': {
