@@ -114,6 +114,7 @@ class fuel_project::jenkins::slave (
     'Debian': {
       $packages = [
         'dutop',
+        'lshw',
         'python-git',
         'python-pip',
         'python-seed-client',
