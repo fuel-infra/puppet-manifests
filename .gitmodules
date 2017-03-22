@@ -1,30 +1,30 @@
 [submodule "modules/display"]
 	path = modules/display
-	url = https://github.com/SergK/puppet-display
+	url = https://github.com/SergK/puppet-display.git
 [submodule "modules/glusterfs"]
 	path = modules/glusterfs
-	url = https://github.com/SergK/puppet-glusterfs
+	url = https://github.com/SergK/puppet-glusterfs.git
 [submodule "modules/sshuserconfig"]
 	path = modules/sshuserconfig
-	url = https://github.com/SergK/puppet-sshuserconfig
+	url = https://github.com/SergK/puppet-sshuserconfig.git
 [submodule "modules/znc"]
 	path = modules/znc
-	url = https://github.com/SergK/puppet-znc
+	url = https://github.com/SergK/puppet-znc.git
 [submodule "modules/yum"]
 	path = modules/yum
-	url = https://github.com/mescanef/puppet-yum
+	url = https://github.com/mescanef/puppet-yum.git
 [submodule "modules/bacula"]
 	path = modules/bacula
-	url = https://github.com/monester/puppet-bacula
+	url = https://github.com/monester/puppet-bacula.git
 [submodule "modules/libvirt"]
 	path = modules/libvirt
-	url = https://github.com/pjbrzozowski/puppet-libvirt
+	url = https://github.com/pjbrzozowski/puppet-libvirt.git
 [submodule "modules/bind"]
 	path = modules/bind
-	url = https://github.com/teran/puppet-bind
+	url = https://github.com/teran/puppet-bind.git
 [submodule "modules/rssh"]
 	path = modules/rssh
-	url = https://github.com/teran/puppet-rssh
+	url = https://github.com/teran/puppet-rssh.git
 [submodule "modules/supervisord"]
 	path = modules/supervisord
 	url = https://github.com/ajcrowe/puppet-supervisord.git
@@ -57,13 +57,13 @@
 	url = https://github.com/maestrodev/puppet-rvm.git
 [submodule "modules/apt"]
 	path = modules/apt
-	url = https://github.com/puppetlabs/puppetlabs-apt.git
+	url = https://github.com/fuel-infra/puppetlabs-apt.git
 [submodule "modules/concat"]
 	path = modules/concat
-	url = https://github.com/puppetlabs/puppetlabs-concat.git
+	url = https://github.com/fuel-infra/puppetlabs-concat.git
 [submodule "modules/firewall"]
 	path = modules/firewall
-	url = https://github.com/puppetlabs/puppetlabs-firewall.git
+	url = https://github.com/fuel-infra/puppetlabs-firewall.git
 [submodule "modules/java"]
 	path = modules/java
 	url = https://github.com/puppetlabs/puppetlabs-java.git
@@ -72,28 +72,28 @@
 	url = https://github.com/puppetlabs/puppetlabs-java_ks.git
 [submodule "modules/mongodb"]
 	path = modules/mongodb
-	url = https://github.com/puppetlabs/puppetlabs-mongodb.git
+	url = https://github.com/fuel-infra/puppetlabs-mongodb.git
 [submodule "modules/mysql"]
 	path = modules/mysql
-	url = https://github.com/puppetlabs/puppetlabs-mysql.git
+	url = https://github.com/fuel-infra/puppetlabs-mysql.git
 [submodule "modules/nodejs"]
 	path = modules/nodejs
 	url = https://github.com/voxpupuli/puppet-nodejs.git
 [submodule "modules/ntp"]
 	path = modules/ntp
-	url = https://github.com/puppetlabs/puppetlabs-ntp.git
+	url = https://github.com/fuel-infra/puppetlabs-ntp.git
 [submodule "modules/postgresql"]
 	path = modules/postgresql
-	url = https://github.com/puppetlabs/puppetlabs-postgresql.git
+	url = https://github.com/fuel-infra/puppetlabs-postgresql.git
 [submodule "modules/rsync"]
 	path = modules/rsync
-	url = https://github.com/puppetlabs/puppetlabs-rsync.git
+	url = https://github.com/fuel-infra/puppetlabs-rsync.git
 [submodule "modules/stdlib"]
 	path = modules/stdlib
-	url = https://github.com/puppetlabs/puppetlabs-stdlib.git
+	url = https://github.com/fuel-infra/puppetlabs-stdlib.git
 [submodule "modules/vcsrepo"]
 	path = modules/vcsrepo
-	url = https://github.com/puppetlabs/puppetlabs-vcsrepo.git
+	url = https://github.com/fuel-infra/puppetlabs-vcsrepo.git
 [submodule "modules/datacat"]
 	path = modules/datacat
 	url = https://github.com/richardc/puppet-datacat.git
@@ -156,10 +156,10 @@
 	url = https://review.fuel-infra.org/fuel-infra/puppet-os_client_config.git
 [submodule "modules/gearman"]
 	path = modules/gearman
-	url = https://github.com/saz/puppet-gearman
+	url = https://github.com/saz/puppet-gearman.git
 [submodule "modules/reboot"]
 	path = modules/reboot
 	url = https://github.com/puppetlabs/puppetlabs-reboot.git
 [submodule "modules/zookeeper"]
 	path = modules/zookeeper
-	url = https://github.com/deric/puppet-zookeeper
+	url = https://github.com/fuel-infra/puppet-zookeeper.git
