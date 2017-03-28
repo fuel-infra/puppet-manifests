@@ -456,4 +456,18 @@ class qa_reporting::application (
     ],
   }
 
+  cron { 'send incomplete job':
+    command => "/usr/bin/flock -n -x /var/lock/qareport-mail.lock /usr/bin/timeout -k10 1800 ${python_path} ${app_path}/manage.py --config production send_incomplete -m 10.0 2>&1 | logger -t qareporting-mail-send-incomplete",
+    user    => $app_user,
+    weekday => 'mon',
+    hour    => 10,
+    minute  => 00,
+    require => [
+      Package['python3-qa-reporting'],
+      User[$app_user],
+      File[$credential_file],
+      Exec['run npm build'],
+    ],
+  }
+
 }
