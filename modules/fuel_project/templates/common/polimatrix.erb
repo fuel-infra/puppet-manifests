@@ -1,0 +1,7 @@
+<% @_matrix.each do |key, hash| -%>
+  <% if /(^|.*)#{key}/.match(_node) then -%>
+    <% if hash.include?(role) -%>
+      allowed
+    <% end -%>
+  <% end -%>
+<% end -%>
