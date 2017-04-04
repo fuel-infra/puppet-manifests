@@ -3,10 +3,10 @@
 # This class deploys facter settings.
 #
 # Parameters:
-#   [*facts*] - defines the list of facts which are deployed on host
+#   [*custom_facts*] - defines the list of facts which are deployed on host
 #
 define puppet::facter (
-  $facts,
+  $custom_facts,
 ) {
   ensure_packages(['bash'])
 

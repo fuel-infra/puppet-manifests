@@ -51,6 +51,12 @@
 #
 #     Default: {}
 #
+#   [*custom_facts*] - Hash, sets up custom facts through hiera. Example:
+#     $custom_facts = {
+#       location => 'location_name',
+#       blah     => 'blah value',
+#     }
+#
 #   [*cronjobs*] - Hash, cron jobs definition
 #     $cronjobs = {
 #       'my_cool_cron_job' => {
@@ -60,12 +66,6 @@
 #     }
 #
 #     Default: {}
-#
-#   [*facts*] - Hash, sets up custom facts through hiera. Example:
-#     $facts = {
-#       location => 'location_name',
-#       blah     => 'blah value',
-#     }
 #
 #   [*files*] - Hash, file create options. Example:
 #     $files = {
@@ -169,7 +169,7 @@ class fuel_project::common (
 ) {
   $apparmor = hiera_hash('fuel_project::common::apparmor', {})
 
-  $facts = hiera_hash('fuel_project::common::facts', {
+  $custom_facts = hiera_hash('fuel_project::common::facts', {
     'location' => $::location,
     'role'     => $::role,
   })
@@ -231,7 +231,7 @@ class fuel_project::common (
   }
 
   ::puppet::facter { 'facts' :
-    facts => $facts,
+    custom_facts => $custom_facts,
   }
 
   # install apparmor if Debian family
