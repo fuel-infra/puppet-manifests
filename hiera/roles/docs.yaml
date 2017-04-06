@@ -83,11 +83,16 @@ fuel_project::roles::docs::ssl_key_content: |
 fuel_project::roles::docs::ssl_key_filename: '/etc/ssl/docs.key'
 fuel_project::roles::docs::www_root: '/var/www'
 
-fuel_project::roles::docs::restrict_location:
- 'docs':
-    vhost: 'docs.test.local'
-    location: '~ ^\/docs\/'
-    location_allow:
-      - '10.0.0.1/32'
-    location_deny:
-      - 'all'
+
+fuel_project::roles::docs::app_secret_key: 'secret_key'
+fuel_project::roles::docs::client_id: 'client_id'
+fuel_project::roles::docs::client_secret: 'client_secret'
+fuel_project::roles::docs::conf_mode: 'prod'
+fuel_project::roles::docs::debug: 'TRUE'
+fuel_project::roles::docs::run_host: '127.0.0.1'
+fuel_project::roles::docs::sqlalchemy_database_uri: '/var/lib/flask-auth/docs_auth.db'
+fuel_project::roles::docs::sqlalchemy_track_modification: 'TRUE'
+fuel_project::roles::docs::oauth2_provider_token_expires_in: 28800
+fuel_project::roles::docs::trusted_proxies:
+  - '127.0.0.1'
+fuel_project::roles::docs::uwsgi_chdir: '/usr/lib/python2.7/dist-packages/flask_auth/'

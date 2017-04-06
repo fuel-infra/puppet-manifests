@@ -1,0 +1,21 @@
+google_creds:
+     CLIENT_ID: '<%= @client_id %>'
+     CLIENT_SECRET: '<%= @client_secret %>'
+DevConfig:
+    DEBUG: <%= @debug %>
+    SQLALCHEMY_DATABASE_URI: <%= @sqlalchemy_database_uri %>
+    SQLALCHEMY_TRACK_MODIFICATIONS: <%= @sqlalchemy_track_modification %>
+    OAUTH2_PROVIDER_TOKEN_EXPIRES_IN: <%= @oauth2_provider_token_expires_in %>
+
+ProdConfig:
+    DEBUG: <%= @debug %>
+    SQLALCHEMY_DATABASE_URI: <%= @sqlalchemy_database_uri %>
+    SQLALCHEMY_TRACK_MODIFICATIONS: <%= @sqlalchemy_track_modification %>
+    OAUTH2_PROVIDER_TOKEN_EXPIRES_IN: <%= @oauth2_provider_token_expires_in %>
+
+
+TRUSTED_PROXIES: <%= @trusted_proxies %>
+
+RUN_HOST: '<%= @run_host %>'
+CONF_MODE: '<%= @conf_mode %>'
+APP_SECRET_KEY: '<%= @app_secret_key %>'

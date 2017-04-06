@@ -3,34 +3,61 @@
 # This class deploys docs role.
 #
 # Parameters:
+#   [*app_secret_key*] - application's secret key for uwsgi application
+#   [*client_id*] - Google's crendetials client id for the application
+#   [*client_secret*] - Google's crendetials client secret for the application
+#   [*conf_mode*] - mode to run application (Prod or Dev)
+#   [*debug*] - enable or disable debug mode for application
 #   [*community_hostname*] - community service hostname
 #   [*community_ssl_cert_content*] - community SSL certificate contents
 #   [*community_ssl_cert_filename*] - community SSL certificate path
 #   [*community_ssl_key_content*] - community SSL key contents
 #   [*community_ssl_key_filename*] - community SSL key path
+#   [*config_file*] - application's config file
+#   [*config_file_path*] - directory to store application's config file
+#   [*config_file_path_template*] - path to template for applicaton config file
 #   [*docs_user*] - user to install docs
 #   [*fuel_version*] - fuel version
 #   [*hostname*] - service hostname
+#   [*logdir*] - directory to collect application's logs
 #   [*nginx_access_log*] - access log
 #   [*nginx_error_log*] - error log
 #   [*nginx_log_format*] - log format
 #   [*specs_hostname*] - specs service hostname
+#   [*sqlalchemy_database_uri*] - database uri
+#   [*sqlalchemy_track_modification*] - track modifications of objects and emit signals
 #   [*ssh_auth_key*] - SSH authorized key
 #   [*ssl_cert_content*] - SSL certificate contents
 #   [*ssl_cert_filename*] - SSL certificate file path
 #   [*ssl_key_content*] - SSL key contents
 #   [*ssl_key_filename*] - SSL key file path
+#   [*trusted_proxies*] - list of networks to allow connections to a private part
+#   [*uwsgi_chdir*] - path for uwsgi to search initial module for application
 #   [*www_root*] - www root path
 #
 class fuel_project::roles::docs (
+  $app_secret_key,
+  $client_id,
+  $client_secret,
+  $conf_mode,
+  $debug,
+  $oauth2_provider_token_expires_in,
+  $run_host,
+  $sqlalchemy_database_uri,
+  $sqlalchemy_track_modification,
+  $trusted_proxies,
   $community_hostname          = 'docs.fuel-infra.org',
   $community_ssl_cert_content  = '',
   $community_ssl_cert_filename = '/etc/ssl/community-docs.crt',
   $community_ssl_key_content   = '',
   $community_ssl_key_filename  = '/etc/ssl/community-docs.key',
+  $config_file                 = '/etc/flask-auth/config.yml',
+  $config_file_path            = '/etc/flask-auth/',
+  $config_file_path_template   = 'fuel_project/roles/docs/config.yml.erb',
   $docs_user                   = 'docs',
   $fuel_version                = '6.0',
   $hostname                    = 'docs.mirantis.com',
+  $logdir                      = '/var/log/flask_auth',
   $nginx_access_log            = '/var/log/nginx/access.log',
   $nginx_error_log             = '/var/log/nginx/error.log',
   $nginx_log_format            = undef,
@@ -40,6 +67,7 @@ class fuel_project::roles::docs (
   $ssl_cert_filename           = '/etc/ssl/docs.crt',
   $ssl_key_content             = '',
   $ssl_key_filename            = '/etc/ssl/docs.key',
+  $uwsgi_chdir                 = '/usr/lib/python2.7/dist-packages/flask_auth/',
   $www_root                    = '/var/www',
 ) {
   if ( ! defined(Class['::fuel_project::nginx']) ) {
@@ -52,7 +80,12 @@ class fuel_project::roles::docs (
     managehome => true,
   }
 
-  ensure_packages('error-pages')
+  ensure_packages([
+    'python-ipaddress',
+    'python-flask-auth',
+    ],
+    {'ensure' => 'latest'}
+  )
 
   if ($ssl_cert_content and $ssl_key_content) {
     file { $ssl_cert_filename :
@@ -108,6 +141,7 @@ class fuel_project::roles::docs (
       owner   => 'root',
       content => $community_ssl_key_content,
     }
+
     Nginx::Resource::Vhost <| title == $community_hostname |> {
       ssl         => true,
       ssl_cert    => $community_ssl_cert_filename,
@@ -149,8 +183,13 @@ class fuel_project::roles::docs (
     access_log          => $nginx_access_log,
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
+    uwsgi               => '127.0.0.1:6776',
     location_cfg_append => {
-      'rewrite' => {
+      uwsgi_connect_timeout  => '3m',
+      uwsgi_read_timeout     => '3m',
+      uwsgi_send_timeout     => '3m',
+      uwsgi_intercept_errors => 'on',
+      'rewrite'              => {
         '^/$'                => '/fuel-dev',
         '^/express/?$'       => '/openstack/express/latest',
         '^/(express/.+)'     => '/openstack/$1',
@@ -231,6 +270,7 @@ class fuel_project::roles::docs (
     access_log          => $nginx_access_log,
     error_log           => $nginx_error_log,
     format_log          => $nginx_log_format,
+    uwsgi               => '127.0.0.1:6776',
     location_cfg_append => {
       'rewrite' => {
         '^/$'                                           => "/mcp",
@@ -244,6 +284,11 @@ class fuel_project::roles::docs (
         '^/openstack/fuel/fuel-master/operations?(.*)$' => '/openstack/fuel/fuel-master/index.html permanent',
       },
     },
+    require             => [
+      File[$ssl_cert_filename],
+      File[$ssl_key_filename],
+      Package['python-flask-auth'],
+    ],
     vhost_cfg_append    => {
       'error_page 403'         => '/mirantis/403.html',
       'error_page 404'         => '/mirantis/404.html',
@@ -259,7 +304,9 @@ class fuel_project::roles::docs (
     ssl      => true,
     ssl_only => true,
     www_root => '/usr/share/error_pages',
-    require  => Package['error-pages'],
+    require  => [
+      Package['error-pages'],
+    ],
   }
 
   if (! defined(File[$www_root])) {
@@ -290,12 +337,85 @@ class fuel_project::roles::docs (
     },
   }
 
-  #method to restrict access to specified location
-  $restrict_location=hiera_hash('fuel_project::roles::docs::restrict_location')
+  # -- configure uwsgi application --
 
-  create_resources(::nginx::resource::location, $restrict_location, {
-    ssl            => true,
-    ssl_only       => true,
-    www_root       => $www_root,
-  })
+  # create directory to store uwsgi logs
+  file { $logdir :
+    ensure  => 'directory',
+    owner   => $docs_user,
+    group   => $docs_user,
+    mode    => '0700',
+    require => [
+        User[$docs_user],
+    ]
+  }
+
+  # create directory to store the application's configuration files
+  file { $config_file_path :
+    ensure  => 'directory',
+    require => [
+        User[$docs_user],
+        Package['python-flask-auth']
+    ]
+  }
+
+  # create application's config file
+  file { $config_file :
+    ensure  => 'file',
+    owner   => $docs_user,
+    group   => $docs_user,
+    mode    => '0700',
+    content => template($config_file_path_template),
+    require => [
+        Package['python-flask-auth'],
+        File[$config_file_path],
+        User[$docs_user],
+    ]
+  }
+
+  # create directory to store application's lock files
+  file { '/var/lock/flask-auth' :
+    ensure  => 'directory',
+    owner   => $docs_user,
+    group   => $docs_user,
+    mode    => '0644',
+    require => [
+        User[$docs_user],
+    ]
+  }
+
+  # create directory to store database for the application
+  file { '/var/lib/flask-auth' :
+    ensure  => 'directory',
+    owner   => $docs_user,
+    group   => $docs_user,
+    mode    => '0644',
+    require => [
+        User[$docs_user],
+    ]
+  }
+
+
+  uwsgi::application { 'flask-auth' :
+    plugins   => 'python',
+    module    => 'run',
+    callable  => 'app',
+    master    => true,
+    lazy_apps => true,
+    workers   => '2',
+    socket    => '127.0.0.1:6776',
+    vacuum    => true,
+    uid       => $docs_user,
+    gid       => $docs_user,
+    chdir     => $uwsgi_chdir,
+    require   => [
+      File[$logdir],
+      Package['python-flask-auth'],
+      User[$docs_user],
+    ],
+    subscribe => [
+      Package['python-flask-auth'],
+    ]
+  }
+
 }
