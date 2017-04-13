@@ -25,7 +25,7 @@ class fuel_project::zuul (
   $config_update_method                   = 'jenkins',
   $jenkins_job                            = 'zuul-maintainer',
   $jenkins_url                            = 'http://jenkins.server.name/',
-  $launcher_jobdir                        = hiera('zuul::launcher_jobs'),
+  $launcher_jobdir                        = hiera('zuul::launcher_jobs', undef),
   $project_config_cfg_dir                 = '/etc/project-config',
   $project_config_clone_ssh_key_file      = undef,
   $project_config_clone_ssh_key_file_path = '/var/lib/project-config-cloner/.ssh/id_rsa',
