@@ -309,7 +309,19 @@ class fuel_project::common (
     default: { }
   }
 
-  # Logrotate items
+  # logrotate defaults
+  class { '::logrotate':
+    ensure => 'latest',
+    config => {
+      create       => true,
+      rotate       => 16,
+      rotate_every => 'week',
+      su_group     => 'syslog',
+      su_user      => 'root',
+    }
+  }
+
+  # logrotate items
   create_resources('::logrotate::rule', $logrotate_rules)
 
   zabbix::item { 'software-zabbix-check' :

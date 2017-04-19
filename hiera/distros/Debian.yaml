@@ -66,31 +66,3 @@ apt::sources:
     include_src: false
     include_deb: true
 
-# fix logrotate zipping problems
-logrotate::rules:
-  upstart:
-    path: '/var/log/upstart/*.log'
-    rotate_every: 'day'
-    rotate: '7'
-    missingok: true
-    compress: true
-    ifempty: false
-    create: false
-    delaycompress: true
-  nginx:
-    path: '/var/log/nginx/*.log'
-    create: true
-    create_mode: '0644'
-    create_owner: 'www-data'
-    create_group: 'adm'
-    rotate_every: 'day'
-    rotate: '30'
-    missingok: true
-    compress: true
-    ifempty: false
-    delaycompress: false
-    sharedscripts: true
-    prerotate: >
-      if [ -d /etc/logrotate.d/httpd-prerotate ]; then run-parts /etc/logrotate.d/httpd-prerotate; fi
-    postrotate: >
-      invoke-rc.d nginx rotate >/dev/null 2>&1
