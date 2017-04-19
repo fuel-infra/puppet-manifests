@@ -173,52 +173,86 @@ landing_page::updater::config: '/etc/release-updater.yaml'
 landing_page::updater::token: 'b3ccf1131c697f26be216753ddac28ca19f05035fbe914968ee7b7c32e274c94c58b3b266e83967093fc52e0527db86e7e92b9b51683b082c08b90c1af552029'
 
 # DevOps keys added everywhere
-ssh::authorized_keys::keys:
+common::infra::devops_team::ssh_keys:
   'devops::anikitin@mirantis.com':
+    users:
+      - 'root'
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDbxNYg5JL0wQ8pSY3PuvQPtoPb37lC3qoCWkdTIeQldH57u5L3TEV7K4WxghNiqdKgmY4cvKmo2YWm3mBGvTvBj3kLJqkjIy+ftncqDgRR2nhZAMvEaQbP4k6JmgGGwIwdv/wszcH6dEuf+BEGTtaWytjUNTO8fmuGQV0o5GgKi2C8Nj5zkzXrIcL/Gn1RITVv6n9MNIQ8OpN5FfIpO2v8OXKMc7MqB4pr3ZOnnjUUvD5LdFcEUf2Za46O6uvJLCkle4gzIHQGx51+1XnknscMGWR9pcmtb6Za4DcpJgiROR9Qvq1X0ZD1f3frE2IMTfPnZX9OU3l+AqyXvp5oztV5'
   'devops::pbrzozowski@mirantis.com':
+    users:
+      - 'root'
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDSxBnEt6mEI0plQXZYuWhlYIFq4vLg6Xuo8Yi+A+6KcLNZmGV97Jp9voFj+CQnSm/KWwdT2qXgrK6RTjoazz6Pz1t/u7793MhpqAxd3Ezg6+B5NGD6z8g8mkxo+C2w8OtKO85+REl+gdlY5EeMp5yCIcewhjzgBT48vo/sglu7ddCUIAoATNomwgjVeaHoRcc1knXYRnNXzYhpWqp/s12avjhm0VzXx+t0aY7YiiGjl7MORlCbkBTYY0SlBz/tMs5JJPb7YZG5K1Zhzk2Zm4ZRoSVcYCtCSfJSli83YmzMzwSbSXiujHxek5nx6LH+TCVVTJvl8VQJ3zKuTgcLYda/'
 
 # Infra CI Engineers keys
 common::infra::ci_team::ssh_keys:
   'ci::aevseev@mirantis.com':
+    users:
+      - 'root'
+      - 'jenkins'
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC6K5hhmmt+EkZV2JoMlK2RcD2g9Zh7sBLTdRzPs4U9KrNdiI4Qu/m1SLLH8KKyZM5Kd15OdCIiwRxP5R/sTrWCjKrTrwHECUNuJS/AzZTRhP2a0Pxmj/5gjRgAaSdUw22tYvxUwWLjXSL44qUDtJIHtfNWpxhDxIIE/HzmIm+JV+aiaWS5klHECZS/c5sTlGboXrmlRUDBkEEHKCvYXm6xX8eGr9jT9tz4aTK6V/OQoxVW6wuuNDKH+P7+F3qY0KFaTnwKI0dSxfNIslps0AzHL3iDi8JqRzr3K9SJMjVPN0oSDWNgaF/YBZdmVDQS3rOaaQCA2f87S+XR7MLJAqoX'
   'ci::dburmistrov@mirantis.com':
+    users:
+      - 'root'
+      - 'jenkins'
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDPKldN0BL6C/pmjkKyaSUw9OTUQAumWLCgNPyLVGZIuYPyFs9GqvKgHVm0QChm1OLhnQuA1wxGW5piBtqaDCTyLbKb/ANR3nhO1rqX5LTwZS2W2I0ImP47HUpnxqsBl15/y9hY2JDHZ7qrd7zNqCD+uCkf9l9qA9BmN1aMSKm07fqaaUfhnl3AocxsPX4X4eHfzy7hPJdzrHEcHbGoLLEd8ahJLkHKieWF1lAI++fIhETPF41+ZbH7MBBG4qw/UhhYAgLP3YAEWwvm/J3DtRqGkpSvH2U21hmAlgJHwxtoCD9Q1jKpH5+BDTvqJIXu0K7Gcl00xbeNYyHrwTVsldFX'
   'ci::dkaigarodtsev@mirantis.com':
+    users:
+      - 'root'
+      - 'jenkins'
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDSz9eH08GDUOSEDReJAIdjDCoYaoTwg1SSzYNwPRO/evJBeqYwRvZmxzITKq+1qy4jXnpa3ZpuBdaUebqKri2VtvMGmBrWtP8Ojbg3kNPjKOfvrW4cCyJE0yrnW03TULnRgrnf4/WXLK0dnHxL39AmlVjQTVS4pbx73XjyPoVjJbk4PXq37F5cLyyLj4aeWmCcPWn7MLsEC4RUkDwHy3DsDNdgKOlUSHmmOfVy9GBwVbXwVyYbq732Qm0Qqf/2zlJi84LgXOH2irv5HRTMDQ2Wey5Amcl7VpK8OMvtN4R8Sb7c3mgsmM/b/h+gefl0Y/vQfsSSi8GCPhmBoNT4FBgZ'
-  'ci::iremizov@mirantis.com':
-    type: ssh-rsa
-    key: 'AAAAB3NzaC1yc2EAAAADAQABAAACAQCux0JF36FL0Sxql/xQF5EtJUFfH2ZHLb6v+B+ezkxMRIUS7q9m5/gREafAFoX+Ak9Mv7LqA1gXb1jGTrpzHsnuL1M1d8NPZJ/oDStgV97pBs1UqDrkZnObtnySanDNAAre90cjvEY/ygrBQjgtHaX0443qwFMbLlG/KjTWjyk6NQobVMx5+eW1m8qVRDm7tyy6qNhNx8k5k27p+USRPX6V4Ig1vBo7XBtL8I4hALnNTJ4VPiij7mUG2kdKw5OnIeolNkhnc+gCXbW+ez6/bYUlqFVUMKgKujYp0gBd4M3plMRBocN8Paf+FI8tEokr1RkBBonulUdQgtioHj4mp8eQtjQPklYtLp/CYWGl6yioGL/WF7wYxXzMRU+YlR7Nkkikfz0yYNBY0pS4U8mFxw1RprPw8fUcjB+XRt3CwGrSCkfnBkPmehVfWLlGjOQ3Y45otFtPSZ5oFW6ep6XgHGvBWxXLiWmnUj1kJrZmbPFPlwIKSAuG6GeHyuDRVVDu5+k894i/X1PVrGETedznkwg7KRrYOiC2sRxbqUCxuGhykYKQXl3e6w+ZBBOXYgF/TvCFqzCK55P4B19vagx3zt8iikzFM1Wd/C6jWmZZp7dsSkMo3kk/yxLGieGp2MIDaiWK8lbtjmwDrYYFQnkK6+hwmabyRiSopkDRjN2hcFl+qQ=='
   'ci::rvyalov@mirantis.com':
+    users:
+      - 'root'
+      - 'jenkins'
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDZd0+4up0jMXgKRsqGDimf39CcTSZKQjGcJ1pH8vsjsWo1stG1hS7Z5dTF8HJFh31/qV4BnvofRAqmZzYCgU11WLM9LibY2G8a3bMtTgGkS92v6NNgNKUxyAEalnjKqwULR1kpxBdsCGFZ9to2+Do4T1r2pktiNhfXpgQ8KPDvune1fU2p9MHbqPucdx4sS5qhzTNInqRSwL0yxB7SHoGN57BFOOlirHZGj/ikqsdeI57jyFZxQm3vRonkZA6l0vi1AN30AR/5mR3Dj98vh6vi99TGa8O3gY/0OAdv+mjjyNl6rFFLA33s3NsocthiAGvRjZSH9u/1ejfBZyN5rirX'
   'ci::sotpuschennikov@mirantis.com':
+    users:
+      - 'root'
+      - 'jenkins'
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDO/nNs4MF5ZOCooLxF+zrxVmuJa9URzAqIQG5eZkhWvSAnrYREN15BN6dlcixA+Ro4YsHY6iSHzsaanr8onNu89yZdCkHIqLZ8+DcBefpoVXcsLZzeXwNNqr9sUjHEJCTesI5dJcEe/222LjwzAdTW1Xv/o3mgVAwt+4XsQ2IPAlxl3LfJOlCQdC/0sL5FMFX6LwMonLBss3B/J45atXgPL1Dx9WKTP0QrJHaX+vh+Xj2PK9yXcB2hJhFP0IULmUqGkYgDw/mh2DiHSiCQUPGZDo49MIw4WqEwqpQKcJGjD0Ihy2pjzwI9ZUzCNWe+bUcqDdl/9SH4YsNbfaK4Te6H'
-
-# MCP team keys
-common::infra::mcp_team::ssh_keys:
-  'mcp::mmatuszkowiak@mirantis.com':
-    type: ssh-rsa
-    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC63QhWE96IF/SRCFWyKJyzOyprc7WlD6RdCClw7BxKum7BDlXfV+fhQupWUdsPVnOaCMwndjG+ZrZXg5okGui4GuL7nucUFYfUhZh252IBM8TM7BkuVd7fmbZ6OD2/4uGTOJRBhO+Jrol9Z2450vaiGZwWrbvWHNPtI+bhx3/4WWxjgZ59NGll220c1cTjGQamvNgtWBWNnsEilmZxinl501EgvDPJ8uewCAS3YA3T9ut11RRJiWKfoMr4H9sFeUTiu1j6ByYlINXMJTNadPzEcV6EW06k1K9oNfJ42F6gYFfjBQK5db83iNTkyA/j4TjfqJ9tlg2cWTp+x2vy8YNV'
 
 # CCP team keys
 common::infra::ccp_team::ssh_keys:
   'ccp::azarzycki@mirantis.com':
+    users:
+      - 'root'
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDy3VXU8rxzIvbIVZ/eSoN0QPixD70pkgN3RJzivt80h90tLlAY5bF2n6NX1aFIhmy5p2B58y3lplftk8pEUwYKUwM+z8IY6k9HKoKLxjQay4i4ldgqPvNXK4rBVYI4B9v7kJRYSgNpD4HeKvLVrhONVfZtvl65g2o5DgDp8la5hqcyj0ygdZ+7DLeNxKpWuKBunFtNno+QmIZrBpLLpJu5HV5XVE4EIpLd8ItdYTSNHJi0bVEA+gJtZB2XDgiCkcVWY1LYckEHYggIv0obFlIFHRnheCmLGZfhTb4DcXp7g/LOIL9H/bR3J7875mFwOjasGPj9/BH6YSMXqF1ayXVv'
   'ccp::mzawadzki@mirantis.com':
+    users:
+      - 'root'
     type: ssh-rsa
     key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC/kfL2+20KFXWrElIx9YXOEkDm80Xdk3bCnPH2p6y8yK+1tA58bo4PaVAGzwOzymmwScRm45iRVJ2L9aEAL5aL9mwt/WWDqFBNkGHqadsiHpBfgZIT74TOdUANEXadW1xU7ZeqOee9WzTb7ESO6qzdViMFa0ck1sImcIn8r/eQgDxd0V3HUg3jsWxpstYGlPpgXOxMi9eHSGI5VG/ieyJp5hxK7i3zKVQd9pgXuNKEvYRcYclmuqUe3sugB3XG74CCDay4QDV+/D6oRgtappO8s5k7rg2zZ84jOsGq4cwKm05jWekDB4uevzpjanPVINMmKMKpNHp9JuUqUkSqnXzh'
-  'ccp::pbogdan@mirantis.com':
+
+# CI systems keys
+common::infra::ci_systems::ssh_keys:
+  'jenkins@product-ci.infra.mirantis.net':
+    users:
+      - 'jenkins'
     type: ssh-rsa
-    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDox6uCmBukMFVlsg1xnNHHsTLOlFTQrsDyGcC3jNgaTi0fi/fzdIqhyRieRhSiryiMmsXSS/Agp6yT1w6JVxKWToEHdSEvns2wyF9W0+GIno+eSnhhBRgUkk+g7/b3pN4X0DSZ0JuRsKplBLLbxQO+ag3xBaXNg2J82gry0Q4+Y0pCJ/3GLqLdGcRwRkoxe0/4p1opo8BYzTvFsW2GI8jZooX46kvg3VCZwDJCAOdsnQPUpNV/KiPlzuoV3V3Urmg8UxG0U+W41EvcXA/YkEmhlk14vpSlI/V0CyaPodt70ZDwqj/oT7QqpVWDhgh06OMagWMc0WJD00mvaDmb31c3'
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDbHoSvkGRNAoC2v0rcnp5cxwJ4fpGks0BSD1pkQHQebLHXOEgpGpcq60KlZgNlF8LyINBaUOproiXqLQNsfH4v0H73knFuNebA1T1BZruNCqxNM38x1dum26GCLIBsuYtJ44V7/DRUu2QXpxPfQgLKmLNBrkyZkPKDYL2+x9l6Uqic6DsTe49C1kiwAmYYDZY4akPC0Whhq/HmGd9BxeuiFGxbhC4fH/K32xbNdbz4yJtlMOVl7ZHWXfIxeW2TKNcAiSidbFXOuZ3JtRjaTD8qDWSk8aCMBUAUOSxMD0Eq6nRq8gwAQ6hGTTa8DCVk4C1JF6c4obX5p0X/t4me6DgV'
+  'jenkins@jenkins-product.srt.mirantis.net':
+    users:
+      - 'jenkins'
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC8W2SJaXlZAUje/IMWW1dzcsdPQZy38zCWfoGQZlLs6F8YTTYhIblONNNx2WDUrb/kFHcrQCyW5BsW62i98oqaDWEb73/NzgaWEbEz7EING7nkbC1+pt7caxTqR/Z+DThU57FH9Zavpt2+4h0nYOht+zawpasTLZI5zab5g4YxwP83m70R/5FI9hNDBau06V4Id8y/6gyxhHiz5eHUw7juvstLlgi2st6hrgXddFduGsvk5n0UH9nnPxf6fjOltv6i6UnzItxoyMOEYchhjDt/6be9+YVnM/Pgl29HsO5/flQlbeje8+qIjKv6elDvRITgN0OoAjYPA40rzaUCse1P'
+  'jenkins@custom-ci.infra.mirantis.net':
+    users:
+      - 'jenkins'
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDXRymLGX3ecz3WmuqF0ThiwyxKzmaPszKykiM4jFDpCO/3Yi8Yl3ax8FxVaS/EnWLvCti5RVwW90A6Hlu3jEOFQAJ3aSxmLcFq9cnCZda+WUHou2wo1K9QK9/tUD5KMdWAwQJevT3UvyscCeD8LIHzd/KEt5g94G1LqEmFbd3d9bVIvXemY20YJj+C+UOdP4F0sU/WYmCwRUwXPxQlYRH6MphmlNQvZcFL+iPQRfERiToyOfbMMnzZHWlLQWdbatMo+vXaN2Ht5veLev16nozZ4Ab1Fh6BYdyluGnB6BXCgb2EwAtonPr2egExEv7aUtlvhhiiLCMDdQtry7lWJTwP'
+  'jenkins@packaging-ci.infra.mirantis.net':
+    users:
+      - 'jenkins'
+    type: ssh-rsa
+    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDrzRwMdPEzyDSrvbgW2cbX2/eh3/pnKa4sxcYkJ/luF66l/MkP4Z1nLzB8K6oR/Eq0s71kH3DFHhCYLK5pXLxC0FHeXhcOx36e/6qokkZf7fLK4+nmTLcagEY5e4rTNOV3YtdLTaeyS7h+hDw2ugHgWNUku/ZLQMnM2x+Z1csmKWLk3iX/TZ0tGLrgrE677ZkKzzHtTY0wiVmUkxx1oNvlTQXfsQ/yTsI7Dh0V/FeN65w5DhYD8oOpOYKrvAl/8PRWnyuKpm1wTTEK2G5/NhKikCZF4Rh3EEzG/de3jtBs4BKthJdt235DQ4LmmwDcLgIAj8hbGdA55e74xgQj2mgX'
 
 system::root_email: 'root@example.com'
 system::mta_local_only: true

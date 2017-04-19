@@ -27,23 +27,13 @@ fuel_project::common::known_hosts:
      'review.openstack.org':
        port: 29418
 fuel_project::common::ldap: true
-fuel_project::common::ssh_keys_group: 'ci_team'
+fuel_project::common::ssh_keys_groups:
+  - 'ci_systems'
+  - 'ci_team'
+  - 'devops_team'
 
 # jenkins slave configuration
 fuel_project::jenkins::slave::http_share_iso: true
-jenkins::slave::authorized_keys:
-  'jenkins@product-ci.infra.mirantis.net':
-    type: ssh-rsa
-    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDbHoSvkGRNAoC2v0rcnp5cxwJ4fpGks0BSD1pkQHQebLHXOEgpGpcq60KlZgNlF8LyINBaUOproiXqLQNsfH4v0H73knFuNebA1T1BZruNCqxNM38x1dum26GCLIBsuYtJ44V7/DRUu2QXpxPfQgLKmLNBrkyZkPKDYL2+x9l6Uqic6DsTe49C1kiwAmYYDZY4akPC0Whhq/HmGd9BxeuiFGxbhC4fH/K32xbNdbz4yJtlMOVl7ZHWXfIxeW2TKNcAiSidbFXOuZ3JtRjaTD8qDWSk8aCMBUAUOSxMD0Eq6nRq8gwAQ6hGTTa8DCVk4C1JF6c4obX5p0X/t4me6DgV'
-  'jenkins@jenkins-product.srt.mirantis.net':
-    type: ssh-rsa
-    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC8W2SJaXlZAUje/IMWW1dzcsdPQZy38zCWfoGQZlLs6F8YTTYhIblONNNx2WDUrb/kFHcrQCyW5BsW62i98oqaDWEb73/NzgaWEbEz7EING7nkbC1+pt7caxTqR/Z+DThU57FH9Zavpt2+4h0nYOht+zawpasTLZI5zab5g4YxwP83m70R/5FI9hNDBau06V4Id8y/6gyxhHiz5eHUw7juvstLlgi2st6hrgXddFduGsvk5n0UH9nnPxf6fjOltv6i6UnzItxoyMOEYchhjDt/6be9+YVnM/Pgl29HsO5/flQlbeje8+qIjKv6elDvRITgN0OoAjYPA40rzaUCse1P'
-  'jenkins@custom-ci.infra.mirantis.net':
-    type: ssh-rsa
-    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDXRymLGX3ecz3WmuqF0ThiwyxKzmaPszKykiM4jFDpCO/3Yi8Yl3ax8FxVaS/EnWLvCti5RVwW90A6Hlu3jEOFQAJ3aSxmLcFq9cnCZda+WUHou2wo1K9QK9/tUD5KMdWAwQJevT3UvyscCeD8LIHzd/KEt5g94G1LqEmFbd3d9bVIvXemY20YJj+C+UOdP4F0sU/WYmCwRUwXPxQlYRH6MphmlNQvZcFL+iPQRfERiToyOfbMMnzZHWlLQWdbatMo+vXaN2Ht5veLev16nozZ4Ab1Fh6BYdyluGnB6BXCgb2EwAtonPr2egExEv7aUtlvhhiiLCMDdQtry7lWJTwP'
-  'jenkins@packaging-ci.infra.mirantis.net':
-    type: ssh-rsa
-    key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDrzRwMdPEzyDSrvbgW2cbX2/eh3/pnKa4sxcYkJ/luF66l/MkP4Z1nLzB8K6oR/Eq0s71kH3DFHhCYLK5pXLxC0FHeXhcOx36e/6qokkZf7fLK4+nmTLcagEY5e4rTNOV3YtdLTaeyS7h+hDw2ugHgWNUku/ZLQMnM2x+Z1csmKWLk3iX/TZ0tGLrgrE677ZkKzzHtTY0wiVmUkxx1oNvlTQXfsQ/yTsI7Dh0V/FeN65w5DhYD8oOpOYKrvAl/8PRWnyuKpm1wTTEK2G5/NhKikCZF4Rh3EEzG/de3jtBs4BKthJdt235DQ4LmmwDcLgIAj8hbGdA55e74xgQj2mgX'
 
 # sudo configuration
 sudo::configs:
