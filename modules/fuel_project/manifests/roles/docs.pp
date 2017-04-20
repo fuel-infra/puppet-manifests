@@ -14,7 +14,6 @@
 #   [*nginx_access_log*] - access log
 #   [*nginx_error_log*] - error log
 #   [*nginx_log_format*] - log format
-#   [*redirect_root_to*] - redirect root to
 #   [*specs_hostname*] - specs service hostname
 #   [*ssh_auth_key*] - SSH authorized key
 #   [*ssl_cert_content*] - SSL certificate contents
@@ -35,7 +34,6 @@ class fuel_project::roles::docs (
   $nginx_access_log            = '/var/log/nginx/access.log',
   $nginx_error_log             = '/var/log/nginx/error.log',
   $nginx_log_format            = undef,
-  $redirect_root_to            = 'http://www.mirantis.com/openstack-documentation/',
   $specs_hostname              = 'specs.fuel-infra.org',
   $ssh_auth_key                = undef,
   $ssl_cert_content            = '',
@@ -235,7 +233,6 @@ class fuel_project::roles::docs (
     format_log          => $nginx_log_format,
     location_cfg_append => {
       'rewrite' => {
-        '^/$'                                           => $redirect_root_to,
         '^/fuel-dev/?(.*)$'                             => "http://${community_hostname}/fuel-dev/\$1",
         '^/express/?$'                                  => '/openstack/express/latest',
         '^/(express/.+)'                                => '/openstack/$1',
