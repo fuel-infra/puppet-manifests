@@ -15,8 +15,8 @@ define ssh::key_group::pair (
   # create atomic parts
   create_resources(ssh::key_group::atom,
     $_pairs, {
-      type => $type,
-      key => $key,
+      'type' => $type,
+      key    => $key,
     }
   )
 }
