@@ -25,7 +25,7 @@ define ssh::key_group::atom (
   }
 
   ## clear known_hosts file before adding new keys
-  File["${home}/.ssh/authorized_keys"] -> Ssh_authorized_key <| tag == 'key_group_atomic' |>
+  File["purge-${user}-authorized_keys"] -> Ssh_authorized_key <| tag == 'key_group_atomic' |>
 
   # finally create authorized_key entry
   ssh_authorized_key { $name:
