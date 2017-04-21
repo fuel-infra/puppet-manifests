@@ -233,6 +233,7 @@ class fuel_project::roles::docs (
     format_log          => $nginx_log_format,
     location_cfg_append => {
       'rewrite' => {
+        '^/$'                                           => "/mcp",
         '^/fuel-dev/?(.*)$'                             => "http://${community_hostname}/fuel-dev/\$1",
         '^/express/?$'                                  => '/openstack/express/latest',
         '^/(express/.+)'                                => '/openstack/$1',
