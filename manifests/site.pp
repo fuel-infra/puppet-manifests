@@ -36,11 +36,13 @@ file { '/var/lib/puppet/gitrevision.txt' :
 # Default
 node default {
   # policy matrix filtering
-  $_node = $trusted['certname']
-  $_matrix = hiera('polimatrix', {})
-  $_allowed = template('fuel_project/common/polimatrix.erb')
-  if $_allowed !~ /allowed/ {
-    fail('This host is not allowed to get this role!')
+  if $trusted {
+    $_node = $trusted['certname']
+    $_matrix = hiera('polimatrix', {})
+    $_allowed = template('fuel_project/common/polimatrix.erb')
+    if $_allowed !~ /allowed/ {
+      fail('This host is not allowed to get this role!')
+    }
   }
 
   $classes = hiera('classes', '')
