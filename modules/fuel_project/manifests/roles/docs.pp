@@ -413,9 +413,6 @@ class fuel_project::roles::docs (
       Package['python-flask-auth'],
       User[$docs_user],
     ],
-    subscribe => [
-      Package['python-flask-auth'],
-    ]
   }
 
 }
