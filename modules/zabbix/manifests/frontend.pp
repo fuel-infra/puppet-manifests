@@ -158,7 +158,7 @@ class zabbix::frontend (
       post_max_size      => '16M',
       max_execution_time => 300,
       max_input_time     => 300,
-      'date.timezone'    => UTC,
+      'date.timezone'    => 'UTC',
       'cgi.fix_pathinfo' => 1,
     },
     require   => Class['::nginx'],
