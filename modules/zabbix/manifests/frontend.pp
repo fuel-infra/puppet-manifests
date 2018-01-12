@@ -155,7 +155,7 @@ class zabbix::frontend (
     listen    => '127.0.0.1:9000',
     user      => 'www-data',
     php_value => {
-      post_max_size      => 16M,
+      post_max_size      => '16M',
       max_execution_time => 300,
       max_input_time     => 300,
       'date.timezone'    => UTC,
