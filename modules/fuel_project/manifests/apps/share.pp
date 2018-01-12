@@ -74,20 +74,27 @@ define fuel_project::apps::share (
     include ::fuel_project::nginx
 
     if($htpasswd) {
-      $vhost_cfg_append = {
+      $vhost_cfg_append_auth = {
         auth_basic           => '"Restricted access!"',
         auth_basic_user_file => "/etc/nginx/${title}.htpasswd",
       }
     } else {
-      $vhost_cfg_append = {}
+      $vhost_cfg_append_auth = {}
     }
-    $vhost_cfg_append['disable_symlinks'] = 'if_not_owner'
 
     if($autoindex) {
-      $vhost_cfg_append['autoindex'] = 'on'
+      $vhost_cfg_append_autoindex = 'on'
     } else {
-      $vhost_cfg_append['autoindex'] = 'off'
+      $vhost_cfg_append_autoindex = 'off'
     }
+
+    $vhost_cfg_append = merge(
+      {
+        disable_symlinks => 'if_not_owner',
+        autoindex        => $vhost_cfg_append_autoindex,
+      },
+      $vhost_cfg_append_auth
+    )
 
     ::nginx::resource::vhost { $title :
       ensure              => 'present',

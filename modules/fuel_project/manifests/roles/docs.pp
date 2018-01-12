@@ -273,7 +273,7 @@ class fuel_project::roles::docs (
     uwsgi               => '127.0.0.1:6776',
     location_cfg_append => {
       'rewrite' => {
-        '^/$'                                           => "/mcp",
+        '^/$'                                           => '/mcp',
         '^/fuel-dev/?(.*)$'                             => "http://${community_hostname}/fuel-dev/\$1",
         '^/express/?$'                                  => '/openstack/express/latest',
         '^/(express/.+)'                                => '/openstack/$1',

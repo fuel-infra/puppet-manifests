@@ -406,7 +406,7 @@ class qa_reporting::application (
   cron { 'testrail full job':
     command => "/usr/bin/flock -n -x /var/lock/qareport-testrail.lock /usr/bin/timeout -k10 9000 ${python_path} ${app_path}/manage.py --config production sync_testrail 2>&1 | logger -t qareporting-testrail",
     user    => $app_user,
-    hour    => 00,
+    hour    => 0,
     minute  => 15,
     require => [
       Package['python3-qa-reporting'],
@@ -433,8 +433,8 @@ class qa_reporting::application (
     command => "/usr/bin/flock -n -x /var/lock/qareport-mail.lock /usr/bin/timeout -k10 1800 ${python_path} ${app_path}/manage.py --config production send_notifications 2>&1 | logger -t qareporting-mail-send-notifications",
     user    => $app_user,
     weekday => 'sat',
-    hour    => 09,
-    minute  => 00,
+    hour    => 9,
+    minute  => 0,
     require => [
       Package['python3-qa-reporting'],
       User[$app_user],
@@ -446,8 +446,8 @@ class qa_reporting::application (
   cron { 'check unfinished job':
     command => "/usr/bin/flock -n -x /var/lock/check-unfinished.lock /usr/bin/timeout -k10 60 ${python_path} ${app_path}/manage.py --config production check_unfinished 2>&1 | logger -t check_unfinished",
     user    => $app_user,
-    hour    => 05,
-    minute  => 00,
+    hour    => 5,
+    minute  => 0,
     require => [
       Package['python3-qa-reporting'],
       User[$app_user],
@@ -461,7 +461,7 @@ class qa_reporting::application (
     user    => $app_user,
     weekday => 'mon',
     hour    => 10,
-    minute  => 00,
+    minute  => 0,
     require => [
       Package['python3-qa-reporting'],
       User[$app_user],

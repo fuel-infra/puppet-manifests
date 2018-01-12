@@ -266,7 +266,7 @@ class fuel_stats::collector (
   }
 
   cron { 'python-logparser' :
-    command  => "/usr/bin/flock -xn /var/lock/python-logparser/mn_geo.lock  /usr/bin/timeout -k10 600 ${script_path} -m `date --date=yesterday \+\%m` -l /var/log/nginx -e ${email_list} 2>&1 | tee -a /var/log/logparser/logparser.log",
+    command  => "/usr/bin/flock -xn /var/lock/python-logparser/mn_geo.lock  /usr/bin/timeout -k10 600 ${script_path} -m `date --date=yesterday '+%m'` -l /var/log/nginx -e ${email_list} 2>&1 | tee -a /var/log/logparser/logparser.log",
     user     => 'root',
     hour     => '0',
     minute   => '1',
