@@ -21,7 +21,7 @@ class lodgeit::web (
   $database_engine   = 'mysql',
   $database_host     = 'localhost',
   $database_name     = 'lodgeit',
-  $database_password = 'lodgeit',
+  $database_password = undef,
   $database_username = 'lodgeit',
   $debug             = false,
   $group             = 'lodgeit',
