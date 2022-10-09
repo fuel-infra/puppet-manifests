@@ -10,7 +10,7 @@
 #
 class gerrit::mysql (
   $database_name     = '',
-  $database_password = '',
+  $database_password = undef,
   $database_user     = '',
 ) {
 
