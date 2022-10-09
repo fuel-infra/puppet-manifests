@@ -10,10 +10,10 @@
 #   [*admin_database*] - administrator database name
 #
 class fuel_project::mongodb (
-  $user           = 'ceilometer',
-  $admin_username = 'admin',
-  $password       = 'ceilometer',
-  $admin_password = 'admin',
+  $user           = undef,
+  $admin_username = undef,
+  $password       = undef,
+  $admin_password = undef,
   $admin_database = 'admin',
 )
 {
